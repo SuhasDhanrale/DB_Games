@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        if (window.self === window.top) {
+            window.location.href = '/';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desi Parakh | Odd One Out</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fffaf0;
+            /* Warm subtle background */
+            background-image: radial-gradient(#fcd34d 0.5px, transparent 0.5px), radial-gradient(#fcd34d 0.5px, #fffaf0 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .photo-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .photo-card:active {
+            transform: scale(0.95);
+        }
+
+        .photo-card.selected-correct {
+            border-color: #10B981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+            transform: scale(1.02);
+        }
+
+        .photo-card.selected-wrong {
+            border-color: #EF4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
+            animation: shake 0.5s;
+        }
+
+        .photo-card.dimmed {
+            opacity: 0.5;
+            filter: grayscale(80%);
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-reveal {
+            animation: slideUpFade 0.4s ease-out forwards;
+        }
+
+        .db-watermark {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <main class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-orange-100 relative">
+
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-orange-500 to-red-500 p-4 text-white text-center relative z-10 shadow-md">
+            <h1 class="text-2xl font-extrabold tracking-wide uppercase flex items-center justify-center gap-2">
+                <i class="fa-solid fa-eye"></i> Desi Parakh
+            </h1>
+            <p class="text-sm font-medium opacity-90 mt-1">Spot the Odd One Out!</p>
+
+            <!-- Progress Bar -->
+            <div class="mt-4 flex gap-1 px-2" id="progress-container">
+                <!-- Filled by JS -->
+            </div>
+        </header>
+
+        <div id="game-area" class="p-5">
+
+            <!-- Question Header -->
+            <div class="text-center mb-6">
+                <span id="theme-badge"
+                    class="inline-block bg-orange-100 text-orange-800 text-xs font-bold px-3 py-1 rounded-full mb-2 uppercase tracking-wider">
+                    Theme
+                </span>
+                <h2 id="question-text" class="text-xl font-bold text-gray-800">
+                    Question text goes here?
+                </h2>
+            </div>
+
+            <div id="photo-grid" class="grid grid-cols-2 gap-4 mb-6">
+                <!-- Cards dynamically injected here by JS -->
+            </div>
+
+            <!-- Feedback & Trivia Box (Hidden by default) -->
+            <div id="feedback-box" class="hidden animate-reveal bg-gray-50 rounded-2xl p-4 border-2 shadow-inner">
+                <div class="flex items-start gap-3">
+                    <div id="feedback-icon" class="text-3xl mt-1">
+                        <!-- Icon -->
+                    </div>
+                    <div>
+                        <h3 id="feedback-title" class="font-bold text-lg mb-1">Result</h3>
+                        <p id="trivia-text" class="text-gray-700 text-sm leading-relaxed font-medium">
+                            Trivia goes here.
+                        </p>
+                    </div>
+                </div>
+                <button id="next-btn" onclick="nextLevel()"
+                    class="w-full mt-4 bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
+                    Next Challenge <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="game-over-area"
+            class="hidden p-8 text-center bg-white min-h-[400px] flex flex-col justify-center items-center">
+            <div class="text-6xl mb-4">🏆</div>
+            <h2 class="text-3xl font-extrabold text-gray-800 mb-2">Shabaash!</h2>
+            <p class="text-gray-600 mb-6 font-medium">You completed the Desi Parakh challenge.</p>
+
+            <div class="bg-orange-50 border-2 border-orange-200 rounded-2xl p-6 w-full mb-8">
+                <p class="text-sm text-orange-800 font-bold uppercase tracking-wide mb-1">Final Score</p>
+                <p class="text-5xl font-black text-orange-600">
+                    <span id="final-score">0</span><span class="text-2xl text-orange-400">/5</span>
+                </p>
+            </div>
+
+            <button onclick="initGame()"
+                class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                Play Again <i class="fa-solid fa-rotate-right ml-2"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        // Game Data defining levels, simulated "internal DB photos", and trivia
+        const gameData = [
+            {
+                theme: "Agriculture",
+                question: "Which of these is NOT a Kharif (monsoon) crop?",
+                options: [
+                    { id: 0, title: "Rice Cultivation", icon: "🌾", color: "from-green-400 to-emerald-600" },
+                    { id: 1, title: "Maize Harvest", icon: "🌽", color: "from-yellow-400 to-orange-500" },
+                    { id: 2, title: "Cotton Fields", icon: "☁️", color: "from-teal-300 to-cyan-500" },
+                    { id: 3, title: "Winter Wheat", icon: "🥖", color: "from-amber-500 to-yellow-600" } // The odd one (Rabi)
+                ],
+                oddId: 3,
+                trivia: "Wheat is a Rabi (winter) crop sown in November! Rice, Maize, and Cotton are Kharif crops relying on monsoon rains."
+            },
+            {
+                theme: "Politics",
+                question: "Which political stalwart's home turf is different?",
+                options: [
+                    { id: 0, title: "Narendra Modi", icon: "🎤", color: "from-orange-400 to-orange-600" },
+                    { id: 1, title: "Amit Shah", icon: "🎙️", color: "from-orange-500 to-red-500" },
+                    { id: 2, title: "Sharad Pawar", icon: "🗣️", color: "from-blue-400 to-blue-600" }, // The odd one (Maharashtra)
+                    { id: 3, title: "Bhupendra Patel", icon: "📝", color: "from-orange-300 to-orange-500" }
+                ],
+                oddId: 2,
+                trivia: "Sharad Pawar is a veteran leader from Maharashtra, whereas the others have deep political roots in Gujarat."
+            },
+            {
+                theme: "Monuments",
+                question: "Spot the monument located in South India!",
+                options: [
+                    { id: 0, title: "Taj Mahal", icon: "🕌", color: "from-stone-300 to-stone-500" },
+                    { id: 1, title: "Red Fort", icon: "🏰", color: "from-red-700 to-red-900" },
+                    { id: 2, title: "Qutub Minar", icon: "🗼", color: "from-amber-700 to-amber-900" },
+                    { id: 3, title: "Charminar", icon: "🏛️", color: "from-emerald-600 to-teal-800" } // The odd one (Hyderabad)
+                ],
+                oddId: 3,
+                trivia: "Charminar stands proudly in Hyderabad (South India), while the other historical marvels are located in North India."
+            },
+            {
+                theme: "Festivals",
+                question: "Which of these is NOT traditionally a Harvest festival?",
+                options: [
+                    { id: 0, title: "Baisakhi", icon: "🥁", color: "from-yellow-400 to-orange-500" },
+                    { id: 1, title: "Pongal", icon: "🍲", color: "from-green-500 to-emerald-700" },
+                    { id: 2, title: "Diwali", icon: "🪔", color: "from-indigo-900 to-purple-900" }, // The odd one (Festival of Lights)
+                    { id: 3, title: "Makar Sankranti", icon: "🪁", color: "from-sky-400 to-blue-600" }
+                ],
+                oddId: 2,
+                trivia: "Diwali is the grand Festival of Lights, whereas Baisakhi, Pongal, and Makar Sankranti celebrate the harvest season."
+            },
+            {
+                theme: "Cuisine",
+                question: "Find the dish that doesn't originate from the South!",
+                options: [
+                    { id: 0, title: "Masala Dosa", icon: "🥞", color: "from-yellow-200 to-yellow-500" },
+                    { id: 1, title: "Idli Sambar", icon: "🥣", color: "from-orange-200 to-orange-400" },
+                    { id: 2, title: "Chole Bhature", icon: "🍛", color: "from-amber-600 to-red-700" }, // The odd one (North Indian)
+                    { id: 3, title: "Medu Vada", icon: "🍩", color: "from-yellow-600 to-yellow-800" }
+                ],
+                oddId: 2,
+                trivia: "Chole Bhature is a beloved hearty dish from North India (Punjab), while the others are classic South Indian staples."
+            }
+        ];
+
+        let currentLevel = 0;
+        let score = 0;
+        let canPlay = true;
+
+        const gameArea = document.getElementById('game-area');
+        const gameOverArea = document.getElementById('game-over-area');
+        const themeBadge = document.getElementById('theme-badge');
+        const questionText = document.getElementById('question-text');
+        const photoGrid = document.getElementById('photo-grid');
+        const feedbackBox = document.getElementById('feedback-box');
+        const progressContainer = document.getElementById('progress-container');
+
+        function initGame() {
+            currentLevel = 0;
+            score = 0;
+            canPlay = true;
+
+            gameArea.classList.remove('hidden');
+            gameOverArea.classList.add('hidden');
+
+            setupProgressBar();
+            loadLevel();
+        }
+
+        function setupProgressBar() {
+            progressContainer.innerHTML = '';
+            for (let i = 0; i < gameData.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = `h-2 flex-1 rounded-full transition-colors duration-300 ${i === 0 ? 'bg-white' : 'bg-orange-300/40'}`;
+                dot.id = `prog-${i}`;
+                progressContainer.appendChild(dot);
+            }
+        }
+
+        function loadLevel() {
+            const levelData = gameData[currentLevel];
+            canPlay = true;
+
+            // Update Text
+            themeBadge.textContent = levelData.theme;
+            questionText.textContent = levelData.question;
+
+            // Update Progress
+            for (let i = 0; i < gameData.length; i++) {
+                const dot = document.getElementById(`prog-${i}`);
+                if (i < currentLevel) {
+                    dot.className = 'h-2 flex-1 rounded-full transition-colors duration-300 bg-white/50';
+                } else if (i === currentLevel) {
+                    dot.className = 'h-2 flex-1 rounded-full transition-colors duration-300 bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]';
+                } else {
+                    dot.className = 'h-2 flex-1 rounded-full transition-colors duration-300 bg-orange-300/40';
+                }
+            }
+
+            // Hide Feedback
+            feedbackBox.classList.add('hidden');
+            feedbackBox.classList.remove('animate-reveal');
+
+            // Render Photo Cards (Simulating Dainik Bhaskar Internal Library Photos)
+            photoGrid.innerHTML = '';
+
+            // Shuffle options slightly to randomize position of the odd one
+            const shuffledOptions = [...levelData.options].sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach((option) => {
+                const card = document.createElement('div');
+                card.className = `photo-card relative rounded-2xl overflow-hidden cursor-pointer border-4 border-white shadow-md aspect-square flex flex-col items-center justify-center bg-gradient-to-br ${option.color}`;
+                card.onclick = () => handleGuess(option.id, card);
+
+                // Constructing the visual card
+                card.innerHTML = `
+                    <!-- Simulated placeholder background to give a "photo" texture -->
+                    <img src="https://placehold.co/400x400/000000/ffffff?text=+" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-20 pointer-events-none" alt="Texture">
+                    
+                    <!-- Large Emoji acting as the main visual -->
+                    <div class="text-6xl mb-2 drop-shadow-lg relative z-10 filter hover:scale-110 transition-transform duration-300">${option.icon}</div>
+                    
+                    <!-- Photo Title -->
+                    <div class="relative z-10 text-white font-bold text-center px-2 text-sm drop-shadow-md bg-black/20 rounded py-1 w-4/5 truncate">
+                        ${option.title}
+                    </div>
+
+                    <!-- DB Photojournalism Watermark (Requirement Simulation) -->
+                    <div class="absolute bottom-0 left-0 w-full db-watermark text-[9px] text-white/80 p-1.5 px-2 flex justify-between items-center z-10">
+                        <span class="font-semibold tracking-wider">📸 DB PHOTO DESK</span>
+                        <span class="opacity-70">FILE: ${Math.floor(Math.random() * 9000) + 1000}</span>
+                    </div>
+                `;
+
+                photoGrid.appendChild(card);
+            });
+        }
+
+        function handleGuess(selectedId, cardElement) {
+            if (!canPlay) return;
+            canPlay = false; // Lock interactions
+
+            const levelData = gameData[currentLevel];
+            const isCorrect = selectedId === levelData.oddId;
+
+            const allCards = document.querySelectorAll('.photo-card');
+
+            // Apply visual feedback to cards
+            allCards.forEach(card => {
+                card.onclick = null; // Remove listeners
+
+                if (card === cardElement) {
+                    if (isCorrect) {
+                        card.classList.add('selected-correct');
+                        score++;
+                    } else {
+                        card.classList.add('selected-wrong');
+                    }
+                } else {
+                    card.classList.add('dimmed');
+                }
+            });
+
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const triviaText = document.getElementById('trivia-text');
+            const nextBtn = document.getElementById('next-btn');
+
+            if (isCorrect) {
+                feedbackBox.className = "hidden animate-reveal bg-green-50 border-green-200 rounded-2xl p-4 border-2 shadow-inner mt-4";
+                feedbackIcon.innerHTML = "✅";
+                feedbackTitle.textContent = "Sahi Jawab! (Correct)";
+                feedbackTitle.className = "font-bold text-lg mb-1 text-green-700";
+                nextBtn.className = "w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2";
+            } else {
+                feedbackBox.className = "hidden animate-reveal bg-red-50 border-red-200 rounded-2xl p-4 border-2 shadow-inner mt-4";
+                feedbackIcon.innerHTML = "❌";
+                feedbackTitle.textContent = "Oops! (Incorrect)";
+                feedbackTitle.className = "font-bold text-lg mb-1 text-red-700";
+                nextBtn.className = "w-full mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2";
+            }
+
+            triviaText.textContent = levelData.trivia;
+
+            // Remove hidden class to trigger animation
+            setTimeout(() => {
+                feedbackBox.classList.remove('hidden');
+            }, 300);
+        }
+
+        function nextLevel() {
+            currentLevel++;
+            if (currentLevel < gameData.length) {
+                loadLevel();
+            } else {
+                showGameOver();
+            }
+        }
+
+        function showGameOver() {
+            gameArea.classList.add('hidden');
+            gameOverArea.classList.remove('hidden');
+
+            const finalScoreEl = document.getElementById('final-score');
+            finalScoreEl.textContent = score;
+
+            // Add a little pop animation to score
+            finalScoreEl.classList.add('scale-150', 'inline-block', 'transition-transform', 'duration-500');
+            setTimeout(() => {
+                finalScoreEl.classList.remove('scale-150');
+            }, 500);
+        }
+
+        // Initialize the game on load
+        window.onload = initGame;
+
+    </script>
+</body>
+
+</html>

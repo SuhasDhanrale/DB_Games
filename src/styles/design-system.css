@@ -1,0 +1,492 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DESIGN SYSTEM — Dainik Bhaskar Game Lab
+   Shared tokens, mobile envelope, layout primitives
+   ============================================================ */
+
+/* ---------- CSS Custom Properties (Design Tokens) ---------- */
+:root {
+  /* — Brand Palette — */
+  --color-primary:        #E23A28; /* Dainik Bhaskar Red/Orange */
+  --color-primary-light:  #F4604C;
+  --color-primary-dark:   #BA2313;
+  --color-secondary:      #2A2A2A;
+  --color-secondary-light:#4A4A4A;
+  --color-accent:         #F39C12;
+  --color-accent-warm:    #FDCB6E;
+  --color-success:        #27AE60;
+  --color-warning:        #F1C40F;
+  --color-danger:         #E74C3C;
+  --color-info:           #3498DB;
+
+  /* — Surfaces (Newspaper Light Theme) — */
+  --bg-app:               #F9F9F7; /* Off-white newsprint */
+  --bg-surface:           #FFFFFF;
+  --bg-surface-raised:    #FFFFFF;
+  --bg-surface-overlay:   rgba(255, 255, 255, 0.95);
+  --bg-glass:             rgba(255, 255, 255, 0.85);
+  --bg-glass-light:       rgba(0, 0, 0, 0.04);
+
+  /* — Text — */
+  --text-primary:         #1C1C1C; /* Dark ink */
+  --text-secondary:       #5C5C5C;
+  --text-tertiary:        #8E8E8E;
+  --text-inverse:         #FFFFFF;
+
+  /* — Borders — */
+  --border-subtle:        rgba(0, 0, 0, 0.1);
+  --border-medium:        rgba(0, 0, 0, 0.2);
+  --border-accent:        var(--color-primary);
+
+  /* — Gradients — */
+  --gradient-brand:       linear-gradient(135deg, #E23A28 0%, #F39C12 100%);
+  --gradient-warm:        linear-gradient(135deg, #F39C12 0%, #F1C40F 100%);
+  --gradient-surface:     linear-gradient(180deg, #FFFFFF 0%, #F9F9F7 100%);
+  --gradient-glow:        radial-gradient(ellipse at 50% 0%, rgba(226, 58, 40, 0.15) 0%, transparent 70%);
+
+  /* — Shadows — */
+  --shadow-sm:            0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md:            0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg:            0 8px 32px rgba(0, 0, 0, 0.15);
+  --shadow-glow:          0 0 24px rgba(226, 58, 40, 0.25);
+  --shadow-glow-accent:   0 0 24px rgba(243, 156, 18, 0.25);
+
+  /* — Typography — */
+  --font-primary:         'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font-display:         'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+
+  --text-xs:              0.6875rem;   /* 11px */
+  --text-sm:              0.8125rem;   /* 13px */
+  --text-base:            0.9375rem;   /* 15px */
+  --text-lg:              1.0625rem;   /* 17px */
+  --text-xl:              1.25rem;     /* 20px */
+  --text-2xl:             1.5rem;      /* 24px */
+  --text-3xl:             1.875rem;    /* 30px */
+  --text-4xl:             2.25rem;     /* 36px */
+
+  --weight-normal:        400;
+  --weight-medium:        500;
+  --weight-semibold:      600;
+  --weight-bold:          700;
+  --weight-extrabold:     800;
+  --weight-black:         900;
+
+  --leading-tight:        1.2;
+  --leading-normal:       1.5;
+  --leading-relaxed:      1.65;
+
+  /* — Spacing — */
+  --space-1:  0.25rem;   /* 4px  */
+  --space-2:  0.5rem;    /* 8px  */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+
+  /* — Radii — */
+  --radius-sm:   0.5rem;   /* 8px  */
+  --radius-md:   0.75rem;  /* 12px */
+  --radius-lg:   1rem;     /* 16px */
+  --radius-xl:   1.25rem;  /* 20px */
+  --radius-2xl:  1.5rem;   /* 24px */
+  --radius-full: 9999px;
+
+  /* — Transitions — */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast:   150ms;
+  --duration-normal: 250ms;
+  --duration-slow:   400ms;
+
+  /* — Z-Index Scale — */
+  --z-base:      1;
+  --z-dropdown:  100;
+  --z-sticky:    200;
+  --z-overlay:   300;
+  --z-modal:     400;
+  --z-toast:     500;
+  --z-loading:   600;
+
+  /* — Mobile Envelope — */
+  --envelope-width:       430px;
+  --envelope-max-height:  932px;
+  --safe-area-top:        env(safe-area-inset-top, 0px);
+  --safe-area-bottom:     env(safe-area-inset-bottom, 0px);
+}
+
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  background: #EBEBE6; /* Desktop wrapper background */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  height: 100dvh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a { color: inherit; text-decoration: none; }
+
+ul, ol { list-style: none; }
+
+
+/* ---------- Mobile Envelope ---------- */
+#app-root {
+  position: relative;
+  width: 100%;
+  max-width: var(--envelope-width);
+  height: 100dvh;
+  max-height: var(--envelope-max-height);
+  background: var(--bg-app);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* On desktop, show a phone-like frame */
+@media (min-width: 481px) {
+  #app-root {
+    border-radius: 2.5rem;
+    border: 2px solid var(--border-subtle);
+    box-shadow:
+      0 0 0 8px #050510,
+      0 0 80px rgba(108, 92, 231, 0.08),
+      0 30px 60px rgba(0, 0, 0, 0.5);
+    height: min(96dvh, var(--envelope-max-height));
+  }
+}
+
+/* On actual mobile, fill screen */
+@media (max-width: 480px) {
+  body {
+    align-items: stretch;
+    justify-content: stretch;
+  }
+  #app-root {
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+  }
+}
+
+
+/* ---------- Screen System ---------- */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-app);
+  opacity: 0;
+  transform: translateX(20px);
+  transition:
+    opacity var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
+  pointer-events: none;
+  z-index: var(--z-base);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.screen.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.screen.exit-left {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+
+/* ---------- Screen Header ---------- */
+.screen-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  padding-top: calc(var(--safe-area-top) + var(--space-4));
+  background: var(--bg-surface-overlay);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: 56px;
+}
+
+.screen-header__back {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--bg-glass-light);
+  font-size: 1.125rem;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+.screen-header__back:active {
+  background: var(--bg-glass);
+}
+
+.screen-header__title {
+  flex: 1;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+}
+
+.screen-header__action {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary-light);
+}
+
+.screen-body {
+  flex: 1;
+  padding: var(--space-5);
+  padding-bottom: calc(var(--safe-area-bottom) + var(--space-5));
+}
+
+
+/* ---------- Bottom Navigation ---------- */
+.bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: var(--space-2) 0 calc(var(--safe-area-bottom) + var(--space-2)) 0;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-sticky);
+}
+
+.bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-2) var(--space-3) calc(var(--space-2) + 6px) var(--space-3);
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  transition: opacity var(--duration-fast) var(--ease-out);
+  position: relative;
+  background: transparent;
+  transform: none;
+}
+
+.bottom-nav__item:active {
+  opacity: 0.7;
+}
+
+.bottom-nav__item.active {
+  color: var(--text-primary);
+  font-weight: var(--weight-bold);
+}
+
+.bottom-nav__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--text-tertiary);
+  transition: transform var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+
+.bottom-nav__item.active .bottom-nav__icon {
+  color: var(--color-primary);
+}
+
+.bottom-nav__item.active::after {
+  content: '';
+  position: absolute;
+  bottom: var(--space-1);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+}
+
+
+/* ---------- Loading Screen ---------- */
+.loading-screen {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-loading);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  background: var(--bg-app);
+  transition: opacity 0.5s var(--ease-out);
+}
+
+.loading-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-logo {
+  text-align: center;
+}
+
+.loading-icon {
+  font-size: 3.5rem;
+  margin-bottom: var(--space-4);
+  animation: loading-bounce 1.2s var(--ease-spring) infinite;
+}
+
+@keyframes loading-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-12px) scale(1.05); }
+}
+
+.loading-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-black);
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.loading-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: var(--space-1);
+}
+
+.loading-bar-track {
+  width: 140px;
+  height: 4px;
+  background: var(--bg-surface-raised);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-brand);
+  border-radius: var(--radius-full);
+  transition: width 0.3s var(--ease-out);
+}
+
+
+/* ---------- Utility Classes ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.text-gradient {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-warm {
+  background: var(--gradient-warm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Scrollbar styling */
+.screen::-webkit-scrollbar {
+  width: 3px;
+}
+.screen::-webkit-scrollbar-track {
+  background: transparent;
+}
+.screen::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: var(--radius-full);
+}
+
+/* Haptic tap animation */
+@keyframes tap-scale {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+.tap-active {
+  animation: tap-scale 150ms var(--ease-out);
+}

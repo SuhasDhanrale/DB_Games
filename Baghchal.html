@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        if (window.self === window.top) {
+            window.location.href = '/';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bagh Bakri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Mukta:wght@400;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --terracotta: #b75d32;
+            --dusty-red: #8c3b1a;
+            --slate-bg: #2d3748;
+            --marigold: #f59e0b;
+            --chalk: #fef9c3;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1c1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Mukta', sans-serif;
+            overflow: hidden;
+            touch-action: none;
+            /* Background pattern to look like an outdoor mat/carpet */
+            background-image: repeating-linear-gradient(45deg, #1f221f 25%, transparent 25%, transparent 75%, #1f221f 75%, #1f221f), repeating-linear-gradient(45deg, #1f221f 25%, #1a1c1a 25%, #1a1c1a 75%, #1f221f 75%, #1f221f);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+        }
+
+        /* The Phone Envelope */
+        .phone-mockup {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            max-height: 850px;
+            background: radial-gradient(circle at center, var(--dusty-red) 0%, #4a1f0a 100%);
+            border-radius: 0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: none;
+        }
+
+        /* Add bezel only on larger screens to simulate phone */
+        @media (min-width: 420px) and (min-height: 860px) {
+            .phone-mockup {
+                border-radius: 40px;
+                border: 12px solid #0f0f11;
+                border-bottom-width: 24px;
+                height: 90vh;
+            }
+
+            .phone-notch {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 120px;
+                height: 25px;
+                background-color: #0f0f11;
+                border-bottom-left-radius: 16px;
+                border-bottom-right-radius: 16px;
+                z-index: 50;
+            }
+        }
+
+        .indian-pattern-top {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 20-20 20L0 20z' fill='%23f59e0b' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .chalk-text {
+            font-family: 'Kalam', cursive;
+            color: var(--chalk);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 0 0 10px rgba(254, 249, 195, 0.3);
+        }
+
+        .board-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
+            margin: 10px 15px;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        canvas {
+            display: block;
+            touch-action: none;
+            filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.6));
+        }
+
+        .hud-glass {
+            background: rgba(30, 15, 5, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stone-btn {
+            background: linear-gradient(145deg, #d97706, #b45309);
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4), inset 2px 2px 4px rgba(255, 255, 255, 0.3);
+            transition: all 0.1s ease;
+        }
+
+        .stone-btn:active {
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4), inset 4px 4px 8px rgba(0, 0, 0, 0.4);
+            transform: translate(2px, 2px);
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="phone-mockup relative">
+        <div class="phone-notch hidden sm:block"></div>
+        <div class="indian-pattern-top"></div>
+
+        <!-- Top Header & Score -->
+        <div class="pt-10 px-6 pb-2 flex flex-col items-center">
+            <h1 class="chalk-text text-4xl leading-none mb-1">Bagh Bakri</h1>
+            <p class="text-amber-500/80 text-sm font-bold tracking-widest uppercase">बाघ बकरी</p>
+        </div>
+
+        <div class="px-4 flex justify-between items-center z-10 gap-2">
+            <div class="hud-glass p-3 rounded-xl w-1/2 flex flex-col items-center">
+                <span class="text-xs text-amber-500 font-bold uppercase tracking-wide">Tigers (Bagh)</span>
+                <div class="flex items-center gap-2 mt-1">
+                    <span class="text-2xl">🐅</span>
+                    <span class="chalk-text text-2xl font-bold" id="tigersScore">0/5</span>
+                </div>
+                <span class="text-[10px] text-gray-400 mt-1">Hunted</span>
+            </div>
+
+            <div class="hud-glass p-3 rounded-xl w-1/2 flex flex-col items-center">
+                <span class="text-xs text-slate-300 font-bold uppercase tracking-wide">Goats (Bakri)</span>
+                <div class="flex items-center gap-2 mt-1">
+                    <span class="chalk-text text-2xl font-bold" id="goatsScore">20</span>
+                    <span class="text-2xl">🐐</span>
+                </div>
+                <span class="text-[10px] text-gray-400 mt-1" id="goatStatusText">To Place</span>
+            </div>
+        </div>
+
+        <!-- Game Canvas Area -->
+        <div class="board-container" id="boardWrapper">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <!-- Bottom Turn Indicator -->
+        <div class="px-6 pb-8 pt-2 z-10 flex flex-col items-center">
+            <div class="hud-glass w-full rounded-2xl p-4 text-center border-l-4 transition-colors duration-300"
+                id="turnIndicator">
+                <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Current Turn</p>
+                <h2 class="chalk-text text-3xl mb-1" id="turnText">GOAT'S TURN</h2>
+                <p class="text-sm text-gray-300 leading-tight" id="instructionText">Place a goat on any empty junction.
+                </p>
+            </div>
+        </div>
+
+        <!-- Overlay: Main Menu & Rules -->
+        <div id="overlayScreen"
+            class="absolute inset-0 modal-overlay flex flex-col items-center justify-center z-40 p-6">
+            <div
+                class="hud-glass w-full max-w-sm p-6 rounded-3xl border-2 border-amber-600 text-center flex flex-col items-center shadow-2xl">
+                <h2 class="chalk-text text-5xl text-amber-400 mb-2">Bagh Bakri</h2>
+                <p class="text-gray-300 text-sm mb-6 font-medium">The classic courtyard strategy.</p>
+
+                <div
+                    class="text-left space-y-3 mb-8 bg-black/30 p-4 rounded-xl border border-white/10 w-full text-sm text-gray-200">
+                    <p>🐐 <b>Goats:</b> Place 20 stones one by one. After all 20 are down, you can move. Trap the tigers
+                        to win!</p>
+                    <p>🐅 <b>Tigers:</b> Move to empty spots or <i>jump over</i> a goat to eat it. Eat 5 goats to win!
+                    </p>
+                    <p>✨ <b>Lines:</b> You can only move along the drawn chalk lines.</p>
+                </div>
+
+                <button id="startBtn"
+                    class="stone-btn text-white font-bold text-xl py-3 px-10 rounded-full chalk-text tracking-wider w-full">
+                    PLAY NOW
+                </button>
+            </div>
+        </div>
+
+        <!-- Overlay: Game Over -->
+        <div id="resultScreen"
+            class="absolute inset-0 modal-overlay hidden flex-col items-center justify-center z-40 p-6 opacity-0 transition-opacity duration-500">
+            <div class="hud-glass w-full max-w-sm p-8 rounded-3xl text-center border-t-8 shadow-2xl flex flex-col items-center"
+                id="resultBox">
+                <div class="text-6xl mb-2" id="resultEmoji">🏆</div>
+                <h2 class="chalk-text text-5xl mb-2" id="resultTitle">WINNER!</h2>
+                <p class="text-gray-200 text-lg mb-8" id="resultSub">Description</p>
+
+                <button id="restartBtn"
+                    class="stone-btn text-white font-bold text-xl py-3 px-10 rounded-full chalk-text tracking-wider w-full">
+                    PLAY AGAIN
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('boardWrapper');
+
+        // UI Elements
+        const tigersScoreDisplay = document.getElementById('tigersScore');
+        const goatsScoreDisplay = document.getElementById('goatsScore');
+        const goatStatusText = document.getElementById('goatStatusText');
+        const turnText = document.getElementById('turnText');
+        const instructionText = document.getElementById('instructionText');
+        const turnIndicator = document.getElementById('turnIndicator');
+        const overlayScreen = document.getElementById('overlayScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const startBtn = document.getElementById('startBtn');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // Game Constants
+        const GRID = 5;
+        const EMPTY = 0;
+        const GOAT = 1;
+        const TIGER = 2;
+
+        const VIBE = {
+            chalk: 'rgba(254, 249, 195, 0.75)',
+            chalkFaint: 'rgba(254, 249, 195, 0.3)',
+            tigerColor: '#d97706', // Amber
+            goatColor: '#f1f5f9', // Slate white
+            validSpot: 'rgba(110, 231, 183, 0.6)', // Mint
+            captureSpot: 'rgba(239, 68, 68, 0.6)', // Red
+            dust: '#b75d32'
+        };
+
+        // State
+        let state = 'MENU'; // MENU, PLAYING, GAMEOVER
+        let turn = GOAT;
+        let board = [];
+        let goatsPlaced = 0;
+        let goatsCaptured = 0;
+        let selected = null; // {r, c}
+        let possibleMoves = [];
+
+        // Rendering specifics
+        let size = 0;
+        let margin = 0;
+        let spacing = 0;
+        let dpr = window.devicePixelRatio || 1;
+        let pieces = []; // Animated physical pieces
+        let dustParticles = [];
+        let animationFrame;
+
+        function isConnected(r1, c1, r2, c2) {
+            const dr = Math.abs(r1 - r2);
+            const dc = Math.abs(c1 - c2);
+
+            // Adjacency check
+            if (dr > 1 || dc > 1 || (dr === 0 && dc === 0)) return false;
+
+            // Diagonal movement allowed only on even sum coords in Alquerque-based boards
+            if (dr === 1 && dc === 1) {
+                return (r1 + c1) % 2 === 0;
+            }
+            return true;
+        }
+
+        function getMoves(r, c) {
+            const type = board[r][c];
+            const moves = [];
+            if (type === EMPTY) return moves;
+
+            // Normal adjacent moves
+            for (let i = -1; i <= 1; i++) {
+                for (let j = -1; j <= 1; j++) {
+                    if (i === 0 && j === 0) continue;
+                    let nr = r + i, nc = c + j;
+                    if (nr >= 0 && nr < GRID && nc >= 0 && nc < GRID) {
+                        if (isConnected(r, c, nr, nc) && board[nr][nc] === EMPTY) {
+                            moves.push({ r: nr, c: nc, type: 'move' });
+                        }
+                    }
+                }
+            }
+
+            // Tiger jump captures
+            if (type === TIGER) {
+                for (let i = -1; i <= 1; i++) {
+                    for (let j = -1; j <= 1; j++) {
+                        if (i === 0 && j === 0) continue;
+                        let capR = r + i, capC = c + j;
+
+                        // Is there an adjacent goat?
+                        if (capR >= 0 && capR < GRID && capC >= 0 && capC < GRID) {
+                            if (isConnected(r, c, capR, capC) && board[capR][capC] === GOAT) {
+                                // Can we land behind it?
+                                let landR = capR + i, landC = capC + j;
+                                if (landR >= 0 && landR < GRID && landC >= 0 && landC < GRID) {
+                                    if (isConnected(capR, capC, landR, landC) && board[landR][landC] === EMPTY) {
+                                        moves.push({ r: landR, c: landC, type: 'capture', capR, capC });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return moves;
+        }
+
+        function checkGameEnd() {
+            if (goatsCaptured >= 5) {
+                triggerGameOver(TIGER);
+                return;
+            }
+
+            // Check if ANY tiger can move
+            let tigersCanMove = false;
+            for (let r = 0; r < GRID; r++) {
+                for (let c = 0; c < GRID; c++) {
+                    if (board[r][c] === TIGER && getMoves(r, c).length > 0) {
+                        tigersCanMove = true;
+                        break;
+                    }
+                }
+                if (tigersCanMove) break;
+            }
+
+            if (!tigersCanMove && goatsPlaced > 0) { // Safety to not trigger immediately
+                triggerGameOver(GOAT);
+            }
+        }
+
+        function resize() {
+            const rect = wrapper.getBoundingClientRect();
+            // Square board fit inside the container
+            const maxW = rect.width * 0.95;
+            const maxH = rect.height * 0.95;
+            size = Math.floor(Math.min(maxW, maxH));
+
+            canvas.style.width = `${size}px`;
+            canvas.style.height = `${size}px`;
+
+            // Adjust for High DPI displays
+            canvas.width = size * dpr;
+            canvas.height = size * dpr;
+
+            ctx.scale(dpr, dpr);
+
+            margin = size * 0.12;
+            spacing = (size - margin * 2) / (GRID - 1);
+
+            updateVisualPiecesTarget();
+            if (state === 'MENU') draw(false);
+        }
+
+        window.addEventListener('resize', resize);
+
+        function initMatch() {
+            board = Array.from({ length: GRID }, () => Array(GRID).fill(EMPTY));
+            // 4 Tigers in corners
+            board[0][0] = TIGER;
+            board[0][GRID - 1] = TIGER;
+            board[GRID - 1][0] = TIGER;
+            board[GRID - 1][GRID - 1] = TIGER;
+
+            goatsPlaced = 0;
+            goatsCaptured = 0;
+            turn = GOAT;
+            selected = null;
+            possibleMoves = [];
+            pieces = [];
+            dustParticles = [];
+            state = 'PLAYING';
+
+            syncPieces();
+            updateHUD();
+
+            if (!animationFrame) loop();
+        }
+
+        // Convert touch/click to grid indices
+        function getCoords(evt) {
+            const rect = canvas.getBoundingClientRect();
+            let cx = evt.clientX;
+            let cy = evt.clientY;
+
+            if (evt.touches && evt.touches.length > 0) {
+                cx = evt.touches[0].clientX;
+                cy = evt.touches[0].clientY;
+            }
+
+            const x = cx - rect.left;
+            const y = cy - rect.top;
+
+            for (let r = 0; r < GRID; r++) {
+                for (let c = 0; c < GRID; c++) {
+                    const px = margin + c * spacing;
+                    const py = margin + r * spacing;
+                    const dist = Math.hypot(x - px, y - py);
+                    if (dist < spacing * 0.45) return { r, c };
+                }
+            }
+            return null;
+        }
+
+        function onInteract(e) {
+            if (state !== 'PLAYING') return;
+            e.preventDefault();
+
+            const pos = getCoords(e);
+            if (!pos) {
+                selected = null;
+                possibleMoves = [];
+                return;
+            }
+
+            const { r, c } = pos;
+            const targetType = board[r][c];
+
+            // Goat Placement Phase
+            if (turn === GOAT && goatsPlaced < 20) {
+                if (targetType === EMPTY) {
+                    board[r][c] = GOAT;
+                    goatsPlaced++;
+                    spawnDust(r, c, VIBE.goatColor);
+                    syncPieces();
+                    checkGameEnd();
+                    if (state === 'PLAYING') switchTurn();
+                }
+                return;
+            }
+
+            // Selection Phase
+            if (targetType === turn) {
+                selected = { r, c };
+                possibleMoves = getMoves(r, c);
+                return;
+            }
+
+            // Movement Execution Phase
+            if (selected && targetType === EMPTY) {
+                const move = possibleMoves.find(m => m.r === r && m.c === c);
+                if (move) {
+                    // Execute move on logical board
+                    board[r][c] = turn;
+                    board[selected.r][selected.c] = EMPTY;
+
+                    if (move.type === 'capture') {
+                        board[move.capR][move.capC] = EMPTY;
+                        goatsCaptured++;
+                        spawnDust(move.capR, move.capC, VIBE.captureSpot);
+                    }
+
+                    spawnDust(r, c, turn === TIGER ? VIBE.tigerColor : VIBE.goatColor);
+                    syncPieces(); // Sync visual layer
+
+                    selected = null;
+                    possibleMoves = [];
+                    checkGameEnd();
+                    if (state === 'PLAYING') switchTurn();
+                } else {
+                    selected = null;
+                    possibleMoves = [];
+                }
+            } else {
+                selected = null;
+                possibleMoves = [];
+            }
+        }
+
+        canvas.addEventListener('mousedown', onInteract);
+        canvas.addEventListener('touchstart', onInteract, { passive: false });
+
+        function switchTurn() {
+            turn = turn === GOAT ? TIGER : GOAT;
+            updateHUD();
+        }
+
+        function updateHUD() {
+            tigersScoreDisplay.innerText = `${goatsCaptured}/5`;
+
+            if (goatsPlaced < 20) {
+                goatsScoreDisplay.innerText = 20 - goatsPlaced;
+                goatStatusText.innerText = "To Place";
+            } else {
+                goatsScoreDisplay.innerText = 20 - goatsCaptured;
+                goatStatusText.innerText = "Surviving";
+            }
+
+            if (turn === GOAT) {
+                turnText.innerText = "BAKRI / GOAT";
+                turnText.className = "chalk-text text-3xl mb-1 text-slate-100";
+                turnIndicator.style.borderLeftColor = VIBE.goatColor;
+
+                if (goatsPlaced < 20) {
+                    instructionText.innerText = "Tap an empty spot to place a goat.";
+                } else {
+                    instructionText.innerText = "Select a goat and move to an adjacent spot.";
+                }
+            } else {
+                turnText.innerText = "BAGH / TIGER";
+                turnText.className = "chalk-text text-3xl mb-1 text-amber-500";
+                turnIndicator.style.borderLeftColor = VIBE.tigerColor;
+                instructionText.innerText = "Move a tiger or jump over a goat to hunt it.";
+            }
+        }
+
+        function syncPieces() {
+            // Remove missing pieces (captured or moved)
+            pieces = pieces.filter(p => board[p.r][p.c] === p.type);
+
+            // Add new pieces or identify moved pieces
+            for (let r = 0; r < GRID; r++) {
+                for (let c = 0; c < GRID; c++) {
+                    if (board[r][c] !== EMPTY) {
+                        const exists = pieces.find(p => p.r === r && p.c === c);
+                        if (!exists) {
+                            // Determine origin for lerping
+                            let originX = margin + c * spacing;
+                            let originY = margin + r * spacing;
+
+                            // Simple spawn (drops in)
+                            pieces.push({
+                                type: board[r][c],
+                                r: r, c: c,
+                                x: originX, y: originY,
+                                targetX: originX, targetY: originY,
+                                scale: 0, targetScale: 1
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        function updateVisualPiecesTarget() {
+            pieces.forEach(p => {
+                p.targetX = margin + p.c * spacing;
+                p.targetY = margin + p.r * spacing;
+                p.x = p.targetX; // Snap on resize
+                p.y = p.targetY;
+            });
+        }
+
+        function spawnDust(r, c, color) {
+            const px = margin + c * spacing;
+            const py = margin + r * spacing;
+            for (let i = 0; i < 12; i++) {
+                dustParticles.push({
+                    x: px + (Math.random() - 0.5) * 20,
+                    y: py + (Math.random() - 0.5) * 20,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: (Math.random() - 0.5) * 4 - 1, // slight upward bias
+                    life: 1,
+                    color: color,
+                    size: Math.random() * 3 + 1
+                });
+            }
+        }
+
+        // Draw rough chalk lines
+        function drawRoughLine(x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            // Second faint pass for chalky feel
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = VIBE.chalkFaint;
+            ctx.beginPath();
+            ctx.moveTo(x1 + (Math.random() - 0.5) * 3, y1 + (Math.random() - 0.5) * 3);
+            ctx.lineTo(x2 + (Math.random() - 0.5) * 3, y2 + (Math.random() - 0.5) * 3);
+            ctx.stroke();
+        }
+
+        function draw(animate = true) {
+            ctx.clearRect(0, 0, size, size);
+
+            // 1. Draw Chalk Board
+            ctx.strokeStyle = VIBE.chalk;
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 2.5;
+
+            // Grids
+            for (let i = 0; i < GRID; i++) {
+                const pos = margin + i * spacing;
+                const end = margin + (GRID - 1) * spacing;
+                drawRoughLine(margin, pos, end, pos); // H
+                drawRoughLine(pos, margin, pos, end); // V
+            }
+
+            // Diagonals (Alquerque style)
+            const m0 = margin;
+            const m4 = margin + 4 * spacing;
+            const m2 = margin + 2 * spacing;
+
+            // X lines
+            drawRoughLine(m0, m0, m4, m4);
+            drawRoughLine(m0, m4, m4, m0);
+            // Diamond
+            drawRoughLine(m2, m0, m4, m2);
+            drawRoughLine(m4, m2, m2, m4);
+            drawRoughLine(m2, m4, m0, m2);
+            drawRoughLine(m0, m2, m2, m0);
+
+            // 2. Draw Nodes & Interactivity Highlights
+            for (let r = 0; r < GRID; r++) {
+                for (let c = 0; c < GRID; c++) {
+                    const px = margin + c * spacing;
+                    const py = margin + r * spacing;
+
+                    // Small dot for node
+                    ctx.fillStyle = VIBE.chalk;
+                    ctx.beginPath();
+                    ctx.arc(px, py, 3, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Possible move highlight
+                    const move = possibleMoves.find(m => m.r === r && m.c === c);
+                    if (move) {
+                        ctx.fillStyle = move.type === 'capture' ? VIBE.captureSpot : VIBE.validSpot;
+                        ctx.beginPath();
+                        ctx.arc(px, py, spacing * 0.25, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            // Draw Selected Ring
+            if (selected) {
+                const px = margin + selected.c * spacing;
+                const py = margin + selected.r * spacing;
+                ctx.strokeStyle = turn === TIGER ? VIBE.tigerColor : VIBE.goatColor;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(px, py, spacing * 0.35, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // 3. Draw Pieces (Stones)
+            const tigerRadius = spacing * 0.28;
+            const goatRadius = spacing * 0.22;
+
+            pieces.forEach(p => {
+                // Lerp properties for smooth animation
+                if (animate) {
+                    p.x += (p.targetX - p.x) * 0.2;
+                    p.y += (p.targetY - p.y) * 0.2;
+                    p.scale += (p.targetScale - p.scale) * 0.2;
+                }
+
+                const rad = (p.type === TIGER ? tigerRadius : goatRadius) * p.scale;
+                if (rad < 0.5) return;
+
+                // Drop shadow
+                ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                ctx.beginPath();
+                ctx.arc(p.x + 3, p.y + 4, rad, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Base stone
+                ctx.fillStyle = p.type === TIGER ? VIBE.tigerColor : VIBE.goatColor;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, rad, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Stone texture/highlight
+                ctx.fillStyle = 'rgba(255,255,255,0.2)';
+                ctx.beginPath();
+                ctx.arc(p.x - rad * 0.3, p.y - rad * 0.3, rad * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Motif on stone
+                if (p.type === TIGER) {
+                    ctx.strokeStyle = '#78350f'; // Dark tiger stripe
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x - rad * 0.5, p.y - rad * 0.2); ctx.lineTo(p.x + rad * 0.2, p.y - rad * 0.2);
+                    ctx.moveTo(p.x - rad * 0.7, p.y + rad * 0.2); ctx.lineTo(p.x + rad * 0.4, p.y + rad * 0.2);
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = '#94a3b8'; // Slate grey markings
+                    ctx.beginPath(); ctx.arc(p.x, p.y, rad * 0.2, 0, Math.PI * 2); ctx.fill();
+                }
+            });
+
+            // 4. Draw Dust Particles
+            if (animate) {
+                for (let i = dustParticles.length - 1; i >= 0; i--) {
+                    let d = dustParticles[i];
+                    ctx.fillStyle = d.color;
+                    ctx.globalAlpha = d.life;
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    d.x += d.vx;
+                    d.y += d.vy;
+                    d.life -= 0.05;
+                    if (d.life <= 0) dustParticles.splice(i, 1);
+                }
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        function loop() {
+            if (state !== 'MENU') {
+                draw();
+            }
+            animationFrame = requestAnimationFrame(loop);
+        }
+
+        function triggerGameOver(winner) {
+            state = 'GAMEOVER';
+
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex');
+
+            // Slight delay for fade in
+            setTimeout(() => {
+                resultScreen.classList.remove('opacity-0');
+            }, 100);
+
+            const rBox = document.getElementById('resultBox');
+            const rTitle = document.getElementById('resultTitle');
+            const rSub = document.getElementById('resultSub');
+            const rEmoji = document.getElementById('resultEmoji');
+
+            if (winner === TIGER) {
+                rBox.style.borderColor = VIBE.tigerColor;
+                rTitle.innerText = "TIGERS FEAST!";
+                rTitle.className = "chalk-text text-5xl mb-2 text-amber-500";
+                rSub.innerText = "5 goats were hunted down.";
+                rEmoji.innerText = "🐅";
+            } else {
+                rBox.style.borderColor = VIBE.goatColor;
+                rTitle.innerText = "GOATS WIN!";
+                rTitle.className = "chalk-text text-5xl mb-2 text-white";
+                rSub.innerText = "The tigers are completely trapped in the courtyard.";
+                rEmoji.innerText = "🐐";
+            }
+        }
+
+        // Bootups
+        startBtn.addEventListener('click', () => {
+            overlayScreen.classList.add('hidden');
+            initMatch();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            resultScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                resultScreen.classList.add('hidden');
+                resultScreen.classList.remove('flex');
+                initMatch();
+            }, 400); // Wait for fade out
+        });
+
+        // Initialize sizing and background render
+        resize();
+
+    </script>
+</body>
+
+</html>
