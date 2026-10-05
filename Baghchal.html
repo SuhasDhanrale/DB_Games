@@ -19,11 +19,11 @@
 
     <style>
         :root {
-            --terracotta: #b75d32;
-            --dusty-red: #8c3b1a;
-            --slate-bg: #2d3748;
-            --marigold: #f59e0b;
-            --chalk: #fef9c3;
+            --terracotta: var(--color-primary);
+            --dusty-red: var(--color-primary-dark);
+            --slate-bg: var(--bg-app);
+            --marigold: var(--color-accent);
+            --chalk: var(--text-primary);
         }
 
         body,
@@ -32,7 +32,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #1a1c1a;
+            background-color: var(--bg-app);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -40,7 +40,7 @@
             overflow: hidden;
             touch-action: none;
             /* Background pattern to look like an outdoor mat/carpet */
-            background-image: repeating-linear-gradient(45deg, #1f221f 25%, transparent 25%, transparent 75%, #1f221f 75%, #1f221f), repeating-linear-gradient(45deg, #1f221f 25%, #1a1c1a 25%, #1a1c1a 75%, #1f221f 75%, #1f221f);
+            background-image: repeating-linear-gradient(45deg, var(--bg-surface) 25%, transparent 25%, transparent 75%, var(--bg-surface) 75%, var(--bg-surface)), repeating-linear-gradient(45deg, var(--bg-surface) 25%, var(--bg-app) 25%, var(--bg-app) 75%, var(--bg-surface) 75%, var(--bg-surface));
             background-position: 0 0, 10px 10px;
             background-size: 20px 20px;
         }

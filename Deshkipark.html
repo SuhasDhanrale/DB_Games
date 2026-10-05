@@ -22,9 +22,10 @@
     <style>
         body {
             font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
-            background-color: #fffaf0;
+            background-color: var(--bg-app);
+            color: var(--text-primary);
             /* Warm subtle background */
-            background-image: radial-gradient(#fcd34d 0.5px, transparent 0.5px), radial-gradient(#fcd34d 0.5px, #fffaf0 0.5px);
+            background-image: radial-gradient(var(--color-primary-light) 0.5px, transparent 0.5px), radial-gradient(var(--color-primary-light) 0.5px, var(--bg-app) 0.5px);
             background-size: 20px 20px;
             background-position: 0 0, 10px 10px;
             -webkit-tap-highlight-color: transparent;
@@ -40,14 +41,14 @@
         }
 
         .photo-card.selected-correct {
-            border-color: #10B981;
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+            border-color: var(--color-success);
+            box-shadow: 0 0 0 4px var(--color-success);
             transform: scale(1.02);
         }
 
         .photo-card.selected-wrong {
-            border-color: #EF4444;
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
+            border-color: var(--color-danger);
+            box-shadow: 0 0 0 4px var(--color-danger);
             animation: shake 0.5s;
         }
 
