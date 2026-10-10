@@ -76,17 +76,19 @@ export const translations = {
     'prog.daily_done':      '✅ Daily challenge completed!',
     'prog.next_daily':      'Next daily in {time}',
 
-    // ---- Games (placeholders) ----
+    // ---- Games ----
     'game1.title':          'Word Search',
     'game1.desc':           'Find hidden words in the grid',
-    'game2.title':          'Color Match',
-    'game2.desc':           'Match colors before time runs out',
-    'game3.title':          'Brain Puzzle',
-    'game3.desc':           'Solve tricky puzzles to level up',
-    'game4.title':          'Daily Quiz',
-    'game4.desc':           'Test your knowledge every day',
-    'game5.title':          'Memory Cards',
-    'game5.desc':           'Flip and match pairs from memory',
+    'game2.title':          'Pen Fight',
+    'game2.desc':           'Flick your pen and knock opponents off the table',
+    'game3.title':          'Desi Parakh',
+    'game3.desc':           'Spot the odd one out across India',
+    'game4.title':          'Bagh Chal',
+    'game4.desc':           'Tigers vs Goats · Indian Strategy Game',
+    'game5.title':          'Lagori',
+    'game5.desc':           'Stack the seven stones and run',
+    'game6.title':          'Super Over',
+    'game6.desc':           '6 balls of high-octane cricket drama · Bat & Bowl',
 
     // ---- Game Over ----
     'gameover.title':       'Game Over!',
@@ -171,17 +173,19 @@ export const translations = {
     'prog.daily_done':      '✅ दैनिक चुनौती पूरी!',
     'prog.next_daily':      'अगली दैनिक चुनौती {time} में',
 
-    // ---- Games (placeholders) ----
+    // ---- Games ----
     'game1.title':          'शब्द खोज',
     'game1.desc':           'ग्रिड में छिपे शब्द खोजें',
-    'game2.title':          'रंग मिलाओ',
-    'game2.desc':           'समय से पहले रंग मिलाएँ',
-    'game3.title':          'दिमागी पहेली',
-    'game3.desc':           'मुश्किल पहेलियाँ सुलझाएँ',
-    'game4.title':          'दैनिक क्विज़',
-    'game4.desc':           'रोज़ अपने ज्ञान की परीक्षा लें',
-    'game5.title':          'मेमोरी कार्ड',
-    'game5.desc':           'याददाश्त से जोड़ी मिलाएँ',
+    'game2.title':          'पेन फाइट',
+    'game2.desc':           'अपनी कलम चलाकर मुकाबला जीतें',
+    'game3.title':          'देश की परख',
+    'game3.desc':           'भारत की अनोखी चीज़ों को पहचानें',
+    'game4.title':          'बाघ चाल',
+    'game4.desc':           'बाघ बनाम बकरी · पारंपरिक रणनीति खेल',
+    'game5.title':          'लगोरी',
+    'game5.desc':           'सात पत्थरों की मीनार गिराएँ और जोड़ें',
+    'game6.title':          'सुपर ओवर',
+    'game6.desc':           '6 गेंदों का रोमांचक मुकाबला · बल्लेबाजी और गेंदबाजी',
 
     // ---- Game Over ----
     'gameover.title':       'गेम ओवर!',

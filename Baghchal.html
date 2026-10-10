@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 
 <head>
     <script>
@@ -8,9 +8,8 @@
         }
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bagh Bakri</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>बाघ चाल | Bagh Chal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -19,216 +18,434 @@
 
     <style>
         :root {
-            --terracotta: var(--color-primary);
-            --dusty-red: var(--color-primary-dark);
-            --slate-bg: var(--bg-app);
-            --marigold: var(--color-accent);
-            --chalk: var(--text-primary);
+            --color-primary: #E23A28; /* Dainik Bhaskar Crimson */
+            --color-primary-dark: #BA2313;
+            --color-primary-light: #F4604C;
+            --color-accent: #F39C12; /* Indian Marigold Amber */
+            --color-accent-warm: #FDCB6E;
+            --color-success: #27AE60;
+            --color-danger: #E74C3C;
+            --bg-app: #F9F9F7; /* Newspaper off-white surface */
+            --bg-surface: #FFFFFF;
+            --text-primary: #1C1C1C;
+            --text-secondary: #5C5C5C;
+            --text-tertiary: #8E8E8E;
+            --border-subtle: rgba(0, 0, 0, 0.08);
+            --border-medium: rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-board: 0 10px 30px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body,
         html {
-            margin: 0;
-            padding: 0;
             width: 100%;
             height: 100%;
             background-color: var(--bg-app);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            color: var(--text-primary);
             font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
             overflow: hidden;
             touch-action: none;
-            /* Background pattern to look like an outdoor mat/carpet */
-            background-image: repeating-linear-gradient(45deg, var(--bg-surface) 25%, transparent 25%, transparent 75%, var(--bg-surface) 75%, var(--bg-surface)), repeating-linear-gradient(45deg, var(--bg-surface) 25%, var(--bg-app) 25%, var(--bg-app) 75%, var(--bg-surface) 75%, var(--bg-surface));
-            background-position: 0 0, 10px 10px;
-            background-size: 20px 20px;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* The Phone Envelope */
-        .phone-mockup {
-            position: relative;
+        .game-layout {
             width: 100%;
-            max-width: 400px;
             height: 100%;
-            max-height: 850px;
-            background: radial-gradient(circle at center, var(--dusty-red) 0%, #4a1f0a 100%);
-            border-radius: 0;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
             display: flex;
             flex-direction: column;
+            padding: 10px 12px 10px 12px;
+            box-sizing: border-box;
+            position: relative;
             overflow: hidden;
-            border: none;
+            justify-content: space-between;
         }
 
-        /* Add bezel only on larger screens to simulate phone */
-        @media (min-width: 420px) and (min-height: 860px) {
-            .phone-mockup {
-                border-radius: 40px;
-                border: 12px solid #0f0f11;
-                border-bottom-width: 24px;
-                height: 90vh;
-            }
-
-            .phone-notch {
-                position: absolute;
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 120px;
-                height: 25px;
-                background-color: #0f0f11;
-                border-bottom-left-radius: 16px;
-                border-bottom-right-radius: 16px;
-                z-index: 50;
-            }
-        }
-
-        .indian-pattern-top {
-            position: absolute;
-            top: 0;
+        /* Minimal Top HUD Strip */
+        .hud-strip {
+            display: flex;
+            gap: 10px;
             width: 100%;
-            height: 40px;
-            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0l20 20-20 20L0 20z' fill='%23f59e0b' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E");
-            opacity: 0.6;
-            pointer-events: none;
+            max-width: 440px;
+            margin: 0 auto;
+            flex-shrink: 0;
+            z-index: 10;
         }
 
-        .chalk-text {
-            font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
-            color: var(--chalk);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 0 0 10px rgba(254, 249, 195, 0.3);
-        }
-
-        .board-container {
+        .hud-card {
             flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 7px 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hud-icon-wrap {
+            font-size: 1.25rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .hud-icon-wrap--tiger {
+            background: rgba(243, 156, 18, 0.16);
+        }
+
+        .hud-icon-wrap--goat {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .hud-text {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .hud-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            line-height: 1.1;
+        }
+
+        .hud-val {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-top: 1px;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .hud-sub {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+        }
+
+        /* Main Playable Board Area — Maximized as Hero */
+        .board-wrapper {
+            flex: 1;
+            min-height: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100%;
+            padding: 6px 0;
             position: relative;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
-            margin: 10px 15px;
-            border-radius: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.05);
+            z-index: 5;
         }
 
         canvas {
             display: block;
             touch-action: none;
-            filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.6));
+            background: #FFFFFF;
+            border-radius: 20px;
+            box-shadow: var(--shadow-board);
+            border: 1.5px solid rgba(226, 58, 40, 0.12);
         }
 
-        .hud-glass {
-            background: rgba(30, 15, 5, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* Minimal Bottom Turn Bar */
+        .turn-strip {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+            flex-shrink: 0;
+            z-index: 10;
         }
 
-        .stone-btn {
-            background: linear-gradient(145deg, #d97706, #b45309);
-            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4), inset 2px 2px 4px rgba(255, 255, 255, 0.3);
-            transition: all 0.1s ease;
+        .turn-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 9999px;
+            padding: 7px 16px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .stone-btn:active {
-            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4), inset 4px 4px 8px rgba(0, 0, 0, 0.4);
-            transform: translate(2px, 2px);
+        .turn-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: background-color 0.25s ease, transform 0.25s ease;
         }
 
+        .turn--goat .turn-dot {
+            background: var(--color-primary);
+            box-shadow: 0 0 8px rgba(226, 58, 40, 0.4);
+        }
+
+        .turn--tiger .turn-dot {
+            background: var(--color-accent);
+            box-shadow: 0 0 8px rgba(243, 156, 18, 0.5);
+        }
+
+        .turn-badge {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: 0.2px;
+        }
+
+        .turn-divider {
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+        }
+
+        .turn-msg {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Overlays & Modals (Styled with Dainik Bhaskar System) */
         .modal-overlay {
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(4px);
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 15, 20, 0.65);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .modal-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--color-primary);
+            background: rgba(226, 58, 40, 0.08);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            display: inline-block;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-top: 4px;
+        }
+
+        .modal-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .rules-box {
+            background: var(--bg-app);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 14px;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.35;
+        }
+
+        .rule-item strong {
+            color: var(--text-primary);
+        }
+
+        .rule-icon {
+            font-size: 1.15rem;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, #E23A28 0%, #F39C12 100%);
+            color: #FFFFFF;
+            font-weight: 800;
+            font-size: 1rem;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(226, 58, 40, 0.35);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            letter-spacing: 0.4px;
+        }
+
+        .btn-play:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 8px rgba(226, 58, 40, 0.25);
+        }
+
+        .result-emoji {
+            font-size: 3.5rem;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .result-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .result-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-bottom: 6px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="phone-mockup relative">
-        <div class="phone-notch hidden sm:block"></div>
-        <div class="indian-pattern-top"></div>
+    <div class="game-layout">
 
-        <!-- Top Header & Score -->
-        <div class="pt-10 px-6 pb-2 flex flex-col items-center">
-            <h1 class="chalk-text text-4xl leading-none mb-1">Bagh Bakri</h1>
-            <p class="text-amber-500/80 text-sm font-bold tracking-widest uppercase">बाघ बकरी</p>
-        </div>
-
-        <div class="px-4 flex justify-between items-center z-10 gap-2">
-            <div class="hud-glass p-3 rounded-xl w-1/2 flex flex-col items-center">
-                <span class="text-xs text-amber-500 font-bold uppercase tracking-wide">Tigers (Bagh)</span>
-                <div class="flex items-center gap-2 mt-1">
-                    <span class="text-2xl">🐅</span>
-                    <span class="chalk-text text-2xl font-bold" id="tigersScore">0/5</span>
+        <!-- Minimal Top HUD Strip -->
+        <div class="hud-strip">
+            <div class="hud-card hud-card--tiger">
+                <div class="hud-icon-wrap hud-icon-wrap--tiger">🐅</div>
+                <div class="hud-text">
+                    <span class="hud-title">बाघ (Tigers)</span>
+                    <span class="hud-val"><strong id="tigersScore">0/5</strong> <small class="hud-sub">हंट</small></span>
                 </div>
-                <span class="text-[10px] text-gray-400 mt-1">Hunted</span>
             </div>
 
-            <div class="hud-glass p-3 rounded-xl w-1/2 flex flex-col items-center">
-                <span class="text-xs text-slate-300 font-bold uppercase tracking-wide">Goats (Bakri)</span>
-                <div class="flex items-center gap-2 mt-1">
-                    <span class="chalk-text text-2xl font-bold" id="goatsScore">20</span>
-                    <span class="text-2xl">🐐</span>
+            <div class="hud-card hud-card--goat">
+                <div class="hud-icon-wrap hud-icon-wrap--goat">🐐</div>
+                <div class="hud-text">
+                    <span class="hud-title">बकरी (Goats)</span>
+                    <span class="hud-val"><strong id="goatsScore">20</strong> <small class="hud-sub" id="goatStatusText">रखने को</small></span>
                 </div>
-                <span class="text-[10px] text-gray-400 mt-1" id="goatStatusText">To Place</span>
             </div>
+
+            <button id="rulesBtn" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; width: 46px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-sm); font-size: 1.2rem; flex-shrink: 0; padding: 0;">
+                ℹ️
+            </button>
         </div>
 
-        <!-- Game Canvas Area -->
-        <div class="board-container" id="boardWrapper">
+        <!-- Main Playable Board Area — Dominant centerpiece -->
+        <div class="board-wrapper" id="boardWrapper">
             <canvas id="gameCanvas"></canvas>
         </div>
 
-        <!-- Bottom Turn Indicator -->
-        <div class="px-6 pb-8 pt-2 z-10 flex flex-col items-center">
-            <div class="hud-glass w-full rounded-2xl p-4 text-center border-l-4 transition-colors duration-300"
-                id="turnIndicator">
-                <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Current Turn</p>
-                <h2 class="chalk-text text-3xl mb-1" id="turnText">GOAT'S TURN</h2>
-                <p class="text-sm text-gray-300 leading-tight" id="instructionText">Place a goat on any empty junction.
-                </p>
+        <!-- Minimal Bottom Turn Bar -->
+        <div class="turn-strip">
+            <div class="turn-pill turn--goat" id="turnIndicator">
+                <span class="turn-dot"></span>
+                <span class="turn-badge" id="turnText">बकरी की बारी</span>
+                <span class="turn-divider">•</span>
+                <span class="turn-msg" id="instructionText">खाली स्थान पर बकरी रखें</span>
             </div>
         </div>
 
         <!-- Overlay: Main Menu & Rules -->
-        <div id="overlayScreen"
-            class="absolute inset-0 modal-overlay flex flex-col items-center justify-center z-40 p-6">
-            <div
-                class="hud-glass w-full max-w-sm p-6 rounded-3xl border-2 border-amber-600 text-center flex flex-col items-center shadow-2xl">
-                <h2 class="chalk-text text-5xl text-amber-400 mb-2">Bagh Bakri</h2>
-                <p class="text-gray-300 text-sm mb-6 font-medium">The classic courtyard strategy.</p>
-
-                <div
-                    class="text-left space-y-3 mb-8 bg-black/30 p-4 rounded-xl border border-white/10 w-full text-sm text-gray-200">
-                    <p>🐐 <b>Goats:</b> Place 20 stones one by one. After all 20 are down, you can move. Trap the tigers
-                        to win!</p>
-                    <p>🐅 <b>Tigers:</b> Move to empty spots or <i>jump over</i> a goat to eat it. Eat 5 goats to win!
-                    </p>
-                    <p>✨ <b>Lines:</b> You can only move along the drawn chalk lines.</p>
+        <div id="overlayScreen" class="modal-overlay">
+            <div class="modal-card">
+                <div>
+                    <span class="modal-badge">दैनिक भास्कर · पारंपरिक खेल</span>
+                    <h2 class="modal-title">बाघ चाल (Bagh Chal)</h2>
+                    <p class="modal-desc">बुद्धि और रणनीति का प्राचीन भारतीय मुकाबला</p>
                 </div>
 
-                <button id="startBtn"
-                    class="stone-btn text-white font-bold text-xl py-3 px-10 rounded-full chalk-text tracking-wider w-full">
-                    PLAY NOW
-                </button>
+                <div class="rules-box">
+                    <div class="rule-item">
+                        <span class="rule-icon">🐐</span>
+                        <div><strong>बकरियां (20):</strong> 20 गोटियों को एक-एक करके रखें, फिर रेखाओं पर चलें। चारों बाघों को घेरकर जीतें!</div>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">🐅</span>
+                        <div><strong>बाघ (4):</strong> रेखाओं पर चलें या बकरी पर कूदकर शिकार करें। 5 शिकार करने पर जीत!</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                    <button id="resumeBtn" class="btn-play" style="background: #27AE60; display: none;">
+                        जारी रखें (RESUME)
+                    </button>
+                    <button id="startPvPBtn" class="btn-play">
+                        खेले (Player vs Player)
+                    </button>
+                    <button id="startPvAIBtn" class="btn-play" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                        खेले (Player vs AI)
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Overlay: Game Over -->
-        <div id="resultScreen"
-            class="absolute inset-0 modal-overlay hidden flex-col items-center justify-center z-40 p-6 opacity-0 transition-opacity duration-500">
-            <div class="hud-glass w-full max-w-sm p-8 rounded-3xl text-center border-t-8 shadow-2xl flex flex-col items-center"
-                id="resultBox">
-                <div class="text-6xl mb-2" id="resultEmoji">🏆</div>
-                <h2 class="chalk-text text-5xl mb-2" id="resultTitle">WINNER!</h2>
-                <p class="text-gray-200 text-lg mb-8" id="resultSub">Description</p>
+        <div id="resultScreen" class="modal-overlay hidden opacity-0">
+            <div class="modal-card" id="resultBox">
+                <div class="result-emoji" id="resultEmoji">🏆</div>
+                <h2 class="result-title" id="resultTitle">बकरियों की जीत!</h2>
+                <p class="result-desc" id="resultSub">शानदार रणनीति! आपने सभी बाघों को घेर लिया।</p>
 
-                <button id="restartBtn"
-                    class="stone-btn text-white font-bold text-xl py-3 px-10 rounded-full chalk-text tracking-wider w-full">
-                    PLAY AGAIN
+                <button id="restartBtn" class="btn-play">
+                    फिर से खेलें (PLAY AGAIN)
                 </button>
             </div>
         </div>
@@ -249,7 +466,10 @@
         const turnIndicator = document.getElementById('turnIndicator');
         const overlayScreen = document.getElementById('overlayScreen');
         const resultScreen = document.getElementById('resultScreen');
-        const startBtn = document.getElementById('startBtn');
+        const startPvPBtn = document.getElementById('startPvPBtn');
+        const startPvAIBtn = document.getElementById('startPvAIBtn');
+        const resumeBtn = document.getElementById('resumeBtn');
+        const rulesBtn = document.getElementById('rulesBtn');
         const restartBtn = document.getElementById('restartBtn');
 
         // Game Constants
@@ -259,17 +479,23 @@
         const TIGER = 2;
 
         const VIBE = {
-            chalk: 'rgba(254, 249, 195, 0.75)',
-            chalkFaint: 'rgba(254, 249, 195, 0.3)',
-            tigerColor: '#d97706', // Amber
-            goatColor: '#f1f5f9', // Slate white
-            validSpot: 'rgba(110, 231, 183, 0.6)', // Mint
-            captureSpot: 'rgba(239, 68, 68, 0.6)', // Red
-            dust: '#b75d32'
+            boardBg: '#FFFFFF',
+            line: '#BA2313', // Dainik Bhaskar deep red / terracotta for clean sharp lines
+            lineFaint: 'rgba(186, 35, 19, 0.22)',
+            nodeBorder: '#BA2313',
+            nodeCenter: '#FFFFFF',
+            tigerColor: '#F39C12', // Dainik Bhaskar Warm Amber
+            tigerDark: '#C0392B',
+            goatColor: '#FFFFFF', // Marble ivory
+            goatBorder: '#64748B',
+            validSpot: 'rgba(39, 174, 96, 0.65)', // Emerald mint
+            captureSpot: 'rgba(226, 58, 40, 0.7)', // Dainik Bhaskar red alert
+            dust: '#E23A28'
         };
 
         // State
         let state = 'MENU'; // MENU, PLAYING, GAMEOVER
+        let gameMode = 'PVP'; // PVP, PVAI
         let turn = GOAT;
         let board = [];
         let goatsPlaced = 0;
@@ -361,28 +587,32 @@
                 if (tigersCanMove) break;
             }
 
-            if (!tigersCanMove && goatsPlaced > 0) { // Safety to not trigger immediately
+            if (!tigersCanMove && goatsPlaced > 0) {
                 triggerGameOver(GOAT);
             }
         }
 
         function resize() {
             const rect = wrapper.getBoundingClientRect();
-            // Square board fit inside the container
-            const maxW = rect.width * 0.95;
-            const maxH = rect.height * 0.95;
+            // Maximize board size inside the available space
+            const pad = 6;
+            const maxW = Math.max(0, rect.width - pad);
+            const maxH = Math.max(0, rect.height - pad);
             size = Math.floor(Math.min(maxW, maxH));
+
+            if (size <= 0) return;
 
             canvas.style.width = `${size}px`;
             canvas.style.height = `${size}px`;
 
-            // Adjust for High DPI displays
-            canvas.width = size * dpr;
-            canvas.height = size * dpr;
+            canvas.width = Math.floor(size * dpr);
+            canvas.height = Math.floor(size * dpr);
 
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.scale(dpr, dpr);
 
-            margin = size * 0.12;
+            // Active playable grid spans 84% of board size!
+            margin = size * 0.08;
             spacing = (size - margin * 2) / (GRID - 1);
 
             updateVisualPiecesTarget();
@@ -425,15 +655,19 @@
                 cy = evt.touches[0].clientY;
             }
 
-            const x = cx - rect.left;
-            const y = cy - rect.top;
+            // Scale coordinates in case the CSS rendered size differs from the internal 'size'
+            const scaleX = size / rect.width;
+            const scaleY = size / rect.height;
+
+            const x = (cx - rect.left) * scaleX;
+            const y = (cy - rect.top) * scaleY;
 
             for (let r = 0; r < GRID; r++) {
                 for (let c = 0; c < GRID; c++) {
                     const px = margin + c * spacing;
                     const py = margin + r * spacing;
                     const dist = Math.hypot(x - px, y - py);
-                    if (dist < spacing * 0.45) return { r, c };
+                    if (dist < spacing * 0.46) return { r, c };
                 }
             }
             return null;
@@ -441,6 +675,7 @@
 
         function onInteract(e) {
             if (state !== 'PLAYING') return;
+            if (gameMode === 'PVAI' && turn === TIGER) return; // Block input during AI turn
             e.preventDefault();
 
             const pos = getCoords(e);
@@ -477,7 +712,6 @@
             if (selected && targetType === EMPTY) {
                 const move = possibleMoves.find(m => m.r === r && m.c === c);
                 if (move) {
-                    // Execute move on logical board
                     board[r][c] = turn;
                     board[selected.r][selected.c] = EMPTY;
 
@@ -488,7 +722,7 @@
                     }
 
                     spawnDust(r, c, turn === TIGER ? VIBE.tigerColor : VIBE.goatColor);
-                    syncPieces(); // Sync visual layer
+                    syncPieces();
 
                     selected = null;
                     possibleMoves = [];
@@ -510,6 +744,55 @@
         function switchTurn() {
             turn = turn === GOAT ? TIGER : GOAT;
             updateHUD();
+            
+            if (gameMode === 'PVAI' && turn === TIGER && state === 'PLAYING') {
+                makeAIMove();
+            }
+        }
+
+        function makeAIMove() {
+            if (state !== 'PLAYING') return;
+            
+            setTimeout(() => {
+                if (state !== 'PLAYING' || turn !== TIGER) return;
+
+                let allMoves = [];
+                for (let r = 0; r < GRID; r++) {
+                    for (let c = 0; c < GRID; c++) {
+                        if (board[r][c] === TIGER) {
+                            let moves = getMoves(r, c);
+                            moves.forEach(m => allMoves.push({ from: {r, c}, move: m }));
+                        }
+                    }
+                }
+
+                if (allMoves.length > 0) {
+                    // Prefer captures
+                    let captures = allMoves.filter(m => m.move.type === 'capture');
+                    let chosen = null;
+                    if (captures.length > 0) {
+                        chosen = captures[Math.floor(Math.random() * captures.length)];
+                    } else {
+                        chosen = allMoves[Math.floor(Math.random() * allMoves.length)];
+                    }
+
+                    // Execute move
+                    let { from, move } = chosen;
+                    board[move.r][move.c] = TIGER;
+                    board[from.r][from.c] = EMPTY;
+                    
+                    if (move.type === 'capture') {
+                        board[move.capR][move.capC] = EMPTY;
+                        goatsCaptured++;
+                        spawnDust(move.capR, move.capC, VIBE.captureSpot);
+                    }
+                    
+                    spawnDust(move.r, move.c, VIBE.tigerColor);
+                    syncPieces();
+                    checkGameEnd();
+                    if (state === 'PLAYING') switchTurn();
+                }
+            }, 600);
         }
 
         function updateHUD() {
@@ -517,45 +800,41 @@
 
             if (goatsPlaced < 20) {
                 goatsScoreDisplay.innerText = 20 - goatsPlaced;
-                goatStatusText.innerText = "To Place";
+                goatStatusText.innerText = "रखने को";
             } else {
                 goatsScoreDisplay.innerText = 20 - goatsCaptured;
-                goatStatusText.innerText = "Surviving";
+                goatStatusText.innerText = "मैदान में";
             }
 
             if (turn === GOAT) {
-                turnText.innerText = "BAKRI / GOAT";
-                turnText.className = "chalk-text text-3xl mb-1 text-slate-100";
-                turnIndicator.style.borderLeftColor = VIBE.goatColor;
+                turnText.innerText = "बकरी की बारी (GOAT)";
+                turnIndicator.classList.remove('turn--tiger');
+                turnIndicator.classList.add('turn--goat');
 
                 if (goatsPlaced < 20) {
-                    instructionText.innerText = "Tap an empty spot to place a goat.";
+                    instructionText.innerText = "खाली जगह पर बकरी रखें";
                 } else {
-                    instructionText.innerText = "Select a goat and move to an adjacent spot.";
+                    instructionText.innerText = "बकरी चुनकर खाली जगह पर चलें";
                 }
             } else {
-                turnText.innerText = "BAGH / TIGER";
-                turnText.className = "chalk-text text-3xl mb-1 text-amber-500";
-                turnIndicator.style.borderLeftColor = VIBE.tigerColor;
-                instructionText.innerText = "Move a tiger or jump over a goat to hunt it.";
+                turnText.innerText = "बाघ की बारी (TIGER)";
+                turnIndicator.classList.remove('turn--goat');
+                turnIndicator.classList.add('turn--tiger');
+                instructionText.innerText = "बाघ चलें या बकरी पर कूदकर शिकार करें";
             }
         }
 
         function syncPieces() {
-            // Remove missing pieces (captured or moved)
             pieces = pieces.filter(p => board[p.r][p.c] === p.type);
 
-            // Add new pieces or identify moved pieces
             for (let r = 0; r < GRID; r++) {
                 for (let c = 0; c < GRID; c++) {
                     if (board[r][c] !== EMPTY) {
                         const exists = pieces.find(p => p.r === r && p.c === c);
                         if (!exists) {
-                            // Determine origin for lerping
                             let originX = margin + c * spacing;
                             let originY = margin + r * spacing;
 
-                            // Simple spawn (drops in)
                             pieces.push({
                                 type: board[r][c],
                                 r: r, c: c,
@@ -573,7 +852,7 @@
             pieces.forEach(p => {
                 p.targetX = margin + p.c * spacing;
                 p.targetY = margin + p.r * spacing;
-                p.x = p.targetX; // Snap on resize
+                p.x = p.targetX;
                 p.y = p.targetY;
             });
         }
@@ -581,49 +860,42 @@
         function spawnDust(r, c, color) {
             const px = margin + c * spacing;
             const py = margin + r * spacing;
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < 10; i++) {
                 dustParticles.push({
-                    x: px + (Math.random() - 0.5) * 20,
-                    y: py + (Math.random() - 0.5) * 20,
-                    vx: (Math.random() - 0.5) * 4,
-                    vy: (Math.random() - 0.5) * 4 - 1, // slight upward bias
+                    x: px + (Math.random() - 0.5) * 16,
+                    y: py + (Math.random() - 0.5) * 16,
+                    vx: (Math.random() - 0.5) * 3,
+                    vy: (Math.random() - 0.5) * 3 - 0.8,
                     life: 1,
                     color: color,
-                    size: Math.random() * 3 + 1
+                    size: Math.random() * 2.5 + 1
                 });
             }
         }
 
-        // Draw rough chalk lines
-        function drawRoughLine(x1, y1, x2, y2) {
+        // Draw crisp board lines in Dainik Bhaskar Terracotta
+        function drawBoardLine(x1, y1, x2, y2) {
             ctx.beginPath();
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
-            ctx.stroke();
-
-            // Second faint pass for chalky feel
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = VIBE.chalkFaint;
-            ctx.beginPath();
-            ctx.moveTo(x1 + (Math.random() - 0.5) * 3, y1 + (Math.random() - 0.5) * 3);
-            ctx.lineTo(x2 + (Math.random() - 0.5) * 3, y2 + (Math.random() - 0.5) * 3);
             ctx.stroke();
         }
 
         function draw(animate = true) {
             ctx.clearRect(0, 0, size, size);
 
-            // 1. Draw Chalk Board
-            ctx.strokeStyle = VIBE.chalk;
+            // 1. Draw subtle board grid lines
+            ctx.strokeStyle = VIBE.line;
             ctx.lineCap = 'round';
-            ctx.lineWidth = 2.5;
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = Math.max(2, size * 0.007);
 
             // Grids
             for (let i = 0; i < GRID; i++) {
                 const pos = margin + i * spacing;
                 const end = margin + (GRID - 1) * spacing;
-                drawRoughLine(margin, pos, end, pos); // H
-                drawRoughLine(pos, margin, pos, end); // V
+                drawBoardLine(margin, pos, end, pos); // Horizontal
+                drawBoardLine(pos, margin, pos, end); // Vertical
             }
 
             // Diagonals (Alquerque style)
@@ -632,92 +904,145 @@
             const m2 = margin + 2 * spacing;
 
             // X lines
-            drawRoughLine(m0, m0, m4, m4);
-            drawRoughLine(m0, m4, m4, m0);
+            drawBoardLine(m0, m0, m4, m4);
+            drawBoardLine(m0, m4, m4, m0);
             // Diamond
-            drawRoughLine(m2, m0, m4, m2);
-            drawRoughLine(m4, m2, m2, m4);
-            drawRoughLine(m2, m4, m0, m2);
-            drawRoughLine(m0, m2, m2, m0);
+            drawBoardLine(m2, m0, m4, m2);
+            drawBoardLine(m4, m2, m2, m4);
+            drawBoardLine(m2, m4, m0, m2);
+            drawBoardLine(m0, m2, m2, m0);
 
-            // 2. Draw Nodes & Interactivity Highlights
+            // 2. Draw junction nodes & hints
+            const nodeRadius = Math.max(3, size * 0.012);
             for (let r = 0; r < GRID; r++) {
                 for (let c = 0; c < GRID; c++) {
                     const px = margin + c * spacing;
                     const py = margin + r * spacing;
 
-                    // Small dot for node
-                    ctx.fillStyle = VIBE.chalk;
+                    // Clean junction bead
+                    ctx.fillStyle = VIBE.nodeCenter;
+                    ctx.strokeStyle = VIBE.nodeBorder;
+                    ctx.lineWidth = 1.5;
                     ctx.beginPath();
-                    ctx.arc(px, py, 3, 0, Math.PI * 2);
+                    ctx.arc(px, py, nodeRadius, 0, Math.PI * 2);
                     ctx.fill();
+                    ctx.stroke();
 
                     // Possible move highlight
                     const move = possibleMoves.find(m => m.r === r && m.c === c);
                     if (move) {
                         ctx.fillStyle = move.type === 'capture' ? VIBE.captureSpot : VIBE.validSpot;
                         ctx.beginPath();
-                        ctx.arc(px, py, spacing * 0.25, 0, Math.PI * 2);
+                        ctx.arc(px, py, spacing * 0.28, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        // Inner pulse dot
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.beginPath();
+                        ctx.arc(px, py, spacing * 0.09, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 }
             }
 
-            // Draw Selected Ring
+            // Draw Selected Piece Ring
             if (selected) {
                 const px = margin + selected.c * spacing;
                 const py = margin + selected.r * spacing;
-                ctx.strokeStyle = turn === TIGER ? VIBE.tigerColor : VIBE.goatColor;
+                ctx.strokeStyle = turn === TIGER ? '#E67E22' : '#E23A28';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
-                ctx.arc(px, py, spacing * 0.35, 0, Math.PI * 2);
+                ctx.arc(px, py, spacing * 0.36, 0, Math.PI * 2);
                 ctx.stroke();
             }
 
             // 3. Draw Pieces (Stones)
             const tigerRadius = spacing * 0.28;
-            const goatRadius = spacing * 0.22;
+            const goatRadius = spacing * 0.23;
 
             pieces.forEach(p => {
-                // Lerp properties for smooth animation
                 if (animate) {
-                    p.x += (p.targetX - p.x) * 0.2;
-                    p.y += (p.targetY - p.y) * 0.2;
-                    p.scale += (p.targetScale - p.scale) * 0.2;
+                    p.x += (p.targetX - p.x) * 0.22;
+                    p.y += (p.targetY - p.y) * 0.22;
+                    p.scale += (p.targetScale - p.scale) * 0.22;
                 }
 
                 const rad = (p.type === TIGER ? tigerRadius : goatRadius) * p.scale;
                 if (rad < 0.5) return;
 
-                // Drop shadow
-                ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                // Soft drop shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.16)';
                 ctx.beginPath();
-                ctx.arc(p.x + 3, p.y + 4, rad, 0, Math.PI * 2);
+                ctx.arc(p.x + 2, p.y + 3, rad, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Base stone
-                ctx.fillStyle = p.type === TIGER ? VIBE.tigerColor : VIBE.goatColor;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, rad, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Stone texture/highlight
-                ctx.fillStyle = 'rgba(255,255,255,0.2)';
-                ctx.beginPath();
-                ctx.arc(p.x - rad * 0.3, p.y - rad * 0.3, rad * 0.4, 0, Math.PI * 2);
-                ctx.fill();
-
-                // Motif on stone
                 if (p.type === TIGER) {
-                    ctx.strokeStyle = '#78350f'; // Dark tiger stripe
-                    ctx.lineWidth = 2;
+                    // Vibrant Amber Tiger Stone
+                    const grad = ctx.createRadialGradient(
+                        p.x - rad * 0.25, p.y - rad * 0.25, rad * 0.1,
+                        p.x, p.y, rad
+                    );
+                    grad.addColorStop(0, '#F5B041');
+                    grad.addColorStop(0.7, '#E67E22');
+                    grad.addColorStop(1, '#D35400');
+
+                    ctx.fillStyle = grad;
                     ctx.beginPath();
-                    ctx.moveTo(p.x - rad * 0.5, p.y - rad * 0.2); ctx.lineTo(p.x + rad * 0.2, p.y - rad * 0.2);
-                    ctx.moveTo(p.x - rad * 0.7, p.y + rad * 0.2); ctx.lineTo(p.x + rad * 0.4, p.y + rad * 0.2);
+                    ctx.arc(p.x, p.y, rad, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Subtle border rim
+                    ctx.strokeStyle = '#BA4A00';
+                    ctx.lineWidth = 1.5;
                     ctx.stroke();
+
+                    // Tiger Stripes Motif
+                    ctx.strokeStyle = '#4A1A05';
+                    ctx.lineWidth = Math.max(1.5, rad * 0.12);
+                    ctx.lineCap = 'round';
+                    ctx.beginPath();
+                    ctx.moveTo(p.x - rad * 0.45, p.y - rad * 0.15);
+                    ctx.lineTo(p.x + rad * 0.2, p.y - rad * 0.15);
+                    ctx.moveTo(p.x - rad * 0.55, p.y + rad * 0.15);
+                    ctx.lineTo(p.x + rad * 0.35, p.y + rad * 0.15);
+                    ctx.stroke();
+
+                    // Top highlight gloss
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+                    ctx.beginPath();
+                    ctx.arc(p.x - rad * 0.3, p.y - rad * 0.3, rad * 0.35, 0, Math.PI * 2);
+                    ctx.fill();
                 } else {
-                    ctx.fillStyle = '#94a3b8'; // Slate grey markings
-                    ctx.beginPath(); ctx.arc(p.x, p.y, rad * 0.2, 0, Math.PI * 2); ctx.fill();
+                    // Pure Polished Marble Goat Stone
+                    const grad = ctx.createRadialGradient(
+                        p.x - rad * 0.25, p.y - rad * 0.25, rad * 0.1,
+                        p.x, p.y, rad
+                    );
+                    grad.addColorStop(0, '#FFFFFF');
+                    grad.addColorStop(0.75, '#F8FAFC');
+                    grad.addColorStop(1, '#E2E8F0');
+
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, rad, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Subtle slate rim
+                    ctx.strokeStyle = '#94A3B8';
+                    ctx.lineWidth = 1.2;
+                    ctx.stroke();
+
+                    // Central delicate dot
+                    ctx.fillStyle = '#64748B';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, rad * 0.22, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Top highlight gloss
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                    ctx.beginPath();
+                    ctx.arc(p.x - rad * 0.3, p.y - rad * 0.3, rad * 0.35, 0, Math.PI * 2);
+                    ctx.fill();
                 }
             });
 
@@ -733,7 +1058,7 @@
 
                     d.x += d.vx;
                     d.y += d.vy;
-                    d.life -= 0.05;
+                    d.life -= 0.055;
                     if (d.life <= 0) dustParticles.splice(i, 1);
                 }
                 ctx.globalAlpha = 1.0;
@@ -750,37 +1075,68 @@
         function triggerGameOver(winner) {
             state = 'GAMEOVER';
 
-            resultScreen.classList.remove('hidden');
-            resultScreen.classList.add('flex');
-
-            // Slight delay for fade in
-            setTimeout(() => {
-                resultScreen.classList.remove('opacity-0');
-            }, 100);
-
-            const rBox = document.getElementById('resultBox');
             const rTitle = document.getElementById('resultTitle');
             const rSub = document.getElementById('resultSub');
             const rEmoji = document.getElementById('resultEmoji');
 
-            if (winner === TIGER) {
-                rBox.style.borderColor = VIBE.tigerColor;
-                rTitle.innerText = "TIGERS FEAST!";
-                rTitle.className = "chalk-text text-5xl mb-2 text-amber-500";
-                rSub.innerText = "5 goats were hunted down.";
-                rEmoji.innerText = "🐅";
+            let finalScore = 0;
+            if (winner === GOAT) {
+                finalScore = 150 + (20 - goatsCaptured) * 10;
+                rTitle.innerText = "बकरियों की जीत! 🐐";
+                rSub.innerText = `अद्भुत खेल! आपने सभी 4 बाघों को घेर लिया। कुल शिकार: ${goatsCaptured}/5`;
+                rEmoji.innerText = "🏆";
             } else {
-                rBox.style.borderColor = VIBE.goatColor;
-                rTitle.innerText = "GOATS WIN!";
-                rTitle.className = "chalk-text text-5xl mb-2 text-white";
-                rSub.innerText = "The tigers are completely trapped in the courtyard.";
-                rEmoji.innerText = "🐐";
+                finalScore = Math.max(30, (20 - goatsCaptured) * 5);
+                rTitle.innerText = "बाघों की जीत! 🐅";
+                rSub.innerText = "बाघों ने 5 बकरियों का शिकार कर लिया। अगली बार और चौकस रहें!";
+                rEmoji.innerText = "🐅";
             }
+
+            // Sync with Host App DBGameLab
+            try {
+                if (window.DBGameLab) {
+                    if (typeof window.DBGameLab.addScore === 'function') {
+                        window.DBGameLab.addScore(finalScore);
+                    }
+                    if (typeof window.DBGameLab.endGame === 'function') {
+                        window.DBGameLab.endGame(finalScore);
+                    }
+                }
+            } catch (err) {
+                console.warn("DBGameLab sync error:", err);
+            }
+
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('flex');
+
+            setTimeout(() => {
+                resultScreen.classList.remove('opacity-0');
+            }, 60);
         }
 
         // Bootups
-        startBtn.addEventListener('click', () => {
+        rulesBtn.addEventListener('click', () => {
+            overlayScreen.classList.remove('hidden');
+            if (state === 'PLAYING') {
+                resumeBtn.style.display = 'block';
+            }
+        });
+
+        resumeBtn.addEventListener('click', () => {
             overlayScreen.classList.add('hidden');
+        });
+
+        startPvPBtn.addEventListener('click', () => {
+            overlayScreen.classList.add('hidden');
+            gameMode = 'PVP';
+            resize(); 
+            initMatch();
+        });
+
+        startPvAIBtn.addEventListener('click', () => {
+            overlayScreen.classList.add('hidden');
+            gameMode = 'PVAI';
+            resize();
             initMatch();
         });
 
@@ -790,11 +1146,16 @@
                 resultScreen.classList.add('hidden');
                 resultScreen.classList.remove('flex');
                 initMatch();
-            }, 400); // Wait for fade out
+            }, 350);
         });
 
         // Initialize sizing and background render
         resize();
+
+        // Auto-start on load
+        overlayScreen.classList.add('hidden');
+        gameMode = 'PVP'; // Default mode
+        initMatch();
 
     </script>
 </body>

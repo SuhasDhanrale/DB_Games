@@ -24,6 +24,7 @@ import './games/game-2/index.js';
 import './games/game-3/index.js';
 import './games/game-4/index.js';
 import './games/game-5/index.js';
+import './games/game-6/index.js';
 
 async function bootstrap() {
   // 1. Initialize core systems

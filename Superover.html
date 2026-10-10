@@ -1,0 +1,2524 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>सुपर ओवर | Super Over Cricket - Dainik Bhaskar Game Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/styles/design-system.css" />
+    <link rel="stylesheet" href="./src/styles/components.css" />
+
+    <style>
+        :root {
+            --color-primary: #E23A28; /* Dainik Bhaskar Crimson */
+            --color-primary-dark: #BA2313;
+            --color-primary-light: #F4604C;
+            --color-accent: #F39C12; /* Cricket Amber / Gold */
+            --color-accent-warm: #FDCB6E;
+            --color-success: #27AE60;
+            --color-danger: #E74C3C;
+            --bg-app: #F9F9F7;
+            --bg-surface: #FFFFFF;
+            --text-primary: #1C1C1C;
+            --text-secondary: #5C5C5C;
+            --text-tertiary: #8E8E8E;
+            --border-subtle: rgba(0, 0, 0, 0.08);
+            --border-medium: rgba(0, 0, 0, 0.16);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-board: 0 12px 36px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .game-layout {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 8px 10px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            justify-content: space-between;
+        }
+
+        /* Top HUD Strip - Clean & Uncluttered */
+        .hud-strip {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .hud-card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 8px 12px;
+            box-shadow: var(--shadow-sm);
+            min-width: 0;
+        }
+
+        .hud-icon-wrap {
+            font-size: 1.25rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(226, 58, 40, 0.1);
+        }
+
+        .hud-icon-wrap--target {
+            background: rgba(243, 156, 18, 0.15);
+        }
+
+        .hud-text {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .hud-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .hud-val {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.2;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            white-space: nowrap;
+        }
+
+        .hud-sub {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            line-height: 1.2;
+        }
+
+        /* Over Ball Tracker Strip */
+        .balls-strip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            max-width: 480px;
+            margin: 4px auto 0 auto;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .ball-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.78rem;
+            font-weight: 800;
+            background: var(--bg-surface);
+            border: 1.5px solid var(--border-subtle);
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .ball-badge.current {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 10px rgba(226, 58, 40, 0.4);
+            transform: scale(1.12);
+            background: #FFF5F5;
+            color: var(--color-primary);
+        }
+
+        .ball-badge.run-0 {
+            background: #F1F2F6;
+            color: #747D8C;
+        }
+
+        .ball-badge.run-1,
+        .ball-badge.run-2,
+        .ball-badge.run-3 {
+            background: #E8F5E9;
+            color: #2E7D32;
+            border-color: #A5D6A7;
+        }
+
+        .ball-badge.run-4 {
+            background: #E3F2FD;
+            color: #1565C0;
+            border-color: #90CAF9;
+            font-weight: 900;
+        }
+
+        .ball-badge.run-6 {
+            background: #FFF8E1;
+            color: #E65100;
+            border-color: #FFE082;
+            font-weight: 900;
+            box-shadow: 0 2px 8px rgba(230, 81, 0, 0.25);
+        }
+
+        .ball-badge.run-w {
+            background: #FFEBEE;
+            color: #C62828;
+            border-color: #EF9A9A;
+            font-weight: 900;
+        }
+
+        /* Live Commentary Bar */
+        .commentary-bar {
+            width: 100%;
+            max-width: 480px;
+            margin: 4px auto 0 auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 9999px;
+            padding: 4px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .commentary-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            box-shadow: 0 0 6px var(--color-primary);
+            flex-shrink: 0;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .commentary-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        /* Main Canvas Hero Area */
+        .board-wrapper {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 4px 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        #cricketCanvas {
+            display: block;
+            touch-action: none;
+            background: #1D753B;
+            border-radius: 20px;
+            box-shadow: var(--shadow-board);
+            border: 1.5px solid rgba(0, 0, 0, 0.15);
+            cursor: grab;
+        }
+
+        #cricketCanvas:active {
+            cursor: grabbing;
+        }
+
+        /* In-Game Action Flash (SIX, FOUR, WICKET) */
+        #actionPrompt {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.7);
+            pointer-events: none;
+            z-index: 35;
+            opacity: 0;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #actionPrompt.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .prompt-pill {
+            background: rgba(28, 28, 28, 0.94);
+            color: #FFFFFF;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 24px;
+            border-radius: 9999px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .prompt-pill--six {
+            border-color: #F39C12;
+            color: #F1C40F;
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.6);
+        }
+
+        .prompt-pill--four {
+            border-color: #3498DB;
+            color: #E0FBFC;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+        }
+
+        .prompt-pill--out {
+            border-color: #E74C3C;
+            color: #FF7675;
+            box-shadow: 0 0 25px rgba(231, 76, 60, 0.6);
+        }
+
+        /* Interactive On-Canvas 8-Direction Compass Visual */
+        #swipeCompassOverlay {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 9999px;
+            padding: 6px 14px;
+            color: #FFFFFF;
+            font-size: 0.75rem;
+            font-weight: 700;
+            pointer-events: none;
+            z-index: 25;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+        }
+
+        .compass-arrow-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #F39C12;
+            box-shadow: 0 0 8px #F39C12;
+        }
+
+        /* Bowling Speed Oscillating Meter */
+        #speedMeterOverlay {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 300px;
+            background: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 8px 14px;
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 30;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .speed-meter-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+
+        .speed-track {
+            position: relative;
+            width: 100%;
+            height: 12px;
+            background: #2D3436;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .speed-gradient {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #3498DB 0%, #2ECC71 45%, #F39C12 75%, #E74C3C 100%);
+        }
+
+        .speed-cursor {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 8px;
+            height: 100%;
+            background: #FFFFFF;
+            border-radius: 2px;
+            transform: translateX(-50%);
+            box-shadow: 0 0 6px #FFF;
+        }
+
+        /* Bottom Minimal Controls Strip */
+        .bottom-controls {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            flex-shrink: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .hint-role-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .gesture-hint-pill {
+            flex: 1;
+            height: 44px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-sm);
+            min-width: 0;
+            transition: all 0.2s ease;
+        }
+
+        .hint-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .hint-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+
+        .btn-mode-toggle {
+            height: 44px;
+            padding: 0 16px;
+            border-radius: 14px;
+            border: 1.5px solid var(--border-subtle);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .btn-mode-toggle:active {
+            transform: scale(0.95);
+            background: var(--bg-app);
+        }
+
+        /* Modal Overlays (Rules & Game Result) */
+        .modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 16px;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-card {
+            background: var(--bg-surface);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 440px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 16px 20px 12px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--text-primary);
+        }
+
+        .modal-subtitle {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .modal-close-btn {
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            padding: 16px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rule-card {
+            background: #F9F9F7;
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 10px 12px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .rule-icon {
+            font-size: 1.35rem;
+            background: #FFFFFF;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+        }
+
+        .rule-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .rule-desc {
+            font-size: 0.76rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .modal-footer {
+            padding: 14px 20px 18px 20px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-modal-primary {
+            flex: 1;
+            height: 46px;
+            border-radius: 14px;
+            background: var(--color-primary);
+            color: #FFFFFF;
+            border: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(226, 58, 40, 0.3);
+        }
+
+        .btn-modal-secondary {
+            height: 46px;
+            padding: 0 16px;
+            border-radius: 14px;
+            background: #F1F2F6;
+            color: var(--text-primary);
+            border: none;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Newspaper Result Screen */
+        .news-header {
+            background: #1C1C1C;
+            color: #FFFFFF;
+            padding: 10px 14px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .news-headline {
+            font-size: 1.15rem;
+            font-weight: 900;
+            line-height: 1.25;
+            color: var(--text-primary);
+            margin: 6px 0 10px 0;
+        }
+
+        .news-scorecard {
+            background: #F8F9FA;
+            border: 1px solid var(--border-medium);
+            border-radius: 14px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            text-align: center;
+        }
+
+        .stat-box-num {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: var(--color-primary);
+        }
+
+        .stat-box-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        /* Confetti Canvas */
+        #confettiCanvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 90;
+            background: transparent !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Transparent Confetti layer for celebrations -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <div class="game-layout">
+        <!-- Minimal Top HUD Strip -->
+        <div class="hud-strip">
+            <div class="hud-card">
+                <div class="hud-icon-wrap" id="modeIconWrap">🏏</div>
+                <div class="hud-text">
+                    <span class="hud-title" id="hudRoleLabel">बल्लेबाजी · रन</span>
+                    <span class="hud-val">
+                        <span id="hudRuns">0</span>/<span id="hudWickets">0</span>
+                        <span class="hud-sub" id="hudOvers">(0.0)</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="hud-card">
+                <div class="hud-icon-wrap hud-icon-wrap--target">🎯</div>
+                <div class="hud-text">
+                    <span class="hud-title" id="hudTargetLabel">लक्ष्य 18</span>
+                    <span class="hud-val" id="hudReqRate">18 रन चाहिए</span>
+                    <span class="hud-sub" id="hudBallsRemaining">6 गेंद शेष</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Over Balls Strip -->
+        <div class="balls-strip" id="ballsStrip">
+            <div class="ball-badge current" id="ball-0">•</div>
+            <div class="ball-badge" id="ball-1">-</div>
+            <div class="ball-badge" id="ball-2">-</div>
+            <div class="ball-badge" id="ball-3">-</div>
+            <div class="ball-badge" id="ball-4">-</div>
+            <div class="ball-badge" id="ball-5">-</div>
+        </div>
+
+        <!-- Commentary & Live Situation Bar -->
+        <div class="commentary-bar">
+            <div class="commentary-dot"></div>
+            <div class="commentary-text" id="commentaryText">सुपर ओवर शुरू! किसी भी दिशा में स्वाइप करके शॉट खेलें।</div>
+        </div>
+
+        <!-- Main Canvas Arena -->
+        <div class="board-wrapper" id="boardWrapper">
+            <canvas id="cricketCanvas"></canvas>
+
+            <!-- Action Prompt Flash -->
+            <div id="actionPrompt">
+                <div class="prompt-pill" id="actionPill">छक्का! SIX!</div>
+            </div>
+        </div>
+
+        <!-- Minimal Bottom Status & Role Switch -->
+        <div class="bottom-controls">
+            <div class="hint-role-bar">
+                <div class="gesture-hint-pill" id="gestureHintPill">
+                    <span class="hint-icon" id="hintIcon">🏏</span>
+                    <span class="hint-text" id="hintText">स्वाइप करें शॉट खेलने के लिए · 8 दिशाएं</span>
+                </div>
+                <button class="btn-mode-toggle" id="switchRoleBtn">
+                    <span id="switchRoleIcon">🔄</span>
+                    <span id="switchRoleText">गेंदबाजी मोड</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Play & Rules Modal -->
+    <div class="modal-overlay hidden" id="rulesModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-header-brand">
+                    <span style="font-size: 1.4rem;">🏏</span>
+                    <div>
+                        <div class="modal-title" id="rulesModalTitle">सुपर ओवर: स्वाइप क्रिकेट</div>
+                        <div class="modal-subtitle">Dainik Bhaskar Game Lab</div>
+                    </div>
+                </div>
+                <button class="modal-close-btn" id="closeRulesBtn">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="rule-card">
+                    <div class="rule-icon">🎥</div>
+                    <div>
+                        <div class="rule-title">2 टिल्टेड कैमरा व्यू (Two POV Angles)</div>
+                        <div class="rule-desc">बल्लेबाज के कंधे के पीछे से बैटिंग एंगल और गेंदबाज के नजरिए से बॉलिंग एंगल। कोई फालतू फील्डर नहीं, सीधा 1v1 रोमांच!</div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-icon">🏃</div>
+                    <div>
+                        <div class="rule-title">गेंदबाज का रन-अप व स्वचालित गति</div>
+                        <div class="rule-desc">गेंदबाज दूर से रन-अप लेकर आता है ताकि आपको गेंद आने का सही अहसास हो। हर गेंद के बीच प्राकृतिक विराम के साथ मैच आगे बढ़ता है!</div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-icon">👆</div>
+                    <div>
+                        <div class="rule-title">8 दिशाओं में स्वाइप (8-Direction Swipe Batting)</div>
+                        <div class="rule-desc">बटन दबाने के बजाय स्क्रीन पर किसी भी दिशा में स्वाइप करें: ⬆️ स्ट्रेट, ↗️ कवर, ➡️ कट, ⬅️ पुल, ↖️ मिड-विकेट और ⬇️ डिफेंस!</div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-icon">🎯</div>
+                    <div>
+                        <div class="rule-title">गेंदबाजी: पिच पर ड्रैग एंड ड्रॉप (Pitch Drag & Drop)</div>
+                        <div class="rule-desc">पिच पर कहीं भी उंगली ड्रैग करें — यॉर्कर, फुल, गुड लेंथ, बाउंसर और इनस्विंग/आउटस्विंग सेट करें, फिर गेंद फेंकने के लिए छोड़ें!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-primary" id="startMatchBtn">मुकाबला शुरू करें</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Over Newspaper Result Modal -->
+    <div class="modal-overlay hidden" id="resultModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-header-brand">
+                    <span style="font-size: 1.4rem;" id="resEmoji">🏆</span>
+                    <div>
+                        <div class="modal-title" id="resTitle">सुपर ओवर समाप्त!</div>
+                        <div class="modal-subtitle">दैनिक भास्कर खेल विशेष</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="news-header">
+                    <span style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 800;">DAINIK BHASKAR · SPECIAL REPORT</span>
+                    <span style="font-size: 0.72rem; color: #FDCB6E;" id="resDateBadge">आज का मैच</span>
+                </div>
+
+                <div class="news-headline" id="resHeadline">
+                    सांस रोक देने वाले सुपर ओवर में अंतिम गेंद पर रोमांचक जीत!
+                </div>
+
+                <div class="news-scorecard">
+                    <div>
+                        <div class="stat-box-num" id="resRuns">19</div>
+                        <div class="stat-box-label" id="resRunsLbl">कुल रन</div>
+                    </div>
+                    <div>
+                        <div class="stat-box-num" id="resWickets">1</div>
+                        <div class="stat-box-label" id="resWicketsLbl">विकेट</div>
+                    </div>
+                    <div>
+                        <div class="stat-box-num" id="resBoundaries">3</div>
+                        <div class="stat-box-label" id="resBoundariesLbl">चौके/छक्के</div>
+                    </div>
+                </div>
+
+                <div style="background: #F9F9F7; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;" id="resNarrative">
+                    आपने दबाव के पलों में बेहतरीन स्वाइप और सटीक टाइमिंग से टीम को शानदार जीत दिलाई।
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-secondary" id="resChangeModeBtn">मोड बदलें</button>
+                <button class="btn-modal-primary" id="resPlayAgainBtn">फिर से खेलें 🏏</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Logic Scripts -->
+    <script>
+        /* ============================================================
+           SUPER OVER CRICKET — Dainik Bhaskar Game Lab
+           Two POV Perspectives, 8-Directional Swipe Batting,
+           Hovering Pitch Area Clue, Swipe Swing Bowling
+           ============================================================ */
+
+        // --- Web Audio Synthesizer ---
+        class CricketAudio {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playBatHit(isSix = false) {
+                if (!this.enabled || !this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+                    const bufferSize = this.ctx.sampleRate * 0.05;
+                    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                    const output = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.2));
+                    }
+                    const noise = this.ctx.createBufferSource();
+                    noise.buffer = buffer;
+
+                    const filter = this.ctx.createBiquadFilter();
+                    filter.type = 'bandpass';
+                    filter.frequency.value = isSix ? 850 : 1200;
+                    filter.Q.value = 3.0;
+
+                    const gain = this.ctx.createGain();
+                    gain.gain.setValueAtTime(isSix ? 0.45 : 0.35, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+                    noise.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    noise.start(now);
+
+                    const osc = this.ctx.createOscillator();
+                    const oscGain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(isSix ? 280 : 380, now);
+                    osc.frequency.exponentialRampToValueAtTime(140, now + 0.12);
+                    oscGain.gain.setValueAtTime(isSix ? 0.4 : 0.25, now);
+                    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                    osc.connect(oscGain);
+                    oscGain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.13);
+
+                    if (isSix) this.playCrowdCheer(1.6);
+                } catch (e) { }
+            }
+
+            playBallBounce() {
+                if (!this.enabled || !this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(75, now + 0.06);
+                    gain.gain.setValueAtTime(0.22, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.07);
+                } catch (e) { }
+            }
+
+            playWicketSmash() {
+                if (!this.enabled || !this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(1400, now);
+                    osc.frequency.exponentialRampToValueAtTime(260, now + 0.28);
+                    gain.gain.setValueAtTime(0.38, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.29);
+                    this.playCrowdCheer(2.0);
+                } catch (e) { }
+            }
+
+            playCrowdCheer(duration = 1.2) {
+                if (!this.enabled || !this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+                    const bufferSize = this.ctx.sampleRate * duration;
+                    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                    const output = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        output[i] = Math.random() * 2 - 1;
+                    }
+                    const whiteNoise = this.ctx.createBufferSource();
+                    whiteNoise.buffer = buffer;
+
+                    const filter = this.ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(450, now);
+                    filter.frequency.linearRampToValueAtTime(800, now + duration * 0.4);
+                    filter.frequency.exponentialRampToValueAtTime(300, now + duration);
+
+                    const gain = this.ctx.createGain();
+                    gain.gain.setValueAtTime(0.02, now);
+                    gain.gain.linearRampToValueAtTime(0.18, now + duration * 0.3);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                    whiteNoise.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    whiteNoise.start(now);
+                } catch (e) { }
+            }
+
+            playFanfare() {
+                if (!this.enabled || !this.ctx) return;
+                try {
+                    const notes = [523.25, 659.25, 783.99, 1046.5];
+                    const now = this.ctx.currentTime;
+                    notes.forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                        gain.gain.setValueAtTime(0.2, now + idx * 0.12);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.4);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + idx * 0.12);
+                        osc.stop(now + idx * 0.12 + 0.45);
+                    });
+                } catch (e) { }
+            }
+        }
+
+        const audio = new CricketAudio();
+
+        // --- I18N Strings ---
+        const I18N = {
+            hi: {
+                title: 'सुपर ओवर',
+                roleBatting: 'बल्लेबाजी · रन',
+                roleBowling: 'गेंदबाजी · बचाव',
+                target: 'लक्ष्य',
+                ballsLeft: 'गेंद शेष',
+                battingDeliver: 'गेंद का सामना करें',
+                bowlingRelease: 'गेंद फेंकें / BOWL',
+                switchToBowl: 'गेंदबाजी मोड',
+                switchToBat: 'बल्लेबाजी मोड',
+                camBatter: 'बल्लेबाज POV',
+                camBowler: 'गेंदबाज POV',
+                winHeadline: 'सांस रोक देने वाले सुपर ओवर में अंतिम गेंद पर ऐतिहासिक जीत!',
+                lossHeadline: 'कड़े मुकाबले में मामूली अंतर से चूकी टीम, सुपर ओवर में हार!',
+                tieHeadline: 'रोमांच की पराकाष्ठा! सुपर ओवर भी टाई समाप्त हुआ!'
+            },
+            en: {
+                title: 'Super Over',
+                roleBatting: 'Batting · Runs',
+                roleBowling: 'Bowling · Defend',
+                target: 'Target',
+                ballsLeft: 'balls left',
+                battingDeliver: 'Face Delivery',
+                bowlingRelease: 'BOWL / RELEASE',
+                switchToBowl: 'Switch to Bowl',
+                switchToBat: 'Switch to Bat',
+                camBatter: 'Batter POV',
+                camBowler: 'Bowler POV',
+                winHeadline: 'Historic victory in last-ball Super Over thriller!',
+                lossHeadline: 'Heartbreak in Super Over! Opponent seals victory.',
+                tieHeadline: 'Incredible tie in the Super Over cliffhanger!'
+            }
+        };
+
+        let currentLang = 'hi';
+        function t(key) {
+            return (I18N[currentLang] && I18N[currentLang][key]) || I18N.hi[key] || key;
+        }
+
+        // --- Perspectives and Roles ---
+        const CAMERA_VIEWS = {
+            BATTER: 'BATTER',   // Camera behind batsman looking down towards bowler
+            BOWLER: 'BOWLER'    // Camera behind bowler looking down towards batsman
+        };
+
+        const ROLES = {
+            BATTING: 'BATTING',
+            BOWLING: 'BOWLING'
+        };
+
+        const STATES = {
+            IDLE: 'IDLE',
+            RUNUP: 'RUNUP',
+            IN_FLIGHT: 'IN_FLIGHT',
+            HIT: 'HIT',
+            COMPLETED: 'COMPLETED'
+        };
+
+        let currentRole = ROLES.BATTING;
+        let currentCameraView = CAMERA_VIEWS.BATTER;
+        let gameState = STATES.IDLE;
+
+        // Match Scores
+        let ballsBowled = 0;
+        let totalRuns = 0;
+        let wickets = 0;
+        let targetRuns = 18;
+        let ballOutcomes = [];
+        let boundariesCount = 0;
+
+        // Canvas & Geometry
+        const canvas = document.getElementById('cricketCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = 360;
+        let height = 500;
+        let scale = 1;
+
+        // Hovering Area Clue (Before delivery landing)
+        const hoverArea = {
+            x: 0,
+            y: 0,
+            radius: 20,
+            pulse: 0,
+            visible: false,
+            label: ''
+        };
+
+        // Bowling Setup
+        const bowlingTarget = {
+            x: 0,
+            y: 0,
+            swingDir: 0, // -1: inswing, 0: straight, +1: outswing
+            speedKmh: 140
+        };
+
+        // Speed Meter
+        let speedMeterVal = 0.5;
+        let speedMeterDir = 1;
+        let speedMeterActive = false;
+
+        // Ball State
+        const ball = {
+            active: false,
+            progress: 0,      // 0 to 1 along pitch
+            x: 0,
+            y: 0,
+            z: 0,             // Altitude off ground
+            pitchProgress: 0.65, // Where on pitch it bounces
+            bounced: false,
+            vx: 0,
+            vy: 0,
+            vz: 0,
+            swingCurve: 0,
+            trail: []
+        };
+
+        // Character Rig State
+        const bowlerRig = { runup: 0, armAngle: 0 };
+        const batsmanRig = { swingAngle: 0, isSwinging: false, swingProgress: 0, swingDir: 'UP' };
+        const stumps = { bailsOff: false, bailsY: 0, bailsRot: 0 };
+
+        // Swipe Gesture Handling (8 Directions)
+        let touchStartPos = null;
+        let lastSwipeDir = null;
+        let swipeTrail = [];
+
+        // Confetti
+        const confettiCanvas = document.getElementById('confettiCanvas');
+        const confCtx = confettiCanvas.getContext('2d');
+        let confettiParticles = [];
+        let confettiActive = false;
+
+        // --- DOM Elements ---
+        const hudRoleLabel = document.getElementById('hudRoleLabel');
+        const hudRuns = document.getElementById('hudRuns');
+        const hudWickets = document.getElementById('hudWickets');
+        const hudOvers = document.getElementById('hudOvers');
+        const hudTargetLabel = document.getElementById('hudTargetLabel');
+        const hudTarget = document.getElementById('hudTarget');
+        const hudReqRate = document.getElementById('hudReqRate');
+        const hudBallsRemaining = document.getElementById('hudBallsRemaining');
+        const commentaryText = document.getElementById('commentaryText');
+        const actionPrompt = document.getElementById('actionPrompt');
+        const actionPill = document.getElementById('actionPill');
+        const gestureHintPill = document.getElementById('gestureHintPill');
+        const hintIcon = document.getElementById('hintIcon');
+        const hintText = document.getElementById('hintText');
+        const switchRoleBtn = document.getElementById('switchRoleBtn');
+        const switchRoleText = document.getElementById('switchRoleText');
+        const resultModal = document.getElementById('resultModal');
+        const resHeadline = document.getElementById('resHeadline');
+        const resRuns = document.getElementById('resRuns');
+        const resWickets = document.getElementById('resWickets');
+        const resBoundaries = document.getElementById('resBoundaries');
+        const resNarrative = document.getElementById('resNarrative');
+        const resPlayAgainBtn = document.getElementById('resPlayAgainBtn');
+        const resChangeModeBtn = document.getElementById('resChangeModeBtn');
+
+        // Automatic delivery sequencing & pitch drag state
+        let autoNextBallTimer = null;
+        let isDraggingPitchTarget = false;
+
+        // Bowling Setup & Length Options
+        const BOWLING_LENGTHS = {
+            YORKER: {
+                name: 'यॉर्कर',
+                icon: '⚡',
+                pitchProgress: 0.85,
+                screenPy: 0.18,
+                desc: 'पैरों पर सटीक यॉर्कर'
+            },
+            GOOD: {
+                name: 'गुड लेंथ',
+                icon: '🎯',
+                pitchProgress: 0.58,
+                screenPy: 0.52,
+                desc: 'ऑफ स्टंप पर कठिन टप्पा'
+            },
+            FULL: {
+                name: 'फुल लेंथ',
+                icon: '🏏',
+                pitchProgress: 0.72,
+                screenPy: 0.35,
+                desc: 'आगे फेंकी गई गेंद'
+            },
+            BOUNCER: {
+                name: 'बाउंसर',
+                icon: '🦘',
+                pitchProgress: 0.38,
+                screenPy: 0.74,
+                desc: 'शॉर्ट पिच तेज बाउंसर'
+            }
+        };
+
+        let selectedBowlingLength = 'GOOD';
+        let selectedBowlingLine = 0; // -0.4 to 0.4
+
+        function setBowlingLength(lengthKey) {
+            if (!BOWLING_LENGTHS[lengthKey]) return;
+            selectedBowlingLength = lengthKey;
+            const item = BOWLING_LENGTHS[lengthKey];
+
+            hoverArea.px = selectedBowlingLine;
+            hoverArea.py = item.screenPy;
+            hoverArea.label = `${item.icon} ${item.name}`;
+            hoverArea.visible = true;
+
+            if (hintText && currentRole === ROLES.BOWLING) {
+                hintText.textContent = `${item.icon} ${item.name} — पिच पर ड्रैग करें या छोड़ें`;
+            }
+        }
+
+        function setBowlingSwing(swingVal) {
+            bowlingTarget.swingDir = Number(swingVal);
+            const swingLabel = bowlingTarget.swingDir === -1 ? '⬅️ इनस्विंग' : (bowlingTarget.swingDir === 1 ? '➡️ आउटस्विंग' : '⬆️ सीधी लाइन');
+            if (hintText && currentRole === ROLES.BOWLING) {
+                hintText.textContent = `${swingLabel} — पिच पर ड्रैग करें या छोड़ें`;
+            }
+        }
+
+        // Direct Pitch Drag & Drop Target Helper
+        function applyPitchDragPoint(pt) {
+            const topY = height * 0.16;
+            const bottomY = height * 0.86;
+            const py = Math.max(0.14, Math.min(0.86, (pt.y - topY) / (bottomY - topY)));
+            const topW = width * 0.22;
+            const bottomW = width * 0.46;
+            const curW = topW + py * (bottomW - topW);
+            const px = Math.max(-0.40, Math.min(0.40, (pt.x - width / 2) / curW));
+
+            // In Bowler View: top of pitch is near batsman (yorker), bottom is near bowler (bouncer)
+            let matchedLength = 'GOOD';
+            if (py < 0.26) {
+                matchedLength = 'YORKER';
+            } else if (py < 0.44) {
+                matchedLength = 'FULL';
+            } else if (py < 0.65) {
+                matchedLength = 'GOOD';
+            } else {
+                matchedLength = 'BOUNCER';
+            }
+
+            let swingVal = 0;
+            let swingText = 'सीधी लाइन';
+            if (px < -0.10) {
+                swingVal = -1;
+                swingText = 'इनस्विंग ⬅️';
+            } else if (px > 0.10) {
+                swingVal = 1;
+                swingText = 'आउटस्विंग ➡️';
+            }
+
+            selectedBowlingLength = matchedLength;
+            selectedBowlingLine = px;
+            bowlingTarget.swingDir = swingVal;
+
+            const item = BOWLING_LENGTHS[matchedLength];
+            hoverArea.px = px;
+            hoverArea.py = py;
+            hoverArea.label = `${item.icon} ${item.name} · ${swingText}`;
+            hoverArea.visible = true;
+
+            if (hintText) {
+                hintText.textContent = `${item.icon} ${item.name} (${swingText}) — छोड़ें गेंद फेंकने के लिए 🚀`;
+            }
+        }
+
+        // --- Canvas Resizing ---
+        function resizeCanvas() {
+            const wrapper = document.getElementById('boardWrapper');
+            const rect = wrapper ? wrapper.getBoundingClientRect() : null;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            const containerW = rect && rect.width > 0 ? rect.width : window.innerWidth;
+            const containerH = rect && rect.height > 0 ? rect.height : (window.innerHeight - 200);
+
+            width = Math.max(300, Math.min(containerW - 8, 460));
+            height = Math.max(360, Math.min(containerH - 8, 560));
+
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+
+            ctx.resetTransform();
+            ctx.scale(dpr, dpr);
+
+            confettiCanvas.width = window.innerWidth * dpr;
+            confettiCanvas.height = window.innerHeight * dpr;
+            confCtx.resetTransform();
+            confCtx.scale(dpr, dpr);
+
+            scale = Math.min(width / 360, height / 500);
+
+            // Default pitch target
+            bowlingTarget.x = width / 2;
+            bowlingTarget.y = height * 0.42;
+        }
+
+        // --- 3D Tilted Perspective Projection Helper ---
+        // Returns 2D screen coordinate {x, y, w} for a point on pitch (px in [-0.5, 0.5], py in [0, 1])
+        function projectPitch(px, py, viewMode) {
+            // py = 0 (far end), py = 1 (near end)
+            // Tilted pitch trapezoid dimensions
+            const topY = height * 0.16;
+            const bottomY = height * 0.86;
+            const topW = width * 0.22;
+            const bottomW = width * 0.46;
+
+            const curY = topY + py * (bottomY - topY);
+            const curW = topW + py * (bottomW - topW);
+            const curX = (width / 2) + px * curW;
+
+            return { x: curX, y: curY, w: curW, scaleAtDepth: 0.6 + py * 0.6 };
+        }
+
+        // --- Match Setup & Reset ---
+        function initMatch(newRole = ROLES.BATTING) {
+            if (autoNextBallTimer) {
+                clearTimeout(autoNextBallTimer);
+                autoNextBallTimer = null;
+            }
+            isDraggingPitchTarget = false;
+            currentRole = newRole;
+            currentCameraView = (currentRole === ROLES.BATTING) ? CAMERA_VIEWS.BATTER : CAMERA_VIEWS.BOWLER;
+            ballsBowled = 0;
+            totalRuns = 0;
+            wickets = 0;
+            boundariesCount = 0;
+            ballOutcomes = [];
+            gameState = STATES.IDLE;
+            ball.active = false;
+            stumps.bailsOff = false;
+            bowlerRig.runup = 0;
+
+            targetRuns = (currentRole === ROLES.BATTING) ? 18 : 15;
+
+            updateHUD();
+            renderBallStrip();
+            updateControlsUI();
+
+            if (currentRole === ROLES.BOWLING) {
+                setBowlingLength(selectedBowlingLength);
+                setBowlingSwing(0);
+                setCommentary('गेंदबाजी मोड: पिच पर ड्रैग करके लेंथ व स्विंग सेट करें और छोड़ें!');
+            } else {
+                hoverArea.visible = false;
+                setCommentary('सुपर ओवर शुरू! पहली गेंद (1/6) के लिए तैयार रहें...');
+                autoNextBallTimer = setTimeout(() => {
+                    if (gameState === STATES.IDLE && ballsBowled === 0 && currentRole === ROLES.BATTING) {
+                        startDelivery();
+                    }
+                }, 2000);
+            }
+        }
+
+        function updateHUD() {
+            hudRuns.textContent = totalRuns;
+            hudWickets.textContent = wickets;
+            hudOvers.textContent = `(0.${ballsBowled})`;
+
+            const ballsRemaining = 6 - ballsBowled;
+            if (currentRole === ROLES.BATTING) {
+                const need = Math.max(0, targetRuns - totalRuns);
+                hudTargetLabel.textContent = `लक्ष्य ${targetRuns}`;
+                hudReqRate.textContent = `${need} रन चाहिए`;
+                if (hudBallsRemaining) hudBallsRemaining.textContent = `${ballsRemaining} गेंद शेष`;
+            } else {
+                hudTargetLabel.textContent = `बचाव लक्ष्य ${targetRuns}`;
+                hudReqRate.textContent = `${totalRuns} रन दिए`;
+                if (hudBallsRemaining) hudBallsRemaining.textContent = `${ballsRemaining} गेंद शेष`;
+            }
+        }
+
+        function renderBallStrip() {
+            for (let i = 0; i < 6; i++) {
+                const el = document.getElementById(`ball-${i}`);
+                if (!el) continue;
+                el.className = 'ball-badge';
+
+                if (i < ballOutcomes.length) {
+                    const res = ballOutcomes[i];
+                    el.textContent = res;
+                    if (res === '0' || res === '•') el.classList.add('run-0');
+                    else if (res === '1' || res === '2' || res === '3') el.classList.add(`run-${res}`);
+                    else if (res === '4') el.classList.add('run-4');
+                    else if (res === '6') el.classList.add('run-6');
+                    else if (res === 'W') el.classList.add('run-w');
+                } else if (i === ballOutcomes.length) {
+                    el.textContent = '•';
+                    el.classList.add('current');
+                } else {
+                    el.textContent = '-';
+                }
+            }
+        }
+
+        function setCommentary(text) {
+            if (commentaryText) commentaryText.textContent = text;
+        }
+
+        function showActionBanner(text, type = 'normal') {
+            actionPill.textContent = text;
+            actionPill.className = 'prompt-pill';
+            if (type === 'six') actionPill.classList.add('prompt-pill--six');
+            else if (type === 'four') actionPill.classList.add('prompt-pill--four');
+            else if (type === 'out') actionPill.classList.add('prompt-pill--out');
+
+            actionPrompt.classList.add('show');
+            setTimeout(() => {
+                actionPrompt.classList.remove('show');
+            }, 1200);
+        }
+
+        function updateControlsUI() {
+            if (currentRole === ROLES.BATTING) {
+                hudRoleLabel.textContent = 'बल्लेबाजी · रन';
+                switchRoleText.textContent = 'गेंदबाजी मोड';
+                if (hintIcon) hintIcon.textContent = '🏏';
+                if (hintText) hintText.textContent = 'स्वाइप करें शॉट खेलने के लिए · 8 दिशाएं';
+            } else {
+                hudRoleLabel.textContent = 'गेंदबाजी · बचाव';
+                switchRoleText.textContent = 'बल्लेबाजी मोड';
+                if (hintIcon) hintIcon.textContent = '🎯';
+                if (hintText) hintText.textContent = 'पिच पर ड्रैग करें (लेंथ व स्विंग) और छोड़ें!';
+                setBowlingLength(selectedBowlingLength);
+            }
+        }
+
+        // --- 8 Directional Swipe Detection ---
+        function getSwipeDirection(dx, dy) {
+            const dist = Math.hypot(dx, dy);
+            if (dist < 18) return null;
+
+            // Angle in degrees (-180 to +180)
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+            if (angle >= -22.5 && angle < 22.5) return 'RIGHT';
+            if (angle >= 22.5 && angle < 67.5) return 'DOWN_RIGHT';
+            if (angle >= 67.5 && angle < 112.5) return 'DOWN';
+            if (angle >= 112.5 && angle < 157.5) return 'DOWN_LEFT';
+            if (angle >= 157.5 || angle < -157.5) return 'LEFT';
+            if (angle >= -157.5 && angle < -112.5) return 'UP_LEFT';
+            if (angle >= -112.5 && angle < -67.5) return 'UP';
+            if (angle >= -67.5 && angle < -22.5) return 'UP_RIGHT';
+            return 'UP';
+        }
+
+        const SHOT_NAMES = {
+            UP: 'स्ट्रेट ड्राइव ⬆️ (Straight Drive)',
+            UP_RIGHT: 'कवर ड्राइव ↗️ (Cover Drive)',
+            UP_LEFT: 'मिड-विकेट ↖️ (Mid-Wicket)',
+            RIGHT: 'कट शॉट ➡️ (Square Cut)',
+            LEFT: 'पुल शॉट ⬅️ (Pull Shot)',
+            DOWN_LEFT: 'फाइन लेग ↙️ (Fine Leg)',
+            DOWN: 'डिफेंस ⬇️ (Forward Defense)',
+            DOWN_RIGHT: 'लेट कट ↘️ (Late Cut)'
+        };
+
+        function highlightGesturePill(dir) {
+            if (hintText && SHOT_NAMES[dir]) {
+                hintText.textContent = `💥 ${SHOT_NAMES[dir]}`;
+            }
+        }
+
+        // --- Delivery Execution Engine ---
+        function startDelivery() {
+            if (gameState !== STATES.IDLE) return;
+            if (ballsBowled >= 6 || wickets >= 2) return;
+
+            audio.init();
+            gameState = STATES.RUNUP;
+            bowlerRig.runup = 0;
+            batsmanRig.isSwinging = false;
+            batsmanRig.swingProgress = 0;
+            stumps.bailsOff = false;
+            swipeTrail = [];
+
+            if (currentRole === ROLES.BATTING) {
+                setCommentary(`गेंदबाज रन-अप पर... गेंद ${ballsBowled + 1}/6`);
+                if (hintText) hintText.textContent = `गेंदबाज रन-अप ले रहा है... स्वाइप के लिए तैयार रहें!`;
+            } else {
+                setCommentary('गेंदबाज रन-अप ले रहा है...');
+            }
+
+            // Pre-calculate Hovering Pitch Clue Area!
+            // Gives the batter an early hint of where the ball is landing
+            if (currentRole === ROLES.BATTING) {
+                const randType = Math.floor(Math.random() * 4);
+                let hoverPy = 0.55;
+                let hoverPx = (Math.random() - 0.5) * 0.3;
+                let clueLabel = '';
+
+                if (randType === 0) {
+                    hoverPy = 0.78; // Yorker at toes
+                    clueLabel = currentLang === 'hi' ? 'यॉर्कर जोन ⚡' : 'Yorker Zone ⚡';
+                } else if (randType === 1) {
+                    hoverPy = 0.38; // Short pitch bouncer
+                    clueLabel = currentLang === 'hi' ? 'शॉर्ट / बाउंसर 🦘' : 'Short Pitch 🦘';
+                } else if (randType === 2) {
+                    hoverPy = 0.58;
+                    hoverPx = 0.22; // Outside off
+                    clueLabel = currentLang === 'hi' ? 'ऑफ स्टंप के बाहर ↗️' : 'Outside Off ↗️';
+                } else {
+                    hoverPy = 0.62;
+                    clueLabel = currentLang === 'hi' ? 'गुड लेंथ 🎯' : 'Good Length 🎯';
+                }
+
+                hoverArea.px = hoverPx;
+                hoverArea.py = hoverPy;
+                hoverArea.label = clueLabel;
+                hoverArea.visible = true;
+                hoverArea.pulse = 0;
+            } else {
+                // Bowler POV: hover area reflects selected length & line
+                const item = BOWLING_LENGTHS[selectedBowlingLength] || BOWLING_LENGTHS.GOOD;
+                hoverArea.px = selectedBowlingLine;
+                hoverArea.py = item.screenPy;
+                hoverArea.label = `${item.icon} ${item.name}`;
+                hoverArea.visible = true;
+            }
+
+            // Run-up animation from behind: 24 steps x 45ms = ~1.08 seconds of realistic run-up
+            let step = 0;
+            const totalSteps = 24;
+            const runupTimer = setInterval(() => {
+                step++;
+                bowlerRig.runup = step / totalSteps;
+                bowlerRig.armAngle += 0.38;
+                hoverArea.pulse += 0.22;
+
+                if (step >= totalSteps) {
+                    clearInterval(runupTimer);
+                    bowlerRig.runup = 1;
+                    releaseBallFlight();
+                }
+            }, 45);
+        }
+
+        function releaseBallFlight() {
+            gameState = STATES.IN_FLIGHT;
+            ball.active = true;
+            ball.progress = 0;
+            ball.bounced = false;
+            ball.trail = [];
+
+            // Calculate flight parameters
+            if (currentRole === ROLES.BOWLING) {
+                const item = BOWLING_LENGTHS[selectedBowlingLength] || BOWLING_LENGTHS.GOOD;
+                ball.speed = 0.027;
+                ball.px = selectedBowlingLine;
+                ball.pitchProgress = item.pitchProgress;
+                ball.swingCurve = bowlingTarget.swingDir * 0.12;
+            } else {
+                ball.speed = 0.028;
+                ball.px = hoverArea.px + (Math.random() - 0.5) * 0.06;
+                ball.pitchProgress = hoverArea.py;
+                ball.swingCurve = (Math.random() - 0.5) * 0.06;
+            }
+
+            setCommentary(currentRole === ROLES.BATTING ?
+                'गेंद हवा में! सही समय पर स्वाइप करें!' :
+                'गेंद डाली गई! बल्लेबाज शॉट खेलने की तैयारी में...');
+        }
+
+        // --- Swipe Shot Trigger for Batting ---
+        function triggerSwipeShot(dir) {
+            if (gameState !== STATES.IN_FLIGHT) return;
+            if (batsmanRig.isSwinging) return;
+
+            audio.init();
+            batsmanRig.isSwinging = true;
+            batsmanRig.swingProgress = 0;
+            batsmanRig.swingDir = dir;
+            lastSwipeDir = dir;
+            highlightGesturePill(dir);
+
+            // Evaluate timing: sweet spot is when ball.progress is between 0.72 and 0.88
+            const ballProg = ball.progress;
+            let rating = 'GOOD';
+            const diff = Math.abs(ballProg - 0.80);
+
+            if (ballProg < 0.62) {
+                rating = 'EARLY'; // Swung too early
+            } else if (ballProg > 0.94) {
+                rating = 'LATE'; // Swung too late / beaten
+            } else if (diff < 0.06) {
+                rating = 'PERFECT';
+            } else {
+                rating = 'GOOD';
+            }
+
+            evaluateShotOutcome(dir, rating);
+        }
+
+        function evaluateShotOutcome(dir, rating) {
+            gameState = STATES.HIT;
+            hoverArea.visible = false;
+
+            let runs = 0;
+            let isOut = false;
+            let outType = '';
+
+            // Strategic mapping of 8 directions:
+            // 1. DOWN (Defend): 0 runs or 1 run, almost immune to wickets!
+            if (dir === 'DOWN') {
+                runs = (Math.random() < 0.35) ? 1 : 0;
+                audio.playBatHit(false);
+                setCommentary('सटीक डिफेंस! गेंद को नीचे दबाया, विकेट सुरक्षित।');
+            }
+            // 2. UP (Straight Drive / Six) or UP_RIGHT (Cover) or UP_LEFT (Midwicket):
+            else if (['UP', 'UP_RIGHT', 'UP_LEFT'].includes(dir)) {
+                if (rating === 'PERFECT') {
+                    runs = 6;
+                    audio.playBatHit(true);
+                } else if (rating === 'GOOD') {
+                    runs = 4;
+                    audio.playBatHit(false);
+                } else if (rating === 'EARLY') {
+                    if (Math.random() < 0.55) {
+                        isOut = true;
+                        outType = 'CAUGHT';
+                    } else {
+                        runs = 1;
+                        audio.playBatHit(false);
+                    }
+                } else { // LATE
+                    if (Math.random() < 0.6) {
+                        isOut = true;
+                        outType = 'BOWLED';
+                    } else {
+                        runs = 0;
+                    }
+                }
+            }
+            // 3. RIGHT (Cut), LEFT (Pull), DOWN_RIGHT (Late Cut), DOWN_LEFT (Fine leg)
+            else {
+                if (rating === 'PERFECT' || rating === 'GOOD') {
+                    runs = (Math.random() < 0.6) ? 4 : 2;
+                    audio.playBatHit(false);
+                } else if (rating === 'EARLY') {
+                    runs = 1;
+                    audio.playBatHit(false);
+                } else {
+                    if (Math.random() < 0.5) {
+                        isOut = true;
+                        outType = 'CAUGHT';
+                    } else {
+                        runs = 0;
+                    }
+                }
+            }
+
+            // Ball flight after hit
+            if (isOut) {
+                if (outType === 'BOWLED') {
+                    stumps.bailsOff = true;
+                }
+                audio.playWicketSmash();
+            }
+
+            setTimeout(() => {
+                finishBall(runs, isOut, outType);
+            }, 1200);
+        }
+
+        // --- AI Batsman Shot Against Bowling Delivery ---
+        function aiPlayShotAgainstDelivery() {
+            if (gameState !== STATES.IN_FLIGHT) return;
+            batsmanRig.isSwinging = true;
+            batsmanRig.swingProgress = 0;
+            gameState = STATES.HIT;
+            hoverArea.visible = false;
+
+            const length = selectedBowlingLength;
+            const swing = bowlingTarget.swingDir;
+            const line = selectedBowlingLine;
+            const finalX = line + swing * 0.1;
+            const isOnStumps = Math.abs(finalX) < 0.15;
+
+            let runs = 0;
+            let isOut = false;
+            let outType = '';
+
+            if (length === 'YORKER') {
+                batsmanRig.swingDir = 'DOWN';
+                const roll = Math.random();
+                if (isOnStumps) {
+                    if (roll < 0.45) {
+                        isOut = true;
+                        outType = 'BOWLED';
+                    } else if (roll < 0.80) {
+                        runs = 0;
+                        audio.playBatHit(false);
+                    } else {
+                        runs = 1;
+                        audio.playBatHit(false);
+                    }
+                } else {
+                    runs = (roll < 0.6) ? 0 : 1;
+                    audio.playBatHit(false);
+                }
+            } else if (length === 'BOUNCER') {
+                batsmanRig.swingDir = (Math.random() < 0.5) ? 'LEFT' : 'UP';
+                const roll = Math.random();
+                if (roll < 0.35) {
+                    runs = 0; // ducked / beaten
+                } else if (roll < 0.70) {
+                    isOut = true;
+                    outType = 'CAUGHT';
+                    audio.playBatHit(false);
+                } else if (roll < 0.90) {
+                    runs = 2;
+                    audio.playBatHit(false);
+                } else {
+                    runs = 4;
+                    audio.playBatHit(false);
+                }
+            } else if (length === 'GOOD') {
+                batsmanRig.swingDir = (swing === 1) ? 'RIGHT' : 'UP';
+                const roll = Math.random();
+                if (swing !== 0) {
+                    if (roll < 0.42) {
+                        isOut = true;
+                        outType = (swing === 1) ? 'CAUGHT' : 'BOWLED';
+                        audio.playBatHit(false);
+                    } else if (roll < 0.75) {
+                        runs = (roll < 0.55) ? 0 : 1;
+                        audio.playBatHit(false);
+                    } else {
+                        runs = 2;
+                        audio.playBatHit(false);
+                    }
+                } else {
+                    if (roll < 0.28) {
+                        if (isOnStumps) { isOut = true; outType = 'BOWLED'; }
+                        else runs = 0;
+                    } else if (roll < 0.65) {
+                        runs = (roll < 0.45) ? 1 : 2;
+                        audio.playBatHit(false);
+                    } else {
+                        runs = 4;
+                        audio.playBatHit(false);
+                    }
+                }
+            } else { // FULL
+                batsmanRig.swingDir = 'UP_RIGHT';
+                const roll = Math.random();
+                if (swing !== 0 && roll < 0.35) {
+                    isOut = true;
+                    outType = 'BOWLED';
+                } else if (roll < 0.30) {
+                    runs = 0;
+                    audio.playBatHit(false);
+                } else if (roll < 0.70) {
+                    runs = 4;
+                    audio.playBatHit(false);
+                } else {
+                    runs = 1;
+                    audio.playBatHit(false);
+                }
+            }
+
+            if (isOut) {
+                if (outType === 'BOWLED') stumps.bailsOff = true;
+                audio.playWicketSmash();
+            }
+
+            setTimeout(() => {
+                finishBall(runs, isOut, outType);
+            }, 1200);
+        }
+
+        function finishBall(runs, isOut, outType) {
+            ballsBowled++;
+
+            if (isOut) {
+                wickets++;
+                ballOutcomes.push('W');
+                showActionBanner(outType === 'BOWLED' ? 'क्लीन बोल्ड! 🎯' : 'कैच आउट! 🧤', 'out');
+                setCommentary(outType === 'BOWLED' ?
+                    (currentLang === 'hi' ? 'क्लीन बोल्ड! गिल्लियां बिखर गईं, बड़ा झटका!' : 'Clean Bowled! Stumps shattered!') :
+                    (currentLang === 'hi' ? 'हवा में गेंद और सीधा कैच! आउट!' : 'High in the air and caught! Out!'));
+            } else {
+                totalRuns += runs;
+                if (runs === 6) {
+                    boundariesCount++;
+                    ballOutcomes.push('6');
+                    showActionBanner('छक्का! SIX! 🚀 6', 'six');
+                    triggerConfetti();
+                    setCommentary(currentLang === 'hi' ? 'धुआंधार छक्का! 98 मीटर लंबा शॉट!' : 'Monster Six! 98 meters into the stands!');
+                } else if (runs === 4) {
+                    boundariesCount++;
+                    ballOutcomes.push('4');
+                    showActionBanner('चौका! FOUR! 🏏 4', 'four');
+                    setCommentary(currentLang === 'hi' ? 'शानदार गैप शॉट! गोली की रफ्तार से बाउंड्री पार - चौका!' : 'Pierced the gap! Races away to the fence for four!');
+                } else if (runs === 0) {
+                    ballOutcomes.push('0');
+                    showActionBanner('डॉट बॉल! 🛡️ 0', 'normal');
+                    setCommentary(currentLang === 'hi' ? 'बल्लेबाज बीट हुआ! सटीक गेंद, कोई रन नहीं।' : 'Beaten by movement! Dot ball.');
+                } else {
+                    ballOutcomes.push(String(runs));
+                    showActionBanner(`${runs} रन`, 'normal');
+                    setCommentary(currentLang === 'hi' ? `तेजी से दौड़कर ${runs} रन चुराए।` : `Good running, took ${runs} runs.`);
+                }
+            }
+
+            updateHUD();
+            renderBallStrip();
+
+            const chaseComplete = (currentRole === ROLES.BATTING && totalRuns >= targetRuns);
+            const allOut = (wickets >= 2);
+            const overFinished = (ballsBowled >= 6);
+
+            if (chaseComplete || allOut || overFinished) {
+                if (autoNextBallTimer) { clearTimeout(autoNextBallTimer); autoNextBallTimer = null; }
+                setTimeout(() => endMatch(chaseComplete), 1000);
+            } else {
+                gameState = STATES.IDLE;
+                ball.active = false;
+                hoverArea.visible = false;
+                bowlerRig.runup = 0;
+
+                // Automatic delivery sequencing with natural pause between balls!
+                if (currentRole === ROLES.BATTING) {
+                    setCommentary(`अगली गेंद (${ballsBowled + 1}/6) के लिए तैयार रहें...`);
+                    if (hintText) hintText.textContent = `अगली गेंद (${ballsBowled + 1}/6) आ रही है... स्वाइप के लिए तैयार रहें`;
+                    if (autoNextBallTimer) clearTimeout(autoNextBallTimer);
+                    autoNextBallTimer = setTimeout(() => {
+                        if (gameState === STATES.IDLE && ballsBowled < 6 && wickets < 2 && currentRole === ROLES.BATTING) {
+                            startDelivery();
+                        }
+                    }, 2400);
+                } else {
+                    setCommentary('🎯 पिच पर कहीं भी ड्रैग करें — लेंथ व स्विंग सेट करके छोड़ें!');
+                    if (hintText) hintText.textContent = 'पिच पर ड्रैग करें — अगली गेंद फेंकने के लिए छोड़ें';
+                }
+            }
+        }
+
+        function endMatch(chaseComplete) {
+            gameState = STATES.COMPLETED;
+            audio.playFanfare();
+
+            let isWin = false;
+            let headline = '';
+            let narrative = '';
+
+            if (currentRole === ROLES.BATTING) {
+                if (totalRuns >= targetRuns) {
+                    isWin = true;
+                    headline = t('winHeadline');
+                    narrative = currentLang === 'hi' ?
+                        `आपने 8-दिशा स्वाइप और सटीक टाइमिंग से ${totalRuns} रन बनाकर लक्ष्य हासिल किया! सुपर ओवर चैंपियन!` :
+                        `Target of ${targetRuns} chased down in style with brilliant swipe execution! Super Over Champion!`;
+                    triggerConfetti();
+                } else {
+                    isWin = false;
+                    headline = t('lossHeadline');
+                    narrative = currentLang === 'hi' ?
+                        `टीम 6 गेंदों में ${totalRuns}/${wickets} रन ही बना सकी और लक्ष्य से ${targetRuns - totalRuns} रन पीछे रह गई।` :
+                        `Fell short by ${targetRuns - totalRuns} runs. Thrilling battle!`;
+                }
+            } else {
+                if (totalRuns < targetRuns) {
+                    isWin = true;
+                    headline = t('winHeadline');
+                    narrative = currentLang === 'hi' ?
+                        `शानदार यॉर्कर और स्विंग गेंदबाजी! विपक्षी टीम को ${totalRuns}/${wickets} पर रोककर जीत दर्ज की!` :
+                        `Masterful death bowling defended the target under intense pressure!`;
+                    triggerConfetti();
+                } else {
+                    isWin = false;
+                    headline = t('lossHeadline');
+                    narrative = currentLang === 'hi' ?
+                        `विपक्षी टीम ने लक्ष्य पार कर लिया। अगली बार यॉर्कर और गति में विविधता लाएं!` :
+                        `Opponent chased the total in the final deliveries. Great contest!`;
+                }
+            }
+
+            resHeadline.textContent = headline;
+            resRuns.textContent = totalRuns;
+            resWickets.textContent = wickets;
+            resBoundaries.textContent = boundariesCount;
+            resNarrative.textContent = narrative;
+
+            resultModal.classList.remove('hidden');
+
+            try {
+                const finalScore = totalRuns * 10 + (isWin ? 50 : 10);
+                if (window.DBGameLab) {
+                    if (typeof window.DBGameLab.addScore === 'function') window.DBGameLab.addScore(finalScore);
+                    if (typeof window.DBGameLab.endGame === 'function') window.DBGameLab.endGame(finalScore);
+                }
+            } catch (e) { }
+        }
+
+        // --- Confetti Engine ---
+        function triggerConfetti() {
+            confettiActive = true;
+            confettiParticles = [];
+            const colors = ['#E23A28', '#F39C12', '#F1C40F', '#27AE60', '#3498DB', '#FFFFFF'];
+            for (let i = 0; i < 70; i++) {
+                confettiParticles.push({
+                    x: window.innerWidth / 2 + (Math.random() * 80 - 40),
+                    y: window.innerHeight * 0.4,
+                    vx: (Math.random() - 0.5) * 14,
+                    vy: (Math.random() - 0.8) * 16,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rotation: Math.random() * 360,
+                    vRot: (Math.random() - 0.5) * 10,
+                    life: 1.0
+                });
+            }
+        }
+
+        function updateAndDrawConfetti() {
+            if (!confettiActive) return;
+            confCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            let alive = false;
+            confettiParticles.forEach(p => {
+                if (p.life > 0) {
+                    alive = true;
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.35;
+                    p.rotation += p.vRot;
+                    p.life -= 0.015;
+
+                    confCtx.save();
+                    confCtx.translate(p.x, p.y);
+                    confCtx.rotate((p.rotation * Math.PI) / 180);
+                    confCtx.fillStyle = p.color;
+                    confCtx.globalAlpha = Math.max(0, p.life);
+                    confCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                    confCtx.restore();
+                }
+            });
+            if (!alive) {
+                confettiActive = false;
+                confCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            }
+        }
+
+        // --- Render Engine: Tilted 3D Perspectives ---
+        function updatePhysics() {
+            // Ball flight
+            if (ball.active && (gameState === STATES.IN_FLIGHT || gameState === STATES.HIT)) {
+                ball.progress += ball.speed;
+
+                // Position calculation based on perspective
+                let curPy = ball.progress;
+                let curPx = ball.px + Math.sin(ball.progress * Math.PI) * ball.swingCurve;
+
+                // In Bowler View, progress is inverted (0 = near bowler, 1 = far batter)
+                let projPy = (currentCameraView === CAMERA_VIEWS.BATTER) ? curPy : (1 - curPy);
+                const proj = projectPitch(curPx, projPy, currentCameraView);
+
+                ball.x = proj.x;
+                ball.y = proj.y;
+
+                // Bounce altitude
+                if (ball.progress >= ball.pitchProgress && !ball.bounced) {
+                    ball.bounced = true;
+                    audio.playBallBounce();
+                }
+
+                // Parabolic height (z)
+                if (ball.progress < ball.pitchProgress) {
+                    const norm = ball.progress / ball.pitchProgress;
+                    ball.z = Math.sin(norm * Math.PI) * 14 * scale;
+                } else {
+                    const normAfter = (ball.progress - ball.pitchProgress) / (1 - ball.pitchProgress);
+                    ball.z = Math.sin(normAfter * Math.PI) * 10 * scale;
+                }
+
+                ball.trail.push({ x: ball.x, y: ball.y - ball.z });
+                if (ball.trail.length > 8) ball.trail.shift();
+
+                // AI Batsman plays against bowling delivery
+                if (currentRole === ROLES.BOWLING && gameState === STATES.IN_FLIGHT && !batsmanRig.isSwinging && ball.progress >= 0.76) {
+                    aiPlayShotAgainstDelivery();
+                }
+
+                // If batter misses without swing, finish at keeper
+                if (ball.progress >= 1.05 && gameState === STATES.IN_FLIGHT) {
+                    // Check if bowled!
+                    if (Math.abs(curPx) < 0.08) {
+                        stumps.bailsOff = true;
+                        audio.playWicketSmash();
+                        finishBall(0, true, 'BOWLED');
+                    } else {
+                        finishBall(0, false, '');
+                    }
+                }
+            }
+
+            // Batsman swing animation
+            if (batsmanRig.isSwinging) {
+                batsmanRig.swingProgress += 0.14;
+                if (batsmanRig.swingProgress >= 1) {
+                    batsmanRig.isSwinging = false;
+                }
+            }
+
+            // Speed meter oscillation
+            if (speedMeterActive) {
+                speedMeterVal += 0.035 * speedMeterDir;
+                if (speedMeterVal >= 1) { speedMeterVal = 1; speedMeterDir = -1; }
+                else if (speedMeterVal <= 0) { speedMeterVal = 0; speedMeterDir = 1; }
+                speedCursor.style.left = `${speedMeterVal * 100}%`;
+                const calculatedKmh = Math.round(115 + speedMeterVal * 35);
+                bowlingTarget.speedKmh = calculatedKmh;
+                speedValueLabel.textContent = `${calculatedKmh} km/h`;
+            }
+        }
+
+        function drawStadium() {
+            ctx.clearRect(0, 0, width, height);
+
+            // 1. Lush Green Field Background — Uniform Single Color (No radiating lines)
+            ctx.fillStyle = '#1D753B';
+            ctx.fillRect(0, 0, width, height);
+
+            // 2. Tilted 3D Clay Pitch (Trapezoid Projection)
+            const pFarLeft = projectPitch(-0.5, 0, currentCameraView);
+            const pFarRight = projectPitch(0.5, 0, currentCameraView);
+            const pNearRight = projectPitch(0.5, 1, currentCameraView);
+            const pNearLeft = projectPitch(-0.5, 1, currentCameraView);
+
+            ctx.beginPath();
+            ctx.moveTo(pFarLeft.x, pFarLeft.y);
+            ctx.lineTo(pFarRight.x, pFarRight.y);
+            ctx.lineTo(pNearRight.x, pNearRight.y);
+            ctx.lineTo(pNearLeft.x, pNearLeft.y);
+            ctx.closePath();
+
+            const pitchGrad = ctx.createLinearGradient(0, pFarLeft.y, 0, pNearLeft.y);
+            pitchGrad.addColorStop(0, '#D6BA8F');
+            pitchGrad.addColorStop(0.5, '#E9D2AC');
+            pitchGrad.addColorStop(1, '#CFA977');
+            ctx.fillStyle = pitchGrad;
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.lineWidth = 1.5 * scale;
+            ctx.stroke();
+
+            // 3. Crease Lines and Pitch End Label (Only below the pitch)
+            const isBatterPOV = (currentCameraView === CAMERA_VIEWS.BATTER);
+            const bottomEndText = isBatterPOV ? 'बल्लेबाजी छोर (Batting End)' : 'गेंदबाजी छोर (Bowling End)';
+
+            // Top Crease Line (Bowling end in Batting POV / Batting end in Bowling POV)
+            const cFarL = projectPitch(-0.52, 0.08, currentCameraView);
+            const cFarR = projectPitch(0.52, 0.08, currentCameraView);
+            ctx.beginPath();
+            ctx.moveTo(cFarL.x, cFarL.y);
+            ctx.lineTo(cFarR.x, cFarR.y);
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 2 * scale;
+            ctx.stroke();
+
+            // Bottom Crease Line (Near player end)
+            const cNearL = projectPitch(-0.52, 0.88, currentCameraView);
+            const cNearR = projectPitch(0.52, 0.88, currentCameraView);
+            ctx.beginPath();
+            ctx.moveTo(cNearL.x, cNearL.y);
+            ctx.lineTo(cNearR.x, cNearR.y);
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 2.5 * scale;
+            ctx.stroke();
+
+            // Bottom End Label — Rendered exclusively below the pitch on the grass
+            ctx.save();
+            ctx.font = `800 ${Math.max(10, 11 * scale)}px Inter, 'Noto Sans Devanagari', sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            const botW = ctx.measureText(bottomEndText).width + 20 * scale;
+            const botH = 21 * scale;
+            const botY = Math.min(height - botH - 6 * scale, pNearLeft.y + 10 * scale);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.68)';
+            ctx.beginPath();
+            ctx.roundRect(width / 2 - botW / 2, botY, botW, botH, 7 * scale);
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 1.2 * scale;
+            ctx.stroke();
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText(bottomEndText, width / 2, botY + 3.5 * scale);
+            ctx.restore();
+
+            // 4. Hovering Pitch Area Clue & Direct Bowling Pitch Drag Targeting
+            if (currentRole === ROLES.BOWLING && (gameState === STATES.IDLE || gameState === STATES.RUNUP)) {
+                // Curved delivery trajectory arc from bowler to target
+                const hoverProj = projectPitch(hoverArea.px, hoverArea.py, currentCameraView);
+                const bowlerProj = projectPitch(0, 0.90, currentCameraView);
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(bowlerProj.x, bowlerProj.y);
+                const ctrlX = bowlerProj.x + (hoverArea.px * width * 0.28) + (bowlingTarget.swingDir * 28 * scale);
+                const ctrlY = (bowlerProj.y + hoverProj.y) / 2;
+                ctx.quadraticCurveTo(ctrlX, ctrlY, hoverProj.x, hoverProj.y);
+                ctx.strokeStyle = isDraggingPitchTarget ? 'rgba(243, 156, 18, 0.9)' : 'rgba(255, 255, 255, 0.45)';
+                ctx.lineWidth = isDraggingPitchTarget ? 3 * scale : 1.8 * scale;
+                ctx.setLineDash([5 * scale, 4 * scale]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.restore();
+            }
+
+            if (hoverArea.visible) {
+                const hoverProj = projectPitch(hoverArea.px, hoverArea.py, currentCameraView);
+                const pulseR = (16 + Math.sin(hoverArea.pulse) * 4) * scale;
+
+                // Pulsating ring
+                ctx.beginPath();
+                ctx.arc(hoverProj.x, hoverProj.y, pulseR, 0, Math.PI * 2);
+                ctx.fillStyle = isDraggingPitchTarget ? 'rgba(231, 76, 60, 0.35)' : 'rgba(243, 156, 18, 0.35)';
+                ctx.fill();
+                ctx.strokeStyle = isDraggingPitchTarget ? '#E74C3C' : '#F39C12';
+                ctx.lineWidth = 2.5 * scale;
+                ctx.setLineDash([4 * scale, 3 * scale]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Inner core dot & crosshair
+                ctx.beginPath();
+                ctx.arc(hoverProj.x, hoverProj.y, 4 * scale, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fill();
+
+                // Text badge
+                if (hoverArea.label) {
+                    ctx.font = `bold ${Math.max(10, 11 * scale)}px Inter, sans-serif`;
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.textAlign = 'center';
+                    ctx.shadowColor = '#000';
+                    ctx.shadowBlur = 6;
+                    ctx.fillText(hoverArea.label, hoverProj.x, hoverProj.y - pulseR - 6);
+                    if (isDraggingPitchTarget) {
+                        ctx.font = `700 ${Math.max(8.5, 9.5 * scale)}px Inter, sans-serif`;
+                        ctx.fillStyle = '#F1C40F';
+                        ctx.fillText('छोड़ें (Release) गेंद फेंकने के लिए 🚀', hoverProj.x, hoverProj.y + pulseR + 14 * scale);
+                    }
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            // 5. Stumps at Both Ends
+            const farStumpPos = projectPitch(0, 0.06, currentCameraView);
+            const nearStumpPos = projectPitch(0, 0.92, currentCameraView);
+
+            // In Batter POV, near stumps are batsman's; in Bowler POV, far stumps are batsman's
+            drawStumpsAt(farStumpPos.x, farStumpPos.y, (currentCameraView === CAMERA_VIEWS.BOWLER) ? stumps.bailsOff : false, 0.7);
+            drawStumpsAt(nearStumpPos.x, nearStumpPos.y, (currentCameraView === CAMERA_VIEWS.BATTER) ? stumps.bailsOff : false, 1.25);
+
+            // 6. Characters: Bowler Run-Up from BEHIND stumps
+            if (currentCameraView === CAMERA_VIEWS.BATTER) {
+                // Batter in foreground
+                drawBatterFigure(nearStumpPos.x - 12 * scale, nearStumpPos.y - 12 * scale, 1.3, batsmanRig);
+
+                // Bowler runs in from behind the far stumps
+                const bowlerBaseY = farStumpPos.y - 42 * scale;
+                if (gameState === STATES.RUNUP) {
+                    const runY = bowlerBaseY + (bowlerRig.runup * 44 * scale);
+                    const runBob = Math.abs(Math.sin(bowlerRig.runup * Math.PI * 8)) * 3 * scale;
+                    drawBowlerFigure(farStumpPos.x, runY - runBob, 0.75, bowlerRig);
+                } else if (gameState === STATES.IDLE) {
+                    // Waiting at the top of the mark behind stumps
+                    drawBowlerFigure(farStumpPos.x, bowlerBaseY, 0.75, bowlerRig);
+                } else {
+                    // In delivery follow-through
+                    drawBowlerFigure(farStumpPos.x, farStumpPos.y + 4 * scale, 0.75, bowlerRig);
+                }
+            } else {
+                // Bowler in foreground (Bowling POV)
+                const bowlerBaseY = nearStumpPos.y + 36 * scale;
+                if (gameState === STATES.RUNUP) {
+                    const runY = bowlerBaseY - (bowlerRig.runup * 44 * scale);
+                    const runBob = Math.abs(Math.sin(bowlerRig.runup * Math.PI * 8)) * 4 * scale;
+                    drawBowlerFigure(nearStumpPos.x, runY - runBob, 1.35, bowlerRig);
+                } else if (gameState === STATES.IDLE) {
+                    drawBowlerFigure(nearStumpPos.x, bowlerBaseY, 1.35, bowlerRig);
+                } else {
+                    drawBowlerFigure(nearStumpPos.x, nearStumpPos.y - 8 * scale, 1.35, bowlerRig);
+                }
+
+                // Batter waiting at far end
+                drawBatterFigure(farStumpPos.x - 6 * scale, farStumpPos.y + 12 * scale, 0.75, batsmanRig);
+            }
+
+            // 7. Ball & Shadow
+            if (ball.active) {
+                // Ball Shadow on pitch
+                const shadowRadius = Math.max(2, 5 * scale * (1 - ball.z * 0.05));
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, shadowRadius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+                ctx.fill();
+
+                // Ball Tracer Trail
+                if (ball.trail.length > 1) {
+                    ctx.beginPath();
+                    ctx.moveTo(ball.trail[0].x, ball.trail[0].y);
+                    for (let i = 1; i < ball.trail.length; i++) {
+                        ctx.lineTo(ball.trail[i].x, ball.trail[i].y);
+                    }
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+                    ctx.lineWidth = 2.5 * scale;
+                    ctx.stroke();
+                }
+
+                // Ball Sphere with 3D altitude
+                const ballDrawY = ball.y - ball.z;
+                const ballRadius = Math.max(3.5, 6 * scale * (0.8 + ball.progress * 0.5));
+
+                ctx.beginPath();
+                ctx.arc(ball.x, ballDrawY, ballRadius, 0, Math.PI * 2);
+                const ballGrad = ctx.createRadialGradient(
+                    ball.x - 2 * scale, ballDrawY - 2 * scale, 1 * scale,
+                    ball.x, ballDrawY, ballRadius
+                );
+                ballGrad.addColorStop(0, '#FF7675');
+                ballGrad.addColorStop(0.7, '#D63031');
+                ballGrad.addColorStop(1, '#781E15');
+                ctx.fillStyle = ballGrad;
+                ctx.fill();
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = 1 * scale;
+                ctx.stroke();
+            }
+
+            // 8. Live Swipe Trail on Canvas
+            if (swipeTrail.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(swipeTrail[0].x, swipeTrail[0].y);
+                for (let i = 1; i < swipeTrail.length; i++) {
+                    ctx.lineTo(swipeTrail[i].x, swipeTrail[i].y);
+                }
+                ctx.strokeStyle = '#F39C12';
+                ctx.lineWidth = 4 * scale;
+                ctx.lineCap = 'round';
+                ctx.shadowColor = '#F39C12';
+                ctx.shadowBlur = 10;
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function drawStumpsAt(x, y, broken, depthScale) {
+            const stumpW = 2.4 * scale * depthScale;
+            const stumpH = 16 * scale * depthScale;
+            const gap = 4.2 * scale * depthScale;
+
+            for (let i = -1; i <= 1; i++) {
+                const sx = x + i * gap;
+                ctx.fillStyle = broken ? '#E74C3C' : '#E8D0A9';
+                ctx.fillRect(sx - stumpW / 2, y - stumpH, stumpW, stumpH);
+            }
+
+            if (!broken) {
+                ctx.fillStyle = '#E8D0A9';
+                ctx.fillRect(x - gap - 2 * scale, y - stumpH - 2 * scale, gap * 2 + 4 * scale, 2 * scale * depthScale);
+            } else {
+                ctx.fillStyle = '#E74C3C';
+                ctx.shadowColor = '#FF0000';
+                ctx.shadowBlur = 8;
+                ctx.fillRect(x - 8 * scale, y - stumpH - 10 * scale, 6 * scale, 2 * scale);
+                ctx.fillRect(x + 4 * scale, y - stumpH - 16 * scale, 6 * scale, 2 * scale);
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function drawBatterFigure(x, y, depthScale, rig) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            // Dynamic bat angle based on 8-direction swipe
+            let batAngle = -0.3;
+            if (rig.isSwinging) {
+                const dir = rig.swingDir;
+                if (dir === 'DOWN') batAngle = 0.2; // Solid forward block
+                else if (dir === 'LEFT' || dir === 'UP_LEFT') batAngle = 2.4; // Pull / on-drive
+                else if (dir === 'RIGHT' || dir === 'UP_RIGHT') batAngle = -2.2; // Cut / off-drive
+                else batAngle = -0.3 + Math.sin(rig.swingProgress * Math.PI) * 2.8;
+            }
+
+            // Batsman Body (Blue India Team Jersey)
+            ctx.beginPath();
+            ctx.arc(0, 0, 9 * scale * depthScale, 0, Math.PI * 2);
+            ctx.fillStyle = '#1E3799';
+            ctx.fill();
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 1.5 * scale * depthScale;
+            ctx.stroke();
+
+            // Helmet & Grill
+            ctx.beginPath();
+            ctx.arc(0, -6 * scale * depthScale, 6 * scale * depthScale, 0, Math.PI * 2);
+            ctx.fillStyle = '#0C2461';
+            ctx.fill();
+
+            // Pads
+            ctx.fillStyle = '#F5F6FA';
+            ctx.fillRect(-7 * scale * depthScale, 7 * scale * depthScale, 4.5 * scale * depthScale, 7 * scale * depthScale);
+            ctx.fillRect(2.5 * scale * depthScale, 7 * scale * depthScale, 4.5 * scale * depthScale, 7 * scale * depthScale);
+
+            // Cricket Bat
+            ctx.save();
+            ctx.rotate(batAngle);
+            ctx.fillStyle = '#D2B48C';
+            ctx.fillRect(2 * scale * depthScale, -18 * scale * depthScale, 4 * scale * depthScale, 20 * scale * depthScale);
+            ctx.fillStyle = '#E74C3C'; // Rubber grip
+            ctx.fillRect(2.5 * scale * depthScale, -24 * scale * depthScale, 3 * scale * depthScale, 6 * scale * depthScale);
+            ctx.restore();
+
+            ctx.restore();
+        }
+
+        function drawBowlerFigure(x, y, depthScale, rig) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            // Red Dainik Bhaskar Jersey
+            ctx.beginPath();
+            ctx.arc(0, 0, 8 * scale * depthScale, 0, Math.PI * 2);
+            ctx.fillStyle = '#E23A28';
+            ctx.fill();
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 1.5 * scale * depthScale;
+            ctx.stroke();
+
+            // Cap
+            ctx.beginPath();
+            ctx.arc(0, -4 * scale * depthScale, 4.5 * scale * depthScale, 0, Math.PI * 2);
+            ctx.fillStyle = '#2A2A2A';
+            ctx.fill();
+
+            // Windmill Bowling Arm
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(Math.cos(rig.armAngle) * 11 * scale * depthScale, Math.sin(rig.armAngle) * 11 * scale * depthScale);
+            ctx.strokeStyle = '#DEB887';
+            ctx.lineWidth = 3 * scale * depthScale;
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // --- Main Animation Loop ---
+        function gameLoop() {
+            updatePhysics();
+            drawStadium();
+            updateAndDrawConfetti();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- Touch / Mouse Swipe Interaction Engine ---
+        function getCanvasPoint(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        canvas.addEventListener('pointerdown', (e) => {
+            audio.init();
+            const pt = getCanvasPoint(e);
+
+            if (currentRole === ROLES.BATTING) {
+                // In Batting Mode:
+                // If during pause between balls, a tap starts delivery immediately!
+                if (gameState === STATES.IDLE) {
+                    if (autoNextBallTimer) {
+                        clearTimeout(autoNextBallTimer);
+                        autoNextBallTimer = null;
+                    }
+                    startDelivery();
+                    return;
+                }
+                touchStartPos = pt;
+                swipeTrail = [pt];
+            } else {
+                // In Bowling Mode:
+                // Direct Drag & Drop on pitch!
+                if (gameState === STATES.IDLE) {
+                    isDraggingPitchTarget = true;
+                    touchStartPos = pt;
+                    applyPitchDragPoint(pt);
+                }
+            }
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+            const pt = getCanvasPoint(e);
+
+            if (currentRole === ROLES.BOWLING && isDraggingPitchTarget && gameState === STATES.IDLE) {
+                applyPitchDragPoint(pt);
+                return;
+            }
+
+            if (!touchStartPos) return;
+            swipeTrail.push(pt);
+            if (swipeTrail.length > 8) swipeTrail.shift();
+        });
+
+        canvas.addEventListener('pointerup', (e) => {
+            const pt = getCanvasPoint(e);
+
+            if (currentRole === ROLES.BOWLING && isDraggingPitchTarget) {
+                isDraggingPitchTarget = false;
+                applyPitchDragPoint(pt);
+                // Dropping/releasing finger immediately delivers this ball!
+                startDelivery();
+                touchStartPos = null;
+                setTimeout(() => { swipeTrail = []; }, 300);
+                return;
+            }
+
+            if (!touchStartPos) return;
+            const dx = pt.x - touchStartPos.x;
+            const dy = pt.y - touchStartPos.y;
+            touchStartPos = null;
+
+            const dir = getSwipeDirection(dx, dy);
+
+            if (currentRole === ROLES.BATTING) {
+                if (dir && gameState === STATES.IN_FLIGHT) {
+                    triggerSwipeShot(dir);
+                }
+            }
+
+            setTimeout(() => { swipeTrail = []; }, 300);
+        });
+
+        // Switch Role Button
+        switchRoleBtn.addEventListener('click', () => {
+            audio.init();
+            const nextRole = (currentRole === ROLES.BATTING) ? ROLES.BOWLING : ROLES.BATTING;
+            initMatch(nextRole);
+        });
+
+        resPlayAgainBtn.addEventListener('click', () => {
+            resultModal.classList.add('hidden');
+            initMatch(currentRole);
+        });
+
+        resChangeModeBtn.addEventListener('click', () => {
+            resultModal.classList.add('hidden');
+            const nextRole = (currentRole === ROLES.BATTING) ? ROLES.BOWLING : ROLES.BATTING;
+            initMatch(nextRole);
+        });
+
+        // Keyboard Support
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'Enter') {
+                e.preventDefault();
+                if (gameState === STATES.IDLE) {
+                    if (autoNextBallTimer) { clearTimeout(autoNextBallTimer); autoNextBallTimer = null; }
+                    startDelivery();
+                }
+            } else if (e.code === 'ArrowUp') triggerSwipeShot('UP');
+            else if (e.code === 'ArrowDown') triggerSwipeShot('DOWN');
+            else if (e.code === 'ArrowLeft') triggerSwipeShot('LEFT');
+            else if (e.code === 'ArrowRight') triggerSwipeShot('RIGHT');
+        });
+
+        // Init
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('orientationchange', resizeCanvas);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            resizeCanvas();
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialRole = (urlParams.get('role') === 'bowling' || urlParams.get('view') === 'bowler') ? ROLES.BOWLING : ROLES.BATTING;
+            initMatch(initialRole);
+            requestAnimationFrame(gameLoop);
+        });
+    </script>
+</body>
+
+</html>
