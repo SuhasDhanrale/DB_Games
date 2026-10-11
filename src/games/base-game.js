@@ -174,8 +174,11 @@ export class BaseGame {
     const stats = getProgression();
     checkAchievements(stats);
 
-    playSfx(isNewBest ? 'levelup' : 'gameover');
+    if (!this.config.ownsResultScreen) playSfx(isNewBest ? 'levelup' : 'gameover');
     bus.emit(Events.GAME_ENDED, { gameId: this.id, score, rank, isNewBest });
+
+    // Embedded games with their own results still submit scores and award XP.
+    if (this.config.ownsResultScreen) return;
 
     // Show game-over modal
     renderGameOver({

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+  <script src="./demo-session.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>आज की नीति · दैनिक भास्कर खेल | Aaj Ki Niti</title>
@@ -10,7 +11,7 @@
   <!-- Google Fonts for Authentic Indian Editorial & Festive Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yatra+One&family=Martel:wght@600;700;800&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yatra+One&family=Martel:wght@600;700;800&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <style>
     /* ============================================================
@@ -1282,8 +1283,8 @@
       let userName = '';
 
       try {
-        userName = localStorage.getItem(USER_NAME_KEY) || '';
-        const savedTheme = localStorage.getItem(THEME_KEY);
+        userName = window.DBJamDemo.getItem(USER_NAME_KEY) || '';
+        const savedTheme = window.DBJamDemo.getItem(THEME_KEY);
         if (savedTheme) activeTheme = savedTheme;
       } catch (e) {}
 
@@ -1293,7 +1294,7 @@
 
       function loadStoredEdition(dayId) {
         try {
-          const raw = localStorage.getItem(getStorageKey(dayId));
+          const raw = window.DBJamDemo.getItem(getStorageKey(dayId));
           if (raw) return JSON.parse(raw);
         } catch (err) {}
         return null;
@@ -1301,17 +1302,12 @@
 
       function saveStoredEdition(dayId, data) {
         try {
-          localStorage.setItem(getStorageKey(dayId), JSON.stringify(data));
+          window.DBJamDemo.setItem(getStorageKey(dayId), JSON.stringify(data));
         } catch (err) {}
       }
 
       function getInitialDayFromUrl() {
-        try {
-          const params = new URLSearchParams(window.location.search);
-          const day = params.get('day');
-          if (day && CONTENT[day]) return day;
-        } catch (e) {}
-        return 'd1';
+        return window.DBJamDemo.day;
       }
 
       /* ============================================================
@@ -2646,7 +2642,7 @@
           btn.addEventListener('click', () => {
             const themeKey = btn.dataset.theme;
             activeTheme = themeKey;
-            try { localStorage.setItem(THEME_KEY, activeTheme); } catch (e) {}
+            try { window.DBJamDemo.setItem(THEME_KEY, activeTheme); } catch (e) {}
 
             els.themeButtons.forEach(b => b.classList.toggle('is-active', b === btn));
             if (els.cardStage) {
@@ -2668,7 +2664,7 @@
             userName = e.target.value;
             els.btnClearName.style.display = userName.trim() ? 'inline-block' : 'none';
 
-            try { localStorage.setItem(USER_NAME_KEY, userName); } catch (err) {}
+            try { window.DBJamDemo.setItem(USER_NAME_KEY, userName); } catch (err) {}
 
             if (nameDebounceTimer) clearTimeout(nameDebounceTimer);
             nameDebounceTimer = setTimeout(() => {
@@ -2680,7 +2676,7 @@
             userName = '';
             els.cardUserNameInput.value = '';
             els.btnClearName.style.display = 'none';
-            try { localStorage.removeItem(USER_NAME_KEY); } catch (e) {}
+            try { window.DBJamDemo.removeItem(USER_NAME_KEY); } catch (e) {}
             generateShareCard();
           });
         }

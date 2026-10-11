@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+  <script src="./demo-session.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>आज का शब्द · दैनिक भास्कर खेल | Aaj Ka Shabd</title>
@@ -1313,12 +1314,7 @@
          URL PARAMETERS & DAY SELECTION
          ============================================================ */
       function getDayFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const day = params.get('day');
-        if (day && EDITIONS_DATA[day.toLowerCase()]) {
-          return day.toLowerCase();
-        }
-        return 'd1';
+        return window.DBJamDemo.day;
       }
 
       function updateUrlDay(day) {
@@ -1332,7 +1328,7 @@
       }
 
       /* ============================================================
-         LOCAL STORAGE PERSISTENCE (Key: db-jam:v2:wordal:<dayId>)
+         IN-MEMORY DEMO STATE (Key: db-jam:v2:wordal:<dayId>)
          ============================================================ */
       function getStorageKey(dayId) {
         return `db-jam:v2:wordal:${dayId}`;
@@ -1348,15 +1344,15 @@
             isRevealed,
             keyStateMap
           };
-          localStorage.setItem(getStorageKey(currentDay), JSON.stringify(data));
+          window.DBJamDemo.setItem(getStorageKey(currentDay), JSON.stringify(data));
         } catch (e) {
-          // localStorage disabled or private mode
+          // Ignore malformed transient state.
         }
       }
 
       function loadGameState() {
         try {
-          const raw = localStorage.getItem(getStorageKey(currentDay));
+          const raw = window.DBJamDemo.getItem(getStorageKey(currentDay));
           if (raw) {
             return JSON.parse(raw);
           }
@@ -1366,7 +1362,7 @@
 
       function clearCurrentDayState() {
         try {
-          localStorage.removeItem(getStorageKey(currentDay));
+          window.DBJamDemo.removeItem(getStorageKey(currentDay));
         } catch (e) {}
       }
 

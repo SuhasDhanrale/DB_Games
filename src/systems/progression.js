@@ -58,16 +58,25 @@ const XP_REWARDS = {
  * @returns {ProgressionData}
  */
 function getDefaults() {
+  const streak = window.DBJamDemo.priorStreak;
+  const yesterday = new Date(window.DBJamDemo.date);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const dailyHistory = {};
+  for (let i = 0; i < streak; i++) {
+    const date = new Date(yesterday);
+    date.setDate(date.getDate() - i);
+    dailyHistory[date.toISOString().split('T')[0]] = true;
+  }
   return {
     xp: 0,
     level: 1,
-    streak: 0,
-    longestStreak: 0,
-    lastPlayDate: '',
+    streak,
+    longestStreak: streak,
+    lastPlayDate: yesterday.toISOString().split('T')[0],
     gamesPlayed: 0,
     totalScore: 0,
     dailyCompleted: {},
-    dailyHistory: {},
+    dailyHistory,
   };
 }
 
@@ -104,14 +113,14 @@ function saveProgression(data) {
  * Get today's date string (YYYY-MM-DD).
  */
 export function todayStr() {
-  return new Date().toISOString().split('T')[0];
+  return window.DBJamDemo.date.split('T')[0];
 }
 
 /**
  * Get yesterday's date string.
  */
 function yesterdayStr() {
-  const d = new Date();
+  const d = new Date(window.DBJamDemo.date);
   d.setDate(d.getDate() - 1);
   return d.toISOString().split('T')[0];
 }

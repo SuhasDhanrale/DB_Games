@@ -9,6 +9,9 @@ import { navigate } from '../core/router.js';
 import { playSfx } from '../core/audio.js';
 import { getProgression, isDailyCompleted } from '../systems/progression.js';
 import { renderBottomNav, attachBottomNavListeners } from '../ui/components.js';
+import { playOpening } from '../ui/opening.js';
+import { getGame } from '../games/registry.js';
+import { prefetchGame } from '../games/game-assets.js';
 
 export function renderHub(container) {
   container.classList.add('screen--no-scroll');
@@ -564,7 +567,7 @@ export function renderHub(container) {
     { key: 'day.sun', en: 'SON', hi: 'रवि' },
   ];
 
-  const now = new Date();
+  const now = new Date(window.DBJamDemo.date);
   const currentDayIndex = (now.getDay() + 6) % 7; // Monday = 0, Sunday = 6
   const monday = new Date(now);
   monday.setDate(now.getDate() - currentDayIndex);
@@ -691,6 +694,11 @@ export function renderHub(container) {
         </button>
       </div>
 
+      <div class="hub-identity">
+        <div style="flex:1;min-width:0"><h1>${t('opening.slogan')}</h1><p>${t('hub.greeting')}</p></div>
+        <button type="button" class="hub-replay" id="hub-replay" aria-label="${t('opening.replay')}" title="${t('opening.replay')}">↻</button>
+      </div>
+
       <!-- Weekly Day Tracker (MON - SON) -->
       <div class="weekly-tracker-wrap">
         <div class="weekly-tracker-card">
@@ -722,6 +730,9 @@ export function renderHub(container) {
   // Attach card click handlers
   const cards = container.querySelectorAll('.game-bento-card');
   cards.forEach((card) => {
+    const warmGame = () => prefetchGame(getGame(card.dataset.gameId)?.htmlFile);
+    card.addEventListener('pointerenter', warmGame, { once: true });
+    card.addEventListener('pointerdown', warmGame, { once: true, passive: true });
     card.addEventListener('click', () => {
       playSfx('tap');
       navigate('/game/' + card.dataset.gameId);
@@ -748,6 +759,12 @@ export function renderHub(container) {
   }
 
   // Attach Bottom Nav
+  container.querySelector('#hub-replay').addEventListener('click', () => {
+    const overlay = document.createElement('div');
+    overlay.className = 'loading-screen';
+    container.appendChild(overlay);
+    playOpening(overlay, () => container.querySelector('#hub-replay')?.focus());
+  });
   attachBottomNavListeners(container, navigate);
 }
 

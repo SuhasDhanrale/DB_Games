@@ -1,4 +1,5 @@
 import { BaseGame } from './base-game.js';
+import { gameUrl } from './game-assets.js';
 
 export class HtmlIframeGame extends BaseGame {
   constructor(container, config) {
@@ -14,11 +15,12 @@ export class HtmlIframeGame extends BaseGame {
   onStart() {
     const area = this.getGameArea();
     area.innerHTML = `
-      <iframe src="/${this.config.htmlFile}" style="width: 100%; height: 100%; border: none;" id="game-iframe-${this.id}"></iframe>
+      <iframe src="${gameUrl(this.config.htmlFile)}" style="width: 100%; height: 100%; border: none;" id="game-iframe-${this.id}"></iframe>
     `;
 
     // Expose DBGameLab globally on host window so window.parent.DBGameLab works
     const bridge = {
+      startGame: () => { if (!this.isRunning) this.start(); },
       addScore: (points) => this.addScore(points),
       endGame: (score) => this.end(score)
     };

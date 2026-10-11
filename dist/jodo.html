@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <script src="./demo-session.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>जोड़ो · भास्कर खेल | Dainik Bhaskar Jodo</title>
+  <meta name="description" content="जोड़ो — चार वस्तुओं और उनके संबंधित तथ्यों को मिलाने का दैनिक ज्ञानवर्धक खेल।">
+  <meta name="theme-color" content="#F9F9F7">
+
+  <style>:root{--color-primary:#e23a28;--color-primary-hover:#c52c1c;--color-primary-light:#fdece9;--color-accent:#f39c12;--color-success:#27ae60;--color-success-bg:#e8f8f0;--color-success-border:#a3e4d7;--color-danger:#e74c3c;--color-danger-bg:#fdedec;--color-bg:#f9f9f7;--color-surface:#fff;--color-surface-subtle:#f3f3ef;--color-surface-hover:#f8f8f5;--text-main:#1c1c1c;--text-muted:#5c5c5c;--text-subtle:#7a7a7a;--text-white:#fff;--border-subtle:#1c1c1c1f;--border-medium:#1c1c1c38;--shadow-sm:0 2px 6px #0000000d;--shadow-md:0 4px 16px #00000014;--shadow-lg:0 10px 30px #0000001f;--shadow-focus:0 0 0 3px #e23a2840;--font-stack:"Noto Sans Devanagari", "Nirmala UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;--radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-full:9999px;--pair-0-color:#2563eb;--pair-0-bg:#eff6ff;--pair-0-border:#93c5fd;--pair-0-text:#1e40af;--pair-1-color:#d97706;--pair-1-bg:#fffbeb;--pair-1-border:#fcd34d;--pair-1-text:#92400e;--pair-2-color:#059669;--pair-2-bg:#ecfdf5;--pair-2-border:#6ee7b7;--pair-2-text:#065f46;--pair-3-color:#7c3aed;--pair-3-bg:#f5f3ff;--pair-3-border:#c4b5fd;--pair-3-text:#5b21b6}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}body{background-color:var(--color-bg);color:var(--text-main);font-family:var(--font-stack);-webkit-user-select:none;user-select:none;flex-direction:column;align-items:center;min-height:100vh;padding:0;font-size:15px;line-height:1.45;display:flex;overflow-x:hidden}.sr-only{clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;width:1px;height:1px;margin:-1px;padding:0;position:absolute;overflow:hidden}.top-accent-bar{z-index:100;background:linear-gradient(90deg,#e23a28 0%,#f39c12 100%);width:100%;height:3px;position:sticky;top:0}.app-container{background-color:var(--color-bg);flex-direction:column;width:100%;max-width:520px;min-height:calc(100vh - 3px);padding:10px 14px 28px;display:flex;position:relative}.info-bar{background:var(--color-surface);border-radius:var(--radius-md);border:1px solid var(--border-subtle);justify-content:space-between;align-items:center;gap:8px;min-height:44px;margin-bottom:14px;padding:9px 14px;transition:all .2s;display:flex}.info-bar.has-error{background:var(--color-danger-bg);border-color:#e74c3c59;animation:.35s ease-in-out shake}.instruction-text{color:var(--text-muted);flex:1;font-size:13.5px;font-weight:600;line-height:1.3;transition:color .15s}.info-bar.has-error .instruction-text{color:var(--color-danger);font-weight:700}.progress-pill{color:var(--color-success);background:var(--color-success-bg);border:1px solid var(--color-success-border);border-radius:var(--radius-full);white-space:nowrap;align-items:center;gap:4px;padding:3px 10px;font-size:13px;font-weight:700;display:inline-flex}.board-container{touch-action:pan-y;margin-bottom:12px;position:relative}.board-container.is-dragging-active{touch-action:none;cursor:crosshair}.connections-svg{pointer-events:none;z-index:10;width:100%;height:100%;position:absolute;top:0;left:0;overflow:visible}.board-header-row{grid-template-columns:minmax(105px,1.05fr) minmax(140px,1.65fr);gap:52px;margin-bottom:8px;padding:0 4px;display:grid}.col-header{color:var(--text-subtle);letter-spacing:.3px;font-size:12px;font-weight:700}.board-grid{z-index:1;grid-template-columns:minmax(105px,1.05fr) minmax(140px,1.65fr);gap:52px;display:grid;position:relative}@media (width>=440px){.board-header-row,.board-grid{gap:60px}}.card-column{flex-direction:column;gap:12px;display:flex}.card-btn{background:var(--color-surface);border:1.5px solid var(--border-subtle);border-radius:var(--radius-md);width:100%;min-height:60px;color:var(--text-main);text-align:left;cursor:pointer;box-shadow:var(--shadow-sm);word-break:break-word;overflow-wrap:break-word;white-space:normal;touch-action:pan-y;flex-direction:column;justify-content:center;font-family:inherit;transition:background .16s,border-color .16s,box-shadow .16s,transform .16s;display:flex;position:relative}.card-btn[data-side=left]{letter-spacing:-.2px;padding:10px 12px;font-size:14.5px;font-weight:700}.card-btn[data-side=right]{padding:10px 12px;font-size:13px;font-weight:600;line-height:1.4}.card-content-wrap{justify-content:space-between;align-items:center;gap:6px;width:100%;display:flex}.card-text{flex:1}.matched-tick{flex-shrink:0;font-size:14px;font-weight:900;line-height:1}.card-btn:hover:not(:disabled):not(.is-matched){background:var(--color-surface-hover);border-color:var(--border-medium);box-shadow:var(--shadow-md);transform:translateY(-1px)}.card-btn:focus-visible{box-shadow:var(--shadow-focus);outline:none}.card-port{background:var(--color-surface);border:2px solid var(--border-medium);pointer-events:auto;cursor:grab;z-index:2;border-radius:50%;justify-content:center;align-items:center;width:14px;height:14px;transition:all .2s cubic-bezier(.16,1,.3,1);display:flex;position:absolute;top:50%;transform:translateY(-50%)}.card-port:after{content:"";background:var(--border-medium);border-radius:50%;width:5px;height:5px;transition:all .2s}.card-btn[data-side=left] .card-port{right:-8px}.card-btn[data-side=right] .card-port{left:-8px}.card-btn[data-pair-idx="0"][data-side=left]{border-left:3.5px solid var(--pair-0-color)}.card-btn[data-pair-idx="1"][data-side=left]{border-left:3.5px solid var(--pair-1-color)}.card-btn[data-pair-idx="2"][data-side=left]{border-left:3.5px solid var(--pair-2-color)}.card-btn[data-pair-idx="3"][data-side=left]{border-left:3.5px solid var(--pair-3-color)}.card-btn.is-selected{border-color:var(--color-primary);background:var(--color-primary-light);box-shadow:0 0 0 2px var(--color-primary)}.card-btn.is-selected[data-side=left][data-pair-idx="0"]{border-color:var(--pair-0-color);background:var(--pair-0-bg);box-shadow:0 0 0 2px var(--pair-0-color)}.card-btn.is-selected[data-side=left][data-pair-idx="1"]{border-color:var(--pair-1-color);background:var(--pair-1-bg);box-shadow:0 0 0 2px var(--pair-1-color)}.card-btn.is-selected[data-side=left][data-pair-idx="2"]{border-color:var(--pair-2-color);background:var(--pair-2-bg);box-shadow:0 0 0 2px var(--pair-2-color)}.card-btn.is-selected[data-side=left][data-pair-idx="3"]{border-color:var(--pair-3-color);background:var(--pair-3-bg);box-shadow:0 0 0 2px var(--pair-3-color)}.card-btn.is-drag-target{transform:scale(1.02);border-color:var(--color-accent)!important;background:#fff9e6!important;box-shadow:0 0 0 3px #f39c1259!important}.card-btn.is-drag-target .card-port{border-color:var(--color-accent);transform:translateY(-50%)scale(1.25);box-shadow:0 0 0 4px #f39c1266}.card-btn.is-wrong{animation:.35s ease-in-out shake;border-color:var(--color-danger)!important;background:var(--color-danger-bg)!important;color:var(--color-danger)!important}@keyframes shake{0%,to{transform:translate(0)}20%,60%{transform:translate(-4px)}40%,80%{transform:translate(4px)}}.card-btn.is-matched{cursor:default;box-shadow:none;opacity:.98}.card-btn.is-matched[data-pair-idx="0"]{background:var(--pair-0-bg);border-color:var(--pair-0-border);color:var(--pair-0-text)}.card-btn.is-matched[data-pair-idx="0"] .card-port{border-color:var(--pair-0-color);background:var(--pair-0-bg)}.card-btn.is-matched[data-pair-idx="0"] .matched-tick{color:var(--pair-0-color)}.card-btn.is-matched[data-pair-idx="1"]{background:var(--pair-1-bg);border-color:var(--pair-1-border);color:var(--pair-1-text)}.card-btn.is-matched[data-pair-idx="1"] .card-port{border-color:var(--pair-1-color);background:var(--pair-1-bg)}.card-btn.is-matched[data-pair-idx="1"] .matched-tick{color:var(--pair-1-color)}.card-btn.is-matched[data-pair-idx="2"]{background:var(--pair-2-bg);border-color:var(--pair-2-border);color:var(--pair-2-text)}.card-btn.is-matched[data-pair-idx="2"] .card-port{border-color:var(--pair-2-color);background:var(--pair-2-bg)}.card-btn.is-matched[data-pair-idx="2"] .matched-tick{color:var(--pair-2-color)}.card-btn.is-matched[data-pair-idx="3"]{background:var(--pair-3-bg);border-color:var(--pair-3-border);color:var(--pair-3-text)}.card-btn.is-matched[data-pair-idx="3"] .card-port{border-color:var(--pair-3-color);background:var(--pair-3-bg)}.card-btn.is-matched[data-pair-idx="3"] .matched-tick{color:var(--pair-3-color)}.active-drag-cable{stroke-width:3.5px;stroke-linecap:round;fill:none}.matched-cable{stroke-width:3.5px;stroke-linecap:round;fill:none;animation:.28s ease-out cableDraw}@keyframes cableDraw{0%{stroke-dashoffset:200px;opacity:.5}to{stroke-dashoffset:0;opacity:1}}.wrong-recoil-cable{stroke:var(--color-danger);stroke-width:3px;stroke-linecap:round;fill:none;animation:.4s ease-out forwards recoilFade}@keyframes recoilFade{0%{opacity:1}to{opacity:0;stroke-width:1px}}.controls-row{justify-content:flex-end;align-items:center;gap:8px;margin-top:6px;display:flex}.btn-hint{border:1px solid var(--border-subtle);background:var(--color-surface);min-height:34px;color:var(--text-muted);border-radius:var(--radius-full);cursor:pointer;align-items:center;gap:5px;padding:0 12px;font-family:inherit;font-size:12.5px;font-weight:600;transition:all .15s;display:inline-flex}.btn-hint:hover:not(:disabled){color:var(--text-main);border-color:var(--border-medium);background:var(--color-surface-hover)}.btn-hint:disabled{opacity:.45;cursor:not-allowed}.result-panel{background:var(--color-surface);border:1.5px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:12px 14px;animation:.25s ease-out fadeIn}@keyframes fadeIn{0%{opacity:0;transform:scale(.98)}to{opacity:1;transform:scale(1)}}.result-header-minimal{border-bottom:1px solid var(--border-subtle);justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;padding-bottom:8px;display:flex}.result-title-wrap{align-items:center;gap:6px;display:flex}.result-badge-icon{font-size:18px;line-height:1}.result-minimal-title{color:var(--text-main);margin:0;font-size:16px;font-weight:800}.result-score-chip{background:var(--color-primary-light);color:var(--color-primary);border-radius:var(--radius-full);align-items:baseline;gap:3px;padding:2px 8px;font-size:13.5px;font-weight:800;display:inline-flex}.result-score-chip small{opacity:.9;font-size:11px;font-weight:600}.review-section{margin:6px 0 10px}.review-title{color:var(--text-subtle);letter-spacing:.2px;margin-bottom:6px;font-size:12px;font-weight:700}.review-list{flex-direction:column;gap:6px;display:flex}.review-item{border-radius:var(--radius-sm);padding:6px 10px}.review-item[data-pair-idx="0"]{background:var(--pair-0-bg);border-left:3px solid var(--pair-0-color)}.review-item[data-pair-idx="1"]{background:var(--pair-1-bg);border-left:3px solid var(--pair-1-color)}.review-item[data-pair-idx="2"]{background:var(--pair-2-bg);border-left:3px solid var(--pair-2-color)}.review-item[data-pair-idx="3"]{background:var(--pair-3-bg);border-left:3px solid var(--pair-3-color)}.review-pair-name{color:var(--text-main);margin-bottom:2px;font-size:12.5px;font-weight:700;line-height:1.3}.review-explanation{color:var(--text-muted);font-size:11.5px;line-height:1.35}.result-actions-row{align-items:center;gap:10px;width:100%;margin-top:10px;display:flex}.btn-action{border-radius:var(--radius-md);cursor:pointer;flex:1;justify-content:center;align-items:center;gap:6px;min-height:42px;font-family:inherit;font-size:14px;font-weight:700;text-decoration:none;transition:all .15s;display:flex}.btn-action-news{background:var(--color-surface);color:var(--color-primary);border:1.5px solid var(--color-primary)}.btn-action-news:hover{background:var(--color-primary-light)}.btn-action-next{background:var(--color-primary);color:var(--text-white);border:1.5px solid var(--color-primary);box-shadow:0 3px 10px #e23a2840}.btn-action-next:hover{background:var(--color-primary-hover);border-color:var(--color-primary-hover);transform:translateY(-1px)}.article-modal{backdrop-filter:blur(2px);z-index:200;background:#00000073;justify-content:center;align-items:flex-end;display:none;position:fixed;inset:0}.article-modal.is-open{display:flex}.article-sheet{background:var(--color-bg);width:100%;max-width:500px;max-height:88vh;box-shadow:var(--shadow-lg);border-radius:18px 18px 0 0;padding:18px 18px 32px;animation:.25s ease-out sheetUp;overflow-y:auto}@keyframes sheetUp{0%{transform:translateY(100%)}to{transform:translateY(0)}}.article-top-bar{border-bottom:1px solid var(--border-subtle);justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;display:flex}.article-badge{color:var(--color-primary);background:var(--color-primary-light);border-radius:var(--radius-full);align-items:center;gap:5px;padding:3px 8px;font-size:12px;font-weight:700;display:inline-flex}.btn-close-sheet{border:1px solid var(--border-subtle);border-radius:var(--radius-full);color:var(--text-main);cursor:pointer;background:0 0;padding:4px 12px;font-family:inherit;font-size:13px;font-weight:600}.btn-close-sheet:hover{background:var(--color-surface-subtle)}.article-category{color:var(--color-primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-size:11.5px;font-weight:700}.article-title{color:var(--text-main);margin-bottom:8px;font-size:20px;font-weight:800;line-height:1.35}.article-summary{color:var(--text-muted);border-left:3px solid var(--color-primary);margin-bottom:14px;padding-left:10px;font-size:14px;font-weight:600;line-height:1.45}.article-body p{color:var(--text-main);margin-bottom:10px;font-size:14.5px;line-height:1.6}.article-source-note{color:var(--text-subtle);background:var(--color-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);margin-top:14px;padding:8px 12px;font-size:12px;line-height:1.4}.article-footer-actions{margin-top:18px}.rules-modal{backdrop-filter:blur(2px);z-index:210;background:#00000073;justify-content:center;align-items:center;padding:16px;display:none;position:fixed;inset:0}.rules-modal.is-open{display:flex}.rules-card{background:var(--color-surface);border-radius:var(--radius-lg);width:100%;max-width:420px;box-shadow:var(--shadow-lg);padding:22px 20px;animation:.2s ease-out fadeIn}.rules-header{justify-content:space-between;align-items:center;margin-bottom:14px;display:flex}.rules-title{color:var(--text-main);align-items:center;gap:6px;font-size:18px;font-weight:800;display:flex}.rules-list{color:var(--text-muted);flex-direction:column;gap:10px;margin-bottom:18px;font-size:14px;line-height:1.5;list-style:none;display:flex}.rules-list li{align-items:flex-start;gap:8px;display:flex}.rules-list li span.step-num{background:var(--color-primary-light);width:22px;height:22px;color:var(--color-primary);border-radius:50%;flex-shrink:0;justify-content:center;align-items:center;margin-top:1px;font-size:12px;font-weight:700;display:inline-flex}.btn-primary-block{background:var(--color-primary);width:100%;min-height:44px;color:var(--text-white);border-radius:var(--radius-md);cursor:pointer;border:none;font-family:inherit;font-size:14.5px;font-weight:700}</style>
+</head>
+<body>
+  <!-- Top Accent Line -->
+  <div class="top-accent-bar" role="presentation"></div>
+
+  <!-- Screen Reader Live Region -->
+  <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Main Shell -->
+  <main class="app-container" id="app">
+
+    <!-- Single Streamlined Direction & Progress Bar -->
+    <div class="info-bar" id="info-bar">
+      <span class="instruction-text" id="instruction-text">एक कार्ड से दूसरे कार्ड तक रेखा खींचें या टैप करें</span>
+      <div class="progress-pill" id="progress-pill" aria-label="प्रगति">
+        <span aria-hidden="true">✓</span>
+        <span id="progress-count">0/4 जोड़ियाँ</span>
+      </div>
+    </div>
+
+    <!-- Game Board (2 Columns with SVG Overlay for Node-type Dragging) -->
+    <section class="board-container" id="board-container" aria-label="कार्ड मिलान पटल">
+      <!-- SVG Connecting Cables Overlay -->
+      <svg class="connections-svg" id="connections-svg">
+        <defs>
+          <filter id="cableGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(0, 0, 0, 0.2)" />
+          </filter>
+        </defs>
+
+        <!-- Matched persistent lines group -->
+        <g id="matched-lines-group"></g>
+
+        <!-- Recoil wrong lines group -->
+        <g id="recoil-lines-group"></g>
+
+        <!-- Active interactive drag line -->
+        <path id="active-drag-line" class="active-drag-cable" d="" style="display: none;" />
+        <circle id="active-drag-head" r="5.5" fill="#E23A28" style="display: none;" />
+      </svg>
+
+      <div class="board-header-row">
+        <div class="col-header" id="left-col-label">सूची (क)</div>
+        <div class="col-header" id="right-col-label">सूची (ख)</div>
+      </div>
+
+      <div class="board-grid">
+        <!-- Left Column -->
+        <div class="card-column" id="left-cards-col" role="group" aria-labelledby="left-col-label">
+          <!-- Rendered via JS -->
+        </div>
+
+        <!-- Right Column -->
+        <div class="card-column" id="right-cards-col" role="group" aria-labelledby="right-col-label">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Hint Control -->
+      <div class="controls-row" id="controls-row">
+        <button type="button" class="btn-hint" id="btn-show-pair" title="एक जोड़ी स्वतः मिलाकर देखें">
+          <span aria-hidden="true">💡</span>
+          <span>एक जोड़ी दिखाएँ</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 2: Final Result Panel (Ultra-compact, No-Scroll) -->
+    <section class="result-panel" id="result-panel" style="display: none;" aria-label="खेल परिणाम">
+      <div class="result-header-minimal">
+        <div class="result-title-wrap">
+          <span class="result-badge-icon" aria-hidden="true">🎉</span>
+          <h2 class="result-minimal-title">4 जोड़ियाँ पूरी हुईं!</h2>
+        </div>
+        <div class="result-score-chip">
+          <span id="score-display">100</span> <small>अंक</small>
+        </div>
+      </div>
+
+      <!-- Concise Review of all 4 Pairs & Explanations -->
+      <div class="review-section">
+        <div class="review-title">जोड़ियों का विवरण व सीख:</div>
+        <div class="review-list" id="review-list">
+          <!-- Rendered via JS with distinct pair colors -->
+        </div>
+      </div>
+
+      <!-- Side-by-side Action Buttons -->
+      <div class="result-actions-row">
+        <button type="button" class="btn-action btn-action-news" id="btn-result-article">
+          <span>📖 जुड़ी ख़बरें</span>
+        </button>
+        <button type="button" class="btn-action btn-action-next" id="btn-next-game">
+          <span>🎮 अगला खेल</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- In-File Article Reader Panel Modal -->
+  <div class="article-modal" id="article-modal" role="dialog" aria-modal="true" aria-labelledby="article-modal-title">
+    <div class="article-sheet">
+      <div class="article-top-bar">
+        <span class="article-badge">डेमो संदर्भ लेख</span>
+        <button type="button" class="btn-close-sheet" id="btn-close-article-top">
+          ✕ बंद करें
+        </button>
+      </div>
+
+      <div class="article-category" id="article-category">विज्ञान</div>
+      <h1 class="article-title" id="article-modal-title">शीर्षक</h1>
+      <p class="article-summary" id="article-summary"></p>
+
+      <div class="article-body" id="article-body">
+        <!-- Paragraphs injected here -->
+      </div>
+
+      <div class="article-source-note" id="article-source-note">
+        स्रोतों पर आधारित डेमो संदर्भ सामग्री।
+      </div>
+
+      <div class="article-footer-actions">
+        <button type="button" class="btn-primary-block" id="btn-close-article-bottom">
+          खेल पर लौटें
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rules Modal -->
+  <div class="rules-modal" id="rules-modal" role="dialog" aria-modal="true" aria-labelledby="rules-modal-title">
+    <div class="rules-card">
+      <div class="rules-header">
+        <h2 class="rules-title" id="rules-modal-title">
+          <span>🧩 जोड़ो के नियम</span>
+        </h2>
+        <button type="button" class="btn-close-sheet" id="btn-close-rules">✕</button>
+      </div>
+
+      <ul class="rules-list">
+        <li>
+          <span class="step-num">1</span>
+          <span>सूची (क) और सूची (ख) में संबंधित तथ्यों को पहचानें।</span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>एक कार्ड से दूसरे कार्ड तक रेखा खींचें (ड्रैग करें) या दोनों कार्डों पर बारी-बारी से टैप करें।</span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>प्रत्येक सही जोड़ी का रंग अलग होगा। सभी 4 जोड़ियाँ मिलाने पर संपूर्ण सीख और स्कोर देखें।</span>
+        </li>
+      </ul>
+
+      <button type="button" class="btn-primary-block" id="btn-rules-ok">
+        समझ गया, खेलें
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================================
+       CONTENT DEFINITION & PAIR THEMES
+       ============================================================ */
+    const PAIR_THEMES = [
+      {
+        idx: 0,
+        color: '#2563EB',      // Royal Blue
+        bg: '#EFF6FF',
+        border: '#93C5FD',
+        text: '#1E40AF'
+      },
+      {
+        idx: 1,
+        color: '#D97706',      // Warm Amber
+        bg: '#FFFBEB',
+        border: '#FCD34D',
+        text: '#92400E'
+      },
+      {
+        idx: 2,
+        color: '#059669',      // Emerald Green
+        bg: '#ECFDF5',
+        border: '#6EE7B7',
+        text: '#065F46'
+      },
+      {
+        idx: 3,
+        color: '#7C3AED',      // Purple
+        bg: '#F5F3FF',
+        border: '#C4B5FD',
+        text: '#5B21B6'
+      }
+    ];
+
+    const CONTENT = {
+      editions: [
+        {
+          id: "d1",
+          title: "संस्करण 1",
+          theme: "अंतरिक्ष",
+          article: {
+            category: "विज्ञान",
+            title: "भारत के चार अंतरिक्ष मिशन क्या खोजते हैं",
+            summary: "चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के अलग-अलग तरीके।",
+            body: [
+              "भारत के अंतरिक्ष मिशनों के काम एक जैसे नहीं हैं। चंद्रयान-3 के उद्देश्यों में चंद्रमा पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था। आदित्य-L1 सूर्य के अध्ययन के लिए बनाया गया भारतीय मिशन है।",
+              "मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल का अध्ययन शामिल था। एस्ट्रोसैट खगोलीय स्रोतों का अलग-अलग तरंगदैर्घ्यों में एक साथ अध्ययन करता है।",
+              "इस संस्करण के जोड़ो खेल में हर मिशन को उसके मुख्य काम से मिलाइए।"
+            ],
+            sourceNote: "इसरो (ISRO) आधिकारिक मिशन विवरण पर आधारित डेमो संदर्भ सामग्री।"
+          },
+          pairs: [
+            {
+              id: "d1-p1",
+              left: "चंद्रयान-3",
+              right: "चंद्रमा पर सॉफ्ट लैंडिंग और रोवर",
+              explanation: "चंद्रयान-3 के उद्देश्यों में चंद्रमा पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था।"
+            },
+            {
+              id: "d1-p2",
+              left: "आदित्य-L1",
+              right: "सूर्य का अध्ययन",
+              explanation: "आदित्य-L1 सूर्य का अध्ययन करने के लिए बनाया गया भारतीय मिशन है।"
+            },
+            {
+              id: "d1-p3",
+              left: "मंगलयान",
+              right: "मंगल की सतह और वायुमंडल का अध्ययन",
+              explanation: "मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल का अध्ययन शामिल था।"
+            },
+            {
+              id: "d1-p4",
+              left: "एस्ट्रोसैट",
+              right: "कई तरंगदैर्घ्यों में खगोलीय अध्ययन",
+              explanation: "एस्ट्रोसैट खगोलीय स्रोतों का अलग-अलग तरंगदैर्घ्यों में एक साथ अध्ययन करता है।"
+            }
+          ],
+          leftOrder: [1, 2, 3, 4],
+          rightOrder: [3, 1, 4, 2]
+        },
+        {
+          id: "d2",
+          title: "संस्करण 2",
+          theme: "पेरिस 2024",
+          article: {
+            category: "खेल",
+            title: "पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते",
+            summary: "चार नाम, चार अलग स्पर्धाएँ। पदक के साथ स्पर्धा पहचानिए।",
+            body: [
+              "पेरिस ओलंपिक 2024 में मनु भाकर ने महिला 10 मीटर एयर पिस्टल स्पर्धा में कांस्य पदक जीता। नीरज चोपड़ा ने पुरुष भाला फेंक स्पर्धा में रजत पदक जीता।",
+              "स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल थ्री पोज़िशन्स स्पर्धा में कांस्य पदक जीता। अमन सहरावत ने पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा स्पर्धा में कांस्य पदक जीता।"
+            ],
+            sourceNote: "पीआईबी (PIB) और ओलंपिक रिकॉर्ड्स पर आधारित संदर्भ सामग्री।"
+          },
+          pairs: [
+            {
+              id: "d2-p1",
+              left: "मनु भाकर",
+              right: "महिला 10 मीटर एयर पिस्टल में कांस्य",
+              explanation: "मनु भाकर ने पेरिस 2024 की महिला 10 मीटर एयर पिस्टल स्पर्धा में कांस्य पदक जीता।"
+            },
+            {
+              id: "d2-p2",
+              left: "नीरज चोपड़ा",
+              right: "पुरुष भाला फेंक में रजत",
+              explanation: "नीरज चोपड़ा ने पेरिस 2024 की पुरुष भाला फेंक स्पर्धा में रजत पदक जीता।"
+            },
+            {
+              id: "d2-p3",
+              left: "स्वप्निल कुसाले",
+              right: "पुरुष 50 मीटर राइफल 3P में कांस्य",
+              explanation: "स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल थ्री पोज़िशन्स स्पर्धा में कांस्य पदक जीता।"
+            },
+            {
+              id: "d2-p4",
+              left: "अमन सहरावत",
+              right: "पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा में कांस्य",
+              explanation: "अमन सहरावत ने पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा स्पर्धा में कांस्य पदक जीता।"
+            }
+          ],
+          leftOrder: [1, 2, 3, 4],
+          rightOrder: [2, 4, 1, 3]
+        },
+        {
+          id: "d3",
+          title: "संस्करण 3",
+          theme: "धरोहर",
+          article: {
+            category: "संस्कृति",
+            title: "भारत की चार धरोहरें और उनके राज्य",
+            summary: "गुजरात से ओडिशा तक, चार जगहों की पहचान और इतिहास।",
+            body: [
+              "धोलावीरा गुजरात में हड़प्पा सभ्यता का एक स्थल है, जो अपनी सुदृढ़ जल व्यवस्था और नगर योजना के लिए जाना जाता है। कर्नाटक के हम्पी में विजयनगर साम्राज्य के ऐतिहासिक अवशेष हैं।",
+              "मध्य प्रदेश का साँची अपने ऐतिहासिक बौद्ध स्मारकों के लिए प्रसिद्ध है। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना पर आधारित अपनी बनावट के लिए जाना जाता है।"
+            ],
+            sourceNote: "यूनेस्को (UNESCO) विश्व धरोहर अभिलेखों पर आधारित संदर्भ सामग्री।"
+          },
+          pairs: [
+            {
+              id: "d3-p1",
+              left: "धोलावीरा",
+              right: "गुजरात (हड़प्पा जल योजना)",
+              explanation: "गुजरात का धोलावीरा हड़प्पा सभ्यता का स्थल है, जो अपनी जल व्यवस्था के लिए जाना जाता है।"
+            },
+            {
+              id: "d3-p2",
+              left: "हम्पी",
+              right: "कर्नाटक (विजयनगर साम्राज्य)",
+              explanation: "कर्नाटक के हम्पी में विजयनगर साम्राज्य के ऐतिहासिक अवशेष हैं।"
+            },
+            {
+              id: "d3-p3",
+              left: "साँची",
+              right: "मध्य प्रदेश (बौद्ध स्तूप)",
+              explanation: "मध्य प्रदेश का साँची अपने बौद्ध स्मारकों के लिए जाना जाता है।"
+            },
+            {
+              id: "d3-p4",
+              left: "कोणार्क",
+              right: "ओडिशा (सूर्य मंदिर)",
+              explanation: "ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना पर आधारित बनावट के लिए प्रसिद्ध है।"
+            }
+          ],
+          leftOrder: [1, 2, 3, 4],
+          rightOrder: [4, 3, 2, 1]
+        }
+      ]
+    };
+
+    /* ============================================================
+       APPLICATION STATE
+       ============================================================ */
+    const STORAGE_PREFIX = "db-jam:v2:jodo:";
+    const DEFAULT_INSTRUCTION = "एक कार्ड से दूसरे कार्ड तक रेखा खींचें या टैप करें";
+    const memoryStore = {};
+
+    function safeGetStorage(key) {
+      try {
+        if (typeof window !== "undefined" && window.DBJamDemo) {
+          const val = window.DBJamDemo.getItem(key);
+          if (val) return JSON.parse(val);
+        }
+      } catch (err) {}
+      return memoryStore[key] || null;
+    }
+
+    function safeSetStorage(key, value) {
+      try {
+        if (typeof window !== "undefined" && window.DBJamDemo) {
+          window.DBJamDemo.setItem(key, JSON.stringify(value));
+        }
+      } catch (err) {}
+      memoryStore[key] = value;
+    }
+
+    function createInitialState() {
+      return {
+        matchedPairIds: [],
+        assistedPairIds: [],
+        wrongMatches: 0,
+        assistedPairs: 0,
+        isCompleted: false,
+        isPractice: false,
+        firstResult: null
+      };
+    }
+
+    let currentDayId = "d1";
+    let state = createInitialState();
+    let selectedLeftId = null;
+    let selectedRightId = null;
+    let isProcessing = false;
+    let feedbackTimer = null;
+
+    // Node Dragging State
+    let isPointerDown = false;
+    let isDragging = false;
+    let dragSource = null;
+    let currentDragTarget = null;
+
+    function getDayFromUrl() {
+      return window.DBJamDemo.day;
+    }
+
+    function syncUrlWithDay(dayId) {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("day", dayId);
+        window.history.replaceState({ day: dayId }, "", url.toString());
+      } catch (e) {}
+    }
+
+    function loadEditionState(dayId) {
+      const saved = safeGetStorage(STORAGE_PREFIX + dayId);
+      if (saved) {
+        state = {
+          matchedPairIds: Array.isArray(saved.matchedPairIds) ? saved.matchedPairIds : [],
+          assistedPairIds: Array.isArray(saved.assistedPairIds) ? saved.assistedPairIds : [],
+          wrongMatches: typeof saved.wrongMatches === "number" ? saved.wrongMatches : 0,
+          assistedPairs: typeof saved.assistedPairs === "number" ? saved.assistedPairs : 0,
+          isCompleted: !!saved.isCompleted,
+          isPractice: !!saved.isPractice,
+          firstResult: saved.firstResult || null
+        };
+      } else {
+        state = createInitialState();
+      }
+      selectedLeftId = null;
+      selectedRightId = null;
+      isProcessing = false;
+    }
+
+    function saveEditionState() {
+      safeSetStorage(STORAGE_PREFIX + currentDayId, state);
+    }
+
+    function getCurrentEdition() {
+      return CONTENT.editions.find(e => e.id === currentDayId) || CONTENT.editions[0];
+    }
+
+    function getPairById(pairId) {
+      const edition = getCurrentEdition();
+      return edition.pairs.find(p => p.id === pairId);
+    }
+
+    function getPairIndex(pairId) {
+      const edition = getCurrentEdition();
+      return edition.pairs.findIndex(p => p.id === pairId);
+    }
+
+    function calculateScore(wrong, assisted) {
+      return Math.max(0, 100 - (10 * wrong) - (15 * assisted));
+    }
+
+    function announce(message) {
+      const el = document.getElementById("sr-announcer");
+      if (el) {
+        el.textContent = "";
+        setTimeout(() => { el.textContent = message; }, 40);
+      }
+    }
+
+    function setInstruction(text, isError = false) {
+      const bar = document.getElementById("info-bar");
+      const textEl = document.getElementById("instruction-text");
+      if (!bar || !textEl) return;
+
+      if (feedbackTimer) clearTimeout(feedbackTimer);
+
+      textEl.textContent = text;
+      if (isError) {
+        bar.classList.add("has-error");
+        feedbackTimer = setTimeout(() => {
+          bar.classList.remove("has-error");
+          textEl.textContent = DEFAULT_INSTRUCTION;
+        }, 1200);
+      } else {
+        bar.classList.remove("has-error");
+      }
+    }
+
+    /* ============================================================
+       SVG BEZIER CURVE CALCULATION
+       ============================================================ */
+    function makeBezierPath(x1, y1, x2, y2, pairIndex = 0) {
+      if (Math.abs(y2 - y1) < 4) {
+        return `M ${x1} ${y1} L ${x2} ${y2}`;
+      }
+      const midX = (x1 + x2) / 2;
+      const laneOffset = ((pairIndex % 4) - 1.5) * 6;
+      const transitX = midX + laneOffset;
+      return `M ${x1} ${y1} C ${transitX} ${y1}, ${transitX} ${y2}, ${x2} ${y2}`;
+    }
+
+    function makeActiveDragPath(x1, y1, x2, y2, startSide) {
+      const dx = Math.max(22, Math.abs(x2 - x1) * 0.45);
+      if (startSide === "left") {
+        return `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+      } else {
+        return `M ${x1} ${y1} C ${x1 - dx} ${y1}, ${x2 + dx} ${y2}, ${x2} ${y2}`;
+      }
+    }
+
+    function getPortCoordinates(cardEl, side) {
+      const board = document.getElementById("board-container");
+      if (!board || !cardEl) return { x: 0, y: 0 };
+
+      const boardRect = board.getBoundingClientRect();
+      const port = cardEl.querySelector(".card-port");
+      if (port) {
+        const portRect = port.getBoundingClientRect();
+        return {
+          x: portRect.left + portRect.width / 2 - boardRect.left,
+          y: portRect.top + portRect.height / 2 - boardRect.top
+        };
+      }
+
+      const cardRect = cardEl.getBoundingClientRect();
+      const y = cardRect.top + cardRect.height / 2 - boardRect.top;
+      const x = (side === "left")
+        ? (cardRect.right - boardRect.left)
+        : (cardRect.left - boardRect.left);
+
+      return { x, y };
+    }
+
+    /* Update persistent matched connection lines with distinct colors */
+    function updateMatchedConnectionLines() {
+      const group = document.getElementById("matched-lines-group");
+      if (!group) return;
+
+      group.innerHTML = "";
+      if (state.isCompleted) return;
+
+      const edition = getCurrentEdition();
+
+      state.matchedPairIds.forEach((pairId) => {
+        const leftBtn = document.querySelector(`#left-cards-col .card-btn[data-pair-id="${pairId}"]`);
+        const rightBtn = document.querySelector(`#right-cards-col .card-btn[data-pair-id="${pairId}"]`);
+
+        if (leftBtn && rightBtn) {
+          const pt1 = getPortCoordinates(leftBtn, "left");
+          const pt2 = getPortCoordinates(rightBtn, "right");
+
+          const pairIndex = edition.pairs.findIndex(p => p.id === pairId);
+          const theme = PAIR_THEMES[pairIndex >= 0 ? pairIndex : 0];
+
+          const d = makeBezierPath(pt1.x, pt1.y, pt2.x, pt2.y, pairIndex);
+
+          // Draw cable in pair's distinct color
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("class", "matched-cable");
+          path.setAttribute("d", d);
+          path.style.stroke = theme.color;
+          path.style.filter = `drop-shadow(0 2px 4px ${theme.color}44)`;
+          group.appendChild(path);
+
+          // Terminal glow circles
+          const dot1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          dot1.setAttribute("cx", pt1.x);
+          dot1.setAttribute("cy", pt1.y);
+          dot1.setAttribute("r", "5");
+          dot1.setAttribute("fill", theme.color);
+          group.appendChild(dot1);
+
+          const dot2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          dot2.setAttribute("cx", pt2.x);
+          dot2.setAttribute("cy", pt2.y);
+          dot2.setAttribute("r", "5");
+          dot2.setAttribute("fill", theme.color);
+          group.appendChild(dot2);
+        }
+      });
+    }
+
+    /* Transient recoil animation for incorrect drag match */
+    function triggerWrongRecoilLine(pt1, pt2, startSide) {
+      const recoilGroup = document.getElementById("recoil-lines-group");
+      if (!recoilGroup) return;
+
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("class", "wrong-recoil-cable");
+      path.setAttribute("d", makeActiveDragPath(pt1.x, pt1.y, pt2.x, pt2.y, startSide));
+      recoilGroup.appendChild(path);
+
+      setTimeout(() => { path.remove(); }, 400);
+    }
+
+    /* ============================================================
+       RENDER FUNCTIONS
+       ============================================================ */
+    function render() {
+      const edition = getCurrentEdition();
+
+      // Progress Counter
+      const matchedCount = state.matchedPairIds.length;
+      document.getElementById("progress-count").textContent = `${matchedCount}/4 जोड़ियाँ`;
+
+      // Render Board Columns
+      renderBoard(edition);
+
+      // Render Results Panel if completed
+      renderResultPanel();
+
+      // Hint button disabled state
+      const btnShowPair = document.getElementById("btn-show-pair");
+      if (btnShowPair) {
+        btnShowPair.disabled = (matchedCount >= 4) || isProcessing || state.isCompleted;
+      }
+
+      // Draw SVG Connection Lines
+      requestAnimationFrame(() => {
+        updateMatchedConnectionLines();
+      });
+    }
+
+    function renderBoard(edition) {
+      const leftCol = document.getElementById("left-cards-col");
+      const rightCol = document.getElementById("right-cards-col");
+      if (!leftCol || !rightCol) return;
+
+      leftCol.innerHTML = "";
+      rightCol.innerHTML = "";
+
+      const leftCards = edition.leftOrder.map(num => edition.pairs[num - 1]);
+      const rightCards = edition.rightOrder.map(num => edition.pairs[num - 1]);
+
+      const isBoardBlocked = isProcessing || state.isCompleted;
+
+      // Left Column Cards
+      leftCards.forEach((pair, idx) => {
+        const isMatched = state.matchedPairIds.includes(pair.id);
+        const isSelected = (selectedLeftId === pair.id);
+        const pairIdx = getPairIndex(pair.id);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.id = `card-left-${idx}`;
+        btn.className = "card-btn";
+        btn.dataset.side = "left";
+        btn.dataset.pairId = pair.id;
+        btn.dataset.pairIdx = pairIdx;
+
+        if (isMatched) {
+          btn.classList.add("is-matched");
+          btn.setAttribute("aria-disabled", "true");
+          btn.innerHTML = `
+            <div class="card-content-wrap">
+              <span class="card-text">${escapeHtml(pair.left)}</span>
+              <span class="matched-tick" aria-hidden="true">✓</span>
+            </div>
+            <span class="card-port" aria-hidden="true"></span>
+          `;
+        } else {
+          if (isSelected) btn.classList.add("is-selected");
+          btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+          btn.innerHTML = `
+            <div class="card-content-wrap">
+              <span class="card-text">${escapeHtml(pair.left)}</span>
+            </div>
+            <span class="card-port" title="खींचकर जोड़ी बनाएँ" aria-hidden="true"></span>
+          `;
+
+          if (!isBoardBlocked) {
+            setupCardDragAndClick(btn, "left", pair.id, pairIdx);
+          } else {
+            btn.style.cursor = "default";
+          }
+        }
+
+        leftCol.appendChild(btn);
+      });
+
+      // Right Column Cards
+      rightCards.forEach((pair, idx) => {
+        const isMatched = state.matchedPairIds.includes(pair.id);
+        const isSelected = (selectedRightId === pair.id);
+        const pairIdx = getPairIndex(pair.id);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.id = `card-right-${idx}`;
+        btn.className = "card-btn";
+        btn.dataset.side = "right";
+        btn.dataset.pairId = pair.id;
+        btn.dataset.pairIdx = pairIdx;
+
+        if (isMatched) {
+          btn.classList.add("is-matched");
+          btn.setAttribute("aria-disabled", "true");
+          btn.innerHTML = `
+            <div class="card-content-wrap">
+              <span class="card-text">${escapeHtml(pair.right)}</span>
+              <span class="matched-tick" aria-hidden="true">✓</span>
+            </div>
+            <span class="card-port" aria-hidden="true"></span>
+          `;
+        } else {
+          if (isSelected) btn.classList.add("is-selected");
+          btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+          btn.innerHTML = `
+            <div class="card-content-wrap">
+              <span class="card-text">${escapeHtml(pair.right)}</span>
+            </div>
+            <span class="card-port" title="खींचकर जोड़ी बनाएँ" aria-hidden="true"></span>
+          `;
+
+          if (!isBoardBlocked) {
+            setupCardDragAndClick(btn, "right", pair.id, pairIdx);
+          } else {
+            btn.style.cursor = "default";
+          }
+        }
+
+        rightCol.appendChild(btn);
+      });
+    }
+
+    /* ============================================================
+       INTERACTION: DRAG & DROP + TAP/CLICK
+       ============================================================ */
+    function setupCardDragAndClick(cardBtn, side, pairId, pairIdx) {
+      let pointerStartX = 0;
+      let pointerStartY = 0;
+      let hasDragged = false;
+
+      cardBtn.addEventListener("pointerdown", (e) => {
+        if (isProcessing || state.isCompleted) return;
+        if (e.button && e.button !== 0) return;
+
+        isPointerDown = true;
+        hasDragged = false;
+        pointerStartX = e.clientX;
+        pointerStartY = e.clientY;
+
+        const portPt = getPortCoordinates(cardBtn, side);
+        dragSource = {
+          side: side,
+          pairId: pairId,
+          pairIdx: pairIdx,
+          el: cardBtn,
+          portX: portPt.x,
+          portY: portPt.y
+        };
+
+        window.addEventListener("pointermove", onPointerMove);
+        window.addEventListener("pointerup", onPointerUp);
+        window.addEventListener("pointercancel", onPointerUp);
+      });
+
+      function onPointerMove(e) {
+        if (!isPointerDown || !dragSource) return;
+
+        const dist = Math.hypot(e.clientX - pointerStartX, e.clientY - pointerStartY);
+        if (dist > 7) {
+          if (!hasDragged) {
+            hasDragged = true;
+            isDragging = true;
+            document.getElementById("board-container").classList.add("is-dragging-active");
+            cardBtn.classList.add("is-selected");
+          }
+
+          const board = document.getElementById("board-container");
+          const boardRect = board.getBoundingClientRect();
+          const curX = e.clientX - boardRect.left;
+          const curY = e.clientY - boardRect.top;
+
+          const elemUnder = document.elementFromPoint(e.clientX, e.clientY)?.closest(".card-btn");
+          const activePath = document.getElementById("active-drag-line");
+          const activeHead = document.getElementById("active-drag-head");
+
+          // Wire color matches dragged item's dedicated color
+          const theme = PAIR_THEMES[dragSource.pairIdx >= 0 ? dragSource.pairIdx : 0];
+          activePath.style.stroke = theme.color;
+          activeHead.setAttribute("fill", theme.color);
+
+          if (currentDragTarget && currentDragTarget !== elemUnder) {
+            currentDragTarget.classList.remove("is-drag-target");
+            currentDragTarget = null;
+          }
+
+          if (elemUnder && elemUnder.dataset.side !== dragSource.side && !elemUnder.classList.contains("is-matched")) {
+            currentDragTarget = elemUnder;
+            elemUnder.classList.add("is-drag-target");
+
+            const targetPt = getPortCoordinates(elemUnder, elemUnder.dataset.side);
+            const d = makeActiveDragPath(dragSource.portX, dragSource.portY, targetPt.x, targetPt.y, dragSource.side);
+
+            activePath.setAttribute("d", d);
+            activePath.style.display = "block";
+
+            activeHead.setAttribute("cx", targetPt.x);
+            activeHead.setAttribute("cy", targetPt.y);
+            activeHead.style.display = "block";
+          } else {
+            const d = makeActiveDragPath(dragSource.portX, dragSource.portY, curX, curY, dragSource.side);
+            activePath.setAttribute("d", d);
+            activePath.style.display = "block";
+
+            activeHead.setAttribute("cx", curX);
+            activeHead.setAttribute("cy", curY);
+            activeHead.style.display = "block";
+          }
+        }
+      }
+
+      function onPointerUp(e) {
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        window.removeEventListener("pointercancel", onPointerUp);
+
+        document.getElementById("board-container").classList.remove("is-dragging-active");
+
+        const activePath = document.getElementById("active-drag-line");
+        const activeHead = document.getElementById("active-drag-head");
+        activePath.style.display = "none";
+        activeHead.style.display = "none";
+
+        if (currentDragTarget) {
+          currentDragTarget.classList.remove("is-drag-target");
+        }
+
+        const source = dragSource;
+        const wasDragged = hasDragged;
+
+        isPointerDown = false;
+        isDragging = false;
+        dragSource = null;
+
+        if (wasDragged) {
+          const elemUnder = document.elementFromPoint(e.clientX, e.clientY)?.closest(".card-btn");
+          if (elemUnder && elemUnder.dataset.side !== source.side && !elemUnder.classList.contains("is-matched")) {
+            const targetPairId = elemUnder.dataset.pairId;
+            const leftId = (source.side === "left") ? source.pairId : targetPairId;
+            const rightId = (source.side === "right") ? source.pairId : targetPairId;
+
+            executePairEvaluation(leftId, rightId);
+          } else {
+            cardBtn.classList.remove("is-selected");
+          }
+        } else {
+          handleCardClick(side, pairId);
+        }
+      }
+    }
+
+    function handleCardClick(side, pairId) {
+      if (isProcessing || state.isCompleted) return;
+
+      const pair = getPairById(pairId);
+      if (!pair) return;
+
+      if (side === "left") {
+        if (selectedLeftId === pairId) {
+          selectedLeftId = null;
+          setInstruction(DEFAULT_INSTRUCTION);
+          render();
+          return;
+        }
+        selectedLeftId = pairId;
+        announce(`चुना: ${pair.left}`);
+
+        if (selectedRightId) {
+          executePairEvaluation(selectedLeftId, selectedRightId);
+        } else {
+          setInstruction(`"${pair.left}" चुना गया। अब दाईं ओर सही कार्ड चुनें या खींचें।`);
+          render();
+        }
+      } else if (side === "right") {
+        if (selectedRightId === pairId) {
+          selectedRightId = null;
+          setInstruction(DEFAULT_INSTRUCTION);
+          render();
+          return;
+        }
+        selectedRightId = pairId;
+        announce(`चुना: ${pair.right}`);
+
+        if (selectedLeftId) {
+          executePairEvaluation(selectedLeftId, selectedRightId);
+        } else {
+          setInstruction(`"${pair.right}" चुना गया। अब बाईं ओर सही कार्ड चुनें या खींचें।`);
+          render();
+        }
+      }
+    }
+
+    /* Core Pair Evaluation: NO mid-game interruption! */
+    function executePairEvaluation(leftId, rightId) {
+      const leftPair = getPairById(leftId);
+      const rightPair = getPairById(rightId);
+
+      if (leftId === rightId) {
+        // --- CORRECT MATCH ---
+        if (!state.matchedPairIds.includes(leftId)) {
+          state.matchedPairIds.push(leftId);
+        }
+        selectedLeftId = null;
+        selectedRightId = null;
+
+        saveEditionState();
+        announce(`सही जोड़ी बनी: ${leftPair.left} और ${leftPair.right}`);
+
+        const totalMatched = state.matchedPairIds.length;
+
+        if (totalMatched === 4) {
+          // All 4 pairs connected!
+          setInstruction("🎉 बहुत बढ़िया! सभी 4 जोड़ियाँ पूरी हुईं।");
+
+          const finalScore = calculateScore(state.wrongMatches, state.assistedPairs);
+          if (!state.firstResult) {
+            state.firstResult = {
+              score: finalScore,
+              wrongMatches: state.wrongMatches,
+              assistedPairs: state.assistedPairs,
+              completedAt: new Date().toISOString()
+            };
+            notifyGamePlatform("WIN", finalScore);
+          }
+
+          render();
+
+          // Smooth transition to Step 2 after viewing the completed cables
+          setTimeout(() => {
+            state.isCompleted = true;
+            saveEditionState();
+            render();
+          }, 650);
+
+        } else {
+          setInstruction(DEFAULT_INSTRUCTION);
+          render();
+        }
+
+      } else {
+        // --- WRONG MATCH ---
+        state.wrongMatches++;
+        isProcessing = true;
+        saveEditionState();
+
+        setInstruction("यह जोड़ी नहीं है, पुनः प्रयास करें!", true);
+        announce("यह जोड़ी नहीं है, पुनः प्रयास करें");
+
+        highlightWrongCards(leftId, rightId);
+
+        const leftBtn = document.querySelector(`#left-cards-col .card-btn[data-pair-id="${leftId}"]`);
+        const rightBtn = document.querySelector(`#right-cards-col .card-btn[data-pair-id="${rightId}"]`);
+        if (leftBtn && rightBtn) {
+          const pt1 = getPortCoordinates(leftBtn, "left");
+          const pt2 = getPortCoordinates(rightBtn, "right");
+          triggerWrongRecoilLine(pt1, pt2, "left");
+        }
+
+        setTimeout(() => {
+          clearWrongHighlight();
+          selectedLeftId = null;
+          selectedRightId = null;
+          isProcessing = false;
+          render();
+        }, 400);
+      }
+    }
+
+    function highlightWrongCards(leftId, rightId) {
+      document.querySelectorAll("#left-cards-col .card-btn").forEach(b => {
+        if (b.dataset.pairId === leftId) b.classList.add("is-wrong");
+      });
+      document.querySelectorAll("#right-cards-col .card-btn").forEach(b => {
+        if (b.dataset.pairId === rightId) b.classList.add("is-wrong");
+      });
+    }
+
+    function clearWrongHighlight() {
+      document.querySelectorAll(".card-btn").forEach(b => b.classList.remove("is-wrong"));
+    }
+
+    /* Hint: "एक जोड़ी दिखाएँ" */
+    function handleShowPairHelp() {
+      if (isProcessing || state.isCompleted) return;
+
+      const edition = getCurrentEdition();
+      const unmatchedPair = edition.pairs.find(p => !state.matchedPairIds.includes(p.id));
+      if (!unmatchedPair) return;
+
+      state.assistedPairs++;
+      state.assistedPairIds.push(unmatchedPair.id);
+      state.matchedPairIds.push(unmatchedPair.id);
+
+      selectedLeftId = null;
+      selectedRightId = null;
+
+      saveEditionState();
+      announce(`जोड़ी दिखाई गई: ${unmatchedPair.left} और ${unmatchedPair.right}`);
+
+      if (state.matchedPairIds.length === 4) {
+        const finalScore = calculateScore(state.wrongMatches, state.assistedPairs);
+        if (!state.firstResult) {
+          state.firstResult = {
+            score: finalScore,
+            wrongMatches: state.wrongMatches,
+            assistedPairs: state.assistedPairs,
+            completedAt: new Date().toISOString()
+          };
+          notifyGamePlatform("WIN", finalScore);
+        }
+        render();
+        setTimeout(() => {
+          state.isCompleted = true;
+          saveEditionState();
+          render();
+        }, 650);
+      } else {
+        render();
+      }
+    }
+
+    /* ============================================================
+       STEP 2: RESULT SCREEN RENDER
+       ============================================================ */
+    function renderResultPanel() {
+      const resultPanel = document.getElementById("result-panel");
+      const boardContainer = document.getElementById("board-container");
+      const infoBar = document.getElementById("info-bar");
+
+      if (!resultPanel) return;
+
+      if (!state.isCompleted) {
+        resultPanel.style.display = "none";
+        if (boardContainer) boardContainer.style.display = "block";
+        if (infoBar) infoBar.style.display = "flex";
+        return;
+      }
+
+      // Hide board and info bar
+      if (boardContainer) boardContainer.style.display = "none";
+      if (infoBar) infoBar.style.display = "none";
+
+      const currentScore = calculateScore(state.wrongMatches, state.assistedPairs);
+      const scoreEl = document.getElementById("score-display");
+      if (scoreEl) scoreEl.textContent = currentScore;
+
+      // Populate Short Explanations with matching pair colors
+      const reviewList = document.getElementById("review-list");
+      if (reviewList) {
+        reviewList.innerHTML = "";
+        const edition = getCurrentEdition();
+
+        edition.pairs.forEach((pair, idx) => {
+          const item = document.createElement("div");
+          item.className = "review-item";
+          item.dataset.pairIdx = idx;
+          item.innerHTML = `
+            <div class="review-pair-name">${escapeHtml(pair.left)} ➔ ${escapeHtml(pair.right)}</div>
+            <div class="review-explanation">${escapeHtml(pair.explanation)}</div>
+          `;
+          reviewList.appendChild(item);
+        });
+      }
+
+      resultPanel.style.display = "block";
+      resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function handlePlayAgainPractice() {
+      const preservedFirst = state.firstResult;
+      state = {
+        matchedPairIds: [],
+        assistedPairIds: [],
+        wrongMatches: 0,
+        assistedPairs: 0,
+        isCompleted: false,
+        isPractice: true,
+        firstResult: preservedFirst
+      };
+
+      selectedLeftId = null;
+      selectedRightId = null;
+      isProcessing = false;
+
+      saveEditionState();
+      setInstruction(DEFAULT_INSTRUCTION);
+      render();
+    }
+
+    function handleNextGame() {
+      if (window.parent && window.parent.location) {
+        window.parent.location.hash = "#/game/superover";
+      } else {
+        handlePlayAgainPractice();
+      }
+    }
+
+    function switchEdition(newDayId) {
+      if (newDayId === currentDayId) return;
+
+      saveEditionState();
+      currentDayId = newDayId;
+      syncUrlWithDay(newDayId);
+      loadEditionState(newDayId);
+
+      setInstruction(DEFAULT_INSTRUCTION);
+      render();
+    }
+
+    /* Modal Handlers */
+    function openArticleModal() {
+      const edition = getCurrentEdition();
+      const article = edition.article;
+      if (!article) return;
+
+      document.getElementById("article-category").textContent = article.category;
+      document.getElementById("article-modal-title").textContent = article.title;
+      document.getElementById("article-summary").textContent = article.summary;
+
+      const bodyContainer = document.getElementById("article-body");
+      bodyContainer.innerHTML = "";
+      article.body.forEach(para => {
+        const p = document.createElement("p");
+        p.textContent = para;
+        bodyContainer.appendChild(p);
+      });
+
+      document.getElementById("article-source-note").textContent = article.sourceNote || "डेमो संदर्भ लेख।";
+
+      const modal = document.getElementById("article-modal");
+      modal.classList.add("is-open");
+      announce("संदर्भ लेख खुला: " + article.title);
+    }
+
+    function closeArticleModal() {
+      const modal = document.getElementById("article-modal");
+      modal.classList.remove("is-open");
+      announce("संदर्भ लेख बंद हुआ");
+    }
+
+    function openRulesModal() {
+      const modal = document.getElementById("rules-modal");
+      if (modal) modal.classList.add("is-open");
+    }
+
+    function closeRulesModal() {
+      const modal = document.getElementById("rules-modal");
+      if (modal) modal.classList.remove("is-open");
+    }
+
+    function notifyGamePlatform(status, score) {
+      try {
+        if (window.parent && window.parent.DBGameLab) {
+          if (typeof window.parent.DBGameLab.addScore === "function") {
+            window.parent.DBGameLab.addScore(score);
+          }
+        }
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: "GAME_COMPLETE",
+            game: "jodo",
+            dayId: currentDayId,
+            score: score,
+            status: status
+          }, "*");
+        }
+      } catch (e) {}
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    /* Resize Listener */
+    window.addEventListener("resize", () => {
+      updateMatchedConnectionLines();
+    });
+
+    /* PostMessage Listener from parent shell */
+    window.addEventListener("message", (e) => {
+      if (e.data && e.data.type === "OPEN_RULES") {
+        openRulesModal();
+      }
+    });
+
+    // Expose openHelpModal for parent bridge
+    window.openHelpModal = openRulesModal;
+
+    /* DOM Ready */
+    document.addEventListener("DOMContentLoaded", () => {
+      currentDayId = getDayFromUrl();
+      loadEditionState(currentDayId);
+
+      // Controls
+      const btnShowPair = document.getElementById("btn-show-pair");
+      if (btnShowPair) btnShowPair.addEventListener("click", handleShowPairHelp);
+
+      const btnPlayAgain = document.getElementById("btn-play-again");
+      if (btnPlayAgain) btnPlayAgain.addEventListener("click", handlePlayAgainPractice);
+
+      const btnNextGame = document.getElementById("btn-next-game");
+      if (btnNextGame) btnNextGame.addEventListener("click", handleNextGame);
+
+      // Article Reader
+      const btnResultArticle = document.getElementById("btn-result-article");
+      if (btnResultArticle) btnResultArticle.addEventListener("click", openArticleModal);
+
+      const btnCloseArticleTop = document.getElementById("btn-close-article-top");
+      if (btnCloseArticleTop) btnCloseArticleTop.addEventListener("click", closeArticleModal);
+
+      const btnCloseArticleBottom = document.getElementById("btn-close-article-bottom");
+      if (btnCloseArticleBottom) btnCloseArticleBottom.addEventListener("click", closeArticleModal);
+
+      const articleModal = document.getElementById("article-modal");
+      if (articleModal) {
+        articleModal.addEventListener("click", (e) => {
+          if (e.target === articleModal) closeArticleModal();
+        });
+      }
+
+      // Rules Modal
+      const btnCloseRules = document.getElementById("btn-close-rules");
+      if (btnCloseRules) btnCloseRules.addEventListener("click", closeRulesModal);
+
+      const btnRulesOk = document.getElementById("btn-rules-ok");
+      if (btnRulesOk) btnRulesOk.addEventListener("click", closeRulesModal);
+
+      const rulesModal = document.getElementById("rules-modal");
+      if (rulesModal) {
+        rulesModal.addEventListener("click", (e) => {
+          if (e.target === rulesModal) closeRulesModal();
+        });
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeArticleModal();
+          closeRulesModal();
+        }
+      });
+
+      render();
+    });
+  </script>
+</body>
+</html>

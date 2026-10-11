@@ -9,11 +9,11 @@ import { resetProgression } from '../systems/progression.js';
 import { resetEngagement } from '../systems/engagement.js';
 import { navigate } from '../core/router.js';
 
-export function renderSettings(container) {
+export function renderSettings(container, { embedded = false, onChange } = {}) {
   const lang = getLang();
   
   container.innerHTML = `
-    ${renderHeader({ title: t('settings.title') })}
+    ${embedded ? '' : renderHeader({ title: t('settings.title') })}
     
     <div class="screen-body" style="padding-top: var(--space-4);">
       
@@ -74,7 +74,7 @@ export function renderSettings(container) {
 
     </div>
 
-    ${renderBottomNav('settings')}
+    ${embedded ? '' : renderBottomNav('profile')}
   `;
 
   attachHeaderListeners(container, {});
@@ -87,7 +87,8 @@ export function renderSettings(container) {
       if (target !== getLang()) {
         toggleLang();
         playSfx('tap');
-        renderSettings(container); // re-render
+        if (onChange) onChange();
+        else renderSettings(container, { embedded });
       }
     });
   });

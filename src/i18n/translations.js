@@ -26,6 +26,11 @@ export const translations = {
 
     // ---- Hub ----
     'hub.title':            'Game Lab',
+    'opening.brand':        'Bhaskar Games',
+    'opening.slogan':       'From news to play. From play to understanding.',
+    'opening.caption':      'Five games. Five moods. One daily habit.',
+    'opening.start':        'Choose a game',
+    'opening.replay':       'Replay the opening animation',
     'hub.greeting':         'Pick a mood for today 👋',
     'hub.daily_challenge':  'Daily Challenge',
     'hub.all_games':        'All Games',
@@ -69,6 +74,8 @@ export const translations = {
     'nav.leaderboard':      'Rankings',
     'nav.profile':          'Profile',
     'nav.settings':         'Settings',
+    'nav.news':             'News',
+    'profile.preferences':  'Your settings',
 
     // ---- Leaderboard ----
     'lb.title':             'Leaderboard',
@@ -156,6 +163,11 @@ export const translations = {
 
     // ---- Hub ----
     'hub.title':            'गेम लैब',
+    'opening.brand':        'भास्कर खेल',
+    'opening.slogan':       'खबर से खेल तक, खेल से समझ तक।',
+    'opening.caption':      'पाँच खेल। पाँच मूड। हर दिन कुछ नया।',
+    'opening.start':        'खेल चुनें',
+    'opening.replay':       'शुरुआती एनिमेशन फिर देखें',
     'hub.greeting':         'आज के लिए एक मूड चुनें 👋',
     'hub.daily_challenge':  'दैनिक चुनौती',
     'hub.all_games':        'सभी गेम्स',
@@ -199,6 +211,8 @@ export const translations = {
     'nav.leaderboard':      'रैंकिंग',
     'nav.profile':          'प्रोफ़ाइल',
     'nav.settings':         'सेटिंग्स',
+    'nav.news':             'समाचार',
+    'profile.preferences':  'आपकी सेटिंग्स',
 
     // ---- Leaderboard ----
     'lb.title':             'लीडरबोर्ड',

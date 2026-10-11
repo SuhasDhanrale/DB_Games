@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <script>
+        if (window.self === window.top) {
+            window.location.href = '/';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>लगोरी | Lagori (Seven Stones)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+
+    <style>:root{--color-primary:#e23a28;--color-primary-dark:#ba2313;--color-primary-light:#f4604c;--color-accent:#f39c12;--color-accent-warm:#fdcb6e;--color-success:#27ae60;--color-danger:#e74c3c;--bg-app:#f9f9f7;--bg-surface:#fff;--text-primary:#1c1c1c;--text-secondary:#5c5c5c;--text-tertiary:#8e8e8e;--border-subtle:#00000014;--border-medium:#00000029;--shadow-sm:0 2px 8px #0000000a;--shadow-md:0 4px 16px #00000014;--shadow-board:0 10px 30px #00000014, 0 2px 6px #0000000a}*{box-sizing:border-box;margin:0;padding:0}body,html{background-color:var(--bg-app);width:100%;height:100%;color:var(--text-primary);touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;font-family:Inter,Noto Sans Devanagari,system-ui,sans-serif;overflow:hidden}.game-layout{box-sizing:border-box;flex-direction:column;justify-content:space-between;width:100%;height:100%;padding:10px 12px;display:flex;position:relative;overflow:hidden}.hud-strip{z-index:10;flex-shrink:0;gap:10px;width:100%;max-width:440px;margin:0 auto;display:flex}.hud-card{background:var(--bg-surface);border:1px solid var(--border-subtle);box-shadow:var(--shadow-sm);border-radius:14px;flex:1;align-items:center;gap:10px;padding:7px 12px;display:flex}.hud-icon-wrap{border-radius:50%;flex-shrink:0;justify-content:center;align-items:center;width:32px;height:32px;font-size:1.25rem;display:flex}.hud-icon-wrap--stone{background:#e23a281a}.hud-icon-wrap--tries{background:#f39c1226}.hud-text{flex-direction:column;min-width:0;display:flex}.hud-title{text-transform:uppercase;color:var(--text-secondary);letter-spacing:.3px;font-size:.65rem;font-weight:700;line-height:1.1}.hud-val{color:var(--text-primary);align-items:baseline;gap:4px;margin-top:1px;font-size:1.05rem;font-weight:800;line-height:1.2;display:flex}.hud-sub{color:var(--text-tertiary);font-size:.65rem;font-weight:600}.hud-btn{background:var(--bg-surface);border:1px solid var(--border-subtle);cursor:pointer;width:44px;box-shadow:var(--shadow-sm);border-radius:14px;flex-shrink:0;justify-content:center;align-items:center;padding:0;font-size:1.25rem;transition:transform .15s,background-color .15s;display:flex}.hud-btn:active{background:var(--bg-app);transform:scale(.92)}.board-wrapper{z-index:5;flex:1;justify-content:center;align-items:center;width:100%;min-height:0;padding:6px 0;display:flex;position:relative}canvas{touch-action:none;box-shadow:var(--shadow-board);background:#e6ba80;border:1.5px solid #ba231326;border-radius:18px;display:block}#actionPrompt{pointer-events:none;z-index:20;opacity:0;transition:all .25s cubic-bezier(.16,1,.3,1);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)scale(.85)}#actionPrompt.show{opacity:1;transform:translate(-50%,-50%)scale(1)}.prompt-pill{color:#fff;-webkit-backdrop-filter:blur(8px);letter-spacing:.5px;text-align:center;white-space:nowrap;background:#1c1c1ce0;border:1px solid #fff3;border-radius:9999px;padding:10px 22px;font-size:1rem;font-weight:800;box-shadow:0 8px 24px #00000040}.turn-strip{z-index:10;flex-shrink:0;width:100%;max-width:440px;margin:0 auto}.turn-pill{background:var(--bg-surface);border:1px solid var(--border-subtle);box-shadow:var(--shadow-sm);border-radius:9999px;justify-content:center;align-items:center;gap:8px;padding:7px 16px;transition:all .25s cubic-bezier(.16,1,.3,1);display:flex}.turn-dot{background:var(--color-primary);border-radius:50%;flex-shrink:0;width:8px;height:8px;transition:background-color .25s;box-shadow:0 0 8px #e23a2866}.turn--scramble .turn-dot{background:var(--color-danger);box-shadow:0 0 8px #e74c3c99}.turn-badge{color:var(--text-primary);letter-spacing:.2px;font-size:.78rem;font-weight:800}.turn-divider{color:var(--text-tertiary);font-size:.75rem}.turn-msg{color:var(--text-secondary);text-overflow:ellipsis;white-space:nowrap;font-size:.75rem;font-weight:500;overflow:hidden}.modal-overlay{-webkit-backdrop-filter:blur(6px);z-index:50;background:#0f0f14a6;flex-direction:column;justify-content:center;align-items:center;padding:16px;transition:opacity .3s;display:flex;position:absolute;inset:0}.modal-overlay.hidden{display:none}.modal-card{background:var(--bg-surface);border:1px solid var(--border-subtle);text-align:center;border-radius:24px;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:370px;padding:24px 20px;display:flex;box-shadow:0 20px 40px #0003}.modal-badge{text-transform:uppercase;letter-spacing:.8px;color:var(--color-primary);background:#e23a2814;border-radius:9999px;padding:4px 10px;font-size:.7rem;font-weight:700;display:inline-block}.modal-title{color:var(--text-primary);margin-top:4px;font-size:1.5rem;font-weight:800;line-height:1.2}.modal-desc{color:var(--text-secondary);font-size:.85rem;line-height:1.4}.rules-box{background:var(--bg-app);border:1px solid var(--border-subtle);text-align:left;border-radius:16px;flex-direction:column;gap:10px;width:100%;padding:14px;display:flex}.rule-item{color:var(--text-secondary);align-items:flex-start;gap:10px;font-size:.8rem;line-height:1.35;display:flex}.rule-item strong{color:var(--text-primary)}.rule-icon{flex-shrink:0;margin-top:1px;font-size:1.15rem;line-height:1}.btn-play{color:#fff;cursor:pointer;letter-spacing:.4px;background:linear-gradient(135deg,#e23a28 0%,#f39c12 100%);border:none;border-radius:9999px;width:100%;padding:12px 24px;font-family:inherit;font-size:1rem;font-weight:800;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 14px #e23a2859}.btn-play:active{transform:scale(.97);box-shadow:0 2px 8px #e23a2840}.result-emoji{margin-bottom:2px;font-size:3.5rem;line-height:1}.result-title{color:var(--text-primary);font-size:1.6rem;font-weight:900;line-height:1.2}.result-desc{color:var(--text-secondary);margin-bottom:6px;font-size:.9rem;line-height:1.4}</style>
+  <link rel="stylesheet" crossorigin href="/assets/components-Ct4o9KB5.css">
+</head>
+
+<body>
+    <div class="game-layout" id="game-layout">
+
+        <!-- Minimal Top HUD Strip -->
+        <div class="hud-strip">
+            <div class="hud-card">
+                <div class="hud-icon-wrap hud-icon-wrap--stone">🧱</div>
+                <div class="hud-text">
+                    <span class="hud-title">पत्थर (Stones)</span>
+                    <span class="hud-val"><strong id="stonesDisplay">7/7</strong> <small class="hud-sub" id="stonesSub">जमाएं</small></span>
+                </div>
+            </div>
+
+            <div class="hud-card">
+                <div class="hud-icon-wrap hud-icon-wrap--tries">🎯</div>
+                <div class="hud-text">
+                    <span class="hud-title">प्रयास (Tries)</span>
+                    <span class="hud-val"><strong id="statusDisplay">3</strong> <small class="hud-sub" id="statusSub">बाकी</small></span>
+                </div>
+            </div>
+
+            <!-- How to Play Button (Exact Baghchal Style) -->
+            <button id="rulesBtn" class="hud-btn" title="खेल के नियम">
+                ℹ️
+            </button>
+        </div>
+
+        <!-- Main Playable Board Area -->
+        <div class="board-wrapper" id="boardWrapper">
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- In-Game Notice Prompt -->
+            <div id="actionPrompt">
+                <div class="prompt-pill" id="promptText">गेंद फेंकने के लिए टैप करें!</div>
+            </div>
+        </div>
+
+        <!-- Minimal Bottom Status Bar -->
+        <div class="turn-strip">
+            <div class="turn-pill" id="turnIndicator">
+                <span class="turn-dot"></span>
+                <span class="turn-badge" id="turnBadge">चरण 1 · निशाना</span>
+                <span class="turn-divider">•</span>
+                <span class="turn-msg" id="instructionText">कोण देखकर टैप करें और 7 पत्थरों को गिराएं</span>
+            </div>
+        </div>
+
+        <!-- Overlay: How to Play / Rules Screen -->
+        <div id="overlayScreen" class="modal-overlay">
+            <div class="modal-card">
+                <div>
+                    <span class="modal-badge">दैनिक भास्कर · पारंपरिक खेल</span>
+                    <h2 class="modal-title">लगोरी (Seven Stones)</h2>
+                    <p class="modal-desc">निशानेबाजी, फुर्ती और टीम भावना का प्राचीन भारतीय खेल</p>
+                </div>
+
+                <div class="rules-box">
+                    <div class="rule-item">
+                        <span class="rule-icon">🎯</span>
+                        <div><strong>चरण 1 (निशाना):</strong> गेंद फेंककर 7 पत्थरों की मीनार को गिराएं (3 प्रयास मिलेंगे)।</div>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">🏃‍♂️</span>
+                        <div><strong>चरण 2 (संग्रह):</strong> टैप या ड्रैग करके खिलाड़ी (नीला) से बिखरे पत्थर उठाएं।</div>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">🧱</span>
+                        <div><strong>चरण 3 (लगोरी!):</strong> पत्थरों को वापस केंद्र में लाकर एक के ऊपर एक दोबारा जमाएं।</div>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">⚠️</span>
+                        <div><strong>बचाव (Dodge):</strong> विरोधी टीम द्वारा फेंकी जा रही लाल गेंदों से बचें!</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                    <button id="resumeBtn" class="btn-play" style="background: #27AE60; display: none;">
+                        जारी रखें (RESUME)
+                    </button>
+                    <button id="startBtn" class="btn-play">
+                        खेलें (PLAY NOW)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay: Result Screen -->
+        <div id="resultScreen" class="modal-overlay hidden opacity-0">
+            <div class="modal-card" id="resultBox">
+                <div class="result-emoji" id="resultEmoji">🏆</div>
+                <h2 class="result-title" id="resultTitle">शानदार लगोरी!</h2>
+                <p class="result-desc" id="resultSub">आपने सभी 7 पत्थरों को सफलता से जमा दिया!</p>
+
+                <button id="restartBtn" class="btn-play">
+                    फिर से खेलें (PLAY AGAIN)
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('boardWrapper');
+
+        // UI Elements
+        const stonesDisplay = document.getElementById('stonesDisplay');
+        const stonesSub = document.getElementById('stonesSub');
+        const statusDisplay = document.getElementById('statusDisplay');
+        const statusSub = document.getElementById('statusSub');
+        const turnBadge = document.getElementById('turnBadge');
+        const instructionText = document.getElementById('instructionText');
+        const turnIndicator = document.getElementById('turnIndicator');
+        const actionPrompt = document.getElementById('actionPrompt');
+        const promptText = document.getElementById('promptText');
+        const overlayScreen = document.getElementById('overlayScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultSub = document.getElementById('resultSub');
+        const resultEmoji = document.getElementById('resultEmoji');
+        const startBtn = document.getElementById('startBtn');
+        const resumeBtn = document.getElementById('resumeBtn');
+        const rulesBtn = document.getElementById('rulesBtn');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // Game Constants & Dimensions
+        const BASE_WIDTH = 600;
+        const BASE_HEIGHT = 800;
+        let scale = 1;
+        let canvasW = 600;
+        let canvasH = 800;
+
+        // Game State
+        let gameState = 'START'; // START, AIMING, BALL_FLYING, SCRAMBLE, GAMEOVER
+        let triesLeft = 3;
+        let stonesStacked = 7;
+        let frames = 0;
+        let animationId = null;
+
+        // Curated Palette
+        const COLORS = {
+            ground: '#E6BA80',
+            groundBorder: 'rgba(186, 35, 19, 0.22)',
+            baseOuter: '#8B5A2B',
+            baseInner: '#A06D3B',
+            // 7 Authentic colorful stone blocks (bottom to top)
+            stones: [
+                '#E23A28', // Crimson Red
+                '#F39C12', // Amber
+                '#27AE60', // Emerald Green
+                '#3498DB', // Sky Blue
+                '#9B59B6', // Purple
+                '#E67E22', // Terracotta
+                '#F1C40F'  // Golden Yellow
+            ],
+            player: '#00B4D8',
+            playerRing: '#0077B6',
+            enemyBall: '#E74C3C',
+            throwBall: '#F39C12',
+            shadow: 'rgba(0, 0, 0, 0.18)',
+            dangerLine: 'rgba(231, 76, 60, 0.6)'
+        };
+
+        // Entities
+        let center = { x: 300, y: 350, radius: 45 };
+        let stones = [];
+        let throwBall = { x: 0, y: 0, vx: 0, vy: 0, radius: 11, active: false };
+        let aimAngle = -Math.PI / 2;
+        let aimDirection = 1;
+
+        let player = {
+            x: 0, y: 0, radius: 17, targetX: 0, targetY: 0,
+            speed: 4.8, hasStone: null, active: false
+        };
+
+        let enemyBalls = [];
+        let warningLines = [];
+
+        function resizeCanvas() {
+            if (!wrapper) return;
+            const rect = wrapper.getBoundingClientRect();
+            const pad = 6;
+            const maxW = Math.max(0, rect.width - pad);
+            const maxH = Math.max(0, rect.height - pad);
+            if (maxW <= 0 || maxH <= 0) return;
+
+            const aspect = BASE_WIDTH / BASE_HEIGHT; // 0.75
+            let w = maxW;
+            let h = maxW / aspect;
+
+            if (h > maxH) {
+                h = maxH;
+                w = maxH * aspect;
+            }
+
+            canvasW = Math.floor(w);
+            canvasH = Math.floor(h);
+
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            canvas.style.width = `${canvasW}px`;
+            canvas.style.height = `${canvasH}px`;
+            canvas.width = Math.floor(canvasW * dpr);
+            canvas.height = Math.floor(canvasH * dpr);
+
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.scale(dpr, dpr);
+
+            scale = canvasW / BASE_WIDTH;
+            center = { x: canvasW / 2, y: canvasH * 0.44, radius: 42 * scale };
+
+            if (gameState === 'AIMING' || gameState === 'START') {
+                player.x = center.x;
+                player.y = canvasH - (55 * scale);
+                player.targetX = player.x;
+                player.targetY = player.y;
+                throwBall.x = player.x;
+                throwBall.y = player.y;
+                if (stones.length === 0 || stones.every(s => s.stacked)) {
+                    initStones();
+                }
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            if (gameState === 'START' || gameState === 'AIMING') draw();
+        });
+
+        function getInputPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            return {
+                x: (clientX - rect.left),
+                y: (clientY - rect.top)
+            };
+        }
+
+        function handleInputStart(e) {
+            e.preventDefault();
+            if (gameState === 'AIMING') {
+                shootBall();
+            } else if (gameState === 'SCRAMBLE') {
+                const pos = getInputPos(e);
+                player.targetX = pos.x;
+                player.targetY = pos.y;
+            }
+        }
+
+        function handleInputMove(e) {
+            e.preventDefault();
+            if (gameState === 'SCRAMBLE') {
+                const pos = getInputPos(e);
+                player.targetX = pos.x;
+                player.targetY = pos.y;
+            }
+        }
+
+        canvas.addEventListener('mousedown', handleInputStart);
+        canvas.addEventListener('touchstart', handleInputStart, { passive: false });
+        canvas.addEventListener('mousemove', handleInputMove);
+        canvas.addEventListener('touchmove', handleInputMove, { passive: false });
+
+        function initStones() {
+            stones = [];
+            const baseW = 62 * scale;
+            const stoneH = 13 * scale;
+            for (let i = 0; i < 7; i++) {
+                stones.push({
+                    id: i,
+                    w: baseW - (i * 6 * scale),
+                    h: stoneH,
+                    color: COLORS.stones[i % COLORS.stones.length],
+                    stacked: true,
+                    scattered: false,
+                    held: false,
+                    x: center.x,
+                    y: center.y - (i * (stoneH - 1 * scale)), // Stack visually with slight overlap
+                    vx: 0,
+                    vy: 0
+                });
+            }
+            stonesStacked = 7;
+        }
+
+        function initGame() {
+            resizeCanvas();
+            initStones();
+
+            triesLeft = 3;
+            gameState = 'AIMING';
+            frames = 0;
+            enemyBalls = [];
+            warningLines = [];
+
+            player.active = false;
+            player.x = center.x;
+            player.y = canvasH - (55 * scale);
+            player.targetX = player.x;
+            player.targetY = player.y;
+            player.hasStone = null;
+
+            throwBall.x = player.x;
+            throwBall.y = player.y;
+            throwBall.active = true;
+
+            overlayScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            resultScreen.classList.add('opacity-0');
+            resumeBtn.style.display = 'none';
+
+            updateUI();
+            showMessage("निशाना लगाएं और टैप करें!", 1800);
+
+            if (!animationId) gameLoop();
+        }
+
+        function updateUI() {
+            stonesDisplay.innerText = `${stonesStacked}/7`;
+            if (gameState === 'AIMING' || gameState === 'BALL_FLYING') {
+                statusDisplay.innerText = triesLeft;
+                statusSub.innerText = "प्रयास बाकी";
+                turnBadge.innerText = "चरण 1 · निशाना";
+                instructionText.innerText = "कोण देखकर टैप करें और 7 पत्थरों को गिराएं";
+                turnIndicator.classList.remove('turn--scramble');
+            } else if (gameState === 'SCRAMBLE') {
+                statusDisplay.innerText = "बचें!";
+                statusSub.innerText = "लाल गेंद";
+                turnBadge.innerText = "चरण 2 · लगोरी";
+                instructionText.innerText = "पत्थर उठाएं और केंद्र में रखें (लाल गेंदों से बचें!)";
+                turnIndicator.classList.add('turn--scramble');
+            }
+        }
+
+        function showMessage(msg, duration = 1500) {
+            promptText.innerText = msg;
+            actionPrompt.classList.add('show');
+
+            if (duration > 0) {
+                setTimeout(() => {
+                    actionPrompt.classList.remove('show');
+                }, duration);
+            }
+        }
+
+        function updateAiming() {
+            const sweepSpeed = 0.045;
+            aimAngle += sweepSpeed * aimDirection;
+
+            const minAngle = -Math.PI / 2 - Math.PI / 4.2;
+            const maxAngle = -Math.PI / 2 + Math.PI / 4.2;
+
+            if (aimAngle < minAngle || aimAngle > maxAngle) {
+                aimDirection *= -1;
+            }
+
+            throwBall.x = player.x;
+            throwBall.y = player.y;
+        }
+
+        function shootBall() {
+            gameState = 'BALL_FLYING';
+            const speed = 14 * scale;
+            throwBall.vx = Math.cos(aimAngle) * speed;
+            throwBall.vy = Math.sin(aimAngle) * speed;
+            turnBadge.innerText = "गेंद हवा में...";
+            instructionText.innerText = "निशाना सीधा पत्थरों की ओर है!";
+        }
+
+        function updateBallFlying() {
+            throwBall.x += throwBall.vx;
+            throwBall.y += throwBall.vy;
+
+            // Check collision with stones (center base)
+            const dx = throwBall.x - center.x;
+            const dy = throwBall.y - center.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < center.radius + throwBall.radius) {
+                // HIT! Break the stones
+                triggerScatter();
+                return;
+            }
+
+            // Missed (out of bounds)
+            if (throwBall.x < -20 || throwBall.x > canvasW + 20 || throwBall.y < -20) {
+                triesLeft--;
+                if (triesLeft <= 0) {
+                    endGame(false, "प्रयास समाप्त! गेंद पत्थरों को नहीं गिरा सकी।");
+                } else {
+                    gameState = 'AIMING';
+                    throwBall.x = player.x;
+                    throwBall.y = player.y;
+                    updateUI();
+                    showMessage("चूक गए! पुनः प्रयास करें", 1200);
+                }
+            }
+        }
+
+        function triggerScatter() {
+            gameState = 'SCRAMBLE';
+            showMessage("लगोरी बिखरी! पत्थर दोबारा जमाएं!", 2000);
+            throwBall.active = false;
+            player.active = true;
+            stonesStacked = 0;
+            updateUI();
+
+            // Give stones random burst velocities away from center
+            stones.forEach((s, idx) => {
+                s.stacked = false;
+                s.scattered = true;
+                const angle = (idx / 7) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+                const speed = (6 + Math.random() * 8) * scale;
+                s.vx = Math.cos(angle) * speed;
+                s.vy = Math.sin(angle) * speed;
+            });
+        }
+
+        function updateScramblePhysics() {
+            // Update sliding stones
+            stones.forEach(s => {
+                if (s.scattered && !s.held && !s.stacked) {
+                    s.x += s.vx;
+                    s.y += s.vy;
+                    // Friction
+                    s.vx *= 0.91;
+                    s.vy *= 0.91;
+
+                    // Courtyard boundary bounce
+                    const boundPad = 25 * scale;
+                    if (s.x < boundPad) { s.x = boundPad; s.vx *= -0.8; }
+                    if (s.x > canvasW - boundPad) { s.x = canvasW - boundPad; s.vx *= -0.8; }
+                    if (s.y < boundPad) { s.y = boundPad; s.vy *= -0.8; }
+                    if (s.y > canvasH - boundPad) { s.y = canvasH - boundPad; s.vy *= -0.8; }
+
+                    if (Math.abs(s.vx) < 0.08) s.vx = 0;
+                    if (Math.abs(s.vy) < 0.08) s.vy = 0;
+                }
+            });
+
+            // Update Player Movement
+            if (player.active) {
+                const pdx = player.targetX - player.x;
+                const pdy = player.targetY - player.y;
+                const pdist = Math.sqrt(pdx * pdx + pdy * pdy);
+
+                if (pdist > player.speed * scale) {
+                    player.x += (pdx / pdist) * player.speed * scale;
+                    player.y += (pdy / pdist) * player.speed * scale;
+                } else {
+                    player.x = player.targetX;
+                    player.y = player.targetY;
+                }
+
+                // Constrain player to court
+                const pPad = player.radius + 12 * scale;
+                player.x = Math.max(pPad, Math.min(canvasW - pPad, player.x));
+                player.y = Math.max(pPad, Math.min(canvasH - pPad, player.y));
+
+                // Interaction Logic (Pickup / Drop)
+                if (player.hasStone === null) {
+                    for (let s of stones) {
+                        if (s.scattered && !s.held && !s.stacked) {
+                            const sdx = s.x - player.x;
+                            const sdy = s.y - player.y;
+                            if (Math.sqrt(sdx * sdx + sdy * sdy) < player.radius * 2.2) {
+                                s.held = true;
+                                player.hasStone = s.id;
+                                showMessage(`पत्थर #${7 - s.id} उठाया!`, 800);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    const heldStone = stones[player.hasStone];
+                    heldStone.x = player.x;
+                    heldStone.y = player.y - (18 * scale);
+
+                    // Check if brought back into center base
+                    const cdx = player.x - center.x;
+                    const cdy = player.y - center.y;
+                    if (Math.sqrt(cdx * cdx + cdy * cdy) < center.radius + player.radius * 0.8) {
+                        heldStone.held = false;
+                        heldStone.scattered = false;
+                        heldStone.stacked = true;
+
+                        const currentlyStacked = stones.filter(st => st.stacked).length;
+                        heldStone.x = center.x;
+                        heldStone.y = center.y - ((currentlyStacked - 1) * (13 * scale - 1 * scale));
+
+                        player.hasStone = null;
+                        stonesStacked++;
+                        updateUI();
+
+                        showMessage(`लगोरी: ${stonesStacked}/7 जमाए!`, 1000);
+
+                        if (stonesStacked === 7) {
+                            endGame(true, "अद्भुत! आपने सभी 7 पत्थर सफलतापूर्वक जमा दिए!");
+                        }
+                    }
+                }
+            }
+
+            // Opponent defender AI throwing balls
+            manageEnemies();
+        }
+
+        function manageEnemies() {
+            // Periodically spawn warning laser lines
+            if (frames % 90 === 0) {
+                let startX, startY;
+                const edge = Math.floor(Math.random() * 4);
+                if (edge === 0) { startX = Math.random() * canvasW; startY = 10 * scale; }
+                else if (edge === 1) { startX = canvasW - 10 * scale; startY = Math.random() * canvasH; }
+                else if (edge === 2) { startX = Math.random() * canvasW; startY = canvasH - 10 * scale; }
+                else { startX = 10 * scale; startY = Math.random() * canvasH; }
+
+                // Aim slightly ahead of player
+                const targetX = player.x + (Math.random() * 30 - 15);
+                const targetY = player.y + (Math.random() * 30 - 15);
+                const angle = Math.atan2(targetY - startY, targetX - startX);
+
+                warningLines.push({
+                    x: startX, y: startY, angle: angle, timer: 55
+                });
+            }
+
+            // Update warning lines
+            for (let i = warningLines.length - 1; i >= 0; i--) {
+                let w = warningLines[i];
+                w.timer--;
+                if (w.timer <= 0) {
+                    const speed = 7.5 * scale;
+                    enemyBalls.push({
+                        x: w.x, y: w.y,
+                        vx: Math.cos(w.angle) * speed,
+                        vy: Math.sin(w.angle) * speed,
+                        radius: 8.5 * scale
+                    });
+                    warningLines.splice(i, 1);
+                }
+            }
+
+            // Update enemy balls & player dodge detection
+            for (let i = enemyBalls.length - 1; i >= 0; i--) {
+                let b = enemyBalls[i];
+                b.x += b.vx;
+                b.y += b.vy;
+
+                const dx = b.x - player.x;
+                const dy = b.y - player.y;
+                if (Math.sqrt(dx * dx + dy * dy) < player.radius + b.radius) {
+                    endGame(false, "आउट! विरोधी टीम की गेंद लग गई।");
+                    return;
+                }
+
+                if (b.x < -40 || b.x > canvasW + 40 || b.y < -40 || b.y > canvasH + 40) {
+                    enemyBalls.splice(i, 1);
+                }
+            }
+        }
+
+        function endGame(won, reason) {
+            gameState = 'GAMEOVER';
+            showMessage(won ? "शानदार लगोरी!" : "आउट!", 0);
+
+            let finalScore = 0;
+            if (won) {
+                finalScore = 150 + (triesLeft * 50);
+                resultEmoji.innerText = "🏆";
+                resultTitle.innerText = "लगोरी की जीत! 🎉";
+                resultSub.innerText = `${reason} कुल स्कोर: ${finalScore}`;
+            } else {
+                finalScore = Math.max(20, stonesStacked * 20);
+                resultEmoji.innerText = "💥";
+                resultTitle.innerText = "खेल समाप्त!";
+                resultSub.innerText = `${reason} अर्जित अंक: ${finalScore}`;
+            }
+
+            // Sync with Host App DBGameLab
+            try {
+                if (window.DBGameLab) {
+                    if (typeof window.DBGameLab.addScore === 'function') {
+                        window.DBGameLab.addScore(finalScore);
+                    }
+                    if (typeof window.DBGameLab.endGame === 'function') {
+                        window.DBGameLab.endGame(finalScore);
+                    }
+                }
+            } catch (err) {
+                console.warn("DBGameLab sync error:", err);
+            }
+
+            setTimeout(() => {
+                resultScreen.classList.remove('hidden');
+                setTimeout(() => {
+                    resultScreen.classList.remove('opacity-0');
+                }, 40);
+
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                    animationId = null;
+                }
+            }, 900);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvasW, canvasH);
+
+            // 1. Authentic Court Surface
+            ctx.fillStyle = COLORS.ground;
+            ctx.fillRect(0, 0, canvasW, canvasH);
+
+            // Court Boundary & Markings (Terracotta tone)
+            const margin = 12 * scale;
+            ctx.strokeStyle = COLORS.groundBorder;
+            ctx.lineWidth = 2 * scale;
+            ctx.strokeRect(margin, margin, canvasW - margin * 2, canvasH - margin * 2);
+
+            // Center Ring (Terracotta / Wood)
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, center.radius * 1.55, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(186, 35, 19, 0.25)';
+            ctx.setLineDash([6 * scale, 4 * scale]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Base platform
+            ctx.beginPath();
+            ctx.arc(center.x, center.y + (3 * scale), center.radius, 0, Math.PI * 2);
+            ctx.fillStyle = COLORS.shadow;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, center.radius, 0, Math.PI * 2);
+            ctx.fillStyle = COLORS.baseOuter;
+            ctx.fill();
+            ctx.strokeStyle = '#5E3A1A';
+            ctx.lineWidth = 2.5 * scale;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, center.radius * 0.72, 0, Math.PI * 2);
+            ctx.fillStyle = COLORS.baseInner;
+            ctx.fill();
+
+            // Crease Line (Thrower Mark)
+            const throwLineY = canvasH - (75 * scale);
+            ctx.beginPath();
+            ctx.moveTo(margin + 5 * scale, throwLineY);
+            ctx.lineTo(canvasW - margin - 5 * scale, throwLineY);
+            ctx.strokeStyle = 'rgba(186, 35, 19, 0.35)';
+            ctx.lineWidth = 2 * scale;
+            ctx.setLineDash([8 * scale, 6 * scale]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 2. Draw Aiming Guide in AIMING phase
+            if (gameState === 'AIMING') {
+                ctx.beginPath();
+                ctx.moveTo(player.x, player.y);
+                const aimLen = 130 * scale;
+                const endX = player.x + Math.cos(aimAngle) * aimLen;
+                const endY = player.y + Math.sin(aimAngle) * aimLen;
+                ctx.lineTo(endX, endY);
+                ctx.strokeStyle = '#E23A28';
+                ctx.lineWidth = 2.5 * scale;
+                ctx.setLineDash([10 * scale, 5 * scale]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Target indicator bead
+                ctx.beginPath();
+                ctx.arc(endX, endY, 6 * scale, 0, Math.PI * 2);
+                ctx.fillStyle = '#E23A28';
+                ctx.fill();
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = 1.5 * scale;
+                ctx.stroke();
+            }
+
+            // 3. Draw Warning Lines (Lasers)
+            warningLines.forEach(w => {
+                ctx.beginPath();
+                ctx.moveTo(w.x, w.y);
+                ctx.lineTo(w.x + Math.cos(w.angle) * 1200, w.y + Math.sin(w.angle) * 1200);
+
+                if (w.timer % 10 < 5) {
+                    ctx.strokeStyle = COLORS.dangerLine;
+                    ctx.lineWidth = 2.5 * scale;
+                    ctx.stroke();
+                }
+            });
+
+            // 4. Draw Stones (Bottom to Top)
+            const stonesToDraw = [...stones].sort((a, b) => b.id - a.id);
+
+            stonesToDraw.forEach(s => {
+                // Shadow
+                ctx.fillStyle = COLORS.shadow;
+                ctx.beginPath();
+                ctx.roundRect(s.x - s.w / 2, s.y + (3 * scale), s.w, s.h, 4 * scale);
+                ctx.fill();
+
+                // Stone Body
+                ctx.fillStyle = s.color;
+                ctx.beginPath();
+                ctx.roundRect(s.x - s.w / 2, s.y - s.h / 2, s.w, s.h, 4 * scale);
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.lineWidth = 1.2 * scale;
+                ctx.stroke();
+
+                // Top highlight
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+                ctx.beginPath();
+                ctx.roundRect(s.x - s.w / 2 + 2, s.y - s.h / 2 + 1, s.w - 4, s.h / 2.2, 3 * scale);
+                ctx.fill();
+
+                // Stone number label
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = `bold ${Math.max(8, 9 * scale)}px Inter, sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(7 - s.id, s.x, s.y + 0.5);
+            });
+
+            // 5. Draw Throw Ball
+            if (gameState === 'AIMING' || gameState === 'BALL_FLYING') {
+                ctx.beginPath();
+                ctx.arc(throwBall.x, throwBall.y + (3 * scale), throwBall.radius, 0, Math.PI * 2);
+                ctx.fillStyle = COLORS.shadow;
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(throwBall.x, throwBall.y, throwBall.radius, 0, Math.PI * 2);
+                ctx.fillStyle = COLORS.throwBall;
+                ctx.fill();
+                ctx.strokeStyle = '#BA7300';
+                ctx.lineWidth = 2 * scale;
+                ctx.stroke();
+
+                // Shine
+                ctx.beginPath();
+                ctx.arc(throwBall.x - throwBall.radius * 0.35, throwBall.y - throwBall.radius * 0.35, throwBall.radius * 0.35, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.fill();
+            }
+
+            // 6. Draw Defender Enemy Balls
+            enemyBalls.forEach(b => {
+                ctx.beginPath();
+                ctx.arc(b.x, b.y + (3 * scale), b.radius, 0, Math.PI * 2);
+                ctx.fillStyle = COLORS.shadow;
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+                ctx.fillStyle = COLORS.enemyBall;
+                ctx.fill();
+                ctx.strokeStyle = '#900C3F';
+                ctx.lineWidth = 2 * scale;
+                ctx.stroke();
+
+                // Speed core
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.radius * 0.4, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFA07A';
+                ctx.fill();
+            });
+
+            // 7. Draw Player Avatar
+            if (gameState === 'AIMING' || gameState === 'SCRAMBLE') {
+                // Shadow
+                ctx.beginPath();
+                ctx.arc(player.x, player.y + (5 * scale), player.radius, 0, Math.PI * 2);
+                ctx.fillStyle = COLORS.shadow;
+                ctx.fill();
+
+                // Player Body Ring
+                ctx.beginPath();
+                ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+                ctx.fillStyle = COLORS.player;
+                ctx.fill();
+                ctx.strokeStyle = COLORS.playerRing;
+                ctx.lineWidth = 2.5 * scale;
+                ctx.stroke();
+
+                // Inner Cap / Head
+                ctx.beginPath();
+                ctx.arc(player.x, player.y - (3 * scale), player.radius * 0.55, 0, Math.PI * 2);
+                ctx.fillStyle = '#E0FBFC';
+                ctx.fill();
+
+                // Carrying indicator
+                if (player.hasStone !== null) {
+                    ctx.strokeStyle = '#F39C12';
+                    ctx.lineWidth = 2.5 * scale;
+                    ctx.beginPath();
+                    ctx.arc(player.x, player.y, player.radius * 1.35, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function gameLoop() {
+            frames++;
+
+            if (gameState === 'AIMING') {
+                updateAiming();
+            } else if (gameState === 'BALL_FLYING') {
+                updateBallFlying();
+            } else if (gameState === 'SCRAMBLE') {
+                updateScramblePhysics();
+            }
+
+            draw();
+
+            if (gameState !== 'GAMEOVER') {
+                animationId = requestAnimationFrame(gameLoop);
+            }
+        }
+
+        // --- Event Listeners & Bootup ---
+
+        // Rules button (exact Baghchal functionality)
+        rulesBtn.addEventListener('click', () => {
+            overlayScreen.classList.remove('hidden');
+            if (gameState === 'AIMING' || gameState === 'SCRAMBLE') {
+                resumeBtn.style.display = 'block';
+            } else {
+                resumeBtn.style.display = 'none';
+            }
+        });
+
+        resumeBtn.addEventListener('click', () => {
+            overlayScreen.classList.add('hidden');
+        });
+
+        startBtn.addEventListener('click', () => {
+            initGame();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            resultScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                resultScreen.classList.add('hidden');
+                initGame();
+            }, 300);
+        });
+
+        // Initialize sizing and match
+        resizeCanvas();
+        initStones();
+        draw();
+
+        // Default start: show game immediately (with rules modal closed)
+        overlayScreen.classList.add('hidden');
+        initGame();
+
+    </script>
+</body>
+
+</html>

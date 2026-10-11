@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="कैरम की गोटी पॉकेट में जाती है">
+  <style>.coin{animation:pocket 2.4s ease both}.striker{animation:shot 2.4s ease both}@keyframes pocket{0%,30%{transform:translate(0,0)}65%,100%{transform:translate(27px,-27px);opacity:.15}}@keyframes shot{0%,20%{transform:translate(0,0)}50%,100%{transform:translate(21px,-21px)}}@media(prefers-reduced-motion:reduce){.coin,.striker{animation:none}}</style>
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="#fff0f3"/><rect x="17" y="17" width="66" height="66" rx="9" fill="#f3d6af" stroke="#9f1239" stroke-width="5"/>
+  <g fill="#4b2830"><circle cx="24" cy="24" r="5"/><circle cx="76" cy="24" r="5"/><circle cx="24" cy="76" r="5"/><circle cx="76" cy="76" r="5"/></g>
+  <circle cx="50" cy="50" r="12" fill="none" stroke="#c18b62" stroke-width="1.5"/><circle class="coin" cx="49" cy="51" r="5" fill="#e23a28"/><circle class="striker" cx="30" cy="69" r="7" fill="#fffdf5" stroke="#9f1239" stroke-width="2"/>
+</svg>

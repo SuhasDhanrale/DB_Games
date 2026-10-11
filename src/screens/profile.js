@@ -7,6 +7,7 @@ import { getProgression, getLevelProgress } from '../systems/progression.js';
 import { getAchievementDefs, getUnlockedAchievements, getAchievementTranslations } from '../systems/engagement.js';
 import { renderHeader, attachHeaderListeners, renderBottomNav, attachBottomNavListeners } from '../ui/components.js';
 import { navigate } from '../core/router.js';
+import { renderSettings } from './settings.js';
 
 export function renderProfile(container) {
   const prog = getProgression();
@@ -57,6 +58,11 @@ export function renderProfile(container) {
         </div>
       </div>
 
+      <section aria-labelledby="profile-settings-title" style="margin-bottom:var(--space-6)">
+        <h3 id="profile-settings-title" class="section-header__title">${t('profile.preferences')}</h3>
+        <div id="profile-settings"></div>
+      </section>
+
       <!-- Achievements -->
       <div class="section-header">
         <h3 class="section-header__title">${t('profile.achievements')} <span style="font-size: var(--text-base); color: var(--text-secondary); font-weight: normal;">(${unlocked.size}/${achDefs.length})</span></h3>
@@ -87,6 +93,7 @@ export function renderProfile(container) {
 
   attachHeaderListeners(container, {});
   attachBottomNavListeners(container, navigate);
+  renderSettings(container.querySelector('#profile-settings'), { embedded: true, onChange: () => renderProfile(container) });
 }
 
 export default renderProfile;

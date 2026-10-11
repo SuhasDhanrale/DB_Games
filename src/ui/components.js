@@ -173,7 +173,7 @@ export function renderBottomNav(activeTab = 'home') {
     { id: 'home',        icon: icons.home,        labelKey: 'nav.home',        route: '/' },
     { id: 'leaderboard', icon: icons.leaderboard, labelKey: 'nav.leaderboard', route: '/leaderboard' },
     { id: 'profile',     icon: icons.profile,     labelKey: 'nav.profile',     route: '/profile' },
-    { id: 'settings',    icon: icons.settings,    labelKey: 'nav.settings',    route: '/settings' },
+    { id: 'news', icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 7h10M7 11h4v5H7zM14 11h3M14 15h3M7 19h10"/></svg>`, labelKey: 'nav.news', route: './news.html' },
   ];
 
   const items = tabs.map(tab => `
@@ -195,7 +195,11 @@ export function attachBottomNavListeners(container, navigateFn) {
   for (const btn of buttons) {
     btn.addEventListener('click', () => {
       playSfx('click');
-      navigateFn(btn.dataset.navRoute);
+      if (btn.dataset.navId === 'news') {
+        window.location.assign(`./news.html?day=${window.DBJamDemo?.day || 'd1'}`);
+      } else {
+        navigateFn(btn.dataset.navRoute);
+      }
     });
   }
 }

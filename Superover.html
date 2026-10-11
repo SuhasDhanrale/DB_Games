@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>सुपर ओवर | Super Over Cricket - Dainik Bhaskar Game Lab</title>
+    <title>सुपर ओवर | दैनिक भास्कर</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <link rel="stylesheet" href="./src/styles/design-system.css" />
     <link rel="stylesheet" href="./src/styles/components.css" />
 
@@ -333,125 +333,18 @@
             box-shadow: 0 0 25px rgba(231, 76, 60, 0.6);
         }
 
-        /* Timing Feedback Card & Precision Meter */
-        #timingFeedbackCard {
-            position: absolute;
-            top: 22%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            pointer-events: none;
-            z-index: 40;
-            opacity: 0;
-            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-            background: rgba(18, 18, 22, 0.94);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 18px;
-            padding: 9px 18px;
-            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55), 0 0 22px rgba(46, 204, 113, 0.18);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            min-width: 250px;
-        }
+        #timingFeedbackCard { position:static; width:240px; max-width:80%; margin:3px auto 4px; flex-shrink:0; }
+        .timing-meter-labels { display:flex; align-items:center; justify-content:space-between; color:var(--text-secondary); font-size:10px; line-height:1.5; margin-bottom:5px; }
+        .timing-badge { color:#258347; font-size:10px; font-weight:700; }
+        .timing-badge.timing-perfect { color:#258347; }
+        .timing-badge.timing-warn { color:#a96314; }
+        .timing-badge.timing-bad { color:var(--color-primary); }
+        .timing-meter-track { display:flex; width:100%; height:6px; border-radius:999px; position:relative; background:#ead8c0; }
+        .timing-zone--early { width:37.625%; background:#edbf95; border-radius:999px 0 0 999px; }
+        .timing-zone--sweet { width:24.75%; background:#52a66c; }
+        .timing-zone--late { width:37.625%; background:#edbf95; border-radius:0 999px 999px 0; }
+        .timing-needle { position:absolute; top:-3px; width:3px; height:12px; background:var(--text-primary); border-radius:3px; transform:translateX(-50%); left:50%; opacity:0; }
 
-        #timingFeedbackCard.show {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .timing-badge {
-            font-size: 0.98rem;
-            font-weight: 900;
-            letter-spacing: 0.4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-align: center;
-        }
-
-        .timing-badge.timing-perfect {
-            color: #2ECC71;
-            text-shadow: 0 0 14px rgba(46, 204, 113, 0.8);
-        }
-
-        .timing-badge.timing-warn {
-            color: #F39C12;
-            text-shadow: 0 0 10px rgba(243, 156, 18, 0.6);
-        }
-
-        .timing-badge.timing-bad {
-            color: #E74C3C;
-            text-shadow: 0 0 10px rgba(231, 76, 60, 0.6);
-        }
-
-        .timing-meter-container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .timing-meter-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.62rem;
-            font-weight: 800;
-            color: rgba(255, 255, 255, 0.65);
-            letter-spacing: 0.2px;
-        }
-
-        .timing-meter-track {
-            position: relative;
-            width: 100%;
-            height: 10px;
-            border-radius: 9999px;
-            overflow: visible;
-            display: flex;
-            background: #2D3436;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-        }
-
-        .timing-zone--early {
-            flex: 3;
-            border-radius: 9999px 0 0 9999px;
-            background: linear-gradient(to right, #E74C3C, #F39C12);
-        }
-
-        .timing-zone--sweet {
-            flex: 4;
-            background: #2ECC71;
-            box-shadow: 0 0 8px #2ECC71;
-        }
-
-        .timing-zone--late {
-            flex: 3;
-            border-radius: 0 9999px 9999px 0;
-            background: linear-gradient(to right, #F39C12, #E74C3C);
-        }
-
-        .timing-needle {
-            position: absolute;
-            top: -3px;
-            left: 50%;
-            width: 7px;
-            height: 16px;
-            background: #FFFFFF;
-            border-radius: 3px;
-            transform: translateX(-50%);
-            box-shadow: 0 0 8px #FFF, 0 2px 4px rgba(0, 0, 0, 0.6);
-            transition: left 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 5;
-        }
-
-        .timing-subtext {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.88);
-            text-align: center;
-        }
 
         /* Interactive On-Canvas 8-Direction Compass Visual */
         #swipeCompassOverlay {
@@ -616,6 +509,8 @@
 
         /* Modal Overlays (Rules & Game Result) */
         .modal-overlay {
+            opacity: 1;
+            pointer-events: auto;
             position: absolute;
             inset: 0;
             background: rgba(0, 0, 0, 0.78);
@@ -815,6 +710,21 @@
             color: var(--text-secondary);
         }
 
+        .result-hero { text-align: center; padding: 8px 0 20px; }
+        .result-hero__medal {
+            display: grid; place-items: center; width: 96px; height: 96px;
+            margin: 0 auto 12px; border-radius: 50%; font-size: 3.5rem;
+            background: #fff2d2; box-shadow: 0 0 0 8px #fff9eb;
+        }
+        .result-hero__message { font-size: 1rem; font-weight: 800; line-height: 1.6; }
+        #resultModal[data-outcome="win"] .modal-header { background: #fff8e7; }
+        #resultModal[data-outcome="win"] .modal-title { color: #825000; }
+        #resultModal[data-outcome="loss"] .result-hero__medal { background: #edf2f7; box-shadow: 0 0 0 8px #f7f9fb; }
+        #resultModal[data-outcome="loss"] .modal-header { background: #f7f9fb; }
+        @media (prefers-reduced-motion: reduce) {
+            #resultModal .modal-card { animation: none; }
+        }
+
         /* Confetti Canvas */
         #confettiCanvas {
             position: absolute;
@@ -822,9 +732,65 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 90;
+            z-index: 110;
             background: transparent !important;
         }
+
+        [hidden] { display: none !important; }
+        body { font-family: 'Noto Sans Devanagari', 'Inter', sans-serif; }
+        button { font-family: inherit; cursor: pointer; }
+        button:focus-visible { outline: 3px solid #E23A28; outline-offset: 4px; }
+        .intro-screen { max-width:480px; margin:auto; height:100%; overflow-y:auto; touch-action:pan-y; padding:24px; display:flex; flex-direction:column; justify-content:center; gap:24px; }
+        .intro-heading { text-align:center; }
+        .intro-heading h1 { font-size:32px; font-weight:900; line-height:1.5; margin-bottom:6px; }
+        .intro-heading p { font-size:11px; color:var(--text-secondary); line-height:1.7; }
+        .intro-matchup { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; text-align:center; }
+        .intro-team { display:flex; flex-direction:column; align-items:center; gap:10px; font-size:21px; }
+        .team-mark { display:block; width:84px; height:56px; border-radius:6px; overflow:hidden; box-shadow:0 4px 12px #00000014; border:1px solid #00000012; }
+        .team-mark svg { display:block; width:100%; height:100%; }
+        .intro-versus { display:flex; flex-direction:column; align-items:center; gap:6px; }
+        .intro-versus strong { font-family:'Inter',sans-serif; font-size:36px; line-height:1; font-weight:900; font-style:italic; color:var(--color-primary); }
+        .cricket-accent { width:48px; height:40px; }
+        .intro-choices { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }
+        .choice-card { width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px 8px 18px; border:2px solid transparent; outline:1px solid var(--border-subtle); background:white; border-radius:18px; text-align:center; box-shadow:var(--shadow-sm); color:var(--text-primary); position:relative; }
+        .choice-card:hover { border-color:var(--color-primary); background:#fffaf7; }
+        .choice-card[aria-pressed="true"] { border-color:var(--color-primary); outline:none; background:#fff5f0; }
+        .choice-card[aria-pressed="true"]::after { content:'✓'; position:absolute; right:9px; top:7px; color:var(--color-primary); font-size:14px; font-weight:800; }
+        .choice-card strong { display:block; font-size:17px; }
+        .choice-card small { display:block; font-size:12px; line-height:1.7; color:var(--text-secondary); }
+        .choice-runs { display:flex; align-items:baseline; gap:5px; color:var(--color-primary); font-size:13px; margin:2px 0; }
+        .choice-runs b { font-family:'Inter',sans-serif; font-size:48px; line-height:1.2; font-weight:900; }
+        .choice-card--bowling .choice-runs { color:#258347; }
+        .intro-footnote { text-align:center; font-size:11px; color:var(--text-tertiary); }
+        .intro-start { display:grid; gap:10px; }
+        #confirmStartBtn { width:100%; min-height:48px; border:0; border-radius:14px; background:var(--color-primary); color:white; font-size:17px; font-weight:800; box-shadow:var(--shadow-sm); }
+        #confirmStartBtn:disabled { background:#e5e5e2; color:#888883; box-shadow:none; cursor:default; }
+        #confirmStartBtn:not(:disabled):hover { background:var(--color-primary-dark); }
+        .game-layout { padding:10px 14px 12px; gap:8px; max-width:680px; margin:auto; justify-content:flex-start; }
+        .hud-strip { gap:0; background:white; border:1px solid var(--border-subtle); border-radius:16px; padding:14px 0 10px; box-shadow:var(--shadow-sm); }
+        .hud-card { border:0; border-radius:0; box-shadow:none; padding:0 18px; }
+        .target-card { border-left:1px solid var(--border-subtle); }
+        .hud-title { font-size:11px; white-space:normal; letter-spacing:0; line-height:1.5; }
+        .hud-val { font-size:28px; line-height:1.5; }
+        .target-card .hud-val { color:var(--color-primary); }
+        .commentary-bar { margin:0; background:transparent; border:0; box-shadow:none; border-radius:0; padding:2px 3px; font-size:11px; min-height:25px; }
+        .commentary-text { white-space:normal; line-height:1.6; }
+        .commentary-dot { width:5px; height:5px; box-shadow:none; }
+        .board-wrapper { flex:1; min-height:0; padding:0; }
+        #cricketCanvas { border-radius:18px; box-shadow:var(--shadow-md); }
+        .target-card .hud-val { font-size:clamp(14px, 3.8vw, 20px); }
+        .over-footer { display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .balls-strip { width:auto; margin:0; gap:8px; }
+        .ball-badge { height:30px; width:30px; font-size:12px; box-shadow:none; }
+        .ball-badge.current { box-shadow:none; transform:none; }
+        .bottom-controls { padding:0; flex-shrink:0; }
+        .gesture-hint-pill { width:100%; border:0; background:transparent; box-shadow:none; justify-content:center; padding:5px 0 0; }
+        .hint-text { white-space:normal; overflow:visible; font-size:11px; line-height:1.6; }
+        .hint-icon { font-size:17px; }
+        .prompt-pill { font-size:18px; padding:8px 18px; }
+        .modal-overlay { padding:16px; touch-action:pan-y; }
+        .modal-card { max-height:90dvh; overflow-y:auto; }
+        @media(max-height:650px) { .intro-screen { gap:16px; } .team-mark { width:66px; height:44px; } .choice-card { padding:14px 8px; } .game-layout { gap:5px; } .hud-strip { padding:8px 0 4px; } .hud-val { font-size:24px; } }
     </style>
 </head>
 
@@ -832,88 +798,48 @@
     <!-- Transparent Confetti layer for celebrations -->
     <canvas id="confettiCanvas"></canvas>
 
-    <div class="game-layout">
-        <!-- Minimal Top HUD Strip -->
+    <section class="intro-screen" id="introScreen" aria-labelledby="introTitle">
+        <div class="intro-heading"><h1 id="introTitle">सुपर ओवर</h1><p>एशियाई खेल 2026 · छह गेंदों की अभ्यास चुनौती</p></div>
+        <div class="match-picker" role="group" aria-label="मुकाबला चुनें">
+            <button type="button" data-match="asian-final" aria-pressed="true">भारत–पाकिस्तान <small>फाइनल · 3 अक्टूबर</small></button>
+            <button type="button" data-match="asian-semi" aria-pressed="false">भारत–श्रीलंका <small>सेमीफाइनल · 1 अक्टूबर</small></button>
+        </div>
+        <div class="match-context"><strong id="matchActual"></strong><p id="matchScores"></p><a id="matchStory" href="./news.html?article=asian-final&game=superover">मुकाबले की खबर पढ़ें →</a></div>
+        <div class="intro-matchup" aria-label="भारत बनाम पाकिस्तान">
+            <div class="intro-team"><span class="team-mark" aria-hidden="true"><svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><path fill="#ff9933" d="M0 0h60v14H0z"/><path fill="#fff" d="M0 13.333h60v13.334H0z"/><path fill="#138808" d="M0 26.667h60V40H0z"/><g stroke="#000080" fill="none" stroke-width=".55"><circle cx="30" cy="20" r="5"/><path id="chakraSpoke" d="M30 15v10"/><use href="#chakraSpoke" transform="rotate(15 30 20)"/><use href="#chakraSpoke" transform="rotate(30 30 20)"/><use href="#chakraSpoke" transform="rotate(45 30 20)"/><use href="#chakraSpoke" transform="rotate(60 30 20)"/><use href="#chakraSpoke" transform="rotate(75 30 20)"/><use href="#chakraSpoke" transform="rotate(90 30 20)"/><use href="#chakraSpoke" transform="rotate(105 30 20)"/><use href="#chakraSpoke" transform="rotate(120 30 20)"/><use href="#chakraSpoke" transform="rotate(135 30 20)"/><use href="#chakraSpoke" transform="rotate(150 30 20)"/><use href="#chakraSpoke" transform="rotate(165 30 20)"/></g><circle cx="30" cy="20" r=".8" fill="#000080"/></svg></span><strong>भारत</strong></div>
+            <span class="intro-versus" aria-label="बनाम"><strong aria-hidden="true">VS</strong><svg class="cricket-accent" viewBox="0 0 48 40" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(32 19 20)"><rect x="16" y="2" width="6" height="17" rx="2" fill="#7253a3"/><rect x="12" y="16" width="14" height="23" rx="3" fill="#e1b579"/><path d="M15 19v15" stroke="#f3d3a6" stroke-width="2"/></g><circle cx="36" cy="27" r="7" fill="#e23a28"/><path d="M33 21q6 6 0 12" fill="none" stroke="#ffe1d9" stroke-width="1.2"/></svg></span>
+            <div class="intro-team intro-team--pakistan"><span class="team-mark" aria-hidden="true"><svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><path fill="#01411c" d="M0 0h60v40H0z"/><path fill="#fff" d="M0 0h15v40H0z"/><circle cx="37" cy="21" r="10" fill="#fff"/><circle cx="41" cy="18" r="9" fill="#01411c"/><path fill="#fff" d="m43 9 1.4 3.7 4 .2-3.1 2.5 1 3.8-3.3-2.2-3.3 2.2 1-3.8-3.1-2.5 4-.2z"/></svg></span><strong>पाकिस्तान</strong></div>
+        </div>
+        <div class="intro-choices">
+            <button class="choice-card" data-role="BATTING" aria-pressed="false"><strong>बल्लेबाजी</strong><span class="choice-runs"><b>18</b> रन</span><small>लक्ष्य पाएँ</small></button>
+            <button class="choice-card choice-card--bowling" data-role="BOWLING" aria-pressed="false"><strong>गेंदबाजी</strong><span class="choice-runs"><b>15</b> रन</span><small>लक्ष्य बचाएँ</small></button>
+        </div>
+        <div class="intro-start"><button id="confirmStartBtn" type="button" disabled>शुरू करें →</button><p class="intro-footnote">भारत की ओर से खेलें · 18/15 रन अभ्यास के लक्ष्य हैं, असली मैच के आखिरी ओवर का समीकरण नहीं।</p></div>
+    </section>
+    <div class="game-layout" id="matchScreen" hidden>
         <div class="hud-strip">
-            <div class="hud-card">
-                <div class="hud-icon-wrap" id="modeIconWrap">🏏</div>
-                <div class="hud-text">
-                    <span class="hud-title" id="hudRoleLabel">बल्लेबाजी · रन</span>
-                    <span class="hud-val">
-                        <span id="hudRuns">0</span>/<span id="hudWickets">0</span>
-                        <span class="hud-sub" id="hudOvers">(0.0)</span>
-                    </span>
-                </div>
-            </div>
-
-            <div class="hud-card">
-                <div class="hud-icon-wrap hud-icon-wrap--target">🎯</div>
-                <div class="hud-text">
-                    <span class="hud-title" id="hudTargetLabel">लक्ष्य 18</span>
-                    <span class="hud-val" id="hudReqRate">18 रन चाहिए</span>
-                    <span class="hud-sub" id="hudBallsRemaining">6 गेंद शेष</span>
-                </div>
-            </div>
+            <div class="hud-card"><div class="hud-text"><span class="hud-title" id="hudRoleLabel">भारत के रन</span><span class="hud-val"><span id="hudRuns">0</span></span></div></div>
+            <div class="hud-card target-card"><div class="hud-text"><span class="hud-title" id="hudTargetLabel">जीत के लिए बाकी</span><span class="hud-val" id="hudReqRate">18 रन</span></div></div>
         </div>
-
-        <!-- Over Balls Strip -->
-        <div class="balls-strip" id="ballsStrip">
-            <div class="ball-badge current" id="ball-0">•</div>
-            <div class="ball-badge" id="ball-1">-</div>
-            <div class="ball-badge" id="ball-2">-</div>
-            <div class="ball-badge" id="ball-3">-</div>
-            <div class="ball-badge" id="ball-4">-</div>
-            <div class="ball-badge" id="ball-5">-</div>
-        </div>
-
-        <!-- Commentary & Live Situation Bar -->
-        <div class="commentary-bar">
-            <div class="commentary-dot"></div>
-            <div class="commentary-text" id="commentaryText">सुपर ओवर शुरू! किसी भी दिशा में स्वाइप करके शॉट खेलें।</div>
-        </div>
-
         <!-- Main Canvas Arena -->
         <div class="board-wrapper" id="boardWrapper">
-            <canvas id="cricketCanvas"></canvas>
+            <canvas id="cricketCanvas" tabindex="0" aria-label="क्रिकेट का मैदान"></canvas>
 
             <!-- Action Prompt Flash -->
             <div id="actionPrompt">
-                <div class="prompt-pill" id="actionPill">छक्का! SIX!</div>
+                <div class="prompt-pill" id="actionPill">छक्का!</div>
             </div>
 
-            <!-- Dynamic Timing Feedback Card & Precision Meter -->
-            <div id="timingFeedbackCard" class="timing-feedback-card">
-                <div class="timing-badge" id="timingVerdictBadge">⚡ PERFECT TIMING</div>
-                <div class="timing-meter-container">
-                    <div class="timing-meter-labels">
-                        <span>जल्दी (EARLY)</span>
-                        <span style="color: #2ECC71;">🎯 SWEET SPOT</span>
-                        <span>देर (LATE)</span>
-                    </div>
-                    <div class="timing-meter-track">
-                        <div class="timing-zone timing-zone--early"></div>
-                        <div class="timing-zone timing-zone--sweet"></div>
-                        <div class="timing-zone timing-zone--late"></div>
-                        <div class="timing-needle" id="timingNeedle"></div>
-                    </div>
-                </div>
-                <div class="timing-subtext" id="timingDetailText">सटीक टाइमिंग! 100% पावर</div>
-            </div>
         </div>
-
-        <!-- Minimal Bottom Status & Role Switch -->
-        <div class="bottom-controls">
-            <div class="hint-role-bar">
-                <div class="gesture-hint-pill" id="gestureHintPill">
-                    <span class="hint-icon" id="hintIcon">🏏</span>
-                    <span class="hint-text" id="hintText">स्वाइप करें शॉट खेलने के लिए · 8 दिशाएं</span>
-                </div>
-                <button class="btn-mode-toggle" id="switchRoleBtn">
-                    <span id="switchRoleIcon">🔄</span>
-                    <span id="switchRoleText">गेंदबाजी मोड</span>
-                </button>
-            </div>
+        <div id="timingFeedbackCard" class="shot-timing" aria-label="शॉट का समय">
+            <div class="timing-meter-labels"><span>जल्दी</span><span class="timing-badge" id="timingVerdictBadge" aria-live="polite">सही समय</span><span>देर</span></div>
+            <div class="timing-meter-track"><div class="timing-zone timing-zone--early"></div><div class="timing-zone timing-zone--sweet"></div><div class="timing-zone timing-zone--late"></div><div class="timing-needle" id="timingNeedle"></div></div>
+            <span id="timingDetailText" hidden></span>
         </div>
+        <div class="over-footer">
+        <div class="balls-strip" id="ballsStrip" aria-label="इस ओवर की गेंदें"><div class="ball-badge" id="ball-0">—</div><div class="ball-badge" id="ball-1">—</div><div class="ball-badge" id="ball-2">—</div><div class="ball-badge" id="ball-3">—</div><div class="ball-badge" id="ball-4">—</div><div class="ball-badge" id="ball-5">—</div></div>
+        </div>
+        <div class="bottom-controls"><div class="gesture-hint-pill" id="gestureHintPill"><span class="hint-icon" id="hintIcon">☝</span><span class="hint-text" id="hintText">गेंद पास आए तो उंगली सरकाकर शॉट खेलें</span></div></div>
     </div>
 
     <!-- How to Play & Rules Modal -->
@@ -923,53 +849,25 @@
                 <div class="modal-header-brand">
                     <span style="font-size: 1.4rem;">🏏</span>
                     <div>
-                        <div class="modal-title" id="rulesModalTitle">सुपर ओवर: स्वाइप क्रिकेट</div>
-                        <div class="modal-subtitle">Dainik Bhaskar Game Lab</div>
+                        <div class="modal-title" id="rulesModalTitle">कैसे खेलें?</div>
+                        <div class="modal-subtitle">दैनिक भास्कर खेल</div>
                     </div>
                 </div>
-                <button class="modal-close-btn" id="closeRulesBtn">✕</button>
+                <button class="modal-close-btn" id="closeRulesBtn" aria-label="मदद बंद करें">✕</button>
             </div>
             <div class="modal-body">
-                <div class="rule-card">
-                    <div class="rule-icon">🎥</div>
-                    <div>
-                        <div class="rule-title">2 टिल्टेड कैमरा व्यू (Two POV Angles)</div>
-                        <div class="rule-desc">बल्लेबाज के कंधे के पीछे से बैटिंग एंगल और गेंदबाज के नजरिए से बॉलिंग एंगल। कोई फालतू फील्डर नहीं, सीधा 1v1 रोमांच!</div>
-                    </div>
-                </div>
-
-                <div class="rule-card">
-                    <div class="rule-icon">🏃</div>
-                    <div>
-                        <div class="rule-title">गेंदबाज का रन-अप व स्वचालित गति</div>
-                        <div class="rule-desc">गेंदबाज दूर से रन-अप लेकर आता है ताकि आपको गेंद आने का सही अहसास हो। हर गेंद के बीच प्राकृतिक विराम के साथ मैच आगे बढ़ता है!</div>
-                    </div>
-                </div>
-
-                <div class="rule-card">
-                    <div class="rule-icon">👆</div>
-                    <div>
-                        <div class="rule-title">8 दिशाओं में स्वाइप (8-Direction Swipe Batting)</div>
-                        <div class="rule-desc">बटन दबाने के बजाय स्क्रीन पर किसी भी दिशा में स्वाइप करें: ⬆️ स्ट्रेट, ↗️ कवर, ➡️ कट, ⬅️ पुल, ↖️ मिड-विकेट और ⬇️ डिफेंस!</div>
-                    </div>
-                </div>
-
-                <div class="rule-card">
-                    <div class="rule-icon">🎯</div>
-                    <div>
-                        <div class="rule-title">गेंदबाजी: पिच पर ड्रैग एंड ड्रॉप (Pitch Drag & Drop)</div>
-                        <div class="rule-desc">पिच पर कहीं भी उंगली ड्रैग करें — यॉर्कर, फुल, गुड लेंथ, बाउंसर और इनस्विंग/आउटस्विंग सेट करें, फिर गेंद फेंकने के लिए छोड़ें!</div>
-                    </div>
-                </div>
+                <div class="rule-card"><div class="rule-icon">🏏</div><div><div class="rule-title">लक्ष्य हासिल करें</div><div class="rule-desc">गेंद पास आए तो मैदान पर उंगली सरकाएँ। जिस दिशा में उंगली सरकाएँगे, उसी दिशा में शॉट जाएगा। हरे निशान पर गेंद आने का इंतज़ार करें।</div></div></div>
+                <div class="rule-card"><div class="rule-icon">🎯</div><div><div class="rule-title">लक्ष्य बचाएँ</div><div class="rule-desc">पिच पर उंगली रखकर गेंद की जगह चुनें। उंगली छोड़ते ही गेंद फेंकी जाएगी। हर गेंद के बाद अगली गेंद की जगह चुनें।</div></div></div>
+                <div class="rule-card"><div class="rule-icon">⑥</div><div><div class="rule-title">बस एक ओवर</div><div class="rule-desc">छह गेंदें मिलेंगी। दो विकेट गिरने पर पारी खत्म हो जाएगी। ऊपर रन और नीचे बची हुई गेंदें देखें।</div></div></div>
             </div>
             <div class="modal-footer">
-                <button class="btn-modal-primary" id="startMatchBtn">मुकाबला शुरू करें</button>
+                <button class="btn-modal-primary" id="startMatchBtn">समझ गए</button>
             </div>
         </div>
     </div>
 
-    <!-- Match Over Newspaper Result Modal -->
-    <div class="modal-overlay hidden" id="resultModal">
+    <!-- Match result, driven by the existing win/loss flag -->
+    <div class="modal-overlay hidden" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resTitle" aria-describedby="resNarrative">
         <div class="modal-card">
             <div class="modal-header">
                 <div class="modal-header-brand">
@@ -981,9 +879,13 @@
                 </div>
             </div>
             <div class="modal-body">
+                <div class="result-hero">
+                    <div class="result-hero__medal" id="resMedal" aria-hidden="true">🏆</div>
+                    <div class="result-hero__message" id="resMessage"></div>
+                </div>
                 <div class="news-header">
-                    <span style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 800;">DAINIK BHASKAR · SPECIAL REPORT</span>
-                    <span style="font-size: 0.72rem; color: #FDCB6E;" id="resDateBadge">आज का मैच</span>
+                    <span style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 800;">दैनिक भास्कर · खेल विशेष</span>
+                    <span style="font-size: 0.72rem; color: #FDCB6E;" id="resDateBadge">आपका खेल</span>
                 </div>
 
                 <div class="news-headline" id="resHeadline">
@@ -1006,11 +908,12 @@
                 </div>
 
                 <div style="background: #F9F9F7; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;" id="resNarrative">
-                    आपने दबाव के पलों में बेहतरीन स्वाइप और सटीक टाइमिंग से टीम को शानदार जीत दिलाई।
+                    आपने लक्ष्य हासिल कर लिया।
                 </div>
+                <div class="match-context result-history"><strong>असली मैच</strong><p id="resActualMatch"></p><a id="resMatchStory" href="./news.html?article=asian-final&game=superover">मुकाबले की खबर पढ़ें →</a><a id="resMatchSource" target="_blank" rel="noopener noreferrer">आधिकारिक स्कोर देखें ↗</a></div>
             </div>
             <div class="modal-footer">
-                <button class="btn-modal-secondary" id="resChangeModeBtn">मोड बदलें</button>
+                <button class="btn-modal-secondary" id="resChangeModeBtn">फिर से चुनें</button>
                 <button class="btn-modal-primary" id="resPlayAgainBtn">फिर से खेलें 🏏</button>
             </div>
         </div>
@@ -1182,15 +1085,19 @@
                 roleBatting: 'बल्लेबाजी · रन',
                 roleBowling: 'गेंदबाजी · बचाव',
                 target: 'लक्ष्य',
-                ballsLeft: 'गेंद शेष',
+                ballsLeft: 'गेंद बाकी',
                 battingDeliver: 'गेंद का सामना करें',
-                bowlingRelease: 'गेंद फेंकें / BOWL',
+                bowlingRelease: 'गेंद फेंकें',
                 switchToBowl: 'गेंदबाजी मोड',
                 switchToBat: 'बल्लेबाजी मोड',
-                camBatter: 'बल्लेबाज POV',
-                camBowler: 'गेंदबाज POV',
-                winHeadline: 'सांस रोक देने वाले सुपर ओवर में अंतिम गेंद पर ऐतिहासिक जीत!',
-                lossHeadline: 'कड़े मुकाबले में मामूली अंतर से चूकी टीम, सुपर ओवर में हार!',
+                camBatter: 'बल्लेबाज',
+                camBowler: 'गेंदबाज',
+                winHeadline: 'बाज़ी आपकी! सुपर ओवर में जीत',
+                winTitle: 'शानदार जीत!',
+                lossTitle: 'इस बार हार हुई',
+                winMessage: 'सुपर ओवर के चैंपियन आप हैं!',
+                lossMessage: 'अगला ओवर आपका हो सकता है। फिर कोशिश करें!',
+                lossHeadline: 'इस बार जीत हाथ से निकल गई',
                 tieHeadline: 'रोमांच की पराकाष्ठा! सुपर ओवर भी टाई समाप्त हुआ!'
             },
             en: {
@@ -1206,6 +1113,10 @@
                 camBatter: 'Batter POV',
                 camBowler: 'Bowler POV',
                 winHeadline: 'Historic victory in last-ball Super Over thriller!',
+                winTitle: 'You won!',
+                lossTitle: 'You lost this round',
+                winMessage: 'You are the Super Over champion!',
+                lossMessage: 'Your next over could be the one. Try again!',
                 lossHeadline: 'Heartbreak in Super Over! Opponent seals victory.',
                 tieHeadline: 'Incredible tie in the Super Over cliffhanger!'
             }
@@ -1384,20 +1295,19 @@
         // --- DOM Elements ---
         const hudRoleLabel = document.getElementById('hudRoleLabel');
         const hudRuns = document.getElementById('hudRuns');
-        const hudWickets = document.getElementById('hudWickets');
-        const hudOvers = document.getElementById('hudOvers');
         const hudTargetLabel = document.getElementById('hudTargetLabel');
-        const hudTarget = document.getElementById('hudTarget');
+        const introScreen = document.getElementById('introScreen');
+        const matchScreen = document.getElementById('matchScreen');
+        let matchStarted = false;
+        let helpOpen = false;
         const hudReqRate = document.getElementById('hudReqRate');
-        const hudBallsRemaining = document.getElementById('hudBallsRemaining');
         const commentaryText = document.getElementById('commentaryText');
         const actionPrompt = document.getElementById('actionPrompt');
         const actionPill = document.getElementById('actionPill');
         const gestureHintPill = document.getElementById('gestureHintPill');
         const hintIcon = document.getElementById('hintIcon');
         const hintText = document.getElementById('hintText');
-        const switchRoleBtn = document.getElementById('switchRoleBtn');
-        const switchRoleText = document.getElementById('switchRoleText');
+
         const resultModal = document.getElementById('resultModal');
         const resHeadline = document.getElementById('resHeadline');
         const resRuns = document.getElementById('resRuns');
@@ -1424,25 +1334,27 @@
                 name: 'गुड लेंथ',
                 icon: '🎯',
                 pitchProgress: 0.58,
-                screenPy: 0.52,
+                screenPy: 0.42,
                 desc: 'ऑफ स्टंप पर कठिन टप्पा'
             },
             FULL: {
                 name: 'फुल लेंथ',
                 icon: '🏏',
                 pitchProgress: 0.72,
-                screenPy: 0.35,
+                screenPy: 0.28,
                 desc: 'आगे फेंकी गई गेंद'
             },
             BOUNCER: {
                 name: 'बाउंसर',
                 icon: '🦘',
                 pitchProgress: 0.38,
-                screenPy: 0.74,
+                screenPy: 0.60,
                 desc: 'शॉर्ट पिच तेज बाउंसर'
             }
         };
 
+        const BOWLING_RANGE = { min: 0.15, max: 0.62 };
+        let selectedBowlingPy = 0.42;
         let selectedBowlingLength = 'GOOD';
         let selectedBowlingLine = 0; // -0.4 to 0.4
 
@@ -1452,12 +1364,13 @@
             const item = BOWLING_LENGTHS[lengthKey];
 
             hoverArea.px = selectedBowlingLine;
-            hoverArea.py = item.screenPy;
-            hoverArea.label = `${item.icon} ${item.name}`;
+            selectedBowlingPy = item.screenPy;
+            hoverArea.py = selectedBowlingPy;
+            hoverArea.label = 'यहाँ गेंद टप्पा खाएगी';
             hoverArea.visible = true;
 
             if (hintText && currentRole === ROLES.BOWLING) {
-                hintText.textContent = `${item.icon} ${item.name} — पिच पर ड्रैग करें या छोड़ें`;
+                hintText.textContent = 'रंगीन हिस्से में जगह चुनें, छोड़कर गेंद फेंकें';
             }
         }
 
@@ -1465,15 +1378,15 @@
             bowlingTarget.swingDir = Number(swingVal);
             const swingLabel = bowlingTarget.swingDir === -1 ? '⬅️ इनस्विंग' : (bowlingTarget.swingDir === 1 ? '➡️ आउटस्विंग' : '⬆️ सीधी लाइन');
             if (hintText && currentRole === ROLES.BOWLING) {
-                hintText.textContent = `${swingLabel} — पिच पर ड्रैग करें या छोड़ें`;
+                hintText.textContent = 'रंगीन हिस्से में जगह चुनें, छोड़कर गेंद फेंकें';
             }
         }
 
         // Direct Pitch Drag & Drop Target Helper
         function applyPitchDragPoint(pt) {
-            const topY = height * 0.16;
+            const topY = height * 0.15;
             const bottomY = height * 0.86;
-            const py = Math.max(0.14, Math.min(0.86, (pt.y - topY) / (bottomY - topY)));
+            const py = Math.max(BOWLING_RANGE.min, Math.min(BOWLING_RANGE.max, (pt.y - topY) / (bottomY - topY)));
             const topW = width * 0.22;
             const bottomW = width * 0.46;
             const curW = topW + py * (bottomW - topW);
@@ -1481,11 +1394,11 @@
 
             // In Bowler View: top of pitch is near batsman (yorker), bottom is near bowler (bouncer)
             let matchedLength = 'GOOD';
-            if (py < 0.26) {
+            if (py < 0.23) {
                 matchedLength = 'YORKER';
-            } else if (py < 0.44) {
+            } else if (py < 0.36) {
                 matchedLength = 'FULL';
-            } else if (py < 0.65) {
+            } else if (py < 0.54) {
                 matchedLength = 'GOOD';
             } else {
                 matchedLength = 'BOUNCER';
@@ -1503,16 +1416,17 @@
 
             selectedBowlingLength = matchedLength;
             selectedBowlingLine = px;
+            selectedBowlingPy = py;
             bowlingTarget.swingDir = swingVal;
 
             const item = BOWLING_LENGTHS[matchedLength];
             hoverArea.px = px;
             hoverArea.py = py;
-            hoverArea.label = `${item.icon} ${item.name} · ${swingText}`;
+            hoverArea.label = 'यहाँ गेंद टप्पा खाएगी';
             hoverArea.visible = true;
 
             if (hintText) {
-                hintText.textContent = `${item.icon} ${item.name} (${swingText}) — छोड़ें गेंद फेंकने के लिए 🚀`;
+                hintText.textContent = 'अब उंगली छोड़कर गेंद फेंकें';
             }
         }
 
@@ -1533,8 +1447,8 @@
                 targetW = Math.min(targetW, targetH * 0.95);
             }
 
-            width = Math.max(320, Math.round(targetW));
-            height = Math.max(420, Math.round(targetH));
+            width = Math.max(1, Math.round(targetW));
+            height = Math.max(1, Math.round(targetH));
 
             canvas.width = width * dpr;
             canvas.height = height * dpr;
@@ -1575,6 +1489,12 @@
 
         // --- Match Setup & Reset ---
         function initMatch(newRole = ROLES.BATTING) {
+            window.DBGameLab?.startGame?.();
+            confettiActive = false;
+            confettiParticles = [];
+            confCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            actionPrompt.classList.remove('show');
+            resetShotTiming();
             if (autoNextBallTimer) {
                 clearTimeout(autoNextBallTimer);
                 autoNextBallTimer = null;
@@ -1606,12 +1526,12 @@
             if (currentRole === ROLES.BOWLING) {
                 setBowlingLength(selectedBowlingLength);
                 setBowlingSwing(0);
-                setCommentary('गेंदबाजी मोड: पिच पर ड्रैग करके लेंथ व स्विंग सेट करें और छोड़ें!');
+                setCommentary('पिच पर उंगली रखकर जगह चुनें। छोड़ते ही गेंद फेंकी जाएगी।');
             } else {
                 hoverArea.visible = false;
                 setCommentary('सुपर ओवर शुरू! पहली गेंद (1/6) के लिए तैयार रहें...');
                 autoNextBallTimer = setTimeout(() => {
-                    if (gameState === STATES.IDLE && ballsBowled === 0 && currentRole === ROLES.BATTING) {
+                    if (matchStarted && !helpOpen && gameState === STATES.IDLE && ballsBowled === 0 && currentRole === ROLES.BATTING) {
                         startDelivery();
                     }
                 }, 2000);
@@ -1619,20 +1539,15 @@
         }
 
         function updateHUD() {
-            hudRuns.textContent = totalRuns;
-            hudWickets.textContent = wickets;
-            hudOvers.textContent = `(0.${ballsBowled})`;
+            hudRuns.textContent = `${totalRuns}/${wickets}`;
 
-            const ballsRemaining = 6 - ballsBowled;
             if (currentRole === ROLES.BATTING) {
                 const need = Math.max(0, targetRuns - totalRuns);
-                hudTargetLabel.textContent = `लक्ष्य ${targetRuns}`;
-                hudReqRate.textContent = `${need} रन चाहिए`;
-                if (hudBallsRemaining) hudBallsRemaining.textContent = `${ballsRemaining} गेंद शेष`;
+                hudTargetLabel.textContent = 'जीत के लिए बाकी';
+                hudReqRate.textContent = `${need} रन · ${Math.max(0, 6 - ballsBowled)} गेंद`;
             } else {
-                hudTargetLabel.textContent = `बचाव लक्ष्य ${targetRuns}`;
-                hudReqRate.textContent = `${totalRuns} रन दिए`;
-                if (hudBallsRemaining) hudBallsRemaining.textContent = `${ballsRemaining} गेंद शेष`;
+                hudTargetLabel.textContent = 'विरोधी को जीत के लिए';
+                hudReqRate.textContent = `${Math.max(0, targetRuns - totalRuns)} रन · ${Math.max(0, 6 - ballsBowled)} गेंद`;
             }
         }
 
@@ -1644,7 +1559,8 @@
 
                 if (i < ballOutcomes.length) {
                     const res = ballOutcomes[i];
-                    el.textContent = res;
+                    el.textContent = res === 'W' ? 'आ' : res;
+                    el.setAttribute('aria-label', `गेंद ${i + 1}: ${res === 'W' ? 'आउट' : res + ' रन'}`);
                     if (res === '0' || res === '•') el.classList.add('run-0');
                     else if (res === '1' || res === '2' || res === '3') el.classList.add(`run-${res}`);
                     else if (res === '4') el.classList.add('run-4');
@@ -1677,7 +1593,7 @@
         }
 
         // --- Real-time Timing Feedback Card ---
-        let timingFeedbackTimer = null;
+
         function showTimingFeedback(verdict, detail, badgeClass, needlePct) {
             const card = document.getElementById('timingFeedbackCard');
             const badge = document.getElementById('timingVerdictBadge');
@@ -1690,26 +1606,32 @@
             subtext.textContent = detail;
             needle.style.left = `${Math.max(5, Math.min(95, needlePct))}%`;
 
-            card.classList.remove('hidden');
-            card.classList.add('show');
+            needle.style.opacity = '1';
+        }
 
-            if (timingFeedbackTimer) clearTimeout(timingFeedbackTimer);
-            timingFeedbackTimer = setTimeout(() => {
-                card.classList.remove('show');
-            }, 2000);
+        function resetShotTiming() {
+            document.getElementById('timingVerdictBadge').textContent = 'सही समय';
+            document.getElementById('timingVerdictBadge').className = 'timing-badge';
+            document.getElementById('timingNeedle').style.opacity = '0';
+        }
+
+        function updateShotTiming() {
+            if (currentRole !== ROLES.BATTING || gameState !== STATES.IN_FLIGHT) return;
+            const needle = document.getElementById('timingNeedle');
+            needle.style.opacity = '1';
+            needle.style.left = `${Math.max(5, Math.min(95, 50 + ((ball.progress - 0.80) / 0.20) * 45))}%`;
         }
 
         function updateControlsUI() {
+            document.getElementById('timingFeedbackCard').hidden = currentRole !== ROLES.BATTING;
             if (currentRole === ROLES.BATTING) {
-                hudRoleLabel.textContent = 'बल्लेबाजी · रन';
-                switchRoleText.textContent = 'गेंदबाजी मोड';
+                hudRoleLabel.textContent = 'भारत के रन';
                 if (hintIcon) hintIcon.textContent = '🏏';
-                if (hintText) hintText.textContent = 'स्वाइप करें शॉट खेलने के लिए · 8 दिशाएं';
+                if (hintText) hintText.textContent = 'गेंद पास आए तो उंगली सरकाकर शॉट खेलें';
             } else {
-                hudRoleLabel.textContent = 'गेंदबाजी · बचाव';
-                switchRoleText.textContent = 'बल्लेबाजी मोड';
+                hudRoleLabel.textContent = 'पाकिस्तान के रन';
                 if (hintIcon) hintIcon.textContent = '🎯';
-                if (hintText) hintText.textContent = 'पिच पर ड्रैग करें (लेंथ व स्विंग) और छोड़ें!';
+                if (hintText) hintText.textContent = 'रंगीन हिस्से में जगह चुनें, छोड़कर गेंद फेंकें';
                 setBowlingLength(selectedBowlingLength);
             }
         }
@@ -1734,14 +1656,14 @@
         }
 
         const SHOT_NAMES = {
-            UP: 'स्ट्रेट ड्राइव ⬆️ (Straight Drive)',
-            UP_RIGHT: 'कवर ड्राइव ↗️ (Cover Drive)',
-            UP_LEFT: 'मिड-विकेट ↖️ (Mid-Wicket)',
-            RIGHT: 'कट शॉट ➡️ (Square Cut)',
-            LEFT: 'पुल शॉट ⬅️ (Pull Shot)',
-            DOWN_LEFT: 'फाइन लेग ↙️ (Fine Leg)',
-            DOWN: 'डिफेंस ⬇️ (Forward Defense)',
-            DOWN_RIGHT: 'लेट कट ↘️ (Late Cut)'
+            UP: 'स्ट्रेट ड्राइव ⬆️',
+            UP_RIGHT: 'कवर ड्राइव ↗️',
+            UP_LEFT: 'मिड-विकेट ↖️',
+            RIGHT: 'कट शॉट ➡️',
+            LEFT: 'पुल शॉट ⬅️',
+            DOWN_LEFT: 'फाइन लेग ↙️',
+            DOWN: 'डिफेंस ⬇️',
+            DOWN_RIGHT: 'लेट कट ↘️'
         };
 
         function highlightGesturePill(dir) {
@@ -1752,10 +1674,12 @@
 
         // --- Delivery Execution Engine ---
         function startDelivery() {
+            if (!matchStarted || helpOpen) return;
             if (gameState !== STATES.IDLE) return;
             if (ballsBowled >= 6 || wickets >= 2) return;
 
             audio.init();
+            if (currentRole === ROLES.BATTING) resetShotTiming();
             gameState = STATES.RUNUP;
             bowlerRig.runup = 0;
             batsmanRig.isSwinging = false;
@@ -1767,7 +1691,7 @@
 
             if (currentRole === ROLES.BATTING) {
                 setCommentary(`गेंदबाज रन-अप शुरू करते हुए... गेंद ${ballsBowled + 1}/6`);
-                if (hintText) hintText.textContent = `गेंदबाज रन-अप पर... हरी 'HIT ZONE' पर नज़र रखें!`;
+                if (hintText) hintText.textContent = `नारंगी: टप्पा · हरा: शॉट खेलने का समय`;
             } else {
                 setCommentary('गेंदबाज रन-अप ले रहा है...');
             }
@@ -1804,8 +1728,8 @@
                 // Bowler POV: hover area reflects selected length & line
                 const item = BOWLING_LENGTHS[selectedBowlingLength] || BOWLING_LENGTHS.GOOD;
                 hoverArea.px = selectedBowlingLine;
-                hoverArea.py = item.screenPy;
-                hoverArea.label = `${item.icon} ${item.name}`;
+                hoverArea.py = selectedBowlingPy;
+                hoverArea.label = 'यहाँ गेंद टप्पा खाएगी';
                 hoverArea.visible = true;
             }
 
@@ -1855,7 +1779,7 @@
                 const item = BOWLING_LENGTHS[selectedBowlingLength] || BOWLING_LENGTHS.GOOD;
                 ball.speed = deliverySpeed;
                 ball.px = selectedBowlingLine;
-                ball.pitchProgress = item.pitchProgress;
+                ball.pitchProgress = 1 - selectedBowlingPy;
                 ball.swingCurve = bowlingTarget.swingDir * 0.12;
             } else {
                 ball.speed = deliverySpeed;
@@ -1865,7 +1789,7 @@
             }
 
             setCommentary(currentRole === ROLES.BATTING ?
-                'गेंद हवा में! हरी Hit Zone में आते ही सही समय पर स्वाइप करें!' :
+                'गेंद हरे निशान पर आए तो उंगली सरकाकर शॉट खेलें।' :
                 'गेंद डाली गई! बल्लेबाज शॉट खेलने की तैयारी में...');
         }
 
@@ -1905,33 +1829,33 @@
             const needlePct = Math.max(5, Math.min(95, 50 + (timingDelta / 0.20) * 45));
 
             let timingRating = 'PERFECT';
-            let timingVerdict = '⚡ PERFECT TIMING!';
-            let timingDetail = 'सटीक टाइमिंग! 100% पावर';
+            let timingVerdict = 'सही समय पर!';
+            let timingDetail = 'सही समय पर शॉट खेला';
             let timingClass = 'timing-perfect';
 
             if (timingDelta < -0.15) { // ballProg < 0.65
                 timingRating = 'TOO_EARLY';
-                timingVerdict = '❌ TOO EARLY (बहुत जल्दी)';
+                timingVerdict = 'बहुत जल्दी';
                 timingDetail = 'गेंद काफी दूर थी — थोड़ा रुक कर खेलें';
                 timingClass = 'timing-bad';
             } else if (timingDelta < -0.055) { // 0.65 <= ballProg < 0.745
                 timingRating = 'EARLY';
-                timingVerdict = '⚠️ EARLY (थोड़ा जल्दी)';
+                timingVerdict = 'थोड़ा जल्दी';
                 timingDetail = 'गेंद के और पास आने का इंतज़ार करें';
                 timingClass = 'timing-warn';
             } else if (timingDelta <= 0.055) { // 0.745 <= ballProg <= 0.855
                 timingRating = 'PERFECT';
-                timingVerdict = '⚡ PERFECT TIMING! (सटीक टाइमिंग)';
-                timingDetail = 'बल्ले के बीचों-बीच संपर्क — बेहतरीन टाइमिंग!';
+                timingVerdict = 'सही समय पर!';
+                timingDetail = 'गेंद बल्ले के बीचों-बीच लगी!';
                 timingClass = 'timing-perfect';
             } else if (timingDelta <= 0.14) { // 0.855 < ballProg <= 0.94
                 timingRating = 'LATE';
-                timingVerdict = '⏱️ LATE (थोड़ा देर)';
-                timingDetail = 'गेंद निकल रही थी — थोड़ा पहले स्वाइप करें';
+                timingVerdict = 'थोड़ी देर';
+                timingDetail = 'गेंद निकल रही थी — थोड़ा पहले शॉट खेलें';
                 timingClass = 'timing-warn';
             } else { // ballProg > 0.94
                 timingRating = 'TOO_LATE';
-                timingVerdict = '❌ TOO LATE (बहुत देर)';
+                timingVerdict = 'बहुत देर';
                 timingDetail = 'गेंद बल्ले को पार कर चुकी थी';
                 timingClass = 'timing-bad';
             }
@@ -2123,7 +2047,7 @@
                         runs = 0;
                         setCommentary(currentLang === 'hi' ? 'बाउंसर की उछाल से बीट हुए — सुरक्षित गेंद।' : 'Beaten by bouncer bounce — sails over stumps safely.');
                     } else {
-                        if (Math.random() < 0.55) {
+                        if (Math.abs(ball.px) < 0.08 && Math.random() < 0.55) {
                             isOut = true;
                             outType = 'BOWLED';
                         } else {
@@ -2181,96 +2105,43 @@
 
             const length = selectedBowlingLength;
             const swing = bowlingTarget.swingDir;
-            const line = selectedBowlingLine;
-            const finalX = line + swing * 0.1;
-            const isOnStumps = Math.abs(finalX) < 0.15;
+            // Swing returns to the delivery line at the stumps (progress = 1).
+            const isOnStumps = Math.abs(ball.px) < 0.08;
 
             let runs = 0;
             let isOut = false;
             let outType = '';
 
+            // Small, fixed outcome weights: wicket, dot, single, two, four, six.
+            // Yorkers restrict scoring; fuller balls are easier to put away.
+            let weights;
             if (length === 'YORKER') {
-                batsmanRig.swingDir = 'DOWN';
-                const roll = Math.random();
-                if (isOnStumps) {
-                    if (roll < 0.48) {
-                        isOut = true;
-                        outType = 'BOWLED';
-                    } else if (roll < 0.80) {
-                        runs = 0;
-                        audio.playBatHit(false);
-                    } else {
-                        runs = 1;
-                        audio.playBatHit(false);
-                    }
-                } else {
-                    runs = (roll < 0.6) ? 0 : 1;
-                    audio.playBatHit(false);
-                }
+                weights = isOnStumps ? [18, 34, 27, 12, 7, 2] : [5, 30, 30, 18, 13, 4];
+                batsmanRig.swingDir = 'UP';
             } else if (length === 'BOUNCER') {
-                // Short ball against AI: lethal for catching wickets off top-edge pull!
-                batsmanRig.swingDir = (Math.random() < 0.5) ? 'LEFT' : 'UP';
-                const roll = Math.random();
-                if (roll < 0.38) {
-                    runs = 0; // ducked / beaten
-                    setCommentary(currentLang === 'hi' ? 'सटीक बाउंसर! बल्लेबाज झुक गया — सुरक्षित गेंद।' : 'Sharp bouncer! Batsman ducks under it.');
-                } else if (roll < 0.72) {
-                    // Lethal short ball caught out!
-                    isOut = true;
-                    outType = 'CAUGHT';
-                    audio.playBatHit(false);
-                    setCommentary(currentLang === 'hi' ? 'बाउंसर पर गलत पुल शॉट! हवा में कैच आउट! 🧤' : 'Top edge off the bouncer! Caught in the deep! 🧤');
-                } else if (roll < 0.88) {
-                    runs = 2;
-                    audio.playBatHit(false);
-                } else {
-                    runs = 4;
-                    audio.playBatHit(false);
-                }
+                weights = [12, 27, 18, 16, 18, 9];
+                batsmanRig.swingDir = 'LEFT';
             } else if (length === 'GOOD') {
-                batsmanRig.swingDir = (swing === 1) ? 'RIGHT' : 'UP';
-                const roll = Math.random();
-                if (swing !== 0) {
-                    if (roll < 0.44) {
-                        isOut = true;
-                        outType = (swing === 1) ? 'CAUGHT' : 'BOWLED';
-                        audio.playBatHit(false);
-                    } else if (roll < 0.75) {
-                        runs = (roll < 0.55) ? 0 : 1;
-                        audio.playBatHit(false);
-                    } else {
-                        runs = 2;
-                        audio.playBatHit(false);
-                    }
-                } else {
-                    if (roll < 0.30) {
-                        if (isOnStumps) { isOut = true; outType = 'BOWLED'; }
-                        else runs = 0;
-                    } else if (roll < 0.65) {
-                        runs = (roll < 0.45) ? 1 : 2;
-                        audio.playBatHit(false);
-                    } else {
-                        runs = 4;
-                        audio.playBatHit(false);
-                    }
-                }
-            } else { // FULL
+                weights = swing !== 0 ? [14, 25, 25, 17, 13, 6] : [10, 24, 25, 18, 16, 7];
+                batsmanRig.swingDir = swing === 1 ? 'RIGHT' : 'UP';
+            } else {
+                weights = [8, 16, 22, 18, 24, 12];
                 batsmanRig.swingDir = 'UP_RIGHT';
-                const roll = Math.random();
-                if (swing !== 0 && roll < 0.38) {
-                    isOut = true;
-                    outType = 'BOWLED';
-                } else if (roll < 0.30) {
-                    runs = 0;
-                    audio.playBatHit(false);
-                } else if (roll < 0.70) {
-                    runs = 4;
-                    audio.playBatHit(false);
-                } else {
-                    runs = 1;
-                    audio.playBatHit(false);
-                }
             }
+
+            let roll = Math.random() * 100;
+            let outcome = 0;
+            while (outcome < weights.length - 1 && roll >= weights[outcome]) {
+                roll -= weights[outcome++];
+            }
+            if (outcome === 0) {
+                isOut = true;
+                // Bouncers and deliveries missing the stumps can only be caught.
+                outType = length !== 'BOUNCER' && isOnStumps ? 'BOWLED' : 'CAUGHT';
+            } else {
+                runs = [0, 0, 1, 2, 4, 6][outcome];
+            }
+            if (!isOut || outType === 'CAUGHT') audio.playBatHit(runs === 6);
 
             // Launch AI hit ball physics
             setupHitBallPhysics(batsmanRig.swingDir, runs, isOut, outType);
@@ -2301,17 +2172,17 @@
                 if (runs === 6) {
                     boundariesCount++;
                     ballOutcomes.push('6');
-                    showActionBanner('🚀 स्टेडियम के बाहर! SIX! 108m', 'six');
+                    showActionBanner('छक्का! 6 रन', 'six');
                     triggerConfetti();
                     setCommentary(currentLang === 'hi' ? 'गगनचुंबी छक्का! गेंद स्टेडियम के बाहर, सीधे पार्किंग में!' : 'Monster Six! Smashed right out of the stadium!');
                 } else if (runs === 4) {
                     boundariesCount++;
                     ballOutcomes.push('4');
-                    showActionBanner('चौका! FOUR! 🏏 4', 'four');
+                    showActionBanner('चौका! 4 रन', 'four');
                     setCommentary(currentLang === 'hi' ? 'शानदार गैप शॉट! गोली की रफ्तार से बाउंड्री पार - चौका!' : 'Pierced the gap! Races away to the fence for four!');
                 } else if (runs === 0) {
                     ballOutcomes.push('0');
-                    showActionBanner('डॉट बॉल! 🛡️ 0', 'normal');
+                    showActionBanner('कोई रन नहीं', 'normal');
                     setCommentary(currentLang === 'hi' ? 'बल्लेबाज बीट हुआ! सटीक गेंद, कोई रन नहीं।' : 'Beaten by movement! Dot ball.');
                 } else {
                     ballOutcomes.push(String(runs));
@@ -2344,23 +2215,23 @@
                 // Automatic delivery sequencing with natural pause between balls!
                 if (currentRole === ROLES.BATTING) {
                     setCommentary(`अगली गेंद (${ballsBowled + 1}/6) के लिए तैयार रहें...`);
-                    if (hintText) hintText.textContent = `अगली गेंद (${ballsBowled + 1}/6) आ रही है... स्वाइप के लिए तैयार रहें`;
+                    if (hintText) hintText.textContent = 'अगली गेंद आ रही है। शॉट खेलने के लिए तैयार रहें।';
                     if (autoNextBallTimer) clearTimeout(autoNextBallTimer);
                     autoNextBallTimer = setTimeout(() => {
-                        if (gameState === STATES.IDLE && ballsBowled < 6 && wickets < 2 && currentRole === ROLES.BATTING) {
+                        if (matchStarted && !helpOpen && gameState === STATES.IDLE && ballsBowled < 6 && wickets < 2 && currentRole === ROLES.BATTING) {
                             startDelivery();
                         }
                     }, 2400);
                 } else {
-                    setCommentary('🎯 पिच पर कहीं भी ड्रैग करें — लेंथ व स्विंग सेट करके छोड़ें!');
-                    if (hintText) hintText.textContent = 'पिच पर ड्रैग करें — अगली गेंद फेंकने के लिए छोड़ें';
+                    setCommentary('पिच पर उंगली रखकर जगह चुनें। छोड़ते ही गेंद फेंकी जाएगी।');
+                    if (hintText) hintText.textContent = 'अगली गेंद के लिए पिच पर जगह चुनें';
                 }
             }
         }
 
         function endMatch(chaseComplete) {
+            if (gameState === STATES.COMPLETED) return;
             gameState = STATES.COMPLETED;
-            audio.playFanfare();
 
             let isWin = false;
             let headline = '';
@@ -2371,14 +2242,13 @@
                     isWin = true;
                     headline = t('winHeadline');
                     narrative = currentLang === 'hi' ?
-                        `आपने 8-दिशा स्वाइप और सटीक टाइमिंग से ${totalRuns} रन बनाकर लक्ष्य हासिल किया! सुपर ओवर चैंपियन!` :
+                        `आपने ${ballsBowled} गेंदों में ${totalRuns} रन बनाकर लक्ष्य हासिल कर लिया!` :
                         `Target of ${targetRuns} chased down in style with brilliant swipe execution! Super Over Champion!`;
-                    triggerConfetti();
                 } else {
                     isWin = false;
                     headline = t('lossHeadline');
                     narrative = currentLang === 'hi' ?
-                        `टीम 6 गेंदों में ${totalRuns}/${wickets} रन ही बना सकी और लक्ष्य से ${targetRuns - totalRuns} रन पीछे रह गई।` :
+                        `आपने ${ballsBowled} गेंदों में ${totalRuns} रन बनाए। जीत के लिए ${targetRuns - totalRuns} रन और चाहिए थे।` :
                         `Fell short by ${targetRuns - totalRuns} runs. Thrilling battle!`;
                 }
             } else {
@@ -2386,18 +2256,26 @@
                     isWin = true;
                     headline = t('winHeadline');
                     narrative = currentLang === 'hi' ?
-                        `शानदार यॉर्कर और स्विंग गेंदबाजी! विपक्षी टीम को ${totalRuns}/${wickets} पर रोककर जीत दर्ज की!` :
+                        `आपने सामने वाली टीम को ${totalRuns} रन पर रोककर लक्ष्य बचा लिया!` :
                         `Masterful death bowling defended the target under intense pressure!`;
-                    triggerConfetti();
                 } else {
                     isWin = false;
                     headline = t('lossHeadline');
                     narrative = currentLang === 'hi' ?
-                        `विपक्षी टीम ने लक्ष्य पार कर लिया। अगली बार यॉर्कर और गति में विविधता लाएं!` :
+                        `सामने वाली टीम ने ${totalRuns} रन बनाकर लक्ष्य हासिल कर लिया। फिर कोशिश करें!` :
                         `Opponent chased the total in the final deliveries. Great contest!`;
                 }
             }
 
+            resultModal.dataset.outcome = isWin ? 'win' : 'loss';
+            document.getElementById('resTitle').textContent = t(isWin ? 'winTitle' : 'lossTitle');
+            document.getElementById('resEmoji').textContent = isWin ? '🏆' : '🏏';
+            document.getElementById('resMedal').textContent = isWin ? '🏆' : '🏏';
+            document.getElementById('resMessage').textContent = t(isWin ? 'winMessage' : 'lossMessage');
+            if (isWin) {
+                audio.playFanfare();
+                if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) triggerConfetti();
+            }
             resHeadline.textContent = headline;
             resRuns.textContent = totalRuns;
             resWickets.textContent = wickets;
@@ -2405,6 +2283,7 @@
             resNarrative.textContent = narrative;
 
             resultModal.classList.remove('hidden');
+            resPlayAgainBtn.focus();
 
             try {
                 const finalScore = totalRuns * 10 + (isWin ? 50 : 10);
@@ -2476,7 +2355,11 @@
 
                     // Position calculation along pitch
                     let curPy = ball.progress;
-                    let curPx = ball.px + Math.sin(ball.progress * Math.PI) * ball.swingCurve;
+                    // Bowling movement crosses the selected spot at bounce and returns to the line at the stumps.
+                    const swingShape = currentRole === ROLES.BOWLING
+                        ? (ball.progress - ball.pitchProgress) / Math.max(ball.pitchProgress, 1 - ball.pitchProgress)
+                        : 1;
+                    let curPx = ball.px + Math.sin(ball.progress * Math.PI) * ball.swingCurve * swingShape;
 
                     // Perspective inversion for Bowler View
                     let projPy = (currentCameraView === CAMERA_VIEWS.BATTER) ? curPy : (1 - curPy);
@@ -2519,7 +2402,7 @@
                             stumps.bailsOff = true;
                             audio.playWicketSmash();
                             if (currentRole === ROLES.BATTING) {
-                                showTimingFeedback('❌ CLEAN BOWLED', 'गेंद सीधे स्टंप्स पर लगी!', 'timing-bad', 95);
+                                showTimingFeedback('बोल्ड!', 'गेंद सीधे स्टंप्स पर लगी!', 'timing-bad', 95);
                             }
                             finishBall(0, true, 'BOWLED');
                         } else {
@@ -2527,12 +2410,12 @@
                             if (isShortBall) {
                                 setCommentary(currentLang === 'hi' ? 'तेज बाउंसर! गेंद स्टंप्स के ऊपर से कीपर के पास — सुरक्षित लीव।' : 'Sharp bouncer flew over stumps to keeper — safe leave.');
                                 if (currentRole === ROLES.BATTING) {
-                                    showTimingFeedback('🛡️ BOUNCER LEFT', 'बाउंसर सिर के ऊपर से सुरक्षित निकल गई', 'timing-warn', 50);
+                                    showTimingFeedback('गेंद छोड़ दी', 'बाउंसर सिर के ऊपर से सुरक्षित निकल गई', 'timing-warn', 50);
                                 }
                             } else {
                                 setCommentary(currentLang === 'hi' ? 'सटीक गेंद! बल्लेबाज बीट हुआ, कोई रन नहीं।' : 'Beaten by movement! Dot ball.');
                                 if (currentRole === ROLES.BATTING) {
-                                    showTimingFeedback('⏱️ BEATEN', 'गेंद बल्ले को बीट कर गई', 'timing-warn', 90);
+                                    showTimingFeedback('गेंद निकल गई', 'गेंद बल्ले को बीट कर गई', 'timing-warn', 90);
                                 }
                             }
                             finishBall(0, false, '');
@@ -2606,7 +2489,7 @@
                 speedCursor.style.left = `${speedMeterVal * 100}%`;
                 const calculatedKmh = Math.round(115 + speedMeterVal * 35);
                 bowlingTarget.speedKmh = calculatedKmh;
-                speedValueLabel.textContent = `${calculatedKmh} km/h`;
+                speedValueLabel.textContent = `${calculatedKmh} किमी/घंटा`;
             }
         }
 
@@ -2663,9 +2546,24 @@
             ctx.lineWidth = 1.5 * scale;
             ctx.stroke();
 
+            // Colored bands show the supported landing range; no extra controls.
+            if (currentRole === ROLES.BOWLING && gameState === STATES.IDLE) {
+                ctx.save();
+                const bands = [[BOWLING_RANGE.min, 0.23, '#F6CB66'], [0.23, 0.36, '#EBAB6D'], [0.36, 0.54, '#67C4BB'], [0.54, BOWLING_RANGE.max, '#91AAF0']];
+                for (const [from, to, color] of bands) {
+                    const corners = [[-0.4, from], [0.4, from], [0.4, to], [-0.4, to]].map(([x,y]) => projectPitch(x,y,currentCameraView));
+                    ctx.beginPath();
+                    corners.forEach((point, i) => i ? ctx.lineTo(point.x,point.y) : ctx.moveTo(point.x,point.y));
+                    ctx.closePath();
+                    ctx.fillStyle = color; ctx.globalAlpha = 0.23; ctx.fill();
+                    ctx.globalAlpha = 0.65; ctx.strokeStyle = color; ctx.lineWidth = scale; ctx.stroke();
+                }
+                ctx.restore();
+            }
+
             // 5. Crease Lines and Pitch End Label
             const isBatterPOV = (currentCameraView === CAMERA_VIEWS.BATTER);
-            const bottomEndText = isBatterPOV ? 'बल्लेबाजी छोर (Batting End)' : 'गेंदबाजी छोर (Bowling End)';
+            const bottomEndText = isBatterPOV ? 'बल्लेबाज' : 'गेंदबाज';
 
             // Top Crease Line
             const cFarL = projectPitch(-0.52, 0.08, currentCameraView);
@@ -2690,7 +2588,7 @@
             // Dynamic Hit Zone (Sweet Spot Indicator) on Pitch in Batting POV!
             if (isBatterPOV && (gameState === STATES.IN_FLIGHT || gameState === STATES.RUNUP)) {
                 const hitZonePos = projectPitch(0, 0.80, currentCameraView);
-                const inSweetSpot = (ball.active && ball.progress >= 0.72 && ball.progress <= 0.88);
+                const inSweetSpot = (ball.active && ball.progress >= 0.745 && ball.progress <= 0.855);
 
                 ctx.save();
                 ctx.beginPath();
@@ -2703,8 +2601,8 @@
                     ctx.shadowColor = '#2ECC71';
                     ctx.shadowBlur = 16;
                 } else {
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.fillStyle = 'rgba(46, 204, 113, 0.10)';
+                    ctx.strokeStyle = 'rgba(46, 204, 113, 0.65)';
                     ctx.lineWidth = 1.6 * scale;
                     ctx.setLineDash([4 * scale, 3 * scale]);
                 }
@@ -2720,10 +2618,10 @@
                     ctx.fillStyle = '#FFFFFF';
                     ctx.shadowColor = '#000';
                     ctx.shadowBlur = 4;
-                    ctx.fillText('⚡ SWIPE NOW! (स्वाइप करें)', hitZonePos.x, hitZonePos.y);
-                } else if (ball.active && ball.progress < 0.72) {
+                    ctx.fillText('अब शॉट खेलें!', hitZonePos.x, hitZonePos.y);
+                } else if (ball.active && ball.progress < 0.745) {
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-                    ctx.fillText('🎯 HIT ZONE', hitZonePos.x, hitZonePos.y);
+                    ctx.fillText('यहाँ शॉट खेलें', hitZonePos.x, hitZonePos.y);
                 }
                 ctx.restore();
             }
@@ -2773,9 +2671,9 @@
                 // Pulsating ring
                 ctx.beginPath();
                 ctx.arc(hoverProj.x, hoverProj.y, pulseR, 0, Math.PI * 2);
-                ctx.fillStyle = isDraggingPitchTarget ? 'rgba(231, 76, 60, 0.35)' : 'rgba(243, 156, 18, 0.35)';
+                ctx.fillStyle = 'rgba(243, 156, 18, 0.35)';
                 ctx.fill();
-                ctx.strokeStyle = isDraggingPitchTarget ? '#E74C3C' : '#F39C12';
+                ctx.strokeStyle = '#F39C12';
                 ctx.lineWidth = 2.5 * scale;
                 ctx.setLineDash([4 * scale, 3 * scale]);
                 ctx.stroke();
@@ -2798,7 +2696,7 @@
                     if (isDraggingPitchTarget) {
                         ctx.font = `700 ${Math.max(8.5, 9.5 * scale)}px Inter, sans-serif`;
                         ctx.fillStyle = '#F1C40F';
-                        ctx.fillText('छोड़ें (Release) गेंद फेंकने के लिए 🚀', hoverProj.x, hoverProj.y + pulseR + 14 * scale);
+                        ctx.fillText('गेंद फेंकने के लिए उंगली छोड़ें', hoverProj.x, hoverProj.y + pulseR + 14 * scale);
                     }
                     ctx.shadowBlur = 0;
                 }
@@ -2838,7 +2736,8 @@
                 }
 
                 // Batter in foreground
-                drawBatterFigure(nearStumpPos.x - 12 * scale, nearStumpPos.y - 12 * scale, 1.3, batsmanRig);
+                const batterPos = projectPitch(-0.13, 0.80, currentCameraView);
+                drawBatterFigure(batterPos.x, batterPos.y, 1.3, batsmanRig);
             } else {
                 // Bowler in foreground (Bowling POV)
                 const bowlerBaseY = nearStumpPos.y + 36 * scale;
@@ -2853,7 +2752,8 @@
                 }
 
                 // Batter waiting at far end
-                drawBatterFigure(farStumpPos.x - 6 * scale, farStumpPos.y + 12 * scale, 0.75, batsmanRig);
+                const batterPos = projectPitch(-0.13, 0.24, currentCameraView);
+                drawBatterFigure(batterPos.x, batterPos.y, 0.75, batsmanRig);
             }
 
             // 9. Ball & Ground Shadow (High Clarity Depth System)
@@ -2919,7 +2819,7 @@
                 ctx.stroke();
 
                 // Golden glow halo around ball when inside sweet spot hit zone
-                if (isBatterPOV && ball.active && !ball.isHit && ball.progress >= 0.72 && ball.progress <= 0.88) {
+                if (isBatterPOV && ball.active && !ball.isHit && ball.progress >= 0.745 && ball.progress <= 0.855) {
                     ctx.beginPath();
                     ctx.arc(ball.x, ballDrawY, ballRadius * 1.6, 0, Math.PI * 2);
                     ctx.strokeStyle = '#2ECC71';
@@ -3220,7 +3120,7 @@
                 ctx.restore();
             }
 
-            // 8. Bottom Pill Badge: "मैदान · FIELD RADAR"
+            // 8. Bottom Pill Badge: "मैदान"
             const badgeW = radarRadius * 1.7;
             const badgeH = 15 * scale;
             const badgeY = cy + radarRadius - badgeH / 2 + 1 * scale;
@@ -3243,7 +3143,7 @@
             ctx.fillStyle = '#FFFFFF';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('मैदान · FIELD RADAR', cx + 3 * scale, badgeY + badgeH / 2);
+            ctx.fillText('मैदान', cx + 3 * scale, badgeY + badgeH / 2);
 
             ctx.restore();
         }
@@ -3509,7 +3409,7 @@
 
         // --- Main Animation Loop ---
         function gameLoop() {
-            updatePhysics();
+            if (matchStarted && !helpOpen) { updatePhysics(); updateShotTiming(); }
             drawStadium();
             updateAndDrawConfetti();
             requestAnimationFrame(gameLoop);
@@ -3602,26 +3502,93 @@
             setTimeout(() => { swipeTrail = []; }, 300);
         });
 
-        // Switch Role Button
-        switchRoleBtn.addEventListener('click', () => {
+        let selectedRole = null;
+        const confirmStartBtn = document.getElementById('confirmStartBtn');
+        function resetRoleSelection() {
+            selectedRole = null;
+            confirmStartBtn.disabled = true;
+            document.querySelectorAll('[data-role]').forEach(button => button.setAttribute('aria-pressed', 'false'));
+        }
+        function showIntroduction() {
+            if (autoNextBallTimer) clearTimeout(autoNextBallTimer);
+            autoNextBallTimer = null;
+            matchStarted = false;
+            ball.active = false;
+            gameState = STATES.IDLE;
+            resultModal.classList.add('hidden');
+            matchScreen.hidden = true;
+            introScreen.hidden = false;
+            resetRoleSelection();
+            document.querySelector('[data-role="BATTING"]').focus();
+        }
+        document.querySelectorAll('[data-role]').forEach(button => button.addEventListener('click', () => {
+            selectedRole = button.dataset.role;
+            document.querySelectorAll('[data-role]').forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+            confirmStartBtn.disabled = false;
+        }));
+        confirmStartBtn.addEventListener('click', () => {
+            if (!selectedRole || matchStarted) return;
             audio.init();
-            const nextRole = (currentRole === ROLES.BATTING) ? ROLES.BOWLING : ROLES.BATTING;
-            initMatch(nextRole);
+            introScreen.hidden = true;
+            matchScreen.hidden = false;
+            matchStarted = true;
+            resizeCanvas();
+            initMatch(selectedRole);
+            canvas.focus();
+        });
+        const rulesModal = document.getElementById('rulesModal');
+        rulesModal.setAttribute('role', 'dialog');
+        rulesModal.setAttribute('aria-modal', 'true');
+        rulesModal.setAttribute('aria-labelledby', 'rulesModalTitle');
+        window.openHelpModal = () => {
+            helpOpen = true;
+            rulesModal.classList.remove('hidden');
+            document.getElementById('startMatchBtn').focus();
+        };
+        function closeHelp() {
+            helpOpen = false;
+            rulesModal.classList.add('hidden');
+            if (matchStarted && currentRole === ROLES.BATTING && gameState === STATES.IDLE) {
+                if (autoNextBallTimer) clearTimeout(autoNextBallTimer);
+                autoNextBallTimer = setTimeout(startDelivery, 1500);
+            }
+            (matchStarted ? canvas : document.querySelector('[data-role="BATTING"]')).focus();
+        }
+        document.getElementById('closeRulesBtn').addEventListener('click', closeHelp);
+        document.getElementById('startMatchBtn').addEventListener('click', closeHelp);
+        window.addEventListener('message', event => {
+            if (event.source === window.parent && event.data?.type === 'OPEN_RULES') window.openHelpModal();
         });
 
         resPlayAgainBtn.addEventListener('click', () => {
             resultModal.classList.add('hidden');
             initMatch(currentRole);
+            canvas.focus();
         });
 
         resChangeModeBtn.addEventListener('click', () => {
             resultModal.classList.add('hidden');
-            const nextRole = (currentRole === ROLES.BATTING) ? ROLES.BOWLING : ROLES.BATTING;
-            initMatch(nextRole);
+            showIntroduction();
         });
 
         // Keyboard Support
         window.addEventListener('keydown', (e) => {
+            if (!resultModal.classList.contains('hidden')) {
+                if (e.code === 'Tab') {
+                    e.preventDefault();
+                    (document.activeElement === resPlayAgainBtn ? resChangeModeBtn : resPlayAgainBtn).focus();
+                }
+                return;
+            }
+            if (e.code === 'Escape' && helpOpen) { closeHelp(); return; }
+            if (helpOpen && e.code === 'Tab') {
+                const first = document.getElementById('closeRulesBtn');
+                const last = document.getElementById('startMatchBtn');
+                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+                return;
+            }
+            if (!matchStarted || helpOpen || e.target.closest('button')) return;
             if (e.code === 'Space' || e.code === 'Enter') {
                 e.preventDefault();
                 if (gameState === STATES.IDLE) {
@@ -3637,12 +3604,11 @@
         // Init
         window.addEventListener('resize', resizeCanvas);
         window.addEventListener('orientationchange', resizeCanvas);
+        new ResizeObserver(() => { if (matchStarted) resizeCanvas(); }).observe(document.getElementById('boardWrapper'));
 
         document.addEventListener('DOMContentLoaded', () => {
             resizeCanvas();
-            const urlParams = new URLSearchParams(window.location.search);
-            const initialRole = (urlParams.get('role') === 'bowling' || urlParams.get('view') === 'bowler') ? ROLES.BOWLING : ROLES.BATTING;
-            initMatch(initialRole);
+            initFieldRadar();
             requestAnimationFrame(gameLoop);
         });
     </script>

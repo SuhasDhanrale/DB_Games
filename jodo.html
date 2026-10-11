@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
+  <script src="./demo-session.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>जोड़ो · भास्कर खेल | Dainik Bhaskar Jodo</title>
@@ -1243,8 +1244,8 @@
 
     function safeGetStorage(key) {
       try {
-        if (typeof window !== "undefined" && window.localStorage) {
-          const val = window.localStorage.getItem(key);
+        if (typeof window !== "undefined" && window.DBJamDemo) {
+          const val = window.DBJamDemo.getItem(key);
           if (val) return JSON.parse(val);
         }
       } catch (err) {}
@@ -1253,8 +1254,8 @@
 
     function safeSetStorage(key, value) {
       try {
-        if (typeof window !== "undefined" && window.localStorage) {
-          window.localStorage.setItem(key, JSON.stringify(value));
+        if (typeof window !== "undefined" && window.DBJamDemo) {
+          window.DBJamDemo.setItem(key, JSON.stringify(value));
         }
       } catch (err) {}
       memoryStore[key] = value;
@@ -1286,14 +1287,7 @@
     let currentDragTarget = null;
 
     function getDayFromUrl() {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const dayParam = params.get("day");
-        if (dayParam && ["d1", "d2", "d3"].includes(dayParam.toLowerCase())) {
-          return dayParam.toLowerCase();
-        }
-      } catch (e) {}
-      return "d1";
+      return window.DBJamDemo.day;
     }
 
     function syncUrlWithDay(dayId) {

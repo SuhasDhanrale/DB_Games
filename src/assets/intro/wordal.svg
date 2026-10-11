@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="शब्द की टाइलें खुलती हैं">
+  <style>.tile{transform-box:fill-box;transform-origin:center;animation:flip 2.4s ease both}.b{animation-delay:.16s}.c{animation-delay:.32s}@keyframes flip{0%,15%{transform:scaleY(.12);opacity:.25}35%,100%{transform:scaleY(1);opacity:1}}@media(prefers-reduced-motion:reduce){.tile{animation:none}}</style>
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="#eef0ff"/>
+  <g class="tile"><rect x="14" y="30" width="22" height="34" rx="6" fill="#4f46e5"/><text x="25" y="54" text-anchor="middle" fill="white" font-size="19" font-family="Nirmala UI,sans-serif">ख</text></g>
+  <g class="tile b"><rect x="39" y="30" width="22" height="34" rx="6" fill="#6366f1"/><text x="50" y="54" text-anchor="middle" fill="white" font-size="19" font-family="Nirmala UI,sans-serif">ब</text></g>
+  <g class="tile c"><rect x="64" y="30" width="22" height="34" rx="6" fill="#27ae60"/><text x="75" y="54" text-anchor="middle" fill="white" font-size="19" font-family="Nirmala UI,sans-serif">र</text></g>
+  <path d="m42 76 6 6 12-13" fill="none" stroke="#27ae60" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

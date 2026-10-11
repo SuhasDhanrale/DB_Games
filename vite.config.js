@@ -1,14 +1,17 @@
 import { defineConfig } from 'vite';
-import { viteSingleFile } from 'vite-plugin-singlefile';
 import tailwindcss from '@tailwindcss/vite';
+import { readdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 export default defineConfig({
-  plugins: [tailwindcss(), viteSingleFile()],
+  plugins: [tailwindcss()],
   build: {
     target: 'esnext',
-    assetsInlineLimit: 100000000,
-    chunkSizeWarningLimit: 100000000,
-    cssCodeSplit: false,
-    brotliSize: false
+    // Build iframe pages too, sharing cacheable CSS instead of compiling it on navigation.
+    rollupOptions: {
+      input: Object.fromEntries(readdirSync(process.cwd())
+        .filter(file => file.endsWith('.html'))
+        .map(file => [file.replace('.html', ''), resolve(process.cwd(), file)]))
+    }
   }
 });

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="बल्ले से गेंद उड़ती है">
+  <style>.bat{transform-origin:49px 59px;animation:swing 2.4s ease both}.ball{animation:flight 2.4s ease both}@keyframes swing{0%,20%{transform:rotate(-20deg)}42%,65%{transform:rotate(28deg)}100%{transform:rotate(0)}}@keyframes flight{0%,24%{transform:translate(-25px,20px);opacity:0}30%{opacity:1}50%,100%{transform:translate(20px,-30px);opacity:1}}@media(prefers-reduced-motion:reduce){.bat,.ball{animation:none}}</style>
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="#e5f6ee"/><path d="M18 78h64" stroke="#a7d9bf" stroke-width="4" stroke-linecap="round"/>
+  <g class="bat" transform="rotate(25 49 59)"><rect x="44" y="17" width="9" height="25" rx="3" fill="#065f46"/><rect x="37" y="38" width="23" height="40" rx="5" fill="#e7b57c"/><path d="M43 44v27" stroke="#fff0cf" stroke-width="3"/></g>
+  <g class="ball"><circle cx="60" cy="48" r="8" fill="#e23a28"/><path d="M58 41q6 7 0 14" fill="none" stroke="#fff" stroke-width="1.5"/></g>
+</svg>

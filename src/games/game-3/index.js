@@ -10,7 +10,7 @@ registerGame({
   hasDailyChallenge: true,
   comingSoon: false,
   htmlFile: 'Superover.html',
-  create: (container) => new HtmlIframeGame(container, { id: 'cricket', titleKey: 'game3.title', icon: '🏏', htmlFile: 'Superover.html' }),
+  create: (container) => new HtmlIframeGame(container, { id: 'cricket', titleKey: 'game3.title', icon: '🏏', htmlFile: 'Superover.html', ownsResultScreen: true }),
 });
 
 // Alias for 'superover' URL route support
@@ -23,5 +23,5 @@ registerGame({
   hasDailyChallenge: true,
   comingSoon: false,
   htmlFile: 'Superover.html',
-  create: (container) => new HtmlIframeGame(container, { id: 'superover', titleKey: 'game3.title', icon: '🏏', htmlFile: 'Superover.html' }),
+  create: (container) => new HtmlIframeGame(container, { id: 'superover', titleKey: 'game3.title', icon: '🏏', htmlFile: 'Superover.html', ownsResultScreen: true }),
 });

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="विचार का कार्ड बनता है">
+  <style>.line{stroke-dasharray:45;stroke-dashoffset:45;animation:write 2.4s ease both}.b{animation-delay:.2s}.c{animation-delay:.4s}.spark{transform-box:fill-box;transform-origin:center;animation:shine 2.4s ease both}@keyframes write{40%,100%{stroke-dashoffset:0}}@keyframes shine{0%,40%{transform:scale(0)}65%,100%{transform:scale(1)}}@media(prefers-reduced-motion:reduce){.line{animation:none;stroke-dashoffset:0}.spark{animation:none}}</style>
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="#fff1df"/><rect x="24" y="18" width="52" height="65" rx="9" fill="#fffdfa" stroke="#f97316" stroke-width="3"/>
+  <path d="M34 34h25M34 46h32M34 58h22" fill="none" stroke="#e8d4bd" stroke-width="4" stroke-linecap="round"/>
+  <path class="line" d="M34 34h25" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/><path class="line b" d="M34 46h32" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/><path class="line c" d="M34 58h22" stroke="#ea580c" stroke-width="4" stroke-linecap="round"/>
+  <path class="spark" d="m76 9 3 9 9 3-9 3-3 9-3-9-9-3 9-3z" fill="#f39c12"/>
+</svg>
