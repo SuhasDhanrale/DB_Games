@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" data-game-theme="jodo">
 <head>
   <script src="./demo-session.js"></script>
   <meta charset="UTF-8">
+  <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
+  <script type="module">
+    import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+    prepareStandaloneIntro('jodo').then(window.finishGameIntro);
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>जोड़ो · भास्कर खेल | Dainik Bhaskar Jodo</title>
   <meta name="description" content="जोड़ो — चार वस्तुओं और उनके संबंधित तथ्यों को मिलाने का दैनिक ज्ञानवर्धक खेल।">
-  <meta name="theme-color" content="#F9F9F7">
+  <meta name="theme-color" content="#faf9f6">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <style>
     /* ============================================================
@@ -119,7 +128,9 @@
       display: flex;
       flex-direction: column;
       background-color: var(--color-bg);
-      padding: 10px 14px 28px;
+      --app-inline-padding: 14px;
+      --app-bottom-padding: 28px;
+      padding: 10px var(--app-inline-padding) var(--app-bottom-padding);
       position: relative;
     }
 
@@ -148,6 +159,36 @@
       font-size: 12px;
       line-height: 1.6;
       color: var(--text-subtle);
+    }
+
+    .result-footer {
+      position: sticky;
+      bottom: 0;
+      margin: auto calc(-1 * var(--app-inline-padding)) calc(-1 * var(--app-bottom-padding));
+      padding: 16px var(--app-inline-padding) max(16px, env(safe-area-inset-bottom));
+      border-top: 1px solid var(--border-subtle);
+      background: var(--color-bg);
+      z-index: 20;
+    }
+
+    .result-footer[hidden] {
+      display: none;
+    }
+
+    .app-container.is-completed {
+      gap: 24px;
+    }
+
+    html[data-game-theme] .app-container {
+      --app-inline-padding: 16px;
+      --app-bottom-padding: max(12px, env(safe-area-inset-bottom));
+    }
+
+    @media (max-height: 600px) {
+      html[data-game-theme] .app-container {
+        --app-inline-padding: 12px;
+        --app-bottom-padding: 10px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -562,7 +603,9 @@
       background: var(--color-surface-hover);
     }
     .btn-hint:disabled {
-      opacity: 0.45;
+      background: var(--color-surface-subtle);
+      color: var(--text-subtle);
+      box-shadow: none;
       cursor: not-allowed;
     }
 
@@ -689,7 +732,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-top: 10px;
       width: 100%;
     }
 
@@ -936,6 +978,7 @@
       cursor: pointer;
     }
   </style>
+  <link rel="stylesheet" href="./src/styles/game-family.css">
 </head>
 <body>
   <!-- Top Accent Line -->
@@ -1001,20 +1044,20 @@
     <footer class="play-footer" id="play-footer">
       <!-- Hint Control -->
       <div class="controls-row" id="controls-row">
-        <button type="button" class="btn-hint" id="btn-show-pair" title="एक जोड़ी स्वतः मिलाकर देखें">
+        <button type="button" class="btn-hint family-secondary" id="btn-show-pair" title="एक संकेत: एक जोड़ी दिखाएँ (15 अंक कम होंगे)">
           <span aria-hidden="true">💡</span>
-          <span>एक जोड़ी दिखाएँ</span>
+          <span id="hint-label">संकेत लें · 1 उपलब्ध</span>
         </button>
       </div>
       <p>चार जोड़ियाँ, चार नई बातें।<br>खेल के बाद जानें हर जोड़ी की कहानी।</p>
     </footer>
 
     <!-- STEP 2: Final Result Panel (Ultra-compact, No-Scroll) -->
-    <section class="result-panel" id="result-panel" style="display: none;" aria-label="खेल परिणाम">
+    <section class="result-panel family-panel" id="result-panel" style="display: none;" aria-label="खेल परिणाम">
       <div class="result-header-minimal">
         <div class="result-title-wrap">
           <span class="result-badge-icon" aria-hidden="true">🎉</span>
-          <h2 class="result-minimal-title">4 जोड़ियाँ पूरी हुईं!</h2>
+          <h2 class="result-minimal-title">चारों जोड़ियाँ मिल गईं!</h2>
         </div>
         <div class="result-score-chip">
           <span id="score-display">100</span> <small>अंक</small>
@@ -1023,22 +1066,24 @@
 
       <!-- Concise Review of all 4 Pairs & Explanations -->
       <div class="review-section">
-        <div class="review-title">जोड़ियों का विवरण व सीख:</div>
+        <div class="review-title">हर जोड़ी के बारे में जानें</div>
         <div class="review-list" id="review-list">
           <!-- Rendered via JS with distinct pair colors -->
         </div>
       </div>
 
-      <!-- Side-by-side Action Buttons -->
+    </section>
+
+    <footer class="result-footer" id="result-footer" aria-label="खेल के बाद" hidden>
       <div class="result-actions-row">
-        <button type="button" class="btn-action btn-action-news" id="btn-result-article">
-          <span>📖 जुड़ी ख़बरें</span>
+        <button type="button" class="btn-action btn-action-news family-secondary" id="btn-result-article">
+          <span>📖 जुड़ी खबरें</span>
         </button>
-        <button type="button" class="btn-action btn-action-next" id="btn-next-game">
+        <button type="button" class="btn-action btn-action-next family-primary" id="btn-next-game">
           <span>🎮 अगला खेल</span>
         </button>
       </div>
-    </section>
+    </footer>
 
   </main>
 
@@ -1065,7 +1110,7 @@
       </div>
 
       <div class="article-footer-actions">
-        <button type="button" class="btn-primary-block" id="btn-close-article-bottom">
+        <button type="button" class="btn-primary-block family-primary" id="btn-close-article-bottom">
           खेल पर लौटें
         </button>
       </div>
@@ -1097,7 +1142,7 @@
         </li>
       </ul>
 
-      <button type="button" class="btn-primary-block" id="btn-rules-ok">
+      <button type="button" class="btn-primary-block family-primary" id="btn-rules-ok">
         समझ गया, खेलें
       </button>
     </div>
@@ -1523,6 +1568,8 @@
       document.getElementById("progress-count").textContent = `${matchedCount}/4 जोड़ियाँ`;
       document.getElementById("play-area").style.display = state.isCompleted ? "none" : "flex";
       document.getElementById("play-footer").hidden = state.isCompleted;
+      document.getElementById("result-footer").hidden = !state.isCompleted;
+      document.querySelector(".app-container").classList.toggle("is-completed", state.isCompleted);
 
       // Render Board Columns
       renderBoard(edition);
@@ -1533,7 +1580,10 @@
       // Hint button disabled state
       const btnShowPair = document.getElementById("btn-show-pair");
       if (btnShowPair) {
-        btnShowPair.disabled = (matchedCount >= 4) || isProcessing || state.isCompleted;
+        const hintUsed = state.assistedPairs >= 1;
+        btnShowPair.disabled = hintUsed || (matchedCount >= 4) || isProcessing || state.isCompleted;
+        document.getElementById("hint-label").textContent = hintUsed ? "संकेत इस्तेमाल हो गया" : "संकेत लें · 1 उपलब्ध";
+        btnShowPair.title = hintUsed ? "इस दौर का संकेत इस्तेमाल हो चुका है" : "एक संकेत: एक जोड़ी दिखाएँ (15 अंक कम होंगे)";
       }
 
       // Draw SVG Connection Lines
@@ -1904,7 +1954,7 @@
 
     /* Hint: "एक जोड़ी दिखाएँ" */
     function handleShowPairHelp() {
-      if (isProcessing || state.isCompleted) return;
+      if (isProcessing || state.isCompleted || state.assistedPairs >= 1) return;
 
       const edition = getCurrentEdition();
       const unmatchedPair = edition.pairs.find(p => !state.matchedPairIds.includes(p.id));
@@ -2116,7 +2166,8 @@
     window.openHelpModal = openRulesModal;
 
     /* DOM Ready */
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
+      await window.gameIntroReady;
       currentDayId = getDayFromUrl();
       loadEditionState(currentDayId);
 

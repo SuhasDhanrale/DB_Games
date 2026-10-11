@@ -1,0 +1,58 @@
+.game-intro { box-sizing: border-box; width: 100%; max-width: 480px; margin: auto; padding: 22px 22px 18px; color: #282a26; background: #faf9f4; font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif; line-height: 1.5; }
+.gi-heading p { margin: 0 0 4px; color: #65745e; font-size: 12px; font-weight: 700; }
+.gi-heading h2 { margin: 0; font-size: 27px; font-weight: 800; line-height: 1.3; }
+.gi-demo { position: relative; margin: 17px 0; padding: 12px 12px 10px; border: 1px solid #dedfd4; border-radius: 16px; background: #f0f1e7; text-align: center; }
+.gi-example { display: block; font-size: 10px; color: #6b6e62; }
+.gi-demo svg { display: block; width: 100%; height: 135px; }
+.gi-demo figcaption { margin-top: 4px; font-size: 12px; font-weight: 600; }
+.gi-rules { display: grid; gap: 15px; margin: 0; padding: 0; list-style: none; }
+.gi-rules li { display: flex; align-items: flex-start; gap: 12px; }
+.gi-number { display: grid; flex: 0 0 27px; height: 27px; place-items: center; border: 1px solid #d3dbcb; border-radius: 50%; background: #e9eddf; color: #506448; font-size: 12px; font-weight: 800; }
+.gi-rules h3 { margin: 0 0 3px; font-size: 15px; font-weight: 750; }
+.gi-rules p { margin: 0; font-size: 13px; color: #565b51; line-height: 1.65; }
+.gi-footer { margin-top: 22px; }
+.gi-play { display: block; width: 100%; min-height: 48px; padding: 10px 16px; border: 0; border-radius: 12px; color: white; background: #496142; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.gi-play:hover { background: #3e5437; }
+.gi-play:focus-visible { outline: 3px solid #a36d35; outline-offset: 4px; }
+.gi-footer p { margin: 10px 0 0; font-size: 11px; text-align: center; color: #6b6e62; }
+.gi-tiles { display: flex; justify-content: center; gap: 12px; padding: 25px 0 18px; }
+.gi-tiles > div { flex: 1; max-width: 84px; }
+.gi-tile { display: grid; width: 52px; height: 56px; margin: 0 auto 8px; place-items: center; border-radius: 7px; color: white; font-size: 27px; font-weight: 700; animation: gi-flip 4s ease-in-out infinite; }
+.gi-tile--0 { background: #496e43; }
+.gi-tile--1 { background: #987420; animation-delay: .3s; }
+.gi-tile--2 { background: #686e70; animation-delay: .6s; }
+.gi-tiles small, .gi-thought small { font-size: 10px; }
+.gi-thought { padding: 16px 8px; }
+.gi-paper { padding: 12px; border: 1px solid #ded9c9; border-radius: 8px; background: #fffdf5; font-size: 13px; }
+.gi-paper > span { color: #987420; }
+.gi-options { display: flex; justify-content: center; gap: 9px; margin: 12px 0 7px; }
+.gi-options > span { padding: 6px 13px; border: 1px solid #d6d9cf; border-radius: 6px; background: #faf9f4; font-size: 19px; }
+.gi-options > .gi-choice { background: #dce6d5; border-color: #7a9270; animation: gi-select 4s ease-in-out infinite; }
+.gi-choice b { font-size: 13px; color: #496e43; }
+.gi-pairs { position: relative; height: 135px; margin: 6px auto; max-width: 320px; }
+.gi-pairs svg { position: absolute; inset: 0; height: 100%; }
+.gi-pair { position: absolute; width: 31%; padding: 9px 3px; border: 1px solid #cbd5c7; border-radius: 8px; background: #fffdf5; font-size: 13px; }
+.gi-pair--a, .gi-pair--b { top: 14%; background: #e0ebda; }
+.gi-pair--c, .gi-pair--d { top: 57%; }
+.gi-pair--a, .gi-pair--c { left: 0; }
+.gi-pair--b, .gi-pair--d { right: 0; }
+.gi-check { color: #496e43; animation: gi-select 4s ease-in-out infinite; }
+.gi-connection { animation: gi-connect 4s ease-in-out infinite; }
+.gi-striker { animation: gi-strike 4s ease-in-out infinite; }
+.gi-coin { animation: gi-pocket 4s ease-in-out infinite; }
+.gi-pull { animation: gi-select 4s ease-in-out infinite; }
+.gi-ball { animation: gi-delivery 4s ease-in-out infinite; }
+.gi-placement { animation: gi-select 4s ease-in-out infinite; }
+.gi-cricket-labels { display: flex; justify-content: space-around; font-size: 10px; margin-top: -3px; }
+.gi-dialog { box-sizing: border-box; width: min(100% - 24px, 460px); max-height: calc(100dvh - 24px); margin: auto; padding: 0; overflow-y: auto; border: 1px solid #dedfd4; border-radius: 20px; background: #faf9f4; }
+.gi-dialog::backdrop { background: rgb(25 32 22 / 60%); }
+.gi-help { position: fixed; top: max(8px, env(safe-area-inset-top)); right: max(8px, calc((100vw - 430px) / 2 + 8px)); z-index: 100; padding: 6px 10px; border: 1px solid #d3dbcb; border-radius: 8px; color: #496142; background: #faf9f4; font: 600 12px 'Noto Sans Devanagari', system-ui, sans-serif; cursor: pointer; }
+.game-area:has(> .game-intro) { overflow-y: auto !important; background: #faf9f4; }
+@keyframes gi-flip { 0%, 12% { transform: rotateX(70deg); opacity: .5; } 25%, 100% { transform: rotateX(0); opacity: 1; } }
+@keyframes gi-select { 0%, 15%, 100% { opacity: .4; } 35%, 85% { opacity: 1; } }
+@keyframes gi-connect { 0%, 10% { stroke-dashoffset: 120; } 50%, 90% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 120; } }
+@keyframes gi-strike { 0%, 35%, 100% { transform: translate(0, 0); } 60%, 90% { transform: translate(19px, -31px); } }
+@keyframes gi-pocket { 0%, 48%, 100% { transform: translate(0, 0); opacity: 1; } 72%, 90% { transform: translate(31px, -47px); opacity: .15; } }
+@keyframes gi-delivery { 0%, 100% { transform: translateY(0); } 55%, 85% { transform: translateY(51px); } }
+@media (max-width: 360px), (max-height: 720px) { .game-intro { padding: 16px 16px 14px; } .gi-demo { margin: 12px 0; } .gi-demo svg, .gi-pairs { height: 110px; } .gi-rules { gap: 11px; } .gi-footer { margin-top: 16px; } }
+@media (prefers-reduced-motion: reduce) { .game-intro *, .game-intro *::before, .game-intro *::after { animation: none !important; } }

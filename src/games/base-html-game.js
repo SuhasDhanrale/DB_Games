@@ -1,15 +1,27 @@
 import { BaseGame } from './base-game.js';
 import { gameUrl } from './game-assets.js';
+import { needsIntro, renderGameIntro } from '../ui/game-intro.js';
+import { getLang } from '../i18n/index.js';
 
 export class HtmlIframeGame extends BaseGame {
   constructor(container, config) {
-    super(container, config);
+    // These games show their own results; the shell only records the score.
+    super(container, { ownsResultScreen: true, ...config });
   }
 
   async init() {
     await super.init();
-    this.start();
-    this.onStart();
+    const launch = () => {
+      this._introCleanup?.();
+      this._introCleanup = null;
+      this.start();
+      this.onStart();
+    };
+    if (!needsIntro(this.id)) launch();
+    else {
+      this._introCleanup = renderGameIntro(this.getGameArea(), this.id, { onPlay: launch, lang: getLang() });
+      this._cleanupFns.push(() => this._introCleanup?.());
+    }
   }
 
   onStart() {
@@ -59,14 +71,17 @@ export class HtmlIframeGame extends BaseGame {
 
   onRulesClick() {
     const area = this.getGameArea();
+    if (this._introCleanup) {
+      area.querySelector('.gi-play')?.focus();
+      return;
+    }
     const iframe = area.querySelector('iframe');
     if (iframe) {
       try {
         if (iframe.contentWindow) {
-          iframe.contentWindow.postMessage({ type: 'OPEN_RULES' }, '*');
           if (typeof iframe.contentWindow.openHelpModal === 'function') {
             iframe.contentWindow.openHelpModal();
-          }
+          } else iframe.contentWindow.postMessage({ type: 'OPEN_RULES' }, window.location.origin);
         }
       } catch (e) {
         console.warn("Could not trigger rules in iframe:", e);

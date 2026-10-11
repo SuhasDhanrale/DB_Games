@@ -418,57 +418,6 @@ ul, ol { list-style: none; }
   pointer-events: none;
 }
 
-.loading-logo {
-  text-align: center;
-}
-
-.loading-icon {
-  font-size: 3.5rem;
-  margin-bottom: var(--space-4);
-  animation: loading-bounce 1.2s var(--ease-spring) infinite;
-}
-
-@keyframes loading-bounce {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50%      { transform: translateY(-12px) scale(1.05); }
-}
-
-.loading-title {
-  font-size: var(--text-3xl);
-  font-weight: var(--weight-black);
-  background: var(--gradient-brand);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: -0.02em;
-}
-
-.loading-subtitle {
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-  font-weight: var(--weight-medium);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-top: var(--space-1);
-}
-
-.loading-bar-track {
-  width: 140px;
-  height: 4px;
-  background: var(--bg-surface-raised);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-
-.loading-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: var(--gradient-brand);
-  border-radius: var(--radius-full);
-  transition: width 0.3s var(--ease-out);
-}
-
-
 /* ---------- Utility Classes ---------- */
 .sr-only {
   position: absolute;

@@ -1,0 +1,1 @@
+import{n as e}from"./game-family-Y3yzjIYT.js";e(`wordal`).then(window.finishGameIntro);

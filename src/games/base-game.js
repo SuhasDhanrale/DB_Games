@@ -11,7 +11,8 @@ import { updateStreak, recordGamePlay, markGamePlayedToday } from '../systems/pr
 import { checkAchievements, shareResult } from '../systems/engagement.js';
 import { getProgression } from '../systems/progression.js';
 import { renderGameOver } from '../ui/components.js';
-import { t } from '../i18n/index.js';
+import { t, getLang } from '../i18n/index.js';
+import '../styles/game-family.css';
 
 /**
  * @abstract
@@ -65,18 +66,26 @@ export class BaseGame {
    * @abstract
    */
   async init() {
-    // Render the game header (back button + title + rules + score)
+    const themes = { neeti: 'niti', superover: 'cricket', carrom_puzzles: 'carrom' };
+    this.theme = themes[this.id] || this.id;
+    this.container.classList.add('game-player');
+    this.container.dataset.gameTheme = this.theme;
+    const isHindi = getLang() === 'hi';
+    // Every game has the same navigation; counters belong to the game board.
     this.container.innerHTML = `
-      <div class="screen-header">
-        <button class="screen-header__back" id="game-back-btn" title="वापस">←</button>
-        <h1 class="screen-header__title">${this.icon} ${t(this.titleKey)}</h1>
-        <div class="screen-header__right">
-          <button type="button" class="screen-header__help-btn" id="game-rules-btn" title="${t('common.rules')}">ℹ️ ${t('common.rules')}</button>
-          <div class="screen-header__action" id="game-score-display">
-            ${t('common.score')}: <strong id="game-score-value">0</strong>
-          </div>
+      <header class="family-header">
+        <button type="button" class="family-header__back" id="game-back-btn" aria-label="${t('common.back')}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h12"/></svg>
+        </button>
+        <div class="family-header__identity">
+          <span class="family-header__brand">${isHindi ? 'भास्कर खेल' : 'Bhaskar Games'}</span>
+          <h1 class="family-header__title">${t(this.titleKey)}</h1>
         </div>
-      </div>
+        <button type="button" class="family-header__help" id="game-rules-btn" aria-label="${isHindi ? 'कैसे खेलें' : 'How to play'}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.3 2.3 0 0 1 4.5.8c0 1.5-2.3 1.5-2.3 3M12 16h.01"/></svg>
+          ${isHindi ? 'कैसे खेलें' : 'How to play'}
+        </button>
+      </header>
     `;
 
     this.container.appendChild(this._gameArea);
@@ -187,6 +196,7 @@ export class BaseGame {
       isNewBest,
       rank,
       gameTitle: t(this.titleKey),
+      theme: this.theme,
       onPlayAgain: () => {
         this._gameArea.innerHTML = '';
         this.start();

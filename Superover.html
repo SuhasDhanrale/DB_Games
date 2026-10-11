@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" data-game-theme="cricket">
 
 <head>
     <meta charset="UTF-8">
+    <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
+    <script type="module">
+        import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+        prepareStandaloneIntro('cricket').then(window.finishGameIntro);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>सुपर ओवर | दैनिक भास्कर</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -802,6 +807,7 @@
         .modal-card { max-height:90dvh; overflow-y:auto; }
         @media(max-height:650px) { .intro-screen { gap:16px; } .team-mark { width:66px; height:44px; } .choice-card { padding:14px 8px; } .game-layout { gap:5px; } .hud-strip { padding:8px 0 4px; } .hud-val { font-size:24px; } }
     </style>
+  <link rel="stylesheet" href="./src/styles/game-family.css">
 </head>
 
 <body>
@@ -809,7 +815,7 @@
     <canvas id="confettiCanvas"></canvas>
 
     <section class="intro-screen" id="introScreen" aria-labelledby="introTitle">
-        <div class="intro-heading"><h1 id="introTitle">सुपर ओवर</h1><p>एशियाई खेल 2026 · छह गेंदों की अभ्यास चुनौती</p></div>
+        <div class="intro-heading"><h1 id="introTitle">आज का मुकाबला</h1><p>एशियाई खेल 2026 · छह गेंदों की अभ्यास चुनौती</p></div>
         <div class="match-picker" role="group" aria-label="मुकाबला चुनें">
             <button type="button" data-match="asian-final" aria-pressed="true">भारत–पाकिस्तान <small>फाइनल · 3 अक्टूबर</small></button>
             <button type="button" data-match="asian-semi" aria-pressed="false">भारत–श्रीलंका <small>सेमीफाइनल · 1 अक्टूबर</small></button>
@@ -824,7 +830,7 @@
             <button class="choice-card" data-role="BATTING" aria-pressed="false"><strong>बल्लेबाजी</strong><span class="choice-runs"><b>18</b> रन</span><small>लक्ष्य पाएँ</small></button>
             <button class="choice-card choice-card--bowling" data-role="BOWLING" aria-pressed="false"><strong>गेंदबाजी</strong><span class="choice-runs"><b>15</b> रन</span><small>लक्ष्य बचाएँ</small></button>
         </div>
-        <div class="intro-start"><button id="confirmStartBtn" type="button" disabled>शुरू करें →</button><p class="intro-footnote">भारत की ओर से खेलें · 18/15 रन अभ्यास के लक्ष्य हैं, असली मैच के आखिरी ओवर का समीकरण नहीं।</p></div>
+        <div class="intro-start"><button id="confirmStartBtn" class="family-primary" type="button" disabled>शुरू करें →</button><p class="intro-footnote">भारत की ओर से खेलें · 18/15 रन अभ्यास के लक्ष्य हैं, असली मैच के आखिरी ओवर का समीकरण नहीं।</p></div>
     </section>
     <div class="game-layout" id="matchScreen" hidden>
         <div class="hud-strip">
@@ -871,7 +877,7 @@
                 <div class="rule-card"><div class="rule-icon">⑥</div><div><div class="rule-title">बस एक ओवर</div><div class="rule-desc">छह गेंदें मिलेंगी। दो विकेट गिरने पर पारी खत्म हो जाएगी। ऊपर रन और नीचे बची हुई गेंदें देखें।</div></div></div>
             </div>
             <div class="modal-footer">
-                <button class="btn-modal-primary" id="startMatchBtn">समझ गए</button>
+                <button class="btn-modal-primary family-primary" id="startMatchBtn">समझ गए</button>
             </div>
         </div>
     </div>
@@ -923,8 +929,8 @@
                 <div class="match-context result-history"><strong>असली मैच</strong><p id="resActualMatch"></p><a id="resMatchStory" href="./news.html?article=asian-final&game=superover">मुकाबले की खबर पढ़ें →</a><a id="resMatchSource" target="_blank" rel="noopener noreferrer">आधिकारिक स्कोर देखें ↗</a></div>
             </div>
             <div class="modal-footer">
-                <button class="btn-modal-secondary" id="resChangeModeBtn">फिर से चुनें</button>
-                <button class="btn-modal-primary" id="resPlayAgainBtn">फिर से खेलें 🏏</button>
+                <button class="btn-modal-secondary family-secondary" id="resChangeModeBtn">फिर से चुनें</button>
+                <button class="btn-modal-primary family-primary" id="resPlayAgainBtn">फिर से खेलें 🏏</button>
             </div>
         </div>
     </div>
@@ -3651,7 +3657,8 @@
         window.addEventListener('orientationchange', resizeCanvas);
         new ResizeObserver(() => { if (matchStarted) resizeCanvas(); }).observe(document.getElementById('boardWrapper'));
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await window.gameIntroReady;
             resizeCanvas();
             initFieldRadar();
             requestAnimationFrame(gameLoop);

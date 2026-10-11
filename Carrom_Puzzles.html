@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" data-game-theme="carrom">
 
 <head>
     <meta charset="UTF-8">
+    <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
+    <script type="module">
+        import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+        prepareStandaloneIntro('carrom').then(window.finishGameIntro);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>कैरम पहेलियाँ | Carrom Puzzles - Dainik Bhaskar Game Lab</title>
 
@@ -348,6 +353,7 @@
             transform: scale(0.96);
         }
     </style>
+  <link rel="stylesheet" href="./src/styles/game-family.css">
 </head>
 
 <body>
@@ -356,7 +362,7 @@
              1. TOP SECTION: Centered Objective Banner (No 'Star 1')
              ============================================================ -->
         <header class="top-section">
-            <div class="objective-banner" id="objective-banner">
+            <div class="objective-banner family-note" id="objective-banner">
                 <span class="objective-icon">🎯</span>
                 <span class="objective-main-text" id="objective-display">सफेद गोटी पॉकेट में डालें</span>
             </div>
@@ -379,7 +385,7 @@
              3. BOTTOM SECTION: Lower Centered Retry Button (Near Thumb)
              ============================================================ -->
         <footer class="bottom-section">
-            <button id="retry-btn" class="btn-retry" type="button" title="स्तर पुनः प्रारंभ करें">
+            <button id="retry-btn" class="btn-retry family-primary" type="button" title="स्तर पुनः प्रारंभ करें">
                 <span class="btn-retry-icon">🔄</span>
                 <span class="btn-retry-text">पुनः प्रयास</span>
             </button>
@@ -394,7 +400,7 @@
             <div class="modal-icon-badge" id="modal-icon">🎉</div>
             <h2 id="modal-title" class="modal-title">शानदार शॉट!</h2>
             <div id="modal-desc" class="modal-desc">आपने लक्ष्य सफलतापूर्वक पूरा कर लिया!</div>
-            <button id="modal-btn" class="modal-btn" type="button">अगला स्तर ➡️</button>
+            <button id="modal-btn" class="modal-btn family-primary" type="button">अगला स्तर ➡️</button>
         </div>
     </div>
 
@@ -1306,8 +1312,10 @@
         // ============================================================
         // 14. INITIALIZE
         // ============================================================
-        loadLevel(0);
-        requestAnimationFrame(loop);
+        window.gameIntroReady.then(() => {
+            loadLevel(0);
+            requestAnimationFrame(loop);
+        });
     </script>
 </body>
 

@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" data-game-theme="niti">
 <head>
   <script src="./demo-session.js"></script>
   <meta charset="UTF-8">
+  <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
+  <script type="module">
+    import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+    prepareStandaloneIntro('niti').then(window.finishGameIntro);
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>आज की नीति · दैनिक भास्कर खेल | Aaj Ki Niti</title>
   <meta name="description" content="आज की नीति — शांत, दैनिक विचार पूर्ति खेल। एक विचार को पूरा करें, उसका गहरा अर्थ समझें और सुंदर विचार-कार्ड साझा करें।">
-  <meta name="theme-color" content="#F9F9F7">
+  <meta name="theme-color" content="#faf9f6">
 
   <!-- Google Fonts for Authentic Indian Editorial & Festive Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yatra+One&family=Martel:wght@600;700;800&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rozha+One&family=Yatra+One&family=Martel:wght@600;700;800&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <style>
     /* ============================================================
@@ -985,6 +990,7 @@
       display: none;
     }
   </style>
+  <link rel="stylesheet" href="./src/styles/game-family.css">
 </head>
 <body>
 
@@ -1006,7 +1012,7 @@
         </div>
 
         <!-- Central Thought Card -->
-        <article class="thought-card" id="thought-card" aria-label="आज का विचार">
+        <article class="thought-card family-panel" id="thought-card" aria-label="आज का विचार">
           <span class="thought-quote-mark" aria-hidden="true">“</span>
           
           <p class="thought-content" id="thought-text-container">
@@ -1040,7 +1046,7 @@
 
       <!-- Bottom Action Bar -->
       <div class="step-bottom-bar">
-        <button type="button" class="btn-main-action" id="btn-step1-action" disabled>
+        <button type="button" class="btn-main-action family-primary" id="btn-step1-action" disabled>
           <span id="btn-step1-label">उत्तर चुनें</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12"></polyline>
@@ -1101,7 +1107,7 @@
           </div>
 
           <!-- Primary Hero Share CTA: Opens Share Options Sheet -->
-          <button type="button" class="btn-share-hero" id="btn-share-primary">
+          <button type="button" class="btn-share-hero family-primary" id="btn-share-primary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="18" cy="5" r="3"></circle>
               <circle cx="6" cy="12" r="3"></circle>
@@ -1114,10 +1120,10 @@
 
           <!-- Navigation Row: Home & Next Edition -->
           <div class="dock-actions-row">
-            <button type="button" class="btn-dock-action" id="btn-go-home">
+            <button type="button" class="btn-dock-action family-secondary" id="btn-go-home">
               <span>🏠 मुख्य पृष्ठ</span>
             </button>
-            <button type="button" class="btn-dock-action is-next-pill" id="btn-go-next-edition">
+            <button type="button" class="btn-dock-action is-next-pill family-secondary" id="btn-go-next-edition">
               <span id="next-edition-label">अगला विचार (2) →</span>
             </button>
           </div>
@@ -1191,7 +1197,7 @@
         </button>
       </div>
 
-      <button type="button" class="share-sheet-cancel-btn" id="sheet-btn-cancel">बंद करें</button>
+      <button type="button" class="share-sheet-cancel-btn family-secondary" id="sheet-btn-cancel">बंद करें</button>
     </div>
   </div>
 
@@ -2733,7 +2739,8 @@
       /* ============================================================
          INITIALIZATION
          ============================================================ */
-      function init() {
+      async function init() {
+        await window.gameIntroReady;
         currentDayId = getInitialDayFromUrl();
         initEventListeners();
 

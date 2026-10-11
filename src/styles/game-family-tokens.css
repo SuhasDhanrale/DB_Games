@@ -1,0 +1,49 @@
+/* The home cards and game documents share one palette. */
+:root {
+  --family-paper: #faf9f6;
+  --family-surface: #fffefa;
+  --family-subtle: #f1efe8;
+  --family-ink: #252522;
+  --family-muted: #66645f;
+  --family-border: #d9d7d0;
+  --family-font: 'Inter', 'Noto Sans Devanagari', 'Nirmala UI', system-ui, sans-serif;
+  --family-radius: 16px;
+  --family-control-radius: 12px;
+  --family-shadow: 0 2px 5px rgba(40, 40, 30, .035);
+  --family-wordal-tint: #e5e0f0;
+  --family-wordal-ink: #403455;
+  --family-niti-tint: #f1dfbb;
+  --family-niti-ink: #624729;
+  --family-cricket-tint: #dce8d8;
+  --family-cricket-ink: #314e3c;
+  --family-carrom-tint: #f0dcd7;
+  --family-carrom-ink: #673e38;
+  --family-jodo-tint: #dce5f0;
+  --family-jodo-ink: #354960;
+}
+
+[data-game-theme="wordal"] {
+  --game-tint: var(--family-wordal-tint);
+  --game-ink: var(--family-wordal-ink);
+  --game-accent: #665477;
+}
+[data-game-theme="niti"] {
+  --game-tint: var(--family-niti-tint);
+  --game-ink: var(--family-niti-ink);
+  --game-accent: #806039;
+}
+[data-game-theme="cricket"] {
+  --game-tint: var(--family-cricket-tint);
+  --game-ink: var(--family-cricket-ink);
+  --game-accent: #526f5c;
+}
+[data-game-theme="carrom"] {
+  --game-tint: var(--family-carrom-tint);
+  --game-ink: var(--family-carrom-ink);
+  --game-accent: #89564d;
+}
+[data-game-theme="jodo"] {
+  --game-tint: var(--family-jodo-tint);
+  --game-ink: var(--family-jodo-ink);
+  --game-accent: #536b89;
+}

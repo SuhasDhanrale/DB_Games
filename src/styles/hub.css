@@ -1,4 +1,6 @@
-.hub-screen { display: flex; flex-direction: column; background: #faf9f6; container-type: inline-size; }
+@import './game-family-tokens.css';
+
+.hub-screen { display: flex; flex-direction: column; background: var(--family-paper); container-type: inline-size; }
 .bento-container { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; padding: calc(var(--safe-area-top) + 18px) 16px 16px; }
 .bento-header { display: flex; flex-shrink: 0; align-items: center; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #d9d7d0; }
 .hub-tagline { flex: 1; min-width: 0; color: #252522; font-size: clamp(16px, 4.5cqw, 20px); font-weight: 750; line-height: 1.5; text-wrap: balance; }
@@ -22,11 +24,11 @@
 .game-bento-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; padding: 14px; border: 1px solid rgba(40,40,30,.08); border-radius: 16px; overflow: hidden; text-align: left; flex: 1; min-width: 0; min-height: 0; isolation: isolate; transition: transform .15s; }
 .game-bento-card:active { transform: scale(.98); }
 .game-bento-card:focus-visible, .hub-icon-circle-btn:focus-visible, .hub-replay:focus-visible { outline: 3px solid #282824; outline-offset: 3px; }
-.card-game-1 { background: #e5e0f0; --card-ink: #403455; }
-.card-game-2 { background: #f1dfbb; --card-ink: #624729; }
-.card-game-3 { background: #dce8d8; --card-ink: #314e3c; }
-.card-game-4 { background: #f0dcd7; --card-ink: #673e38; }
-.card-game-5 { background: #dce5f0; --card-ink: #354960; }
+.card-game-1 { background: var(--family-wordal-tint); --card-ink: var(--family-wordal-ink); }
+.card-game-2 { background: var(--family-niti-tint); --card-ink: var(--family-niti-ink); }
+.card-game-3 { background: var(--family-cricket-tint); --card-ink: var(--family-cricket-ink); }
+.card-game-4 { background: var(--family-carrom-tint); --card-ink: var(--family-carrom-ink); }
+.card-game-5 { background: var(--family-jodo-tint); --card-ink: var(--family-jodo-ink); }
 .card-bottom-info { position: relative; z-index: 2; width: 100%; }
 .card-game-title { display: block; color: var(--card-ink); font-size: clamp(15px, 4.4cqw, 19px); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
 .card-description { display: block; margin-top: 3px; color: var(--card-ink); font-size: 11px; line-height: 1.5; }

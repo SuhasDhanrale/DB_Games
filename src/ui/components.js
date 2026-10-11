@@ -80,8 +80,12 @@ export function initModalSystem() {
  * Open a modal.
  * @param {{ title: string, content: string|HTMLElement, onClose?: Function }} opts
  */
-export function openModal({ title, content, onClose }) {
+export function openModal({ title, content, onClose, theme }) {
   if (!modalOverlay) return;
+
+  const modal = modalOverlay.querySelector('#global-modal');
+  if (theme) modal.dataset.gameTheme = theme;
+  else delete modal.dataset.gameTheme;
 
   document.getElementById('modal-title').textContent = title;
   const body = document.getElementById('modal-body');
@@ -213,6 +217,7 @@ export function renderGameOver({
   isNewBest,
   rank,
   gameTitle,
+  theme,
   onPlayAgain,
   onHome,
   onShare,
@@ -260,7 +265,7 @@ export function renderGameOver({
     </div>
   `;
 
-  openModal({ title: '', content });
+  openModal({ title: '', content, theme });
 
   // Attach listeners
   content.querySelector('#go-play-again')?.addEventListener('click', () => {

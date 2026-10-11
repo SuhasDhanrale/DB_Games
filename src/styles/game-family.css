@@ -1,0 +1,287 @@
+@import './game-family-tokens.css';
+
+/* Shared shell. Game counters stay next to their own boards. */
+.game-player {
+  background: var(--family-paper);
+  overflow: hidden;
+  font-family: var(--family-font);
+}
+.family-header {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 12px;
+  padding: calc(var(--safe-area-top, 0px) + 12px) 16px 12px;
+  background: var(--family-paper);
+  border-bottom: 1px solid var(--family-border);
+  box-shadow: inset 0 3px var(--game-tint);
+  color: var(--game-ink);
+}
+.family-header__identity { flex: 1; min-width: 0; }
+.family-header__brand {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 10px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--family-muted);
+}
+.family-header__title { margin: 0; font-size: 18px; line-height: 1.45; font-weight: 800; }
+.family-header__back, .family-header__help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 6px;
+  min-height: 44px;
+  border: 1px solid var(--family-border);
+  background: var(--family-surface);
+  border-radius: var(--family-control-radius);
+  color: var(--game-ink);
+  font: inherit;
+  cursor: pointer;
+}
+.family-header__back { width: 44px; }
+.family-header__help { padding: 0 10px; font-size: 12px; font-weight: 700; }
+.family-header svg { width: 18px; height: 18px; }
+.family-header button:active { background: var(--game-tint); }
+.family-header button:focus-visible { outline: 3px solid var(--game-accent); outline-offset: 2px; }
+.game-player .game-area { min-height: 0; }
+.game-player iframe { display: block; flex: 1; min-height: 0; background: var(--family-paper); }
+
+/* The first-play walkthrough shares the game's colour and common controls. */
+:is(.game-player, html[data-game-theme]) .game-intro { background: var(--family-paper); color: var(--family-ink); font-family: var(--family-font); }
+:is(.game-player, html[data-game-theme]) .gi-heading :is(p, h2) { color: var(--game-ink); }
+:is(.game-player, html[data-game-theme]) .gi-demo { background: var(--game-tint); border-color: transparent; border-radius: var(--family-radius); }
+:is(.game-player, html[data-game-theme]) .gi-number { background: var(--game-tint); border-color: transparent; color: var(--game-ink); }
+:is(.game-player, html[data-game-theme]) .gi-play { background: var(--game-accent); border-radius: var(--family-control-radius); }
+:is(.game-player, html[data-game-theme]) .gi-play:hover { background: var(--game-ink); }
+:is(.game-player, html[data-game-theme]) .gi-play:focus-visible { outline-color: var(--game-accent); }
+html[data-game-theme] .gi-dialog { background: var(--family-paper); border-color: var(--family-border); border-radius: var(--family-radius); }
+html[data-game-theme] .gi-help { background: var(--family-surface); border-color: var(--family-border); color: var(--game-ink); min-height: 44px; }
+.game-player .game-area:has(> .game-intro) { background: var(--family-paper); }
+
+/* Loaded after each game's local styles. Semantic gameplay colours are retained. */
+html[data-game-theme] {
+  --color-bg: var(--family-paper);
+  --bg-app: var(--family-paper);
+  --color-surface: var(--family-surface);
+  --bg-surface: var(--family-surface);
+  --color-surface-soft: var(--family-subtle);
+  --color-surface-subtle: var(--family-subtle);
+  --color-surface-warm: var(--family-surface);
+  --color-surface-hover: var(--family-subtle);
+  --text-main: var(--family-ink);
+  --text-primary: var(--family-ink);
+  --text-muted: var(--family-muted);
+  --text-secondary: var(--family-muted);
+  --text-subtle: #77736b;
+  --text-tertiary: #77736b;
+  --color-primary: var(--game-accent);
+  --color-primary-hover: var(--game-ink);
+  --color-primary-dark: var(--game-ink);
+  --color-primary-light: var(--game-tint);
+  --color-primary-subtle: var(--game-tint);
+  --border-active: var(--game-accent);
+  --border-subtle: var(--family-border);
+  --border-medium: #bcb9b0;
+  --font-stack: var(--family-font);
+  --font-family: var(--family-font);
+  --shadow-sm: var(--family-shadow);
+  --shadow-md: var(--family-shadow);
+  --shadow-lg: 0 12px 32px rgba(40, 40, 30, .12);
+  --shadow-focus: 0 0 0 3px var(--game-tint);
+  --radius-sm: 8px;
+  --radius-md: var(--family-control-radius);
+  --radius-lg: var(--family-radius);
+  --radius-xl: var(--family-radius);
+}
+html[data-game-theme] body {
+  background: var(--family-paper);
+  color: var(--family-ink);
+  font-family: var(--family-font);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+html[data-game-theme] :is(button, input) { font-family: var(--family-font); }
+html[data-game-theme] :is(button, a, input):focus-visible {
+  outline: 3px solid var(--game-accent);
+  outline-offset: 3px;
+}
+.top-accent-bar { display: none; }
+html[data-game-theme] :is(.app-container, .game-layout, .carrom-layout) {
+  padding: 14px 16px max(12px, env(safe-area-inset-bottom));
+}
+
+/* One panel and action vocabulary, shared by help, news and results. */
+.family-panel {
+  background: var(--family-surface);
+  border: 1px solid var(--family-border);
+  border-radius: var(--family-radius);
+  box-shadow: var(--family-shadow);
+}
+.family-note {
+  background: var(--game-tint);
+  color: var(--game-ink);
+  border: 1px solid transparent;
+  border-radius: var(--family-control-radius);
+  box-shadow: none;
+}
+.family-primary, .family-secondary {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-radius: var(--family-control-radius);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background .15s, transform .15s;
+}
+.family-primary { background: var(--game-accent); color: #fff; }
+.family-secondary { background: var(--family-surface); border-color: var(--family-border); color: var(--game-ink); }
+.family-primary:hover:not(:disabled), .family-primary:active:not(:disabled) {
+  background: var(--game-ink);
+  box-shadow: none;
+}
+.family-secondary:hover:not(:disabled), .family-secondary:active:not(:disabled) {
+  background: var(--game-tint);
+  box-shadow: none;
+}
+.family-primary:disabled, .family-secondary:disabled {
+  background: var(--family-subtle);
+  color: var(--family-muted);
+  border-color: var(--family-border);
+  box-shadow: none;
+  cursor: default;
+  transform: none;
+}
+html[data-game-theme] :is(.modal-card, .rules-card, .share-sheet-modal, .article-sheet) {
+  background: var(--family-surface);
+  border: 1px solid var(--family-border);
+  border-radius: var(--family-radius);
+  box-shadow: 0 12px 32px rgba(40, 40, 30, .14);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+html[data-game-theme] :is(.modal-title, .rules-title, .share-sheet-title, .result-minimal-title) {
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 800;
+  color: var(--game-ink);
+}
+html[data-game-theme] :is(.modal-close-btn, .btn-close-sheet) {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--family-control-radius);
+  color: var(--game-ink);
+}
+html[data-game-theme] :is(.modal-backdrop, .modal-overlay, .rules-modal, .article-modal, .share-sheet-backdrop) {
+  background: rgba(37, 37, 34, .38);
+  backdrop-filter: blur(3px);
+}
+
+/* Shabd: purple clue, paper tiles, consistent keyboard and results. */
+[data-game-theme="wordal"] .app-container { height: 100dvh; max-height: 100dvh; }
+[data-game-theme="wordal"] .editorial-clue-card { padding: 10px 12px; margin-bottom: 10px; border-left-width: 1px; }
+[data-game-theme="wordal"] :is(.clue-badge, .clue-topic) { color: var(--game-ink); }
+[data-game-theme="wordal"] .clue-title { line-height: 1.5; }
+[data-game-theme="wordal"] .clue-attempt-pill { background: var(--family-surface); color: var(--game-ink); border: 1px solid var(--game-accent); }
+[data-game-theme="wordal"] .clue-tag-row { flex-wrap: wrap; gap: 2px 8px; }
+[data-game-theme="wordal"] #game-board { max-width: min(280px, calc((100dvh - 265px) * .82)); gap: 5px; }
+[data-game-theme="wordal"] .tile { border-width: 1px; border-radius: 8px; background: var(--family-surface); }
+[data-game-theme="wordal"] .key-btn { height: 44px; border-radius: 8px; box-shadow: none; }
+[data-game-theme="wordal"] .keyboard-row { gap: 4px; margin-bottom: 4px; }
+[data-game-theme="wordal"] .result-hero-card::before { background: var(--game-accent); height: 3px; }
+[data-game-theme="wordal"] .result-word-title { color: var(--game-ink); }
+[data-game-theme="wordal"] :is(.result-meaning-box, .news-snippet-box) { background: var(--family-subtle); border-color: var(--family-border); border-left-color: var(--game-accent); border-radius: var(--family-control-radius); }
+
+/* Super Over: sage selection and counters; the field keeps its own artwork. */
+[data-game-theme="cricket"] .intro-screen { padding: 16px; gap: 16px; width: 100%; max-width: 480px; }
+[data-game-theme="cricket"] .intro-heading { padding: 12px; background: var(--game-tint); border-radius: var(--family-control-radius); text-align: left; }
+[data-game-theme="cricket"] .intro-heading h1 { font-size: 19px; font-weight: 800; line-height: 1.5; margin-bottom: 3px; color: var(--game-ink); }
+[data-game-theme="cricket"] .intro-heading p { color: var(--game-ink); }
+[data-game-theme="cricket"] .match-picker button { background: var(--family-surface); border-color: var(--family-border); color: var(--family-ink); }
+[data-game-theme="cricket"] .match-picker button[aria-pressed="true"] { background: var(--game-tint); border-color: var(--game-accent); color: var(--game-ink); }
+[data-game-theme="cricket"] .match-context { background: var(--family-surface); border-color: var(--family-border); }
+[data-game-theme="cricket"] .match-context a { color: var(--game-ink); }
+[data-game-theme="cricket"] .intro-versus strong { color: var(--game-accent); font-size: 28px; font-style: normal; }
+[data-game-theme="cricket"] .choice-card { padding: 14px 8px; border: 1px solid var(--family-border); outline: none; background: var(--family-surface); border-radius: var(--family-radius); box-shadow: none; }
+[data-game-theme="cricket"] .choice-card:hover, [data-game-theme="cricket"] .choice-card[aria-pressed="true"] { border-color: var(--game-accent); background: var(--game-tint); }
+[data-game-theme="cricket"] .choice-runs, [data-game-theme="cricket"] .choice-card--bowling .choice-runs { color: var(--game-ink); }
+[data-game-theme="cricket"] .choice-runs b { font-size: 38px; }
+[data-game-theme="cricket"] #confirmStartBtn { background: var(--game-accent); box-shadow: none; font-size: 15px; }
+[data-game-theme="cricket"] #confirmStartBtn:disabled { background: var(--family-subtle); color: var(--family-muted); }
+[data-game-theme="cricket"] .hud-strip { background: var(--game-tint); border: 1px solid transparent; box-shadow: none; }
+[data-game-theme="cricket"] .hud-card { background: transparent; }
+[data-game-theme="cricket"] .hud-title, [data-game-theme="cricket"] .hud-val { color: var(--game-ink); }
+[data-game-theme="cricket"] .ball-badge.current { background: var(--game-tint); border-color: var(--game-accent); color: var(--game-ink); }
+[data-game-theme="cricket"] .gesture-hint-pill { color: var(--family-muted); }
+[data-game-theme="cricket"] .rule-card { background: var(--family-paper); border-radius: var(--family-control-radius); }
+[data-game-theme="cricket"] .rule-icon { background: var(--game-tint); box-shadow: none; }
+[data-game-theme="cricket"] .modal-header, #resultModal[data-outcome] .modal-header { background: var(--game-tint); }
+[data-game-theme="cricket"] .modal-subtitle { color: var(--game-ink); }
+
+/* Niti: the same controls surround the thought and share-card studio. */
+[data-game-theme="niti"] .thought-category-pill { align-self: stretch; padding: 10px 12px; border-radius: var(--family-control-radius); color: var(--game-ink); }
+[data-game-theme="niti"] .thought-card { padding: 20px 18px; border-width: 1px; }
+[data-game-theme="niti"] .thought-card::before { background: var(--game-accent); height: 3px; }
+[data-game-theme="niti"] .thought-quote-mark { color: var(--game-accent); }
+[data-game-theme="niti"] .thought-blank-slot.is-empty { background: var(--game-tint); border-bottom-color: var(--game-accent); color: var(--game-ink); }
+[data-game-theme="niti"] .opt-card-btn { border-width: 1px; box-shadow: none; min-height: 54px; }
+[data-game-theme="niti"] .opt-card-btn.is-selected { box-shadow: none; }
+[data-game-theme="niti"] .meaning-reveal-box { background: var(--family-subtle); border-color: var(--family-border); border-left-color: var(--game-accent); }
+[data-game-theme="niti"] .meaning-label { color: var(--game-ink); }
+[data-game-theme="niti"] .btn-main-action.is-goto-card { background: var(--game-accent); box-shadow: none; animation: none; }
+[data-game-theme="niti"] .theme-tab-btn.is-active { background: var(--game-tint); border-color: var(--game-accent); color: var(--game-ink); box-shadow: none; }
+[data-game-theme="niti"] .card-studio-dock { background: var(--family-paper); border-color: var(--family-border); box-shadow: none; }
+[data-game-theme="niti"] .btn-share-hero { background: var(--game-accent); box-shadow: none; }
+[data-game-theme="niti"] .btn-share-hero:hover { background: var(--game-ink); box-shadow: none; }
+[data-game-theme="niti"] .btn-dock-action.is-next-pill { background: var(--game-tint); border-color: var(--family-border); color: var(--game-ink); }
+
+/* Carrom: a matte objective, restrained board frame and familiar retry. */
+[data-game-theme="carrom"] .objective-banner { padding: 12px; justify-content: flex-start; }
+[data-game-theme="carrom"] .objective-main-text { color: var(--game-ink); font-size: 13px; font-weight: 700; }
+[data-game-theme="carrom"] #game-container { border-color: #795c43; border-width: 2px; border-radius: var(--family-radius); box-shadow: 0 5px 14px rgba(45, 26, 17, .12); }
+[data-game-theme="carrom"] input[type=range]::-webkit-slider-thumb { border-color: var(--game-accent); box-shadow: var(--family-shadow); }
+[data-game-theme="carrom"] .btn-retry { min-width: 180px; }
+[data-game-theme="carrom"] .modal-icon-badge { background: var(--game-tint); box-shadow: none; }
+
+/* Jodo: keep pair colours and drag feedback within the paper card system. */
+[data-game-theme="jodo"] .app-container { min-height: 100dvh; }
+[data-game-theme="jodo"] .info-bar:not(.has-error) { background: var(--game-tint); border-color: transparent; }
+[data-game-theme="jodo"] .instruction-text { color: var(--game-ink); }
+[data-game-theme="jodo"] .card-btn { border-radius: var(--family-control-radius); box-shadow: none; }
+[data-game-theme="jodo"] .card-btn:not(.is-matched):not(.is-selected):not(.is-wrong) { background: var(--family-surface); }
+[data-game-theme="jodo"] .result-panel { padding: 16px; border-width: 1px; }
+[data-game-theme="jodo"] .result-score-chip { background: var(--game-tint); color: var(--game-ink); border-color: transparent; }
+
+/* Shared platform results, used by games without a result of their own. */
+.modal[data-game-theme] { background: var(--family-surface); border: 1px solid var(--family-border); border-radius: var(--family-radius); }
+.modal[data-game-theme] .btn--primary { background: var(--game-accent); color: #fff; box-shadow: none; }
+.modal[data-game-theme] .btn--secondary { background: var(--family-surface); border-color: var(--family-border); }
+.modal[data-game-theme] .btn { border-radius: var(--family-control-radius); }
+.modal[data-game-theme] :is(.text-gradient, .text-gradient-warm) { background: none; -webkit-text-fill-color: var(--game-ink); color: var(--game-ink); }
+
+@media (max-height: 600px) {
+  html[data-game-theme] :is(.app-container, .game-layout, .carrom-layout) { padding: 10px 12px; }
+  [data-game-theme="wordal"] .editorial-clue-card { padding: 7px 10px; margin-bottom: 6px; }
+  [data-game-theme="wordal"] #game-board { max-width: min(255px, calc((100dvh - 250px) * .82)); }
+  [data-game-theme="niti"] .step1-content-wrap { overflow-y: auto; justify-content: safe center; padding: 3px 0; }
+  [data-game-theme="niti"] .thought-card { padding: 14px; }
+}
+@media (max-width: 380px) {
+  .family-header { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .family-header__title { font-size: 17px; }
+  .family-header__help { padding: 0 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-game-theme] *, html[data-game-theme] *::before, html[data-game-theme] *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
