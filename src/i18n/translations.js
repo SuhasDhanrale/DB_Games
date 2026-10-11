@@ -30,6 +30,25 @@ export const translations = {
     'hub.all_games':        'All Games',
     'hub.your_stats':       'Your Stats',
     'hub.view_all':         'View All',
+    'hub.game_label':       'GAME {num}',
+    'hub.done':             'Done',
+    'hub.left':             'Left to play',
+
+    // ---- Days of Week ----
+    'day.mon':              'MON',
+    'day.tue':              'TUE',
+    'day.wed':              'WED',
+    'day.thu':              'THU',
+    'day.fri':              'FRI',
+    'day.sat':              'SAT',
+    'day.sun':              'SUN',
+
+    // ---- Moods ----
+    'mood.curiosity':       'Curiosity',
+    'mood.excitement':      'Excitement',
+    'mood.discovery':       'Discovery',
+    'mood.thinking':        'Strategy',
+    'mood.nostalgia':       'Nostalgia',
 
     // ---- Bottom Nav ----
     'nav.home':             'Home',
@@ -127,6 +146,25 @@ export const translations = {
     'hub.all_games':        'सभी गेम्स',
     'hub.your_stats':       'आपके आँकड़े',
     'hub.view_all':         'सभी देखें',
+    'hub.game_label':       'गेम {num}',
+    'hub.done':             'पूर्ण',
+    'hub.left':             'बाकी है',
+
+    // ---- Days of Week ----
+    'day.mon':              'सोम',
+    'day.tue':              'मंगल',
+    'day.wed':              'बुध',
+    'day.thu':              'गुरु',
+    'day.fri':              'शुक्र',
+    'day.sat':              'शनि',
+    'day.sun':              'रवि',
+
+    // ---- Moods ----
+    'mood.curiosity':       'जिज्ञासा',
+    'mood.excitement':      'उत्साह',
+    'mood.discovery':       'खोज',
+    'mood.thinking':        'रणनीति',
+    'mood.nostalgia':       'यादें',
 
     // ---- Bottom Nav ----
     'nav.home':             'होम',

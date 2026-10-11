@@ -67,6 +67,7 @@ function getDefaults() {
     gamesPlayed: 0,
     totalScore: 0,
     dailyCompleted: {},
+    dailyHistory: {},
   };
 }
 
@@ -75,7 +76,20 @@ function getDefaults() {
  * @returns {ProgressionData}
  */
 export function getProgression() {
-  return storage.getOrInit(PROG_KEY, getDefaults());
+  const data = storage.getOrInit(PROG_KEY, getDefaults());
+  if (!data.dailyHistory) data.dailyHistory = {};
+  if (!data.dailyCompleted) data.dailyCompleted = {};
+
+  // If player has an active streak and lastPlayDate, ensure history has recent dates
+  if (data.lastPlayDate && data.streak > 0 && Object.keys(data.dailyHistory).length === 0) {
+    const lastDate = new Date(data.lastPlayDate);
+    for (let i = 0; i < Math.min(data.streak, 7); i++) {
+      const d = new Date(lastDate);
+      d.setDate(lastDate.getDate() - i);
+      data.dailyHistory[d.toISOString().split('T')[0]] = true;
+    }
+  }
+  return data;
 }
 
 /**
@@ -89,7 +103,7 @@ function saveProgression(data) {
 /**
  * Get today's date string (YYYY-MM-DD).
  */
-function todayStr() {
+export function todayStr() {
   return new Date().toISOString().split('T')[0];
 }
 
@@ -112,6 +126,9 @@ export function updateStreak() {
 
   if (data.lastPlayDate === today) {
     // Already played today, streak is current
+    if (!data.dailyHistory) data.dailyHistory = {};
+    data.dailyHistory[today] = true;
+    saveProgression(data);
     return data.streak;
   }
 
@@ -129,6 +146,8 @@ export function updateStreak() {
 
   data.lastPlayDate = today;
   data.longestStreak = Math.max(data.longestStreak, data.streak);
+  if (!data.dailyHistory) data.dailyHistory = {};
+  data.dailyHistory[today] = true;
 
   saveProgression(data);
   bus.emit(Events.STREAK_UPDATED, { streak: data.streak, lost: false });
@@ -165,16 +184,57 @@ export function awardXP(amount, reason = '') {
 }
 
 /**
+ * Mark a specific game as played/completed today.
+ * @param {string} gameId
+ */
+export function markGamePlayedToday(gameId) {
+  const data = getProgression();
+  const today = todayStr();
+
+  if (!data.dailyHistory) data.dailyHistory = {};
+  data.dailyHistory[today] = true;
+
+  if (!data.dailyCompleted) data.dailyCompleted = {};
+  data.dailyCompleted[gameId] = true;
+
+  data.lastPlayDate = today;
+  saveProgression(data);
+  bus.emit(Events.DAILY_COMPLETED, { gameId });
+}
+
+/**
+ * Check if a date (YYYY-MM-DD) was completed in history.
+ * @param {string} dateStr
+ * @returns {boolean}
+ */
+export function isDateCompleted(dateStr) {
+  const data = getProgression();
+  const today = todayStr();
+  if (data.dailyHistory && data.dailyHistory[dateStr]) return true;
+  if (dateStr === today && data.lastPlayDate === today) return true;
+  if (dateStr === today && data.dailyCompleted && Object.values(data.dailyCompleted).some(Boolean)) return true;
+  return false;
+}
+
+/**
  * Record a game play session.
  * @param {string} gameId
  * @param {number} score
- * @param {boolean} [isDaily=false]
+ * @param {boolean} [isDaily=true]
  */
-export function recordGamePlay(gameId, score, isDaily = false) {
+export function recordGamePlay(gameId, score, isDaily = true) {
   const data = getProgression();
+  const today = todayStr();
 
   data.gamesPlayed += 1;
   data.totalScore += score;
+  data.lastPlayDate = today;
+
+  if (!data.dailyHistory) data.dailyHistory = {};
+  data.dailyHistory[today] = true;
+
+  if (!data.dailyCompleted) data.dailyCompleted = {};
+  data.dailyCompleted[gameId] = true;
 
   saveProgression(data);
 
@@ -188,9 +248,7 @@ export function recordGamePlay(gameId, score, isDaily = false) {
   }
 
   // Daily challenge completion
-  if (isDaily && !data.dailyCompleted[gameId]) {
-    data.dailyCompleted[gameId] = true;
-    saveProgression(data);
+  if (isDaily) {
     awardXP(XP_REWARDS.DAILY_COMPLETED, 'daily_completed');
     bus.emit(Events.DAILY_COMPLETED, { gameId });
   }
@@ -203,7 +261,7 @@ export function recordGamePlay(gameId, score, isDaily = false) {
  */
 export function isDailyCompleted(gameId) {
   const data = getProgression();
-  return !!data.dailyCompleted[gameId];
+  return Boolean(data.dailyCompleted && data.dailyCompleted[gameId]);
 }
 
 /**
@@ -264,6 +322,7 @@ export function resetProgression() {
 
 export default {
   getProgression, updateStreak, awardXP, recordGamePlay,
-  isDailyCompleted, getLevelProgress, resetDailyChallenges,
-  getTimeUntilDailyReset, resetProgression,
+  markGamePlayedToday, isDateCompleted, isDailyCompleted,
+  getLevelProgress, resetDailyChallenges, getTimeUntilDailyReset,
+  resetProgression, todayStr,
 };
