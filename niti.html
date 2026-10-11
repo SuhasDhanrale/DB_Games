@@ -1944,6 +1944,25 @@
         saveStoredEdition(currentDayId, savePayload);
         selectedOptionId = null;
 
+        // Sync with host platform DBGameLab
+        try {
+          const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
+          const points = isCorrect ? 100 : 40;
+          if (lab) {
+            if (typeof lab.addScore === 'function') lab.addScore(points);
+            if (typeof lab.endGame === 'function') lab.endGame(points);
+          }
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+              type: 'GAME_COMPLETE',
+              game: 'niti',
+              dayId: currentDayId,
+              score: points,
+              status: isCorrect ? 'WIN' : 'COMPLETE'
+            }, '*');
+          }
+        } catch(e) {}
+
         // Render result & generate card
         renderCurrentEdition();
 

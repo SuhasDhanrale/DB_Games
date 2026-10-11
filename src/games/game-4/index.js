@@ -2,13 +2,26 @@ import { HtmlIframeGame } from '../base-html-game.js';
 import { registerGame } from '../registry.js';
 
 registerGame({
-  id: 'baghchal',
+  id: 'carrom',
   titleKey: 'game4.title',
   descKey: 'game4.desc',
-  icon: '🐅',
-  color: '#f39c12',
+  icon: '🎯',
+  color: '#BE123C',
   hasDailyChallenge: true,
   comingSoon: false,
-  htmlFile: 'Baghchal.html',
-  create: (container) => new HtmlIframeGame(container, { id: 'baghchal', titleKey: 'game4.title', icon: '🐅', htmlFile: 'Baghchal.html' }),
+  htmlFile: 'Carrom_Puzzles.html',
+  create: (container) => new HtmlIframeGame(container, { id: 'carrom', titleKey: 'game4.title', icon: '🎯', htmlFile: 'Carrom_Puzzles.html' }),
+});
+
+// Alias for 'carrom_puzzles'
+registerGame({
+  id: 'carrom_puzzles',
+  titleKey: 'game4.title',
+  descKey: 'game4.desc',
+  icon: '🎯',
+  color: '#BE123C',
+  hasDailyChallenge: true,
+  comingSoon: false,
+  htmlFile: 'Carrom_Puzzles.html',
+  create: (container) => new HtmlIframeGame(container, { id: 'carrom_puzzles', titleKey: 'game4.title', icon: '🎯', htmlFile: 'Carrom_Puzzles.html' }),
 });

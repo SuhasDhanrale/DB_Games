@@ -2,13 +2,26 @@ import { HtmlIframeGame } from '../base-html-game.js';
 import { registerGame } from '../registry.js';
 
 registerGame({
-  id: 'penfight',
+  id: 'niti',
   titleKey: 'game2.title',
   descKey: 'game2.desc',
-  icon: '🖊️',
-  color: '#3498db',
+  icon: '📜',
+  color: '#D35400',
   hasDailyChallenge: true,
   comingSoon: false,
-  htmlFile: 'Penfight.html',
-  create: (container) => new HtmlIframeGame(container, { id: 'penfight', titleKey: 'game2.title', icon: '🖊️', htmlFile: 'Penfight.html' }),
+  htmlFile: 'niti.html',
+  create: (container) => new HtmlIframeGame(container, { id: 'niti', titleKey: 'game2.title', icon: '📜', htmlFile: 'niti.html' }),
+});
+
+// Alias for 'neeti' URL route support
+registerGame({
+  id: 'neeti',
+  titleKey: 'game2.title',
+  descKey: 'game2.desc',
+  icon: '📜',
+  color: '#D35400',
+  hasDailyChallenge: true,
+  comingSoon: false,
+  htmlFile: 'niti.html',
+  create: (container) => new HtmlIframeGame(container, { id: 'neeti', titleKey: 'game2.title', icon: '📜', htmlFile: 'niti.html' }),
 });

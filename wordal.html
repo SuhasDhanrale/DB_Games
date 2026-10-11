@@ -567,13 +567,31 @@
             const titleElement = document.getElementById('modal-title');
             const messageElement = document.getElementById('modal-message');
 
-            if (grid[currentAttempt - 1 > 0 ? currentAttempt - 1 : 0].join("") === targetWord.join("") || (currentAttempt < ROW_COUNT && gameOver)) {
+            const won = grid[currentAttempt - 1 > 0 ? currentAttempt - 1 : 0].join("") === targetWord.join("") || (currentAttempt < ROW_COUNT && gameOver);
+            if (won) {
                 titleElement.textContent = "You Won!";
                 messageElement.textContent = `You guessed the word in ${currentAttempt + (currentAttempt === ROW_COUNT ? 0 : 1)} attempts.`;
             } else {
                 titleElement.textContent = "Game Over";
                 messageElement.textContent = `The word was ${targetWord.join("")}.`;
             }
+
+            try {
+                const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
+                const score = won ? Math.max(100, (ROW_COUNT - currentAttempt) * 100) : 30;
+                if (lab) {
+                    if (typeof lab.addScore === 'function') lab.addScore(score);
+                    if (typeof lab.endGame === 'function') lab.endGame(score);
+                }
+                if (window.parent && window.parent !== window) {
+                    window.parent.postMessage({
+                        type: 'GAME_COMPLETE',
+                        game: 'wordal',
+                        score: score,
+                        status: won ? 'WIN' : 'OVER'
+                    }, '*');
+                }
+            } catch(e) {}
 
             modal.style.display = 'flex';
         }

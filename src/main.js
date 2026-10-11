@@ -18,13 +18,12 @@ import renderProfile from './screens/profile.js';
 import renderSettings from './screens/settings.js';
 import renderGamePlayer from './screens/game-player.js';
 
-// Game Registry Bootstrapping (Imports self-registering modules)
+// Game Registry Bootstrapping (Imports self-registering modules: 5 Daily Games)
 import './games/game-1/index.js';
 import './games/game-2/index.js';
 import './games/game-3/index.js';
 import './games/game-4/index.js';
 import './games/game-5/index.js';
-import './games/game-6/index.js';
 
 async function bootstrap() {
   // 1. Initialize core systems

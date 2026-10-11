@@ -1,4 +1,3 @@
-_
 <!DOCTYPE html>
 <html lang="en">
 
@@ -406,12 +405,24 @@ _
 
             const result = currentLevel.check(potted);
             if (result === 'win') {
+                try {
+                    const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
+                    if (lab && typeof lab.addScore === 'function') {
+                        lab.addScore(100);
+                    }
+                } catch(e) {}
                 if (currentLevelIndex < LEVELS.length - 1) {
                     showModal("Success!", "Excellent shot.", "Next Level", () => {
                         currentLevelIndex++;
                         loadLevel(currentLevelIndex);
                     });
                 } else {
+                    try {
+                        const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
+                        if (lab && typeof lab.endGame === 'function') {
+                            lab.endGame(LEVELS.length * 100);
+                        }
+                    } catch(e) {}
                     showModal("Game Cleared!", "You beat all the puzzles! Amazing striking skills.", "Play Again", () => {
                         currentLevelIndex = 0;
                         loadLevel(currentLevelIndex);

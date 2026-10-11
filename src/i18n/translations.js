@@ -49,6 +49,19 @@ export const translations = {
     'mood.discovery':       'Discovery',
     'mood.thinking':        'Strategy',
     'mood.nostalgia':       'Nostalgia',
+    'mood.wisdom':          'Wisdom',
+    'mood.focus':           'Focus',
+
+    // ---- Card Tags ----
+    'tag.word_puzzle':      'WORD PUZZLE',
+    'tag.daily_thought':    'DAILY THOUGHT',
+    'tag.cricket':          'CRICKET',
+    'tag.carrom':           'CARROM',
+    'tag.matching':         'MATCH & CONNECT',
+    'tag.action_flick':     'ACTION FLICK',
+    'tag.visual_quiz':      'VISUAL QUIZ',
+    'tag.strategy':         'STRATEGY',
+    'tag.seven_stones':     '7 STONES',
 
     // ---- Bottom Nav ----
     'nav.home':             'Home',
@@ -96,18 +109,18 @@ export const translations = {
     'prog.next_daily':      'Next daily in {time}',
 
     // ---- Games ----
-    'game1.title':          'Word Search',
-    'game1.desc':           'Find hidden words in the grid',
-    'game2.title':          'Pen Fight',
-    'game2.desc':           'Flick your pen and knock opponents off the table',
-    'game3.title':          'Desi Parakh',
-    'game3.desc':           'Spot the odd one out across India',
-    'game4.title':          'Bagh Chal',
-    'game4.desc':           'Tigers vs Goats · Indian Strategy Game',
-    'game5.title':          'Lagori',
-    'game5.desc':           'Stack the seven stones and run',
+    'game1.title':          'Aaj Ka Shabd',
+    'game1.desc':           'Guess the secret daily word',
+    'game2.title':          'Aaj Ki Niti',
+    'game2.desc':           'Daily thoughtful reflection and contemplation',
+    'game3.title':          'Super Over',
+    'game3.desc':           'Super Over · 6 balls of high-octane drama',
+    'game4.title':          'Carrom',
+    'game4.desc':           'Precision trick shots & pocket puzzles',
+    'game5.title':          'Jodo',
+    'game5.desc':           'Connect matching items and knowledge nodes',
     'game6.title':          'Super Over',
-    'game6.desc':           '6 balls of high-octane cricket drama · Bat & Bowl',
+    'game6.desc':           'Super Over · 6 balls of high-octane drama',
 
     // ---- Game Over ----
     'gameover.title':       'Game Over!',
@@ -161,10 +174,23 @@ export const translations = {
 
     // ---- Moods ----
     'mood.curiosity':       'जिज्ञासा',
-    'mood.excitement':      'उत्साह',
+    'mood.excitement':      'रोमांच',
     'mood.discovery':       'खोज',
     'mood.thinking':        'रणनीति',
     'mood.nostalgia':       'यादें',
+    'mood.wisdom':          'चिंतन',
+    'mood.focus':           'एकाग्रता',
+
+    // ---- Card Tags ----
+    'tag.word_puzzle':      'शब्द पहेली',
+    'tag.daily_thought':    'दैनिक विचार',
+    'tag.cricket':          'क्रिकेट',
+    'tag.carrom':           'कैरम पहेली',
+    'tag.matching':         'जोड़ो',
+    'tag.action_flick':     'एक्शन मुकाबला',
+    'tag.visual_quiz':      'दृष्टि परख',
+    'tag.strategy':         'रणनीति',
+    'tag.seven_stones':     'सात पत्थर',
 
     // ---- Bottom Nav ----
     'nav.home':             'होम',
@@ -212,18 +238,18 @@ export const translations = {
     'prog.next_daily':      'अगली दैनिक चुनौती {time} में',
 
     // ---- Games ----
-    'game1.title':          'शब्द खोज',
-    'game1.desc':           'ग्रिड में छिपे शब्द खोजें',
-    'game2.title':          'पेन फाइट',
-    'game2.desc':           'अपनी कलम चलाकर मुकाबला जीतें',
-    'game3.title':          'देश की परख',
-    'game3.desc':           'भारत की अनोखी चीज़ों को पहचानें',
-    'game4.title':          'बाघ चाल',
-    'game4.desc':           'बाघ बनाम बकरी · पारंपरिक रणनीति खेल',
-    'game5.title':          'लगोरी',
-    'game5.desc':           'सात पत्थरों की मीनार गिराएँ और जोड़ें',
+    'game1.title':          'आज का शब्द',
+    'game1.desc':           'दैनिक गुप्त शब्द का अनुमान लगाएँ',
+    'game2.title':          'आज की नीति',
+    'game2.desc':           'शांत दैनिक विचार पूर्ति और जीवन दर्शन',
+    'game3.title':          'सुपर ओवर',
+    'game3.desc':           '6 गेंदों का रोमांचक क्रिकेट मुकाबला',
+    'game4.title':          'कैरम',
+    'game4.desc':           'सटीक स्ट्राइक से सिक्के पॉकेट करें',
+    'game5.title':          'जोड़ो',
+    'game5.desc':           'तथ्यों और ज्ञान को आपस में जोड़ें',
     'game6.title':          'सुपर ओवर',
-    'game6.desc':           '6 गेंदों का रोमांचक मुकाबला · बल्लेबाजी और गेंदबाजी',
+    'game6.desc':           '6 गेंदों का रोमांचक क्रिकेट मुकाबला',
 
     // ---- Game Over ----
     'gameover.title':       'गेम ओवर!',

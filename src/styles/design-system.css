@@ -242,6 +242,12 @@ ul, ol { list-style: none; }
   z-index: 2;
 }
 
+.screen--no-scroll {
+  overflow: hidden !important;
+  height: 100% !important;
+  max-height: 100% !important;
+}
+
 .screen.exit-left {
   opacity: 0;
   transform: translateX(-20px);
