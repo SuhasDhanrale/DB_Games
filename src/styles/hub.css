@@ -1,0 +1,40 @@
+.hub-screen { display: flex; flex-direction: column; background: #faf9f6; container-type: inline-size; }
+.bento-container { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; padding: calc(var(--safe-area-top) + 18px) 16px 16px; }
+.bento-header { display: flex; flex-shrink: 0; align-items: center; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #d9d7d0; }
+.hub-tagline { flex: 1; min-width: 0; color: #252522; font-size: clamp(16px, 4.5cqw, 20px); font-weight: 750; line-height: 1.5; text-wrap: balance; }
+.hub-header-pill { display: flex; align-items: center; gap: 5px; color: #61584d; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.hub-header-pill svg { width: 22px; height: 33px; flex-shrink: 0; }
+.hub-icon-circle-btn { min-width: 44px; height: 44px; border: 1px solid #d9d7d0; border-radius: 50%; font-size: 12px; font-weight: 700; }
+.hub-screen .hub-replay { width: 44px; height: 44px; background: transparent; border: none; color: #77736b; box-shadow: none; }
+.weekly-tracker-wrap { flex-shrink: 0; padding: 13px 0 17px; }
+.weekly-tracker-card { display: flex; justify-content: space-between; padding: 0 8px; }
+.weekly-day-col { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.weekly-day-label { font-size: 10px; color: #77736b; }
+.weekly-day-dot { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1px solid #d8d6cf; }
+.weekly-day-dot.done { background: #526f5c; border-color: #526f5c; }
+.weekly-day-col.is-today .weekly-day-label { color: #222; font-weight: 700; }
+.weekly-day-dot.today-dot { outline: 1px solid #526f5c; outline-offset: 3px; }
+.weekly-day-dot.today-dot:not(.done)::after { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #526f5c; }
+.bento-games-area { display: flex; flex-direction: column; flex: 1 0 clamp(390px, 110cqw, 470px); gap: 12px; min-height: clamp(390px, 110cqw, 470px); }
+.bento-row-top { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1.6; min-height: 0; }
+.bento-col-left { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.bento-row-bottom { display: grid; grid-template-columns: 1.35fr 1fr; gap: 12px; flex: 1; min-height: 0; }
+.game-bento-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; padding: 14px; border: 1px solid rgba(40,40,30,.08); border-radius: 16px; overflow: hidden; text-align: left; flex: 1; min-width: 0; min-height: 0; isolation: isolate; transition: transform .15s; }
+.game-bento-card:active { transform: scale(.98); }
+.game-bento-card:focus-visible, .hub-icon-circle-btn:focus-visible, .hub-replay:focus-visible { outline: 3px solid #282824; outline-offset: 3px; }
+.card-game-1 { background: #e5e0f0; --card-ink: #403455; }
+.card-game-2 { background: #f1dfbb; --card-ink: #624729; }
+.card-game-3 { background: #dce8d8; --card-ink: #314e3c; }
+.card-game-4 { background: #f0dcd7; --card-ink: #673e38; }
+.card-game-5 { background: #dce5f0; --card-ink: #354960; }
+.card-bottom-info { position: relative; z-index: 2; width: 100%; }
+.card-game-title { display: block; color: var(--card-ink); font-size: clamp(15px, 4.4cqw, 19px); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
+.card-description { display: block; margin-top: 3px; color: var(--card-ink); font-size: 11px; line-height: 1.5; }
+.card-art-float { position: absolute; right: -12px; bottom: -12px; width: 70%; max-width: 145px; aspect-ratio: 1; max-height: calc(100% - 60px); pointer-events: none; z-index: -1; }
+.card-art-float svg { width: 100%; height: 100%; max-width: none; }
+.card-game-2 .card-art-float { width: 100%; max-width: 235px; aspect-ratio: 140 / 150; right: -13px; bottom: -5px; }
+.card-game-4 .card-art-float { width: 78%; max-width: 185px; right: -16px; bottom: -20px; }
+.card-game-5 .card-art-float { width: 94%; max-width: 175px; right: -9px; bottom: -10px; }
+.game-status-dot { position: absolute; right: 10px; bottom: 10px; z-index: 3; width: 23px; height: 23px; border-radius: 50%; background: #526f5c; border: 2px solid #faf9f6; display: grid; place-items: center; }
+.hub-screen > .bottom-nav { flex-shrink: 0; background: #faf9f6; }
+@media (prefers-reduced-motion: reduce) { .game-bento-card { transition: none; } }

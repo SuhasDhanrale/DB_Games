@@ -741,6 +741,7 @@
         button { font-family: inherit; cursor: pointer; }
         button:focus-visible { outline: 3px solid #E23A28; outline-offset: 4px; }
         .intro-screen { max-width:480px; margin:auto; height:100%; overflow-y:auto; touch-action:pan-y; padding:24px; display:flex; flex-direction:column; justify-content:center; gap:24px; }
+        .intro-screen { justify-content: safe center; }
         .intro-heading { text-align:center; }
         .intro-heading h1 { font-size:32px; font-weight:900; line-height:1.5; margin-bottom:6px; }
         .intro-heading p { font-size:11px; color:var(--text-secondary); line-height:1.7; }
@@ -763,6 +764,15 @@
         .choice-card--bowling .choice-runs { color:#258347; }
         .intro-footnote { text-align:center; font-size:11px; color:var(--text-tertiary); }
         .intro-start { display:grid; gap:10px; }
+        .match-picker { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .match-picker button { min-height:56px; border:1px solid #dedbd5; background:#fff; border-radius:12px; font:inherit; font-size:14px; font-weight:800; padding:9px; }
+        .match-picker button[aria-pressed="true"] { border-color:#e23a28; background:#fff1ec; color:#ba2313; }
+        .match-picker small { display:block; font-size:12px; font-weight:500; margin-top:3px; }
+        .match-context { border:1px solid #e7e0d4; border-radius:12px; background:#fff9ef; padding:12px; font-size:14px; line-height:1.7; }
+        .match-context p { margin:3px 0 7px; }
+        .match-context a { color:#ba2313; text-decoration:underline; display:block; min-height:32px; }
+        .result-history { margin-top:12px; }
+        .match-picker button:focus-visible,.match-context a:focus-visible { outline:3px solid #1c1c1c; outline-offset:3px; }
         #confirmStartBtn { width:100%; min-height:48px; border:0; border-radius:14px; background:var(--color-primary); color:white; font-size:17px; font-weight:800; box-shadow:var(--shadow-sm); }
         #confirmStartBtn:disabled { background:#e5e5e2; color:#888883; box-shadow:none; cursor:default; }
         #confirmStartBtn:not(:disabled):hover { background:var(--color-primary-dark); }
@@ -1146,6 +1156,13 @@
             COMPLETED: 'COMPLETED'
         };
 
+        const ASIAN_MATCHES = {
+            'asian-final': { id:'asian-final', opponent:'पाकिस्तान', code:'PAK', date:'3 अक्टूबर 2026', stage:'फाइनल', scores:'भारत 211/6 · पाकिस्तान 192/6', outcome:'भारत 19 रन से जीता।', source:'https://www.bcci.tv/matches/1d466763-a1a9-4120-a576-73135df57d9a/More/news' },
+            'asian-semi': { id:'asian-semi', opponent:'श्रीलंका', code:'SL', date:'1 अक्टूबर 2026', stage:'सेमीफाइनल', scores:'भारत 169/7 · श्रीलंका 45 ऑल आउट', outcome:'भारत 124 रन से जीता।', source:'https://www.bcci.tv/matches/244555/More/news' }
+        };
+        const initialMatch = new URLSearchParams(location.search).get('match');
+        const initialDay = new URLSearchParams(location.search).get('day');
+        let selectedMatchId = ASIAN_MATCHES[initialMatch] ? initialMatch : ((initialDay === 'd2' || window.DBJamDemo?.index === 1) ? 'asian-semi' : 'asian-final');
         let currentRole = ROLES.BATTING;
         let currentCameraView = CAMERA_VIEWS.BATTER;
         let gameState = STATES.IDLE;
@@ -1629,7 +1646,7 @@
                 if (hintIcon) hintIcon.textContent = '🏏';
                 if (hintText) hintText.textContent = 'गेंद पास आए तो उंगली सरकाकर शॉट खेलें';
             } else {
-                hudRoleLabel.textContent = 'पाकिस्तान के रन';
+                hudRoleLabel.textContent = `${ASIAN_MATCHES[selectedMatchId].opponent} के रन`;
                 if (hintIcon) hintIcon.textContent = '🎯';
                 if (hintText) hintText.textContent = 'रंगीन हिस्से में जगह चुनें, छोड़कर गेंद फेंकें';
                 setBowlingLength(selectedBowlingLength);
@@ -2281,6 +2298,11 @@
             resWickets.textContent = wickets;
             resBoundaries.textContent = boundariesCount;
             resNarrative.textContent = narrative;
+            const historicalMatch = ASIAN_MATCHES[selectedMatchId];
+            document.getElementById('resDateBadge').textContent = 'आपका खेल · अभ्यास';
+            document.getElementById('resActualMatch').textContent = `${historicalMatch.stage} · ${historicalMatch.date}। ${historicalMatch.scores}। ${historicalMatch.outcome}`;
+            document.getElementById('resMatchSource').href = historicalMatch.source;
+            document.getElementById('resMatchStory').href = matchStoryUrl(historicalMatch.id);
 
             resultModal.classList.remove('hidden');
             resPlayAgainBtn.focus();
@@ -3503,6 +3525,29 @@
         });
 
         let selectedRole = null;
+        const opponentTeam = document.querySelector('.intro-team--pakistan');
+        const pakistanMark = opponentTeam.querySelector('.team-mark').innerHTML;
+        function matchStoryUrl(id) {
+            const day = window.DBJamDemo?.day || new URLSearchParams(location.search).get('day') || 'd1';
+            return `./news.html?article=${id}&game=superover&day=${day}&match=${id}`;
+        }
+        function updateMatchContext() {
+            const match = ASIAN_MATCHES[selectedMatchId];
+            document.querySelectorAll('[data-match]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.match === selectedMatchId)));
+            opponentTeam.querySelector('strong').textContent = match.opponent;
+            opponentTeam.querySelector('.team-mark').innerHTML = match.code === 'PAK' ? pakistanMark : '<svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="40" rx="3" fill="#8c1836"/><rect x="2" y="2" width="56" height="36" rx="2" fill="none" stroke="#edbb54" stroke-width="3"/><text x="30" y="27" text-anchor="middle" font-size="20" fill="#fff0be" font-family="sans-serif" font-weight="700">SL</text></svg>';
+            document.querySelector('.intro-matchup').setAttribute('aria-label', `भारत बनाम ${match.opponent}`);
+            document.getElementById('matchActual').textContent = `${match.stage} · ${match.date} · ${match.outcome}`;
+            document.getElementById('matchScores').textContent = match.scores;
+            document.getElementById('matchStory').href = matchStoryUrl(match.id);
+            try { const url = new URL(location.href); url.searchParams.set('match', match.id); history.replaceState(history.state, '', url); } catch {}
+        }
+        document.querySelectorAll('[data-match]').forEach(button => button.addEventListener('click', () => {
+            selectedMatchId = button.dataset.match;
+            resetRoleSelection();
+            updateMatchContext();
+        }));
+        updateMatchContext();
         const confirmStartBtn = document.getElementById('confirmStartBtn');
         function resetRoleSelection() {
             selectedRole = null;

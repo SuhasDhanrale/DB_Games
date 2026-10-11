@@ -8,9 +8,8 @@ import '../styles/opening.css';
 
 export function openingMarkup() {
   const games = [wordal, niti, cricket, carrom, jodo];
-  return `<div class="opening-brand">${t('opening.brand')}</div>
-    <h1 class="opening-slogan">${t('opening.slogan')}</h1>
-    <div class="opening-games" aria-hidden="true">${games.map((svg, i) => `<div class="opening-game">${svg}<span>${t(`game${i + 1}.title`)}</span></div>`).join('')}</div>
+  return `<h1 class="opening-brand">${t('opening.brand')}</h1>
+    <div class="opening-games" aria-hidden="true">${games.map((svg, i) => `<div class="opening-game" style="--intro-order:${i}">${svg}</div>`).join('')}</div>
     <p class="opening-caption">${t('opening.caption')}</p>`;
 }
 
@@ -27,7 +26,6 @@ export function playOpening(root, onComplete) {
     onComplete();
   };
   root.classList.add('opening-screen');
-  root.innerHTML = `<div class="opening-content">${openingMarkup()}<button class="opening-skip" type="button">${t('opening.start')} →</button></div>`;
-  root.querySelector('button').addEventListener('click', finish);
+  root.innerHTML = `<div class="opening-content">${openingMarkup()}</div>`;
   timer = setTimeout(finish, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 800 : 2600);
 }

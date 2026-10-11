@@ -26,9 +26,11 @@ export const translations = {
 
     // ---- Hub ----
     'hub.title':            'Game Lab',
-    'opening.brand':        'Bhaskar Games',
+    'hub.daily_tagline':    'A little play, every day.',
+    'hub.torch_hint':       'Play every day to keep your torch burning.',
+    'opening.brand':        'Dainik Bhaskar Games',
     'opening.slogan':       'From news to play. From play to understanding.',
-    'opening.caption':      'Five games. Five moods. One daily habit.',
+    'opening.caption':      'Five games. Five moods. Something new every day.',
     'opening.start':        'Choose a game',
     'opening.replay':       'Replay the opening animation',
     'hub.greeting':         'Pick a mood for today 👋',
@@ -163,7 +165,9 @@ export const translations = {
 
     // ---- Hub ----
     'hub.title':            'गेम लैब',
-    'opening.brand':        'भास्कर खेल',
+    'hub.daily_tagline':    'थोड़ा खेल, हर रोज़।',
+    'hub.torch_hint':       'हर रोज़ खेलें, मशाल जलाए रखें।',
+    'opening.brand':        'दैनिक भास्कर गेम्स',
     'opening.slogan':       'खबर से खेल तक, खेल से समझ तक।',
     'opening.caption':      'पाँच खेल। पाँच मूड। हर दिन कुछ नया।',
     'opening.start':        'खेल चुनें',

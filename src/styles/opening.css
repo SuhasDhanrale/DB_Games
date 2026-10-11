@@ -1,15 +1,11 @@
-.opening-screen { background: #f9f9f7; padding: 24px; }
-.opening-content { width: 100%; max-width: 390px; text-align: center; }
-.opening-brand { color: #e23a28; font-size: 15px; font-weight: 800; letter-spacing: .02em; }
-.opening-slogan { color: #1c1c1c; font-size: clamp(25px, 7vw, 33px); font-weight: 900; line-height: 1.65; margin: 14px 0 28px; }
-.opening-games { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-.opening-game svg { width: 100%; height: auto; display: block; }
-.opening-game span { display: block; font-size: 11px; color: #5c5c5c; margin-top: 8px; line-height: 1.6; }
-.opening-caption { color: #5c5c5c; font-size: 16px; line-height: 1.7; margin: 24px 0 16px; }
-.opening-skip { min-height: 48px; padding: 12px 24px; background: #e23a28; color: #fff; border-radius: 14px; font-weight: 800; font-size: 16px; }
-.opening-skip:focus-visible { outline: 3px solid #1c1c1c; outline-offset: 4px; }
-.hub-identity { padding: 0 16px 10px; display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
-.hub-identity h1 { font-size: clamp(17px, 2.5vh, 21px); color: #1c1c1c; font-weight: 900; line-height: 1.65; margin: 0; }
-.hub-identity p { font-size: 12px; color: #5c5c5c; margin: 0; line-height: 1.6; }
-.hub-replay { width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; background: #fff; border: 1px solid #e9e4dd; color: #e23a28; font-size: 23px; }
-.hub-replay:focus-visible { outline: 3px solid #e23a28; outline-offset: 2px; }
+.opening-screen { background: #faf9f6; padding: calc(var(--safe-area-top) + 24px) 24px calc(var(--safe-area-bottom) + 24px); overflow-y: auto; }
+.opening-content { width: 100%; max-width: 390px; text-align: center; margin: auto; }
+.opening-brand { color: #252522; font-size: clamp(23px, 6vw, 30px); font-weight: 800; line-height: 1.5; text-wrap: balance; }
+.opening-games { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; gap: clamp(5px, 2vw, 10px); margin: 32px 0 26px; }
+.opening-game { animation: opening-arrive .45s ease both; animation-delay: calc(var(--intro-order) * .16s); }
+.opening-game svg { width: 100%; height: auto; max-height: 76px; display: block; }
+.opening-caption { color: #615f59; font-size: clamp(14px, 3.8vw, 17px); line-height: 1.8; text-wrap: balance; }
+.hub-replay { width: 44px; height: 44px; flex-shrink: 0; color: #77736b; font-size: 23px; }
+.hub-replay:focus-visible { outline: 3px solid #282824; outline-offset: 2px; }
+@keyframes opening-arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .opening-game { animation: none; } }

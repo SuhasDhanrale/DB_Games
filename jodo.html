@@ -115,11 +115,43 @@
       width: 100%;
       max-width: 520px;
       min-height: calc(100vh - 3px);
+      min-height: calc(100dvh - 3px);
       display: flex;
       flex-direction: column;
       background-color: var(--color-bg);
       padding: 10px 14px 28px;
       position: relative;
+    }
+
+    .play-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(12px, 6dvh, 56px) 0 24px;
+      animation: board-arrive 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes board-arrive {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .play-footer {
+      padding: 16px 0 max(8px, env(safe-area-inset-bottom));
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+    }
+
+    .play-footer p {
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-subtle);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .play-area { animation: none; }
     }
 
     /* Single Streamlined Direction & Progress Bar */
@@ -503,13 +535,13 @@
     .controls-row {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: center;
       gap: 8px;
       margin-top: 6px;
     }
 
     .btn-hint {
-      min-height: 34px;
+      min-height: 44px;
       padding: 0 12px;
       border: 1px solid var(--border-subtle);
       background: var(--color-surface);
@@ -924,6 +956,7 @@
       </div>
     </div>
 
+    <div class="play-area" id="play-area">
     <!-- Game Board (2 Columns with SVG Overlay for Node-type Dragging) -->
     <section class="board-container" id="board-container" aria-label="कार्ड मिलान पटल">
       <!-- SVG Connecting Cables Overlay -->
@@ -962,6 +995,10 @@
         </div>
       </div>
 
+    </section>
+    </div>
+
+    <footer class="play-footer" id="play-footer">
       <!-- Hint Control -->
       <div class="controls-row" id="controls-row">
         <button type="button" class="btn-hint" id="btn-show-pair" title="एक जोड़ी स्वतः मिलाकर देखें">
@@ -969,7 +1006,8 @@
           <span>एक जोड़ी दिखाएँ</span>
         </button>
       </div>
-    </section>
+      <p>चार जोड़ियाँ, चार नई बातें।<br>खेल के बाद जानें हर जोड़ी की कहानी।</p>
+    </footer>
 
     <!-- STEP 2: Final Result Panel (Ultra-compact, No-Scroll) -->
     <section class="result-panel" id="result-panel" style="display: none;" aria-label="खेल परिणाम">
@@ -1483,6 +1521,8 @@
       // Progress Counter
       const matchedCount = state.matchedPairIds.length;
       document.getElementById("progress-count").textContent = `${matchedCount}/4 जोड़ियाँ`;
+      document.getElementById("play-area").style.display = state.isCompleted ? "none" : "flex";
+      document.getElementById("play-footer").hidden = state.isCompleted;
 
       // Render Board Columns
       renderBoard(edition);
@@ -2081,6 +2121,7 @@
       loadEditionState(currentDayId);
 
       // Controls
+      new ResizeObserver(updateMatchedConnectionLines).observe(document.getElementById("board-container"));
       const btnShowPair = document.getElementById("btn-show-pair");
       if (btnShowPair) btnShowPair.addEventListener("click", handleShowPairHelp);
 

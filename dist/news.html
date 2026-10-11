@@ -92,9 +92,9 @@
     <!-- VIEW 2: SMALL MOCK FEED VIEW -->
     <section class="view-section" id="feedView">
       <div class="feed-header-card">
-        <h2 class="feed-title">खेल से जुड़ी कहानियाँ</h2>
+          <h2 class="feed-title">खबर से खेल तक</h2>
         <p class="feed-desc">
-          खेल खेलने के बाद पढ़ें आज की विशेष पृष्ठभूमि कहानियाँ और सांस्कृतिक संदर्भ। नीचे दी गई किसी भी कहानी पर टैप करके पढ़ें।
+          कहानी पढ़ें, उससे जुड़ा खेल आज़माएँ। या खेल के बाद उसकी पृष्ठभूमि जानें—अपना रास्ता चुनें।
         </p>
         <div class="feed-action-bar">
           <span class="badge-prototype">नमूना सामग्री · डेमो फ़ीड</span>
@@ -298,6 +298,28 @@
         'jodo': './jodo.html'
       };
 
+      const ASIAN_ARTICLES = {
+        'asian-final': {
+          id: 'asian-final', day: 'd1', gameId: 'superover', matchId: 'asian-final', gameName: 'सुपर ओवर · अभ्यास',
+          category: 'खेल · एशियाई खेल 2026', headline: 'भारत–पाकिस्तान फाइनल: 19 रन की जीत से भारत को स्वर्ण',
+          excerpt: '3 अक्टूबर का मुकाबला: भारत ने 211/6 बनाए और पाकिस्तान को 192/6 पर रोका। मैच से प्रेरित छह गेंदों की चुनौती खेलें।',
+          body: ['3 अक्टूबर 2026 को निस्शिन के कोरोगी स्पोर्ट्स पार्क में खेले गए पुरुष क्रिकेट फाइनल में भारत ने पाकिस्तान को 19 रन से हराया। भारत ने 20 ओवर में 211/6 बनाए; पाकिस्तान की पारी 192/6 पर समाप्त हुई।', 'यह एक नियमित टी20 मुकाबला था, टाई के बाद खेला जाने वाला सुपर ओवर नहीं। यहाँ “सुपर ओवर” नाम का खेल इसी मुकाबले से प्रेरित छह गेंदों का अभ्यास है।', 'खेल में 18 रन का बल्लेबाजी लक्ष्य और 15 रन का गेंदबाजी लक्ष्य अभ्यास के लिए बनाए गए हैं। ये असली मैच के आखिरी ओवर के समीकरण नहीं हैं। अपना परिणाम देखें, फिर असली मैच से तुलना करें।'],
+          source: 'स्रोत: BCCI आधिकारिक मैच रिकॉर्ड', sourceUrl: 'https://www.bcci.tv/matches/1d466763-a1a9-4120-a576-73135df57d9a/More/news', date: 'मुकाबला: 3 अक्टूबर 2026 · शोध जाँच: 11 अक्टूबर 2026'
+        },
+        'asian-semi': {
+          id: 'asian-semi', day: 'd2', gameId: 'superover', matchId: 'asian-semi', gameName: 'सुपर ओवर · अभ्यास',
+          category: 'खेल · एशियाई खेल 2026', headline: 'भारत–श्रीलंका सेमीफाइनल: 124 रन की जीत से फाइनल में भारत',
+          excerpt: '1 अक्टूबर का मुकाबला: भारत 169/7, श्रीलंका 45 ऑल आउट। इस जीत की पृष्ठभूमि जानें और छह गेंदों का अभ्यास खेलें।',
+          body: ['1 अक्टूबर 2026 को निस्शिन में पुरुष क्रिकेट के सेमीफाइनल में भारत ने श्रीलंका को 124 रन से हराया। भारत ने 20 ओवर में 169/7 बनाए। श्रीलंका की पारी 9.5 ओवर में 45 रन पर समाप्त हुई।', 'यह जीत भारत को फाइनल तक ले गई। यह नियमित टी20 मैच था; इसमें टाई-ब्रेक सुपर ओवर नहीं हुआ।', 'इस कहानी से जुड़ा खेल छह गेंदों की सरल अभ्यास चुनौती है। 18/15 रन के लक्ष्य और दो विकेट का नियम खेल के लिए बनाए गए हैं। खिलाड़ी का परिणाम असली मैच का परिणाम नहीं बदलता।'],
+          source: 'स्रोत: BCCI आधिकारिक मैच रिकॉर्ड', sourceUrl: 'https://www.bcci.tv/matches/244555/More/news', date: 'मुकाबला: 1 अक्टूबर 2026 · शोध जाँच: 11 अक्टूबर 2026'
+        }
+      };
+      Object.assign(ARTICLES_DATA, ASIAN_ARTICLES);
+      // Keep existing inbound article links, replacing the obsolete fictional cricket copy.
+      for (const [id, matchId] of Object.entries({ 'd1-cricket':'asian-final', 'd2-cricket':'asian-semi', 'd3-cricket':'asian-final', 'cricket-archive':'asian-final' })) {
+        ARTICLES_DATA[id] = { ...ASIAN_ARTICLES[matchId], id, day: id.slice(0, 2), hiddenFromFeed: true };
+      }
+      let selectedArticleMatch = null;
       const ALLOWED_DAYS = ['d1', 'd2', 'd3'];
       const DEFAULT_DAY = 'd1';
 
@@ -328,7 +350,8 @@
       // Compute Return URL strictly from allowlist
       function computeReturnUrl(game, day) {
         if (game && ALLOWED_GAMES[game]) {
-          return `${ALLOWED_GAMES[game]}?day=${encodeURIComponent(day)}`;
+          const matchParam = game === 'superover' && selectedArticleMatch ? `&match=${encodeURIComponent(selectedArticleMatch)}` : '';
+          return `${ALLOWED_GAMES[game]}?day=${encodeURIComponent(day)}${matchParam}`;
         }
         // Fallback destination if no recognized game is provided
         return `./index.html`;
@@ -379,6 +402,7 @@
         }
 
         const effectiveGame = game || article.gameId;
+        selectedArticleMatch = article.matchId || null;
 
         // Populate article details
         document.getElementById('artCategory').textContent = article.category || 'समाचार';
@@ -389,6 +413,15 @@
         const dateElem = document.getElementById('artDate');
         if (article.source) {
           sourceElem.textContent = article.source;
+          if (article.sourceUrl) {
+            const sourceLink = document.createElement('a');
+            sourceLink.href = article.sourceUrl;
+            sourceLink.target = '_blank';
+            sourceLink.rel = 'noopener noreferrer';
+            sourceLink.textContent = ' · आधिकारिक रिकॉर्ड देखें ↗';
+            sourceLink.style.textDecoration = 'underline';
+            sourceElem.appendChild(sourceLink);
+          }
           sourceElem.style.display = 'block';
         } else {
           sourceElem.style.display = 'none';
@@ -423,6 +456,10 @@
         // Navigation state
         btnBackToFeed.style.display = 'inline-flex';
         updateReturnButtons(effectiveGame, day);
+        bottomReturnBtn.textContent = article.matchId ? 'छह गेंदों की चुनौती खेलें →' : 'जुड़ा खेल खेलें →';
+        topReturnBtn.textContent = 'आज के खेल';
+        topReturnBtn.href = `./index.html?day=${encodeURIComponent(day)}`;
+        document.querySelector('.sample-notice-banner').textContent = article.sourceUrl ? 'आधिकारिक स्रोत पर आधारित मौलिक डेमो सारांश। यह भास्कर में प्रकाशित लेख नहीं है।' : 'प्रोटोटाइप के लिए तैयार नमूना संदर्भ सामग्री।';
 
         articleView.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -446,9 +483,10 @@
       // Render Small Mock Feed View
       function showFeed(game, day) {
         hideAllViews();
+        selectedArticleMatch = null;
 
         storiesList.innerHTML = '';
-        const articleKeys = Object.keys(ARTICLES_DATA);
+        const articleKeys = Object.keys(ARTICLES_DATA).filter(id => !ARTICLES_DATA[id].hiddenFromFeed);
 
         // Prioritize stories for the active day
         articleKeys.sort(function (a, b) {
@@ -486,6 +524,8 @@
 
         btnBackToFeed.style.display = 'none';
         updateReturnButtons(game, day);
+        topReturnBtn.textContent = 'आज के खेल';
+        topReturnBtn.href = `./index.html?day=${encodeURIComponent(day)}`;
 
         feedView.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
