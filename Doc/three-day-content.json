@@ -1,0 +1,1191 @@
+{
+  "schemaVersion": 1,
+  "contentVersion": "jam-2",
+  "locale": "hi-IN",
+  "timeZone": "Asia/Kolkata",
+  "editionMode": "manual-three-day",
+  "brandLabel": "भास्कर खेल · डेमो",
+  "feedDisclosure": "डेमो समाचार फ़ीड · स्रोतों पर आधारित नमूना लेख",
+  "nitiPolicy": "All three thoughts are original demo writing, not historical quotations.",
+  "cricketPolicy": "All scenarios are fictional practice; no real-match comparison.",
+  "sources": [
+    {
+      "id": "S01",
+      "title": "ISRO Chandrayaan 3 objectives",
+      "url": "https://www.isro.gov.in/ISRO_EN/Chandrayaan3_New.html",
+      "supports": "Soft landing, rover and in situ lunar experiments.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S02",
+      "title": "ISRO Aditya L1 mission details",
+      "url": "https://www.isro.gov.in/Aditya_L1-MissionDetails.html",
+      "supports": "Mission dedicated to studying the Sun.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S03",
+      "title": "ISRO Mars Orbiter objectives",
+      "url": "https://www.isro.gov.in/mission_objective_C25.html",
+      "supports": "Mars surface and atmospheric studies.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S04",
+      "title": "ISRO AstroSat",
+      "url": "https://www.isro.gov.in/AstroSat.html",
+      "supports": "Simultaneous observations in X-ray, optical and ultraviolet bands.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S05",
+      "title": "PIB Manu Bhaker bronze 28 July 2024",
+      "url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2038138&lang=2&reg=48",
+      "supports": "Women’s 10m air pistol bronze at Paris 2024.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S06",
+      "title": "PIB Neeraj Chopra silver 9 August 2024",
+      "url": "https://www.pib.gov.in/FeaturesDeatils.aspx?ModuleId=2&NoteId=153309&lang=2&reg=48",
+      "supports": "Men’s javelin silver at Paris 2024.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S07",
+      "title": "PIB Swapnil Kusale bronze 1 August 2024",
+      "url": "https://www.pib.gov.in/Pressreleaseshare.aspx?PRID=2040211&lang=2&reg=48",
+      "supports": "Men’s 50m rifle three positions bronze at Paris 2024.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S08",
+      "title": "PIB Aman Sehrawat bronze 9 August 2024",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2043947&lang=2&reg=48",
+      "supports": "Men’s freestyle wrestling 57kg bronze at Paris 2024.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S09",
+      "title": "UNESCO Dholavira",
+      "url": "https://whc.unesco.org/en/list/1645/",
+      "supports": "Harappan city in Gujarat with water management features.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S10",
+      "title": "UNESCO Hampi",
+      "url": "https://whc.unesco.org/en/list/241/",
+      "supports": "Vijayanagara remains in Karnataka.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S11",
+      "title": "UNESCO Sanchi",
+      "url": "https://whc.unesco.org/en/list/524/",
+      "supports": "Buddhist monuments in Madhya Pradesh.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "S12",
+      "title": "UNESCO Konark",
+      "url": "https://whc.unesco.org/en/list/246/",
+      "supports": "Sun Temple in Odisha; the listing uses the former spelling Orissa.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "T03",
+      "title": "MDN Pointer events",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events",
+      "supports": "Mouse and touch handling, pointer capture and cancellation.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "T04",
+      "title": "MDN requestAnimationFrame",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame",
+      "supports": "Animation timing and visibility considerations.",
+      "checkedOn": "2026-10-10"
+    },
+    {
+      "id": "T05",
+      "title": "MDN Web Share",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share",
+      "supports": "Native share support is conditional; provide a fallback.",
+      "checkedOn": "2026-10-10"
+    }
+  ],
+  "days": [
+    {
+      "id": "d1",
+      "sequence": 1,
+      "label": "दिन 1",
+      "theme": "जिज्ञासा और खोज",
+      "periodLabel": "अंतरिक्ष विशेष",
+      "niti": {
+        "id": "d1-niti",
+        "prompt": "नई बात समझने की शुरुआत ___ से होती है।",
+        "options": [
+          {
+            "id": "o1",
+            "text": "जल्दी मान लेने"
+          },
+          {
+            "id": "o2",
+            "text": "सवाल पूछने"
+          },
+          {
+            "id": "o3",
+            "text": "चुप रहने"
+          },
+          {
+            "id": "o4",
+            "text": "नकल करने"
+          }
+        ],
+        "answerId": "o2",
+        "fullText": "नई बात समझने की शुरुआत सवाल पूछने से होती है।",
+        "meaning": "जो समझ न आए, उसके बारे में पूछना सीखने का पहला कदम है।",
+        "attribution": "मौलिक विचार · डेमो के लिए लिखा गया",
+        "sourceType": "original-demo",
+        "sourceIds": [],
+        "articleId": "d1-feature",
+        "articleLinkLabel": "खोज की एक कहानी पढ़ें",
+        "shareCaption": "आज की नीति पढ़ें और अपना विचार साझा करें।",
+        "shareText": "नई बात समझने की शुरुआत सवाल पूछने से होती है।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · भास्कर खेल डेमो"
+      },
+      "shabd": {
+        "id": "d1-shabd",
+        "answer": "अनुसंधान",
+        "answerTokens": [
+          "अ",
+          "नु",
+          "सं",
+          "धा",
+          "न"
+        ],
+        "bank": [
+          {
+            "id": "k1",
+            "text": "अ"
+          },
+          {
+            "id": "k2",
+            "text": "नु"
+          },
+          {
+            "id": "k3",
+            "text": "सं"
+          },
+          {
+            "id": "k4",
+            "text": "धा"
+          },
+          {
+            "id": "k5",
+            "text": "न"
+          },
+          {
+            "id": "k6",
+            "text": "प्र"
+          },
+          {
+            "id": "k7",
+            "text": "ति"
+          },
+          {
+            "id": "k8",
+            "text": "यो"
+          },
+          {
+            "id": "k9",
+            "text": "गि"
+          },
+          {
+            "id": "k10",
+            "text": "ता"
+          },
+          {
+            "id": "k11",
+            "text": "ऐ"
+          },
+          {
+            "id": "k12",
+            "text": "हा"
+          },
+          {
+            "id": "k13",
+            "text": "सि"
+          },
+          {
+            "id": "k14",
+            "text": "क"
+          },
+          {
+            "id": "k15",
+            "text": "आ"
+          },
+          {
+            "id": "k16",
+            "text": "का"
+          },
+          {
+            "id": "k17",
+            "text": "श"
+          },
+          {
+            "id": "k18",
+            "text": "वा"
+          },
+          {
+            "id": "k19",
+            "text": "णी"
+          },
+          {
+            "id": "k20",
+            "text": "रा"
+          },
+          {
+            "id": "k21",
+            "text": "ज"
+          },
+          {
+            "id": "k22",
+            "text": "नी"
+          },
+          {
+            "id": "k23",
+            "text": "म"
+          },
+          {
+            "id": "k24",
+            "text": "भा"
+          }
+        ],
+        "clue": "खोज और अध्ययन",
+        "meaning": "किसी विषय को व्यवस्थित ढंग से खोजने और समझने का काम।",
+        "extraHint": "इस डेमो में संकेत नहीं है।",
+        "maxChecks": 6,
+        "articleId": "d1-feature",
+        "articleLinkLabel": "इस शब्द से जुड़ी कहानी पढ़ें",
+        "keyboardRows": [
+          [
+            "अ",
+            "नु",
+            "सं",
+            "धा",
+            "न",
+            "प्र",
+            "ति",
+            "यो"
+          ],
+          [
+            "गि",
+            "ता",
+            "ऐ",
+            "हा",
+            "सि",
+            "क",
+            "आ",
+            "का"
+          ],
+          [
+            "श",
+            "वा",
+            "णी",
+            "रा",
+            "ज",
+            "नी",
+            "म",
+            "भा"
+          ]
+        ],
+        "guessPolicy": "any-five-key-units",
+        "inputMode": "reusable-keyboard"
+      },
+      "jodo": {
+        "id": "d1-jodo",
+        "title": "मिशन और उसका काम",
+        "instruction": "मिशन को उसके मुख्य काम से जोड़ें।",
+        "leftOrder": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "rightOrder": [
+          3,
+          1,
+          4,
+          2
+        ],
+        "pairs": [
+          {
+            "id": "d1-p1",
+            "left": "चंद्रयान-3",
+            "right": "चाँद पर उतरना और रोवर चलाना",
+            "reveal": "चंद्रयान-3 के उद्देश्यों में सुरक्षित उतरना, रोवर चलाना और चाँद पर प्रयोग करना शामिल था।",
+            "sourceIds": [
+              "S01"
+            ],
+            "articleId": "d1-feature"
+          },
+          {
+            "id": "d1-p2",
+            "left": "आदित्य-एल1",
+            "right": "सूर्य का अध्ययन",
+            "reveal": "आदित्य-एल1 सूर्य का अध्ययन करने के लिए बनाया गया मिशन है।",
+            "sourceIds": [
+              "S02"
+            ],
+            "articleId": "d1-feature"
+          },
+          {
+            "id": "d1-p3",
+            "left": "मंगलयान",
+            "right": "मंगल की सतह और वायुमंडल",
+            "reveal": "मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल का अध्ययन शामिल था।",
+            "sourceIds": [
+              "S03"
+            ],
+            "articleId": "d1-feature"
+          },
+          {
+            "id": "d1-p4",
+            "left": "एस्ट्रोसैट",
+            "right": "अलग-अलग तरंगों में खगोलीय पिंड देखना",
+            "reveal": "एस्ट्रोसैट एक्स-रे, दृश्य और पराबैंगनी प्रकाश में एक साथ अवलोकन कर सकता है।",
+            "sourceIds": [
+              "S04"
+            ],
+            "articleId": "d1-feature"
+          }
+        ]
+      },
+      "superover": {
+        "id": "d1-superover",
+        "mode": "bat",
+        "target": 10,
+        "maxBalls": 6,
+        "maxWickets": 2,
+        "scenarioType": "fictional-practice",
+        "opponent": "मेहमान टीम",
+        "playerTeam": "आपकी टीम",
+        "articleId": "d1-cricket",
+        "balls": [
+          {
+            "id": "d1-b1",
+            "travelMs": 1400,
+            "gap": "L"
+          },
+          {
+            "id": "d1-b2",
+            "travelMs": 1300,
+            "gap": "C"
+          },
+          {
+            "id": "d1-b3",
+            "travelMs": 1500,
+            "gap": "R"
+          },
+          {
+            "id": "d1-b4",
+            "travelMs": 1200,
+            "gap": "L"
+          },
+          {
+            "id": "d1-b5",
+            "travelMs": 1400,
+            "gap": "R"
+          },
+          {
+            "id": "d1-b6",
+            "travelMs": 1300,
+            "gap": "C"
+          }
+        ],
+        "instruction": "खाली दिशा चुनें। गेंद निशान पर आए, तब शॉट खेलें।"
+      },
+      "carrom": {
+        "id": "d1-carrom",
+        "title": "सीधा निशाना",
+        "objective": "2 शॉट में लाल गोटी किसी पॉकेट में डालें।",
+        "maxShots": 2,
+        "bankRequired": false,
+        "targets": [
+          {
+            "id": "red",
+            "x": 390,
+            "y": 410
+          }
+        ],
+        "order": [],
+        "blockers": []
+      },
+      "articles": [
+        {
+          "id": "d1-feature",
+          "category": "विज्ञान",
+          "title": "भारत के चार अंतरिक्ष मिशन क्या खोजते हैं",
+          "summary": "चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के अलग-अलग तरीके।",
+          "period": "अंतरिक्ष मिशनों पर संदर्भ लेख",
+          "kind": "researched-demo",
+          "sourceIds": [
+            "S01",
+            "S02",
+            "S03",
+            "S04"
+          ],
+          "body": [
+            "भारत के अंतरिक्ष मिशनों के काम एक जैसे नहीं हैं। चंद्रयान-3 के उद्देश्यों में चाँद पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था। आदित्य-एल1 सूर्य के अध्ययन के लिए बनाया गया है।",
+            "मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल को समझना शामिल था। एस्ट्रोसैट खगोलीय पिंडों को एक्स-रे, दृश्य और पराबैंगनी प्रकाश में एक साथ देख सकता है।",
+            "इस डेमो संस्करण के जोड़ो खेल में हर मिशन को उसके काम से मिलाइए। आज का शब्द भी इसी विषय से जुड़ा है। यह संदर्भ सामग्री है, किसी नई घटना की खबर नहीं।"
+          ]
+        },
+        {
+          "id": "d1-cricket",
+          "category": "क्रिकेट अभ्यास",
+          "title": "अभ्यास चुनौती में 6 गेंदों पर 10 रन चाहिए",
+          "summary": "सही समय और सही चुनाव की छह गेंदों वाली चुनौती।",
+          "period": "काल्पनिक अभ्यास स्थिति",
+          "kind": "fictional-practice",
+          "sourceIds": [],
+          "body": [
+            "यह एक काल्पनिक क्रिकेट अभ्यास स्थिति है। आपकी टीम को जीतने के लिए आखिरी 6 गेंदों में 10 रन चाहिए। दो विकेट गिरने पर पारी रुक जाएगी।",
+            "मैदान की खाली दिशा देखें और सधे हुए या बड़े शॉट में से चुनें। गेंद निशान तक पहुँचे, तब शॉट खेलें। यह किसी वास्तविक मैच का स्कोर या परिणाम नहीं है।"
+          ]
+        }
+      ],
+      "feedOrder": [
+        {
+          "type": "article",
+          "id": "d1-feature"
+        },
+        {
+          "type": "games",
+          "id": "d1"
+        },
+        {
+          "type": "article",
+          "id": "d1-cricket"
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "sequence": 2,
+      "label": "दिन 2",
+      "theme": "अभ्यास और प्रयास",
+      "periodLabel": "पेरिस 2024 की यादें",
+      "niti": {
+        "id": "d2-niti",
+        "prompt": "छोटा अभ्यास भी काम आता है, जब हम उसे ___।",
+        "options": [
+          {
+            "id": "o1",
+            "text": "एक बार करके छोड़ दें"
+          },
+          {
+            "id": "o2",
+            "text": "सिर्फ सोचते रहें"
+          },
+          {
+            "id": "o3",
+            "text": "नियमित दोहराएँ"
+          },
+          {
+            "id": "o4",
+            "text": "दूसरों पर छोड़ दें"
+          }
+        ],
+        "answerId": "o3",
+        "fullText": "छोटा अभ्यास भी काम आता है, जब हम उसे नियमित दोहराएँ।",
+        "meaning": "रोज थोड़ा अभ्यास करने से अपनी गलतियों को समझने और सुधारने का मौका मिलता है।",
+        "attribution": "मौलिक विचार · डेमो के लिए लिखा गया",
+        "sourceType": "original-demo",
+        "sourceIds": [],
+        "articleId": "d2-feature",
+        "articleLinkLabel": "खेल की एक कहानी पढ़ें",
+        "shareCaption": "आज की नीति पढ़ें और अपना विचार साझा करें।",
+        "shareText": "छोटा अभ्यास भी काम आता है, जब हम उसे नियमित दोहराएँ।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · भास्कर खेल डेमो"
+      },
+      "shabd": {
+        "id": "d2-shabd",
+        "answer": "प्रतियोगिता",
+        "answerTokens": [
+          "प्र",
+          "ति",
+          "यो",
+          "गि",
+          "ता"
+        ],
+        "bank": [
+          {
+            "id": "k1",
+            "text": "अ"
+          },
+          {
+            "id": "k2",
+            "text": "नु"
+          },
+          {
+            "id": "k3",
+            "text": "सं"
+          },
+          {
+            "id": "k4",
+            "text": "धा"
+          },
+          {
+            "id": "k5",
+            "text": "न"
+          },
+          {
+            "id": "k6",
+            "text": "प्र"
+          },
+          {
+            "id": "k7",
+            "text": "ति"
+          },
+          {
+            "id": "k8",
+            "text": "यो"
+          },
+          {
+            "id": "k9",
+            "text": "गि"
+          },
+          {
+            "id": "k10",
+            "text": "ता"
+          },
+          {
+            "id": "k11",
+            "text": "ऐ"
+          },
+          {
+            "id": "k12",
+            "text": "हा"
+          },
+          {
+            "id": "k13",
+            "text": "सि"
+          },
+          {
+            "id": "k14",
+            "text": "क"
+          },
+          {
+            "id": "k15",
+            "text": "आ"
+          },
+          {
+            "id": "k16",
+            "text": "का"
+          },
+          {
+            "id": "k17",
+            "text": "श"
+          },
+          {
+            "id": "k18",
+            "text": "वा"
+          },
+          {
+            "id": "k19",
+            "text": "णी"
+          },
+          {
+            "id": "k20",
+            "text": "रा"
+          },
+          {
+            "id": "k21",
+            "text": "ज"
+          },
+          {
+            "id": "k22",
+            "text": "नी"
+          },
+          {
+            "id": "k23",
+            "text": "म"
+          },
+          {
+            "id": "k24",
+            "text": "भा"
+          }
+        ],
+        "clue": "खेल और मुकाबला",
+        "meaning": "ऐसा आयोजन जिसमें भाग लेने वाले तय नियमों के अनुसार मुकाबला करते हैं।",
+        "extraHint": "इस डेमो में संकेत नहीं है।",
+        "maxChecks": 6,
+        "articleId": "d2-feature",
+        "articleLinkLabel": "इस शब्द से जुड़ी कहानी पढ़ें",
+        "keyboardRows": [
+          [
+            "अ",
+            "नु",
+            "सं",
+            "धा",
+            "न",
+            "प्र",
+            "ति",
+            "यो"
+          ],
+          [
+            "गि",
+            "ता",
+            "ऐ",
+            "हा",
+            "सि",
+            "क",
+            "आ",
+            "का"
+          ],
+          [
+            "श",
+            "वा",
+            "णी",
+            "रा",
+            "ज",
+            "नी",
+            "म",
+            "भा"
+          ]
+        ],
+        "guessPolicy": "any-five-key-units",
+        "inputMode": "reusable-keyboard"
+      },
+      "jodo": {
+        "id": "d2-jodo",
+        "title": "पेरिस 2024 के खिलाड़ी",
+        "instruction": "खिलाड़ी को उसकी स्पर्धा और पदक से जोड़ें।",
+        "leftOrder": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "rightOrder": [
+          4,
+          3,
+          1,
+          2
+        ],
+        "pairs": [
+          {
+            "id": "d2-p1",
+            "left": "मनु भाकर",
+            "right": "10 मीटर एयर पिस्टल महिला · कांस्य",
+            "reveal": "मनु भाकर ने पेरिस 2024 में महिला 10 मीटर एयर पिस्टल स्पर्धा में कांस्य जीता।",
+            "sourceIds": [
+              "S05"
+            ],
+            "articleId": "d2-feature"
+          },
+          {
+            "id": "d2-p2",
+            "left": "नीरज चोपड़ा",
+            "right": "भाला फेंक पुरुष · रजत",
+            "reveal": "नीरज चोपड़ा ने पेरिस 2024 में पुरुष भाला फेंक में रजत पदक जीता।",
+            "sourceIds": [
+              "S06"
+            ],
+            "articleId": "d2-feature"
+          },
+          {
+            "id": "d2-p3",
+            "left": "स्वप्निल कुसाले",
+            "right": "50 मीटर राइफल 3 पोज़िशन पुरुष · कांस्य",
+            "reveal": "स्वप्निल कुसाले ने पेरिस 2024 में पुरुष 50 मीटर राइफल 3 पोज़िशन में कांस्य जीता।",
+            "sourceIds": [
+              "S07"
+            ],
+            "articleId": "d2-feature"
+          },
+          {
+            "id": "d2-p4",
+            "left": "अमन सहरावत",
+            "right": "57 किग्रा फ्रीस्टाइल कुश्ती पुरुष · कांस्य",
+            "reveal": "अमन सहरावत ने पेरिस 2024 में पुरुष 57 किग्रा फ्रीस्टाइल कुश्ती में कांस्य जीता।",
+            "sourceIds": [
+              "S08"
+            ],
+            "articleId": "d2-feature"
+          }
+        ]
+      },
+      "superover": {
+        "id": "d2-superover",
+        "mode": "bat",
+        "target": 15,
+        "maxBalls": 6,
+        "maxWickets": 2,
+        "scenarioType": "fictional-practice",
+        "opponent": "मेहमान टीम",
+        "playerTeam": "आपकी टीम",
+        "articleId": "d2-cricket",
+        "balls": [
+          {
+            "id": "d2-b1",
+            "travelMs": 1200,
+            "gap": "R"
+          },
+          {
+            "id": "d2-b2",
+            "travelMs": 1000,
+            "gap": "L"
+          },
+          {
+            "id": "d2-b3",
+            "travelMs": 1300,
+            "gap": "C"
+          },
+          {
+            "id": "d2-b4",
+            "travelMs": 1100,
+            "gap": "R"
+          },
+          {
+            "id": "d2-b5",
+            "travelMs": 1000,
+            "gap": "C"
+          },
+          {
+            "id": "d2-b6",
+            "travelMs": 1200,
+            "gap": "L"
+          }
+        ],
+        "instruction": "खाली दिशा चुनें। गेंद निशान पर आए, तब शॉट खेलें।"
+      },
+      "carrom": {
+        "id": "d2-carrom",
+        "title": "किनारे से निशाना",
+        "objective": "3 शॉट में लाल गोटी डालें। उस शॉट में स्ट्राइकर पहले किनारे से टकराए।",
+        "maxShots": 3,
+        "bankRequired": true,
+        "targets": [
+          {
+            "id": "red",
+            "x": 500,
+            "y": 420
+          }
+        ],
+        "order": [],
+        "blockers": []
+      },
+      "articles": [
+        {
+          "id": "d2-feature",
+          "category": "खेल",
+          "title": "पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते",
+          "summary": "चार नाम, चार अलग स्पर्धाएँ। पदक के साथ स्पर्धा पहचानिए।",
+          "period": "ऐतिहासिक संदर्भ · पेरिस ओलंपिक 2024",
+          "kind": "researched-demo",
+          "sourceIds": [
+            "S05",
+            "S06",
+            "S07",
+            "S08"
+          ],
+          "body": [
+            "पेरिस ओलंपिक 2024 में मनु भाकर ने महिला 10 मीटर एयर पिस्टल में कांस्य पदक जीता। नीरज चोपड़ा ने पुरुष भाला फेंक में रजत पदक हासिल किया।",
+            "स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल 3 पोज़िशन में कांस्य जीता। अमन सहरावत ने पुरुष 57 किग्रा फ्रीस्टाइल कुश्ती में कांस्य पदक जीता।",
+            "इन चार उपलब्धियों को सही स्पर्धा के साथ पहचानना आज के जोड़ो खेल की चुनौती है। यह चयन पूरी भारतीय पदक सूची नहीं है। आज की नीति अभ्यास पर एक अलग मौलिक विचार है; इसे किसी खिलाड़ी का कथन न मानें।"
+          ]
+        },
+        {
+          "id": "d2-cricket",
+          "category": "क्रिकेट अभ्यास",
+          "title": "अभ्यास चुनौती में 6 गेंदों पर 15 रन चाहिए",
+          "summary": "सही समय और सही चुनाव की छह गेंदों वाली चुनौती।",
+          "period": "काल्पनिक अभ्यास स्थिति",
+          "kind": "fictional-practice",
+          "sourceIds": [],
+          "body": [
+            "यह एक काल्पनिक क्रिकेट अभ्यास स्थिति है। आपकी टीम को जीतने के लिए आखिरी 6 गेंदों में 15 रन चाहिए। दो विकेट गिरने पर पारी रुक जाएगी।",
+            "मैदान की खाली दिशा देखें और सधे हुए या बड़े शॉट में से चुनें। गेंद निशान तक पहुँचे, तब शॉट खेलें। यह किसी वास्तविक मैच का स्कोर या परिणाम नहीं है।"
+          ]
+        }
+      ],
+      "feedOrder": [
+        {
+          "type": "article",
+          "id": "d2-feature"
+        },
+        {
+          "type": "games",
+          "id": "d2"
+        },
+        {
+          "type": "article",
+          "id": "d2-cricket"
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "sequence": 3,
+      "label": "दिन 3",
+      "theme": "विरासत और देखभाल",
+      "periodLabel": "भारत की विरासत",
+      "niti": {
+        "id": "d3-niti",
+        "prompt": "विरासत अगली पीढ़ी तक पहुँचती है, जब हम उसे ___।",
+        "options": [
+          {
+            "id": "o1",
+            "text": "केवल तस्वीरों में देखें"
+          },
+          {
+            "id": "o2",
+            "text": "भुला दें"
+          },
+          {
+            "id": "o3",
+            "text": "अपना नाम दें"
+          },
+          {
+            "id": "o4",
+            "text": "समझें और सँभालें"
+          }
+        ],
+        "answerId": "o4",
+        "fullText": "विरासत अगली पीढ़ी तक पहुँचती है, जब हम उसे समझें और सँभालें।",
+        "meaning": "पुरानी जगहों और परंपराओं का महत्व जानना उनकी देखभाल की शुरुआत हो सकता है।",
+        "attribution": "मौलिक विचार · डेमो के लिए लिखा गया",
+        "sourceType": "original-demo",
+        "sourceIds": [],
+        "articleId": "d3-feature",
+        "articleLinkLabel": "विरासत की एक कहानी पढ़ें",
+        "shareCaption": "आज की नीति पढ़ें और अपना विचार साझा करें।",
+        "shareText": "विरासत अगली पीढ़ी तक पहुँचती है, जब हम उसे समझें और सँभालें।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · भास्कर खेल डेमो"
+      },
+      "shabd": {
+        "id": "d3-shabd",
+        "answer": "ऐतिहासिक",
+        "answerTokens": [
+          "ऐ",
+          "ति",
+          "हा",
+          "सि",
+          "क"
+        ],
+        "bank": [
+          {
+            "id": "k1",
+            "text": "अ"
+          },
+          {
+            "id": "k2",
+            "text": "नु"
+          },
+          {
+            "id": "k3",
+            "text": "सं"
+          },
+          {
+            "id": "k4",
+            "text": "धा"
+          },
+          {
+            "id": "k5",
+            "text": "न"
+          },
+          {
+            "id": "k6",
+            "text": "प्र"
+          },
+          {
+            "id": "k7",
+            "text": "ति"
+          },
+          {
+            "id": "k8",
+            "text": "यो"
+          },
+          {
+            "id": "k9",
+            "text": "गि"
+          },
+          {
+            "id": "k10",
+            "text": "ता"
+          },
+          {
+            "id": "k11",
+            "text": "ऐ"
+          },
+          {
+            "id": "k12",
+            "text": "हा"
+          },
+          {
+            "id": "k13",
+            "text": "सि"
+          },
+          {
+            "id": "k14",
+            "text": "क"
+          },
+          {
+            "id": "k15",
+            "text": "आ"
+          },
+          {
+            "id": "k16",
+            "text": "का"
+          },
+          {
+            "id": "k17",
+            "text": "श"
+          },
+          {
+            "id": "k18",
+            "text": "वा"
+          },
+          {
+            "id": "k19",
+            "text": "णी"
+          },
+          {
+            "id": "k20",
+            "text": "रा"
+          },
+          {
+            "id": "k21",
+            "text": "ज"
+          },
+          {
+            "id": "k22",
+            "text": "नी"
+          },
+          {
+            "id": "k23",
+            "text": "म"
+          },
+          {
+            "id": "k24",
+            "text": "भा"
+          }
+        ],
+        "clue": "इतिहास और धरोहर",
+        "meaning": "इतिहास से जुड़ा हुआ।",
+        "extraHint": "इस डेमो में संकेत नहीं है।",
+        "maxChecks": 6,
+        "articleId": "d3-feature",
+        "articleLinkLabel": "इस शब्द से जुड़ी कहानी पढ़ें",
+        "keyboardRows": [
+          [
+            "अ",
+            "नु",
+            "सं",
+            "धा",
+            "न",
+            "प्र",
+            "ति",
+            "यो"
+          ],
+          [
+            "गि",
+            "ता",
+            "ऐ",
+            "हा",
+            "सि",
+            "क",
+            "आ",
+            "का"
+          ],
+          [
+            "श",
+            "वा",
+            "णी",
+            "रा",
+            "ज",
+            "नी",
+            "म",
+            "भा"
+          ]
+        ],
+        "guessPolicy": "any-five-key-units",
+        "inputMode": "reusable-keyboard"
+      },
+      "jodo": {
+        "id": "d3-jodo",
+        "title": "धरोहर और राज्य",
+        "instruction": "धरोहर को उसके राज्य से जोड़ें।",
+        "leftOrder": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "rightOrder": [
+          2,
+          4,
+          1,
+          3
+        ],
+        "pairs": [
+          {
+            "id": "d3-p1",
+            "left": "धोलावीरा",
+            "right": "गुजरात",
+            "reveal": "धोलावीरा गुजरात में स्थित हड़प्पा सभ्यता का स्थल है।",
+            "sourceIds": [
+              "S09"
+            ],
+            "articleId": "d3-feature"
+          },
+          {
+            "id": "d3-p2",
+            "left": "हम्पी",
+            "right": "कर्नाटक",
+            "reveal": "हम्पी के स्मारक कर्नाटक में विजयनगर के इतिहास से जुड़े हैं।",
+            "sourceIds": [
+              "S10"
+            ],
+            "articleId": "d3-feature"
+          },
+          {
+            "id": "d3-p3",
+            "left": "साँची",
+            "right": "मध्य प्रदेश",
+            "reveal": "साँची के बौद्ध स्मारक मध्य प्रदेश में हैं।",
+            "sourceIds": [
+              "S11"
+            ],
+            "articleId": "d3-feature"
+          },
+          {
+            "id": "d3-p4",
+            "left": "कोणार्क सूर्य मंदिर",
+            "right": "ओडिशा",
+            "reveal": "कोणार्क का सूर्य मंदिर ओडिशा में है।",
+            "sourceIds": [
+              "S12"
+            ],
+            "articleId": "d3-feature"
+          }
+        ]
+      },
+      "superover": {
+        "id": "d3-superover",
+        "mode": "bowl",
+        "target": 12,
+        "maxBalls": 6,
+        "maxWickets": 2,
+        "scenarioType": "fictional-practice",
+        "opponent": "मेहमान टीम",
+        "playerTeam": "आपकी टीम",
+        "articleId": "d3-cricket",
+        "balls": [
+          {
+            "id": "d3-b1",
+            "travelMs": 1400,
+            "weakness": "yorker"
+          },
+          {
+            "id": "d3-b2",
+            "travelMs": 1200,
+            "weakness": "slower"
+          },
+          {
+            "id": "d3-b3",
+            "travelMs": 1300,
+            "weakness": "length"
+          },
+          {
+            "id": "d3-b4",
+            "travelMs": 1100,
+            "weakness": "yorker"
+          },
+          {
+            "id": "d3-b5",
+            "travelMs": 1200,
+            "weakness": "length"
+          },
+          {
+            "id": "d3-b6",
+            "travelMs": 1000,
+            "weakness": "slower"
+          }
+        ],
+        "instruction": "कमजोरी देखें। गेंद चुनें और सही समय पर डालें।"
+      },
+      "carrom": {
+        "id": "d3-carrom",
+        "title": "दो गोटियाँ",
+        "objective": "3 शॉट में दोनों गोटियाँ किसी भी क्रम में डालें।",
+        "maxShots": 3,
+        "bankRequired": false,
+        "targets": [
+          {
+            "id": "red",
+            "x": 360,
+            "y": 400
+          },
+          {
+            "id": "white",
+            "x": 640,
+            "y": 400
+          }
+        ],
+        "order": [],
+        "blockers": []
+      },
+      "articles": [
+        {
+          "id": "d3-feature",
+          "category": "संस्कृति",
+          "title": "भारत की चार धरोहरें और उनके राज्य",
+          "summary": "गुजरात से ओडिशा तक, चार जगहों की पहचान और इतिहास।",
+          "period": "विश्व धरोहर स्थलों पर संदर्भ लेख",
+          "kind": "researched-demo",
+          "sourceIds": [
+            "S09",
+            "S10",
+            "S11",
+            "S12"
+          ],
+          "body": [
+            "धोलावीरा गुजरात में हड़प्पा सभ्यता का एक स्थल है। वहाँ की जल व्यवस्था उस समय की नगर योजना को समझने में मदद करती है। कर्नाटक के हम्पी में विजयनगर के अवशेष हैं।",
+            "मध्य प्रदेश में साँची के बौद्ध स्मारक हैं। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना से जुड़ी अपनी बनावट के लिए जाना जाता है। ये चारों स्थल यूनेस्को की विश्व धरोहर सूची में दर्ज हैं।",
+            "आज के जोड़ो में इन स्थानों को उनके राज्यों से मिलाइए। शब्द खेल में इसी विषय का एक शब्द मिलेगा। यह संदर्भ लेख है; किसी नए संरक्षण अभियान या घोषणा का दावा नहीं करता।"
+          ]
+        },
+        {
+          "id": "d3-cricket",
+          "category": "क्रिकेट अभ्यास",
+          "title": "अभ्यास चुनौती में 11 रन बचाइए",
+          "summary": "सही समय और सही चुनाव की छह गेंदों वाली चुनौती।",
+          "period": "काल्पनिक अभ्यास स्थिति",
+          "kind": "fictional-practice",
+          "sourceIds": [],
+          "body": [
+            "यह एक काल्पनिक क्रिकेट अभ्यास स्थिति है। मेहमान टीम को 6 गेंदों में जीतने के लिए 12 रन चाहिए। उसे 10 या कम पर रोकने पर आप जीतेंगे; 11 पर बराबरी होगी।",
+            "हर गेंद से पहले बल्लेबाज की कमजोर जगह का संकेत पढ़ें। गेंद का प्रकार चुनकर सही समय पर डालें। दो विकेट लेने पर पारी रुकती है। यह किसी वास्तविक मैच का परिणाम नहीं है।"
+          ]
+        }
+      ],
+      "feedOrder": [
+        {
+          "type": "article",
+          "id": "d3-feature"
+        },
+        {
+          "type": "games",
+          "id": "d3"
+        },
+        {
+          "type": "article",
+          "id": "d3-cricket"
+        }
+      ]
+    }
+  ],
+  "projectStatus": "Provisional game-jam concepts; standalone HTML first"
+}

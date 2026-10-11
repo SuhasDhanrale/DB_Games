@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>भास्कर खेल · समाचार | Dainik Bhaskar Games News</title>
+  <meta name="description" content="दैनिक भास्कर खेल लैब — खेल से जुड़े समाचार और आलेख">
+  <meta name="theme-color" content="#F9F9F7">
+
+  <style>
+    /* ============================================================
+       DAINIK BHASKAR GAMES — NEWS READER (SELF-CONTAINED)
+       Mobile-first, Hindi-first, editorial design
+       ============================================================ */
+    :root {
+      --bg-app: #F8F5EA; /* Warm light newsprint background */
+      --bg-surface: #FFFFFF;
+      --bg-surface-subtle: #F3F0E6;
+      --text-primary: #1C1C1C;
+      --text-secondary: #555555;
+      --text-tertiary: #7E7E7E;
+      --accent-yellow: #FF9900; /* Signature Bhaskar Sun Yellow/Saffron */
+      --accent-yellow-light: #FFF8E1;
+      --accent-yellow-soft: #FFE082;
+      --accent-red: #E23A28;
+      --accent-red-hover: #C52C1C;
+      --accent-red-subtle: #FDECE9;
+      --accent-gold: #FF9900;
+      --border-subtle: rgba(28, 28, 28, 0.08);
+      --border-medium: rgba(28, 28, 28, 0.16);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.07);
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Devanagari", "Nirmala UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-app);
+      color: var(--text-primary);
+      font-family: var(--font-stack);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* Top Accent Rule - Light & Yellow Bar */
+    .top-accent-bar {
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #FF9900 0%, #FFB300 50%, #FFCA28 100%);
+      box-shadow: 0 1px 4px rgba(255, 153, 0, 0.35);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* Main Container (Centered, Mobile-First 360-430px up to 680px desktop) */
+    .app-container {
+      width: 100%;
+      max-width: 680px;
+      min-height: calc(100vh - 4px);
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-app);
+      padding: 0 16px 40px;
+    }
+
+    /* Masthead Header */
+    .masthead {
+      padding: 16px 0 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .masthead-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-icon {
+      width: 34px;
+      height: 34px;
+      background-color: var(--accent-red);
+      color: #FFFFFF;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 19px;
+      line-height: 1;
+      box-shadow: 0 2px 6px rgba(226, 58, 40, 0.3);
+      flex-shrink: 0;
+    }
+
+    .brand-names {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-main-label {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+
+    .brand-sub-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Visible Label Pill */
+    .badge-prototype {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: var(--accent-red-subtle);
+      color: var(--accent-red);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(226, 58, 40, 0.2);
+      white-space: nowrap;
+    }
+
+    .badge-prototype::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--accent-red);
+    }
+
+    /* Prominent Return Button */
+    .btn-return-game {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: var(--accent-red);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 12px 20px;
+      border-radius: 12px;
+      min-height: 48px;
+      min-width: 140px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(226, 58, 40, 0.25);
+      transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-return-game:hover {
+      background-color: var(--accent-red-hover);
+      box-shadow: 0 4px 14px rgba(226, 58, 40, 0.35);
+    }
+
+    .btn-return-game:active {
+      transform: scale(0.98);
+    }
+
+    .btn-return-game-secondary {
+      background-color: #FFFFFF;
+      color: var(--text-primary);
+      border: 1.5px solid var(--border-medium);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-return-game-secondary:hover {
+      background-color: var(--bg-surface-subtle);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Navigation toolbar between views */
+    .nav-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    #topReturnBtn {
+      margin-left: auto;
+    }
+
+    .btn-back-feed {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .btn-back-feed:hover {
+      color: var(--accent-red);
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    /* Views Layout */
+    .view-section {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .view-section.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ------------------------------------------------------------
+       ARTICLE VIEW STYLES
+       ------------------------------------------------------------ */
+    .article-container {
+      background-color: var(--bg-surface);
+      border-radius: 18px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 480px) {
+      .article-container {
+        padding: 32px 28px;
+      }
+    }
+
+    .article-header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+    }
+
+    .article-meta-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .category-badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-red);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      background-color: var(--accent-red-subtle);
+      padding: 3px 10px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .article-headline {
+      font-size: 1.45rem;
+      line-height: 1.35;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.015em;
+    }
+
+    @media (min-width: 480px) {
+      .article-headline {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* Source & Metadata Box */
+    .article-source-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background-color: var(--bg-surface-subtle);
+      border-left: 3px solid var(--accent-red);
+      padding: 8px 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .article-source-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Article Body */
+    .article-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #262626;
+      margin-top: 4px;
+    }
+
+    .article-body p {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .sample-notice-banner {
+      margin-top: 10px;
+      padding: 12px 14px;
+      background-color: #FFF9ED;
+      border: 1px dashed var(--accent-gold);
+      border-radius: 10px;
+      font-size: 0.82rem;
+      color: #7A5500;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .sample-notice-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* Return Action Box at Bottom of Article */
+    .article-return-card {
+      margin-top: 12px;
+      padding: 20px 16px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F9F9F7 100%);
+      border: 1px solid var(--border-medium);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+
+    .return-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .return-card-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      max-width: 440px;
+    }
+
+    /* ------------------------------------------------------------
+       MOCK FEED VIEW STYLES
+       ------------------------------------------------------------ */
+    .feed-header-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feed-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .feed-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .feed-action-bar {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 4px;
+    }
+
+    .stories-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .story-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      position: relative;
+    }
+
+    .story-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(226, 58, 40, 0.3);
+    }
+
+    .story-card:active {
+      transform: scale(0.99);
+    }
+
+    .story-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .story-card-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+    }
+
+    .story-card-excerpt {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .story-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.82rem;
+      color: var(--text-tertiary);
+    }
+
+    .story-read-link {
+      font-weight: 700;
+      color: var(--accent-red);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ------------------------------------------------------------
+       MISSING STORY VIEW STYLES
+       ------------------------------------------------------------ */
+    .missing-story-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      padding: 36px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .missing-icon {
+      font-size: 2.8rem;
+      line-height: 1;
+    }
+
+    .missing-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .missing-desc {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      max-width: 440px;
+      line-height: 1.6;
+    }
+
+    .missing-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+      margin-top: 8px;
+    }
+
+    /* Simple Footer */
+    .page-footer {
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-tertiary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Red Accent Bar -->
+  <div class="top-accent-bar"></div>
+
+  <!-- Main Responsive Container -->
+  <div class="app-container">
+
+    <!-- Top Masthead Header -->
+    <header class="masthead">
+      <div class="masthead-top">
+        <a href="javascript:void(0)" id="logoHomeLink" class="brand-title-wrap" title="दैनिक भास्कर खेल">
+          <div class="brand-logo-icon">भा</div>
+          <div class="brand-names">
+            <span class="brand-main-label">भास्कर खेल</span>
+            <span class="brand-sub-label">दैनिक खेल पत्रिका</span>
+          </div>
+        </a>
+
+        <!-- Visible Label as required -->
+        <div class="badge-prototype">
+          भास्कर खेल · डेमो समाचार पृष्ठ
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Bar (Dynamic back button + game return) -->
+    <div class="nav-toolbar" id="navToolbar">
+      <button type="button" class="btn-back-feed" id="btnBackToFeed" style="display: none;">
+        ← सभी कहानियाँ देखें
+      </button>
+      <a href="./index.html" class="btn-return-game" id="topReturnBtn">
+        खेल पर लौटें
+      </a>
+    </div>
+
+    <!-- VIEW 1: ARTICLE VIEW -->
+    <section class="view-section" id="articleView">
+      <article class="article-container">
+        <div class="article-header">
+          <div class="article-meta-top">
+            <span class="category-badge" id="artCategory">श्रेणी</span>
+            <span class="badge-prototype">नमूना सामग्री</span>
+          </div>
+
+          <h1 class="article-headline" id="artHeadline">शीर्षक</h1>
+
+          <!-- Source / Date Area -->
+          <div class="article-source-box" id="artSourceBox">
+            <div class="article-source-item" id="artSource">स्रोत: शोध संदर्भ स्थानधारक</div>
+            <div class="article-source-item" id="artDate">प्रारूप: प्रोटोटाइप डेमो</div>
+          </div>
+        </div>
+
+        <!-- Article Body Paragraphs -->
+        <div class="article-body" id="artBody">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Visible Notice Banner -->
+        <div class="sample-notice-banner">
+          <span class="sample-notice-icon">ℹ️</span>
+          <div>
+            <strong>नमूना सामग्री:</strong> यह प्रोटोटाइप के लिए तैयार की गई परीक्षण सामग्री है। जल्द ही शोध-सत्यापित आलेख यहाँ उपलब्ध कराया जाएगा।
+          </div>
+        </div>
+
+        <!-- Prominent Return Card at Bottom -->
+        <div class="article-return-card">
+          <div class="return-card-title">क्या आप तैयार हैं?</div>
+          <p class="return-card-desc" id="returnCardDesc">
+            कहानी की पृष्ठभूमि जानने के बाद वापस खेल में लौटें और अपनी चुनौती जारी रखें।
+          </p>
+          <a href="./index.html" class="btn-return-game" id="bottomReturnBtn">
+            खेल पर लौटें
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <!-- VIEW 2: SMALL MOCK FEED VIEW -->
+    <section class="view-section" id="feedView">
+      <div class="feed-header-card">
+        <h2 class="feed-title">खेल से जुड़ी कहानियाँ</h2>
+        <p class="feed-desc">
+          खेल खेलने के बाद पढ़ें आज की विशेष पृष्ठभूमि कहानियाँ और सांस्कृतिक संदर्भ। नीचे दी गई किसी भी कहानी पर टैप करके पढ़ें।
+        </p>
+        <div class="feed-action-bar">
+          <span class="badge-prototype">नमूना सामग्री · डेमो फ़ीड</span>
+        </div>
+      </div>
+
+      <div class="stories-list" id="storiesList">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </section>
+
+    <!-- VIEW 3: MISSING STORY (FRIENDLY 404) -->
+    <section class="view-section" id="missingView">
+      <div class="missing-story-card">
+        <div class="missing-icon">📰</div>
+        <h2 class="missing-title">कहानी उपलब्ध नहीं है</h2>
+        <p class="missing-desc" id="missingMessage">
+          माफ़ कीजिए, आपके द्वारा खोजी गई कहानी यहाँ नहीं मिली। शायद इसका लिंक बदल गया है या यह सामग्री अभी तैयार की जा रही है।
+        </p>
+
+        <div class="missing-actions">
+          <a href="./index.html" class="btn-return-game" id="missingReturnBtn">
+            खेल पर लौटें
+          </a>
+          <button type="button" class="btn-return-game btn-return-game-secondary" id="btnBrowseFeedFromMissing">
+            उपलब्ध कहानियाँ देखें
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+      <div>भास्कर खेल · डेमो समाचार पृष्ठ</div>
+      <div style="margin-top: 4px;">दैनिक भास्कर गेम लैब प्रोटोटाइप 2026</div>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPT: SELF-CONTAINED ROUTING & EDITABLE ARTICLES DATA -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ============================================================
+         EDITABLE ARTICLES DATA STORE
+         Short original Hindi placeholder copy, visibly labelled "नमूना सामग्री".
+         No invented current news, sources, statistics, journalist names or dates.
+         ============================================================ */
+      const ARTICLES_DATA = {
+        'language-tech': {
+          id: 'language-tech',
+          category: 'भाषा और तकनीक',
+          gameId: 'wordal',
+          gameName: 'खबर शब्द (Wordal)',
+          headline: 'डिजिटल युग में हिंदी भाषा और शब्द संरचना का विकास',
+          excerpt: 'कंप्यूटर और स्मार्टफ़ोन पर देवनागरी लिपि के बढ़ते प्रयोग ने भाषा सीखने और दैनिक पहेलियों को एक नया रूप दिया है।',
+          body: [
+            'यह प्रोटोटाइप के लिए तैयार की गई मूल नमूना सामग्री है। डिजिटल माध्यमों पर भारतीय भाषाओं के विस्तार के साथ शब्दावली और लिपि की संरचना में नए प्रयोग देखे जा रहे हैं।',
+            'शब्द पहेलियों और भाषा-आधारित खेलों का उद्देश्य न केवल मनोरंजन है, बल्कि रोज़मर्रा की भाषा से जुड़ने का एक सहज अवसर प्रदान करना भी है। इस स्थान पर शोध-आधारित विस्तृत आलेख जोड़ा जाएगा।'
+          ],
+          source: 'स्रोत: भाषा तकनीकी अध्ययन प्रभाग (नमूना विवरण)',
+          date: 'अद्यतन: प्रारूप डेमो'
+        },
+        'cricket-archive': {
+          id: 'cricket-archive',
+          category: 'क्रिकेट अभिलेखागार',
+          gameId: 'superover',
+          gameName: 'सुपर ओवर (Super Over)',
+          headline: 'सुपर ओवर का रोमांच और ऐतिहासिक पलों की स्मृतियाँ',
+          excerpt: 'सीमित ओवरों के मैच जब टाई होते हैं, तब 6 गेंदों का मुकाबला रणनीति, दबाव और एकाग्रता की सबसे बड़ी परीक्षा बन जाता है।',
+          body: [
+            'यह प्रोटोटाइप के लिए तैयार की गई मूल नमूना सामग्री है। क्रिकेट इतिहास में सुपर ओवर और निर्णायक ओवरों का विशेष स्थान रहा है, जहाँ हर गेंद मैच का रुख मोड़ देती है।',
+            'मैदान पर बल्लेबाज़ और गेंदबाज़ के बीच चलने वाले मानसिक द्वंद्व को खेल के माध्यम से अनुभव करने के बाद खिलाड़ी यहाँ उस रोमांच के पीछे की पृष्ठभूमि जान सकते हैं। जल्द ही यहाँ प्रामाणिक अभिलेखीय सामग्री जोड़ी जाएगी।'
+          ],
+          source: 'स्रोत: खेल अभिलेखागार संकलन (नमूना विवरण)',
+          date: 'अद्यतन: प्रारूप डेमो'
+        },
+        'heritage': {
+          id: 'heritage',
+          category: 'पारंपरिक खेल और धरोहर',
+          gameId: 'carrom',
+          gameName: 'कैरम पहेली (Carrom Puzzles)',
+          headline: 'भारतीय बैठक और आँगन से क्लब तक: कैरम की सांस्कृतिक यात्रा',
+          excerpt: 'लकड़ी के बोर्ड और स्ट्राइकर का यह खेल पीढ़ियों से परिवारों को जोड़ने और कोण व गति की सहज समझ बढ़ाने का माध्यम रहा है।',
+          body: [
+            'यह प्रोटोटाइप के लिए तैयार की गई मूल नमूना सामग्री है। कैरम जैसे पारंपरिक खेल भारतीय घरों में सामाजिक जुड़ाव और सटीक निशानेबाज़ी का अनोखा संगम प्रस्तुत करते हैं।',
+            'बोर्ड के चार कोनों और स्ट्राइकर के रिबाउंड की भौतिकी हर उम्र के खिलाड़ियों को आकर्षित करती है। खेल में पहेली हल करने के बाद खिलाड़ी यहाँ इस पारंपरिक कला की पृष्ठभूमि पढ़ सकते हैं। शोधित सामग्री इस अनुभाग में जोड़ी जाएगी।'
+          ],
+          source: 'स्रोत: सांस्कृतिक धरोहर प्रलेखन (नमूना विवरण)',
+          date: 'अद्यतन: प्रारूप डेमो'
+        }
+      };
+
+      /* ============================================================
+         STRICT ALLOWLIST FOR RETURN DESTINATIONS & VALID DAYS
+         Preserves day parameter in return URL.
+         Never accepts an arbitrary return URL.
+         ============================================================ */
+      const ALLOWED_GAMES = {
+        'wordal': './wordal.html',
+        'superover': './Superover.html',
+        'carrom': './Carrom_Puzzles.html'
+      };
+
+      const ALLOWED_DAYS = ['d1', 'd2', 'd3'];
+      const DEFAULT_DAY = 'd1';
+
+      // Parse Query Parameters
+      function parseParams() {
+        const params = new URLSearchParams(window.location.search);
+        const articleParam = params.get('article');
+        const gameParam = params.get('game');
+        const dayParam = params.get('day');
+
+        // Sanitize day: d1, d2 or d3; default d1
+        const cleanDay = (dayParam && ALLOWED_DAYS.includes(dayParam.toLowerCase()))
+          ? dayParam.toLowerCase()
+          : DEFAULT_DAY;
+
+        // Clean game: only if present in explicit allowlist
+        const cleanGame = (gameParam && Object.prototype.hasOwnProperty.call(ALLOWED_GAMES, gameParam.toLowerCase()))
+          ? gameParam.toLowerCase()
+          : null;
+
+        return {
+          articleId: articleParam ? articleParam.trim() : null,
+          game: cleanGame,
+          day: cleanDay
+        };
+      }
+
+      // Compute Return URL strictly from allowlist
+      function computeReturnUrl(game, day) {
+        if (game && ALLOWED_GAMES[game]) {
+          return `${ALLOWED_GAMES[game]}?day=${encodeURIComponent(day)}`;
+        }
+        // Fallback destination if no recognized game is provided
+        return `./index.html`;
+      }
+
+      // DOM Elements
+      const articleView = document.getElementById('articleView');
+      const feedView = document.getElementById('feedView');
+      const missingView = document.getElementById('missingView');
+      const navToolbar = document.getElementById('navToolbar');
+      const btnBackToFeed = document.getElementById('btnBackToFeed');
+      const topReturnBtn = document.getElementById('topReturnBtn');
+      const bottomReturnBtn = document.getElementById('bottomReturnBtn');
+      const missingReturnBtn = document.getElementById('missingReturnBtn');
+      const btnBrowseFeedFromMissing = document.getElementById('btnBrowseFeedFromMissing');
+      const logoHomeLink = document.getElementById('logoHomeLink');
+      const storiesList = document.getElementById('storiesList');
+
+      // Update all return buttons with sanitized destination
+      function updateReturnButtons(game, day) {
+        const targetUrl = computeReturnUrl(game, day);
+        topReturnBtn.setAttribute('href', targetUrl);
+        bottomReturnBtn.setAttribute('href', targetUrl);
+        missingReturnBtn.setAttribute('href', targetUrl);
+
+        // Friendly label indicating destination if game is known
+        const returnText = 'खेल पर लौटें';
+        topReturnBtn.textContent = returnText;
+        bottomReturnBtn.textContent = returnText;
+        missingReturnBtn.textContent = returnText;
+      }
+
+      // Hide all view sections
+      function hideAllViews() {
+        articleView.classList.remove('active');
+        feedView.classList.remove('active');
+        missingView.classList.remove('active');
+      }
+
+      // Render Article View
+      function showArticle(articleId, game, day) {
+        hideAllViews();
+        const article = ARTICLES_DATA[articleId];
+
+        if (!article) {
+          showMissingStory(articleId, game, day);
+          return;
+        }
+
+        // Populate article details
+        document.getElementById('artCategory').textContent = article.category || 'समाचार';
+        document.getElementById('artHeadline').textContent = article.headline || '';
+
+        // Source and Date Area
+        const sourceElem = document.getElementById('artSource');
+        const dateElem = document.getElementById('artDate');
+        if (article.source) {
+          sourceElem.textContent = article.source;
+          sourceElem.style.display = 'block';
+        } else {
+          sourceElem.style.display = 'none';
+        }
+
+        if (article.date) {
+          dateElem.textContent = article.date;
+          dateElem.style.display = 'block';
+        } else {
+          dateElem.style.display = 'none';
+        }
+
+        // Paragraphs
+        const bodyElem = document.getElementById('artBody');
+        bodyElem.innerHTML = '';
+        if (Array.isArray(article.body)) {
+          article.body.forEach(function (paraText) {
+            const p = document.createElement('p');
+            p.textContent = paraText;
+            bodyElem.appendChild(p);
+          });
+        }
+
+        // Return card note
+        const returnCardDesc = document.getElementById('returnCardDesc');
+        if (game && ALLOWED_GAMES[game]) {
+          returnCardDesc.textContent = 'आप इस समय ' + (article.gameName || 'खेल') + ' खेल रहे हैं। खेल में लौटकर आज की चुनौती पूरी करें।';
+        } else {
+          returnCardDesc.textContent = 'कहानी की पृष्ठभूमि जानने के बाद वापस खेल में लौटें और अपनी चुनौती जारी रखें।';
+        }
+
+        // Navigation state
+        btnBackToFeed.style.display = 'inline-flex';
+        updateReturnButtons(game, day);
+
+        articleView.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Render Missing Story View
+      function showMissingStory(articleId, game, day) {
+        hideAllViews();
+        const missingDesc = document.getElementById('missingMessage');
+        const safeId = String(articleId || '').replace(/[^\w-]/g, '');
+
+        missingDesc.innerHTML = 'माफ़ कीजिए, आपके द्वारा खोजी गई कहानी <strong>"' + safeId + '"</strong> उपलब्ध नहीं है। शायद इसका लिंक बदल गया है या यह अभी तैयार नहीं है।';
+
+        btnBackToFeed.style.display = 'none';
+        updateReturnButtons(game, day);
+
+        missingView.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Render Small Mock Feed View
+      function showFeed(game, day) {
+        hideAllViews();
+
+        storiesList.innerHTML = '';
+        const articleKeys = Object.keys(ARTICLES_DATA);
+
+        articleKeys.forEach(function (id) {
+          const item = ARTICLES_DATA[id];
+          const card = document.createElement('a');
+          card.className = 'story-card';
+          card.href = 'javascript:void(0);';
+
+          card.innerHTML = `
+            <div class="story-card-top">
+              <span class="category-badge">${escapeHtml(item.category)}</span>
+              <span class="badge-prototype">नमूना सामग्री</span>
+            </div>
+            <h3 class="story-card-title">${escapeHtml(item.headline)}</h3>
+            <p class="story-card-excerpt">${escapeHtml(item.excerpt)}</p>
+            <div class="story-card-footer">
+              <span>${escapeHtml(item.gameName ? 'संबंधित: ' + item.gameName : 'भास्कर खेल')}</span>
+              <span class="story-read-link">पूरा पढ़ें →</span>
+            </div>
+          `;
+
+          card.addEventListener('click', function (e) {
+            e.preventDefault();
+            navigateToArticle(id, game, day);
+          });
+
+          storiesList.appendChild(card);
+        });
+
+        btnBackToFeed.style.display = 'none';
+        updateReturnButtons(game, day);
+
+        feedView.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Helper: Navigate internally and update URL query cleanly
+      function navigateToArticle(articleId, game, day) {
+        const query = new URLSearchParams();
+        if (articleId) query.set('article', articleId);
+        if (game) query.set('game', game);
+        if (day) query.set('day', day);
+
+        const newUrl = window.location.pathname + '?' + query.toString();
+        try {
+          window.history.pushState({ articleId: articleId, game: game, day: day }, '', newUrl);
+        } catch (e) {
+          // Graceful fallback for file:// protocol environments that restrict pushState
+        }
+
+        showArticle(articleId, game, day);
+      }
+
+      // Helper: Navigate back to feed internally
+      function navigateToFeed(game, day) {
+        const query = new URLSearchParams();
+        if (game) query.set('game', game);
+        if (day) query.set('day', day);
+
+        const queryString = query.toString();
+        const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
+        try {
+          window.history.pushState({ articleId: null, game: game, day: day }, '', newUrl);
+        } catch (e) {
+          // Graceful fallback
+        }
+
+        showFeed(game, day);
+      }
+
+      // Helper: Escape text for safe HTML rendering
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // Handle Route on load or popstate
+      function route() {
+        const params = parseParams();
+
+        if (params.articleId) {
+          showArticle(params.articleId, params.game, params.day);
+        } else {
+          showFeed(params.game, params.day);
+        }
+      }
+
+      // Event Listeners
+      btnBackToFeed.addEventListener('click', function () {
+        const params = parseParams();
+        navigateToFeed(params.game, params.day);
+      });
+
+      btnBrowseFeedFromMissing.addEventListener('click', function () {
+        const params = parseParams();
+        navigateToFeed(params.game, params.day);
+      });
+
+      logoHomeLink.addEventListener('click', function () {
+        const params = parseParams();
+        navigateToFeed(params.game, params.day);
+      });
+
+      // Browser Back / Forward button handling
+      window.addEventListener('popstate', function () {
+        route();
+      });
+
+      // Initial routing execution
+      route();
+
+    })();
+  </script>
+</body>
+</html>

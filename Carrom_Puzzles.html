@@ -1,0 +1,916 @@
+_
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carrom Puzzles</title>
+
+    <!-- Tailwind CSS for UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Matter.js for 2D Physics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #121212;
+            font-family: 'Inter', sans-serif;
+            touch-action: none;
+            /* Prevents pull-to-refresh on mobile */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 1 / 1;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #Edf2f7;
+            border: 3px solid #0984E3;
+            cursor: pointer;
+            margin-top: -9px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game-container">
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas" width="600" height="600"></canvas>
+
+        <!-- UI Overlay Layer -->
+        <div id="ui-layer"
+            class="absolute inset-0 pointer-events-none flex flex-col items-center justify-center p-4 z-10">
+
+            <!-- Top HUD -->
+            <div id="top-bar"
+                class="absolute top-4 left-4 right-4 flex flex-col sm:flex-row sm:justify-between items-center text-white drop-shadow-md opacity-0 transition-opacity duration-300">
+                <span id="level-display"
+                    class="font-black text-2xl tracking-tight bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm mb-2 sm:mb-0">Level
+                    1</span>
+                <span id="objective-display"
+                    class="text-sm font-bold bg-amber-600/90 px-4 py-1.5 rounded-full backdrop-blur-sm text-center">Pot
+                    the white</span>
+            </div>
+
+            <!-- Striker Position Slider -->
+            <div id="slider-container"
+                class="absolute bottom-6 left-0 right-0 flex flex-col items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none">
+                <span
+                    class="text-white/80 text-xs font-bold mb-2 bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm shadow-md">POSITION
+                    STRIKER</span>
+                <input type="range" id="position-slider" min="150" max="450" value="300"
+                    class="w-3/4 max-w-[300px] pointer-events-auto">
+            </div>
+
+            <!-- Interactive Modal -->
+            <div id="modal"
+                class="bg-slate-50/95 backdrop-blur-md pointer-events-auto p-8 rounded-3xl shadow-2xl text-center max-w-xs w-full transition-all duration-300 transform opacity-100 scale-100 flex flex-col items-center border border-white/20">
+                <div class="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h1 id="modal-title" class="text-2xl font-black mb-2 text-slate-800">Carrom Puzzles</h1>
+                <p id="modal-desc" class="text-slate-600 mb-8 font-medium">Solve the board in one shot.</p>
+                <button id="modal-btn"
+                    class="bg-slate-800 hover:bg-slate-900 active:scale-95 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all w-full text-lg uppercase tracking-wide">
+                    Play
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CANVAS_SIZE = 600;
+        const POCKET_RADIUS = 28;
+        const STRIKER_RADIUS = 20;
+        const COIN_RADIUS = 15;
+
+        // State
+        let gameState = 'MENU'; // MENU, IDLE, AIMING, MOVING, EVALUATE
+        let currentLevelIndex = 0;
+        let currentLevel = null;
+        let potted = { white: 0, black: 0, red: 0, striker: 0 };
+        let restTicks = 0;
+
+        // Interaction state
+        let dragStart = null;
+        let dragCurrent = null;
+        let strikerBody = null;
+
+        // Audio state
+        let audioCtx = null;
+        let lastClackTime = 0;
+
+        const LEVELS = [
+            {
+                title: "Level 1",
+                objective: "Pot the White coin.",
+                coins: [
+                    { x: 300, y: 150, type: 'white' }
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => p.white > 0 ? 'win' : 'lose'
+            },
+            {
+                title: "Level 2",
+                objective: "Bank shot! Pot the White. Avoid the Black.",
+                coins: [
+                    { x: 300, y: 150, type: 'white' },
+                    { x: 300, y: 250, type: 'black' } // Blocks direct shot from center
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => (p.white > 0 && p.black === 0) ? 'win' : 'lose'
+            },
+            {
+                title: "Level 3",
+                objective: "Cut shot! Pot the Red. Don't pot Blacks.",
+                coins: [
+                    { x: 450, y: 150, type: 'red' }, // Near top right pocket
+                    { x: 400, y: 220, type: 'black' }, // Blocks straight path
+                    { x: 300, y: 300, type: 'black' }  // Extra obstacle
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => (p.red > 0 && p.black === 0) ? 'win' : 'lose'
+            },
+            {
+                title: "Level 4",
+                objective: "Thread the needle. Pot the White.",
+                coins: [
+                    { x: 300, y: 100, type: 'white' },
+                    { x: 260, y: 220, type: 'black' },
+                    { x: 340, y: 220, type: 'black' } // Narrow gap in the middle
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => (p.white > 0 && p.black === 0) ? 'win' : 'lose'
+            },
+            {
+                title: "Level 5",
+                objective: "The Fortress. Pot the Red coin.",
+                coins: [
+                    { x: 120, y: 120, type: 'red' }, // Top left pocket
+                    { x: 180, y: 120, type: 'black' }, // Guard right
+                    { x: 120, y: 180, type: 'black' }, // Guard bottom
+                    { x: 250, y: 250, type: 'black' }  // Mid board obstacle
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => (p.red > 0 && p.black === 0) ? 'win' : 'lose'
+            }
+        ];
+
+        function initAudio() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            } catch (e) {
+                console.warn("Web Audio API not supported", e);
+            }
+        }
+
+        function playClack(volume = 1) {
+            if (!audioCtx || audioCtx.state !== 'running') return;
+            const now = Date.now();
+            if (now - lastClackTime < 40) return; // limit rapid fire sounds
+            lastClackTime = now;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
+
+            gain.gain.setValueAtTime(volume * 0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.03);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        function playPocketSound() {
+            if (!audioCtx || audioCtx.state !== 'running') return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.15);
+
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.2);
+        }
+
+        const engine = Matter.Engine.create({
+            gravity: { x: 0, y: 0, scale: 0 } // Top-down perspective
+        });
+        const world = engine.world;
+
+        // Canvas setup
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const ui = {
+            modal: document.getElementById('modal'),
+            title: document.getElementById('modal-title'),
+            desc: document.getElementById('modal-desc'),
+            btn: document.getElementById('modal-btn'),
+            topBar: document.getElementById('top-bar'),
+            level: document.getElementById('level-display'),
+            objective: document.getElementById('objective-display'),
+            sliderContainer: document.getElementById('slider-container'),
+            positionSlider: document.getElementById('position-slider')
+        };
+
+        // State Manager Function
+        function setGameState(newState) {
+            gameState = newState;
+            if (gameState === 'IDLE') {
+                ui.sliderContainer.classList.add('opacity-100');
+                ui.sliderContainer.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                ui.sliderContainer.classList.remove('opacity-100');
+                ui.sliderContainer.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        // Slider Event
+        ui.positionSlider.addEventListener('input', (e) => {
+            if (gameState === 'IDLE' && strikerBody) {
+                Matter.Body.setPosition(strikerBody, {
+                    x: parseFloat(e.target.value),
+                    y: currentLevel.striker.y
+                });
+                Matter.Body.setVelocity(strikerBody, { x: 0, y: 0 });
+            }
+        });
+
+        function showModal(title, desc, btnText, callback) {
+            ui.modal.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
+            ui.modal.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+            ui.title.innerText = title;
+            ui.desc.innerText = desc;
+            ui.btn.innerText = btnText;
+            ui.btn.onclick = () => {
+                initAudio();
+                callback();
+            };
+        }
+
+        function hideModal() {
+            ui.modal.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+            ui.modal.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
+        }
+
+        function setupBoard() {
+            // Precise frame bounds - 4 sides matching the visual frame exactly
+            const THICKNESS = 35;
+            const wOpt = { isStatic: true, label: 'wall', restitution: 0.9, friction: 0 };
+
+            // Physics walls aligned perfectly with the inner visual edges of the board
+            Matter.World.add(world, [
+                Matter.Bodies.rectangle(CANVAS_SIZE / 2, THICKNESS / 2, CANVAS_SIZE, THICKNESS, wOpt), // Top
+                Matter.Bodies.rectangle(CANVAS_SIZE / 2, CANVAS_SIZE - THICKNESS / 2, CANVAS_SIZE, THICKNESS, wOpt), // Bottom
+                Matter.Bodies.rectangle(THICKNESS / 2, CANVAS_SIZE / 2, THICKNESS, CANVAS_SIZE, wOpt), // Left
+                Matter.Bodies.rectangle(CANVAS_SIZE - THICKNESS / 2, CANVAS_SIZE / 2, THICKNESS, CANVAS_SIZE, wOpt) // Right
+            ]);
+        }
+
+        function loadLevel(index) {
+            Matter.World.clear(world);
+            Matter.Engine.clear(engine);
+            setupBoard();
+
+            currentLevel = LEVELS[index];
+            potted = { white: 0, black: 0, red: 0, striker: 0 };
+            restTicks = 0;
+
+            const physOptions = {
+                restitution: 0.9,
+                friction: 0, // 0 contact friction ensures perfect geometric deflection angles
+                frictionAir: 0.015, // Sliding friction against the board surface
+                density: 0.005
+            };
+
+            // Spawn Coins
+            currentLevel.coins.forEach(c => {
+                let body = Matter.Bodies.circle(c.x, c.y, COIN_RADIUS, {
+                    ...physOptions,
+                    label: 'coin_' + c.type
+                });
+                Matter.World.add(world, body);
+            });
+
+            // Spawn Obstacles
+            if (currentLevel.obstacles) {
+                currentLevel.obstacles.forEach(o => {
+                    let body = Matter.Bodies.rectangle(o.x, o.y, o.w, o.h, {
+                        isStatic: true,
+                        angle: o.angle || 0,
+                        label: 'obstacle',
+                        restitution: 0.9,
+                        friction: 0
+                    });
+                    Matter.World.add(world, body);
+                });
+            }
+
+            // Spawn Striker
+            strikerBody = Matter.Bodies.circle(currentLevel.striker.x, currentLevel.striker.y, STRIKER_RADIUS, {
+                restitution: 0.9,
+                friction: 0,
+                frictionAir: 0.012,
+                density: 0.012, // Heavier than coins
+                label: 'striker'
+            });
+            Matter.World.add(world, strikerBody);
+
+            // Update UI State
+            ui.level.innerText = currentLevel.title;
+            ui.objective.innerText = currentLevel.objective;
+            ui.topBar.classList.add('opacity-100');
+            ui.topBar.classList.remove('opacity-0');
+
+            ui.positionSlider.value = currentLevel.striker.x;
+
+            showModal(currentLevel.title, currentLevel.objective, "Start", () => {
+                hideModal();
+                setGameState('IDLE');
+            });
+        }
+
+        function evaluateLevel() {
+            if (potted.striker > 0) {
+                showModal("Foul!", "You potted the striker. Try again.", "Retry", () => loadLevel(currentLevelIndex));
+                return;
+            }
+
+            const result = currentLevel.check(potted);
+            if (result === 'win') {
+                if (currentLevelIndex < LEVELS.length - 1) {
+                    showModal("Success!", "Excellent shot.", "Next Level", () => {
+                        currentLevelIndex++;
+                        loadLevel(currentLevelIndex);
+                    });
+                } else {
+                    showModal("Game Cleared!", "You beat all the puzzles! Amazing striking skills.", "Play Again", () => {
+                        currentLevelIndex = 0;
+                        loadLevel(currentLevelIndex);
+                    });
+                }
+            } else {
+                showModal("Missed!", "You didn't complete the objective.", "Retry", () => loadLevel(currentLevelIndex));
+            }
+        }
+
+        let bodiesToRemove = [];
+        Matter.Events.on(engine, 'collisionStart', (e) => {
+            e.pairs.forEach(pair => {
+                const { bodyA, bodyB } = pair;
+                // Play clack sound on strong physical impacts
+                if (bodyA.speed > 1 || bodyB.speed > 1) {
+                    playClack(Math.min(1, (bodyA.speed + bodyB.speed) / 15));
+                }
+            });
+        });
+
+        // Track and remove pocketed bodies accurately
+        Matter.Events.on(engine, 'afterUpdate', () => {
+            const POCKET_OFFSET = 40;
+            const POCKET_FALL_RADIUS = 24; // Distance threshold for piece to fall over the lip
+            const corners = [
+                [POCKET_OFFSET, POCKET_OFFSET],
+                [CANVAS_SIZE - POCKET_OFFSET, POCKET_OFFSET],
+                [POCKET_OFFSET, CANVAS_SIZE - POCKET_OFFSET],
+                [CANVAS_SIZE - POCKET_OFFSET, CANVAS_SIZE - POCKET_OFFSET]
+            ];
+
+            world.bodies.forEach(b => {
+                if (b.label.startsWith('coin') || b.label === 'striker') {
+                    for (let c of corners) {
+                        const dist = Math.hypot(b.position.x - c[0], b.position.y - c[1]);
+                        if (dist < POCKET_FALL_RADIUS) {
+                            if (!bodiesToRemove.includes(b)) {
+                                bodiesToRemove.push(b);
+                                playPocketSound();
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+
+            bodiesToRemove.forEach(b => {
+                Matter.World.remove(world, b);
+                if (b.label === 'coin_white') potted.white++;
+                if (b.label === 'coin_black') potted.black++;
+                if (b.label === 'coin_red') potted.red++;
+                if (b.label === 'striker') potted.striker++;
+            });
+            if (bodiesToRemove.length > 0) {
+                bodiesToRemove = [];
+            }
+        });
+
+        function drawBoard() {
+            const THICKNESS = 35;
+
+            // Outer Dark Wood Frame
+            ctx.fillStyle = '#3E2723';
+            ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+            // Inner Light Wood Board
+            ctx.fillStyle = '#E8C396';
+            ctx.fillRect(THICKNESS, THICKNESS, CANVAS_SIZE - THICKNESS * 2, CANVAS_SIZE - THICKNESS * 2);
+
+            // Frame joints (Diagonal lines at the corners of the frame)
+            ctx.strokeStyle = '#2D1A11';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 0); ctx.lineTo(THICKNESS, THICKNESS);
+            ctx.moveTo(CANVAS_SIZE, 0); ctx.lineTo(CANVAS_SIZE - THICKNESS, THICKNESS);
+            ctx.moveTo(0, CANVAS_SIZE); ctx.lineTo(THICKNESS, CANVAS_SIZE - THICKNESS);
+            ctx.moveTo(CANVAS_SIZE, CANVAS_SIZE); ctx.lineTo(CANVAS_SIZE - THICKNESS, CANVAS_SIZE - THICKNESS);
+            ctx.stroke();
+
+            // Center Decorations
+            const cx = CANVAS_SIZE / 2;
+            const cy = CANVAS_SIZE / 2;
+
+            // Outer dashed ring
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath(); ctx.arc(cx, cy, 95, 0, Math.PI * 2); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Middle rings
+            ctx.strokeStyle = '#A13333'; // Deep red
+            ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.arc(cx, cy, 75, 0, Math.PI * 2); ctx.stroke();
+
+            ctx.strokeStyle = '#222'; // Inner black
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(cx, cy, 65, 0, Math.PI * 2); ctx.stroke();
+
+            // Bullseye
+            ctx.fillStyle = '#A13333';
+            ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#222';
+            ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.stroke();
+
+            // Center dot
+            ctx.fillStyle = '#E8C396';
+            ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
+
+            // Baselines (All 4 sides)
+            const drawBaseline = (x, y, w, h, isVertical) => {
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.lineWidth = 1.5;
+
+                // Parallel lines
+                if (isVertical) {
+                    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + h); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(x + w, y); ctx.lineTo(x + w, y + h); ctx.stroke();
+                } else {
+                    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + w, y); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(x, y + h); ctx.lineTo(x + w, y + h); ctx.stroke();
+                }
+
+                // Red corner intersection circles
+                const r = 15;
+                const drawEnd = (endX, endY) => {
+                    ctx.fillStyle = '#A13333';
+                    ctx.beginPath(); ctx.arc(endX, endY, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                    ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+                    ctx.beginPath(); ctx.arc(endX, endY, r - 4, 0, Math.PI * 2); ctx.stroke();
+                };
+
+                if (isVertical) {
+                    drawEnd(x + w / 2, y);
+                    drawEnd(x + w / 2, y + h);
+                } else {
+                    drawEnd(x, y + h / 2);
+                    drawEnd(x + w, y + h / 2);
+                }
+            };
+
+            const bOffset = 150;
+            const bLength = 300;
+            const bThick = 26;
+
+            drawBaseline(bOffset, 472, bLength, bThick, false); // Bottom
+            drawBaseline(bOffset, 102, bLength, bThick, false); // Top
+            drawBaseline(102, bOffset, bThick, bLength, true);  // Left
+            drawBaseline(472, bOffset, bThick, bLength, true);  // Right
+
+            // Pocket Holes (Rendered with deep realistic shadow)
+            const offset = 40;
+            const pRadius = POCKET_RADIUS;
+            const corners = [[offset, offset], [CANVAS_SIZE - offset, offset], [offset, CANVAS_SIZE - offset], [CANVAS_SIZE - offset, CANVAS_SIZE - offset]];
+
+            corners.forEach(c => {
+                // Deep Hole
+                ctx.fillStyle = '#111';
+                ctx.beginPath();
+                ctx.arc(c[0], c[1], pRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Inner drop shadow rim
+                ctx.strokeStyle = '#2a2a2a';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(c[0], c[1], pRadius - 2, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Outer wood cut rim
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#3E2723';
+                ctx.beginPath();
+                ctx.arc(c[0], c[1], pRadius + 1, 0, Math.PI * 2);
+                ctx.stroke();
+            });
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+            drawBoard();
+
+            // Draw Obstacles
+            ctx.fillStyle = '#5A351D'; // Dark Wood
+            world.bodies.forEach(b => {
+                if (b.label === 'obstacle') {
+                    ctx.beginPath();
+                    b.vertices.forEach((v, i) => {
+                        if (i === 0) ctx.moveTo(v.x, v.y);
+                        else ctx.lineTo(v.x, v.y);
+                    });
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#382010';
+                    ctx.stroke();
+                }
+            });
+
+            // Draw Pieces with 3D gradient look
+            world.bodies.forEach(b => {
+                if (b.label.startsWith('coin') || b.label === 'striker') {
+                    ctx.translate(b.position.x, b.position.y);
+                    ctx.rotate(b.angle);
+
+                    // Drop Shadow
+                    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                    ctx.beginPath();
+                    ctx.arc(2, 3, b.circleRadius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Radial Gradient Bevel
+                    let grad = ctx.createRadialGradient(
+                        -b.circleRadius * 0.3, -b.circleRadius * 0.3, 2,
+                        0, 0, b.circleRadius
+                    );
+
+                    ctx.beginPath();
+                    ctx.arc(0, 0, b.circleRadius, 0, Math.PI * 2);
+
+                    if (b.label === 'coin_white') {
+                        grad.addColorStop(0, '#FFFFFF');
+                        grad.addColorStop(1, '#E6D5B8');
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        ctx.lineWidth = 1; ctx.strokeStyle = '#BBA480'; ctx.stroke();
+
+                        // Detail rings
+                        ctx.strokeStyle = '#C5B293'; ctx.lineWidth = 1.5;
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
+
+                    } else if (b.label === 'coin_black') {
+                        grad.addColorStop(0, '#666666');
+                        grad.addColorStop(1, '#1A1A1A');
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        ctx.lineWidth = 1; ctx.strokeStyle = '#000000'; ctx.stroke();
+
+                        // Detail rings
+                        ctx.strokeStyle = '#333333'; ctx.lineWidth = 1.5;
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
+
+                    } else if (b.label === 'coin_red') {
+                        grad.addColorStop(0, '#FF6B6B');
+                        grad.addColorStop(1, '#C21807');
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        ctx.lineWidth = 1; ctx.strokeStyle = '#7A0F04'; ctx.stroke();
+
+                        // Detail rings
+                        ctx.strokeStyle = '#9C1305'; ctx.lineWidth = 1.5;
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
+
+                    } else if (b.label === 'striker') {
+                        grad.addColorStop(0, '#FFFFFF');
+                        grad.addColorStop(1, '#D9E2E8');
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        ctx.lineWidth = 1.5; ctx.strokeStyle = '#1E3A8A'; ctx.stroke();
+
+                        // Detail rings
+                        ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 2;
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.65, 0, Math.PI * 2); ctx.stroke();
+
+                        // Center dot
+                        ctx.fillStyle = '#2563EB';
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.2, 0, Math.PI * 2); ctx.fill();
+
+                        // Aiming indicator (rotational pip)
+                        ctx.fillStyle = '#1E3A8A';
+                        ctx.beginPath(); ctx.arc(0, -b.circleRadius * 0.45, 3, 0, Math.PI * 2); ctx.fill();
+                    }
+
+                    ctx.rotate(-b.angle);
+                    ctx.translate(-b.position.x, -b.position.y);
+                }
+            });
+
+            if (gameState === 'AIMING' && dragStart && dragCurrent && strikerBody) {
+                const dx = dragStart.x - dragCurrent.x;
+                const dy = dragStart.y - dragCurrent.y;
+                const dist = Math.hypot(dx, dy);
+                const maxDist = 150;
+                const clampedDist = Math.min(dist, maxDist);
+
+                if (clampedDist > 15) {
+                    const angle = Math.atan2(dy, dx);
+
+                    const startX = strikerBody.position.x;
+                    const startY = strikerBody.position.y;
+                    const dirX = Math.cos(angle);
+                    const dirY = Math.sin(angle);
+
+                    let t_min = Infinity;
+                    let hitCoin = null;
+
+                    // 1. Check distance to Walls
+                    const minX = 35 + STRIKER_RADIUS;
+                    const maxX = CANVAS_SIZE - 35 - STRIKER_RADIUS;
+                    const minY = 35 + STRIKER_RADIUS;
+                    const maxY = CANVAS_SIZE - 35 - STRIKER_RADIUS;
+
+                    if (dirX > 0) t_min = Math.min(t_min, (maxX - startX) / dirX);
+                    else if (dirX < 0) t_min = Math.min(t_min, (minX - startX) / dirX);
+
+                    if (dirY > 0) t_min = Math.min(t_min, (maxY - startY) / dirY);
+                    else if (dirY < 0) t_min = Math.min(t_min, (minY - startY) / dirY);
+
+                    // 2. Check distance to Coins (Circle Sweep Collision)
+                    world.bodies.forEach(b => {
+                        if (b.label.startsWith('coin')) {
+                            const vecX = startX - b.position.x;
+                            const vecY = startY - b.position.y;
+
+                            const b_quad = 2 * (dirX * vecX + dirY * vecY);
+                            const c_quad = (vecX * vecX + vecY * vecY) - Math.pow(STRIKER_RADIUS + b.circleRadius, 2);
+
+                            const discriminant = (b_quad * b_quad) - (4 * c_quad);
+
+                            if (discriminant >= 0) {
+                                // Only calculate the first intersection point (entry)
+                                const t1 = (-b_quad - Math.sqrt(discriminant)) / 2;
+
+                                if (t1 > 0.01 && t1 < t_min) {
+                                    t_min = t1;
+                                    hitCoin = b;
+                                }
+                            }
+                        }
+                    });
+
+                    const impactX = startX + dirX * t_min;
+                    const impactY = startY + dirY * t_min;
+
+                    // Calculate power ratio (0.0 to 1.0)
+                    const powerRatio = clampedDist / maxDist;
+
+                    // --- Draw Circular Power Meter ---
+                    const ringRadius = STRIKER_RADIUS + 14;
+
+                    // Background track
+                    ctx.beginPath();
+                    ctx.arc(startX, startY, ringRadius, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+
+                    // Colored Power Fill
+                    ctx.beginPath();
+                    ctx.arc(startX, startY, ringRadius, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * powerRatio));
+                    const hue = (1 - powerRatio) * 120;
+                    ctx.strokeStyle = `hsla(${hue}, 100%, 55%, 1)`;
+                    ctx.lineWidth = 4;
+                    ctx.lineCap = 'round';
+                    ctx.stroke();
+
+                    // --- Draw Trajectory Line ---
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(impactX, impactY);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.stroke();
+
+                    // --- Draw Ghost Striker ---
+                    ctx.beginPath();
+                    ctx.arc(impactX, impactY, STRIKER_RADIUS, 0, Math.PI * 2);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function getTouchPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = CANVAS_SIZE / rect.width;
+            const scaleY = CANVAS_SIZE / rect.height;
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function handleStart(e) {
+            if (gameState !== 'IDLE' || !strikerBody) return;
+            const pos = getTouchPos(e);
+            const dist = Math.hypot(pos.x - strikerBody.position.x, pos.y - strikerBody.position.y);
+
+            // Generous touch hit area
+            if (dist <= strikerBody.circleRadius + 30) {
+                setGameState('AIMING');
+                dragStart = pos;
+                dragCurrent = pos;
+            }
+        }
+
+        function handleMove(e) {
+            if (gameState !== 'AIMING') return;
+            dragCurrent = getTouchPos(e);
+        }
+
+        function handleEnd(e) {
+            if (gameState !== 'AIMING') return;
+
+            const dx = dragStart.x - dragCurrent.x;
+            const dy = dragStart.y - dragCurrent.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist > 15) {
+                const maxDist = 150;
+                const clampedDist = Math.min(dist, maxDist);
+                const angle = Math.atan2(dy, dx);
+
+                // Max speed slightly reduced to balance the higher wall bounciness
+                const speed = (clampedDist / maxDist) * 24;
+
+                Matter.Body.setVelocity(strikerBody, {
+                    x: Math.cos(angle) * speed,
+                    y: Math.sin(angle) * speed
+                });
+
+                setGameState('MOVING');
+                ui.topBar.classList.remove('opacity-100'); // Hide HUD during shot to focus
+                ui.topBar.classList.add('opacity-0');
+            } else {
+                setGameState('IDLE'); // Cancel shot if drag was too short
+            }
+        }
+
+        // Attach events
+        canvas.addEventListener('mousedown', handleStart);
+        canvas.addEventListener('touchstart', handleStart, { passive: true });
+
+        // Window level binding for drag out bounds support
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('touchmove', handleMove, { passive: true });
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchend', handleEnd, { passive: true });
+
+        function checkGameState() {
+            if (gameState === 'MOVING') {
+                let moving = false;
+
+                // Track moving bodies, snap slow ones to rest
+                for (let i = 0; i < world.bodies.length; i++) {
+                    let b = world.bodies[i];
+                    if (!b.isStatic && b.label !== 'pocket') {
+                        if (b.speed > 0.05) {
+                            moving = true;
+                        } else if (b.speed > 0) {
+                            Matter.Body.setVelocity(b, { x: 0, y: 0 });
+                            Matter.Body.setAngularVelocity(b, 0);
+                        }
+                    }
+                }
+
+                if (!moving) {
+                    restTicks++;
+                    if (restTicks > 20) { // Slight delay to ensure everything rests
+                        setGameState('EVALUATE');
+                        evaluateLevel();
+                    }
+                } else {
+                    restTicks = 0;
+                }
+            }
+        }
+
+        let lastTime = 0;
+        function loop(timestamp) {
+            // Fixed time step for physics
+            Matter.Engine.update(engine, 1000 / 60);
+            render();
+            checkGameState();
+            requestAnimationFrame(loop);
+        }
+
+        // Start Application
+        showModal(
+            "Carrom Puzzles",
+            "Pull back on the striker to aim and shoot.\nComplete the objective in 1 shot.",
+            "Play",
+            () => {
+                loadLevel(0);
+                requestAnimationFrame(loop);
+            }
+        );
+    </script>
+</body>
+
+</html>

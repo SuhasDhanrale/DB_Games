@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
+    "dev:superover": "vite --open /Superover.html",
     "build": "vite build",
     "preview": "vite preview"
   },

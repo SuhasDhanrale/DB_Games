@@ -1,0 +1,2493 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>आज की नीति · दैनिक भास्कर खेल | Aaj Ki Niti</title>
+  <meta name="description" content="आज की नीति — शांत, दैनिक विचार पूर्ति खेल। एक विचार को पूरा करें, उसका गहरा अर्थ समझें और सुंदर विचार-कार्ड साझा करें।">
+  <meta name="theme-color" content="#F9F9F7">
+
+  <style>
+    /* ============================================================
+       आज की नीति (AAJ KI NITI) — DAINIK BHASKAR GAMES
+       Hindi-first, Mobile-first, Self-contained Editorial Daily Game
+       ============================================================ */
+
+    :root {
+      --color-primary: #E23A28;         /* Dainik Bhaskar Signature Red */
+      --color-primary-hover: #C52C1C;
+      --color-primary-light: #FDECE9;
+      --color-primary-subtle: #FFF5F4;
+      --color-accent-gold: #D35400;      /* Warm Saffron / Gold */
+      --color-accent-amber: #B7791F;
+      --color-success: #1E824C;         /* Editorial Forest Green */
+      --color-success-bg: #E8F8F0;
+      --color-success-border: #A3E4D7;
+      --color-wrong: #A93226;           /* Subtle Editorial Error Red */
+      --color-wrong-bg: #FDEDEC;
+      --color-wrong-border: #F5B7B1;
+      --color-bg: #F9F9F7;              /* Warm Newsprint Paper */
+      --color-surface: #FFFFFF;
+      --color-surface-soft: #F4F1EA;
+      --color-surface-warm: #FAF8F5;
+      --text-main: #1C1C1C;             /* Deep Editorial Ink */
+      --text-muted: #555555;
+      --text-subtle: #7A7A7A;
+      --text-white: #FFFFFF;
+      --border-subtle: rgba(28, 28, 28, 0.12);
+      --border-medium: rgba(28, 28, 28, 0.22);
+      --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.07);
+      --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.11);
+      --shadow-focus: 0 0 0 3px rgba(226, 58, 40, 0.28);
+      --font-stack: "Noto Sans Devanagari", "Nirmala UI", "Mangal", "Devanagari Sangam MN", "Kohinoor Devanagari", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-serif: "Rozha One", "Martel", "Georgia", "Cambria", serif;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 18px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--text-main);
+      font-family: var(--font-stack);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      overflow-x: hidden;
+      font-size: 16px;
+    }
+
+    /* Screen Reader Only Utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Top Red-Orange Accent Bar */
+    .top-accent-bar {
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #E23A28 0%, #F39C12 100%);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* App Shell Container (Mobile-first 360-430px up to 500px desktop) */
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      min-height: calc(100vh - 4px);
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-bg);
+      padding: 12px 16px 40px;
+      position: relative;
+    }
+
+    /* Header & Masthead */
+    .header-masthead {
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 12px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .brand-identity {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-primary);
+      letter-spacing: 0.3px;
+    }
+
+    .brand-sun-icon {
+      width: 14px;
+      height: 14px;
+      fill: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .brand-mood-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--color-surface-soft);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .game-main-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.25;
+    }
+
+    .edition-tag-pill {
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+
+    /* Edition Switcher Tabs */
+    .edition-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .edition-tab-btn {
+      min-height: 48px;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--color-surface);
+      color: var(--text-muted);
+      font-family: inherit;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 4px;
+      transition: all 0.16s ease;
+      text-align: center;
+    }
+
+    .edition-tab-btn .tab-main {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .edition-tab-btn .tab-sub {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.85;
+      margin-top: 1px;
+    }
+
+    .edition-tab-btn:hover {
+      background: var(--color-surface-warm);
+      border-color: var(--border-medium);
+      color: var(--text-main);
+    }
+
+    .edition-tab-btn.is-active {
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      box-shadow: 0 2px 6px rgba(226, 58, 40, 0.12);
+    }
+
+    .edition-tab-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--shadow-focus);
+    }
+
+    .edition-tab-btn .tab-status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--color-success);
+      margin-top: 3px;
+    }
+
+    /* Instruction Row */
+    .instruction-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 9px 12px;
+      margin-bottom: 14px;
+    }
+
+    .instruction-icon {
+      color: var(--color-primary);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .instruction-text {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* Practice Mode Alert Banner */
+    .practice-alert-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #FFF8E1;
+      border: 1px solid #FFE082;
+      color: #8D6E63;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .practice-alert-bar.is-visible {
+      display: flex;
+    }
+
+    .practice-return-btn {
+      background: #FFFFFF;
+      border: 1px solid #D7CCC8;
+      color: #5D4037;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       CENTRAL THOUGHT CARD (Visual Center of the Screen)
+       ============================================================ */
+    .thought-card {
+      background: var(--color-surface);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 22px 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      transition: all 0.25s ease;
+    }
+
+    .thought-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 20px;
+      right: 20px;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(226, 58, 40, 0.6) 0%, rgba(243, 156, 18, 0.4) 100%);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .thought-quote-mark {
+      font-size: 34px;
+      line-height: 1;
+      color: var(--color-primary);
+      opacity: 0.25;
+      font-family: var(--font-serif);
+      margin-bottom: -6px;
+      display: block;
+      user-select: none;
+    }
+
+    .thought-content {
+      font-size: 19px;
+      line-height: 1.65;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+    }
+
+    /* Thought Blank Elements */
+    .thought-blank-slot {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 4px;
+      min-width: 140px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .thought-blank-slot.is-empty {
+      border-bottom: 2px dashed rgba(226, 58, 40, 0.5);
+      padding: 1px 12px;
+      color: rgba(28, 28, 28, 0.4);
+      background: rgba(226, 58, 40, 0.04);
+      border-radius: var(--radius-sm);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .thought-blank-slot.is-preview {
+      background: #FFF8E1;
+      border: 1.5px solid #FFC107;
+      color: #B7791F;
+      border-radius: var(--radius-sm);
+      padding: 1px 10px;
+      font-weight: 700;
+      box-shadow: 0 1px 4px rgba(255, 193, 7, 0.2);
+      animation: pulseSubtle 1.8s infinite alternate;
+    }
+
+    .thought-blank-slot.is-correct {
+      background: var(--color-success-bg);
+      border: 1.5px solid var(--color-success-border);
+      color: var(--color-success);
+      border-radius: var(--radius-sm);
+      padding: 1px 10px;
+      font-weight: 700;
+    }
+
+    .thought-blank-slot.is-wrong {
+      background: var(--color-wrong-bg);
+      border: 1.5px solid var(--color-wrong-border);
+      color: var(--color-wrong);
+      border-radius: var(--radius-sm);
+      padding: 1px 10px;
+      font-weight: 700;
+    }
+
+    @keyframes pulseSubtle {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.02); }
+    }
+
+    .thought-meta-sub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-subtle);
+    }
+
+    .thought-attribution-label {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Subtle pulse animation when user clicks "विचार फिर देखें" */
+    .thought-card.is-highlighted {
+      animation: cardPulse 1.2s ease-out;
+    }
+
+    @keyframes cardPulse {
+      0% { box-shadow: 0 0 0 0 rgba(226, 58, 40, 0.4); transform: scale(1); }
+      30% { box-shadow: 0 0 0 8px rgba(226, 58, 40, 0.15); transform: scale(1.015); }
+      100% { box-shadow: var(--shadow-sm); transform: scale(1); }
+    }
+
+    /* ============================================================
+       OPTIONS STACK (4 Vertically Stacked Answer Buttons)
+       ============================================================ */
+    .options-section {
+      margin-bottom: 16px;
+    }
+
+    .options-heading-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-item-btn {
+      min-height: 50px;
+      width: 100%;
+      background: var(--color-surface);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: inherit;
+      font-size: 15.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      position: relative;
+    }
+
+    .option-item-btn:hover:not(:disabled) {
+      border-color: var(--border-medium);
+      background: var(--color-surface-warm);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .option-item-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--shadow-focus);
+    }
+
+    /* Option Marker (Letter Badge: क, ख, ग, घ) */
+    .option-marker {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-surface-soft);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.16s ease;
+    }
+
+    .option-text-wrap {
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .option-feedback-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      display: none;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    /* Selected state (before confirmation) */
+    .option-item-btn.is-selected {
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+      color: var(--color-primary-hover);
+      box-shadow: 0 2px 8px rgba(226, 58, 40, 0.12);
+    }
+
+    .option-item-btn.is-selected .option-marker {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border-color: var(--color-primary);
+    }
+
+    /* Confirmed States */
+    .option-item-btn:disabled {
+      cursor: default;
+      transform: none;
+    }
+
+    /* Author's correct completion */
+    .option-item-btn.is-authored-correct {
+      border-color: var(--color-success);
+      background: var(--color-success-bg);
+      color: var(--color-success);
+    }
+
+    .option-item-btn.is-authored-correct .option-marker {
+      background: var(--color-success);
+      color: #FFFFFF;
+      border-color: var(--color-success);
+    }
+
+    .option-item-btn.is-authored-correct .option-feedback-badge {
+      display: inline-flex;
+      background: #FFFFFF;
+      color: var(--color-success);
+      border: 1px solid var(--color-success-border);
+    }
+
+    /* Selected Wrong Choice */
+    .option-item-btn.is-user-wrong {
+      border-color: var(--color-wrong);
+      background: var(--color-wrong-bg);
+      color: var(--color-wrong);
+    }
+
+    .option-item-btn.is-user-wrong .option-marker {
+      background: var(--color-wrong);
+      color: #FFFFFF;
+      border-color: var(--color-wrong);
+    }
+
+    .option-item-btn.is-user-wrong .option-feedback-badge {
+      display: inline-flex;
+      background: #FFFFFF;
+      color: var(--color-wrong);
+      border: 1px solid var(--color-wrong-border);
+    }
+
+    /* Other neutral unselected options once confirmed */
+    .option-item-btn.is-dimmed {
+      opacity: 0.55;
+      background: var(--color-surface-soft);
+      border-color: var(--border-subtle);
+    }
+
+    /* ============================================================
+       CONFIRMATION BUTTON
+       ============================================================ */
+    .confirm-action-row {
+      margin-bottom: 20px;
+    }
+
+    .btn-confirm-action {
+      min-height: 48px;
+      width: 100%;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(226, 58, 40, 0.25);
+      transition: all 0.16s ease;
+    }
+
+    .btn-confirm-action:hover:not(:disabled) {
+      background: var(--color-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(226, 58, 40, 0.3);
+    }
+
+    .btn-confirm-action:disabled {
+      background: #D8D8D8;
+      color: #888888;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-confirm-action:focus-visible {
+      outline: none;
+      box-shadow: var(--shadow-focus);
+    }
+
+    /* ============================================================
+       RESULT SECTION (Revealed after Confirmation)
+       ============================================================ */
+    .result-section {
+      display: none;
+      animation: fadeInSlideUp 0.35s ease-out forwards;
+    }
+
+    .result-section.is-active {
+      display: block;
+    }
+
+    @keyframes fadeInSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Outcome Feedback Banner */
+    .outcome-feedback-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+
+    .outcome-feedback-banner.is-correct {
+      background: var(--color-success-bg);
+      border: 1px solid var(--color-success-border);
+      color: var(--color-success);
+    }
+
+    .outcome-feedback-banner.is-wrong {
+      background: var(--color-wrong-bg);
+      border: 1px solid var(--color-wrong-border);
+      color: var(--color-wrong);
+    }
+
+    .outcome-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .outcome-text-wrap {
+      flex: 1;
+    }
+
+    .outcome-title {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .outcome-subtext {
+      font-size: 12.5px;
+      font-weight: 500;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    /* Complete Meaning Card */
+    .meaning-card {
+      background: var(--color-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .meaning-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-accent-gold);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .meaning-text {
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .subtle-explain-note {
+      font-size: 12.5px;
+      color: var(--text-subtle);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-subtle);
+      line-height: 1.45;
+      font-style: italic;
+    }
+
+    .attribution-note-box {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      background: var(--color-surface-soft);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    /* Related Article Button (Configurable) */
+    .related-article-wrap {
+      display: none;
+      margin-bottom: 16px;
+    }
+
+    .related-article-wrap.is-visible {
+      display: block;
+    }
+
+    .btn-related-article {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 44px;
+      background: var(--color-surface-soft);
+      color: var(--color-primary);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 14px;
+      transition: all 0.16s ease;
+    }
+
+    .btn-related-article:hover {
+      background: var(--color-primary-light);
+      border-color: var(--color-primary);
+    }
+
+    /* Primary & Action Buttons Group */
+    .action-buttons-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .btn-primary-share {
+      min-height: 48px;
+      width: 100%;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(226, 58, 40, 0.22);
+      transition: all 0.16s ease;
+    }
+
+    .btn-primary-share:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-download-card {
+      min-height: 44px;
+      width: 100%;
+      background: var(--color-surface);
+      color: var(--text-main);
+      border: 1.5px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .btn-download-card:hover {
+      background: var(--color-surface-warm);
+      border-color: var(--text-main);
+    }
+
+    .secondary-actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-secondary-action {
+      min-height: 44px;
+      background: var(--color-surface-soft);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 6px 10px;
+      transition: all 0.16s ease;
+      text-align: center;
+    }
+
+    .btn-secondary-action:hover {
+      background: var(--color-surface);
+      color: var(--text-main);
+      border-color: var(--border-medium);
+    }
+
+    /* In-Page Share Card Preview Box */
+    .card-preview-section {
+      background: var(--color-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-preview-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-preview-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+    }
+
+    .card-preview-container {
+      width: 100%;
+      background: #F4F1EA;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 4 / 5;
+    }
+
+    .card-preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: opacity 0.2s ease;
+    }
+
+    .card-preview-tools {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-card-tool {
+      flex: 1;
+      min-height: 44px;
+      background: var(--color-surface-soft);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-card-tool:hover {
+      background: var(--color-surface);
+      border-color: var(--border-medium);
+    }
+
+    /* Off-screen canvas for 1080x1350 generation */
+    #shareCanvas {
+      display: none;
+    }
+
+    /* ============================================================
+       MODALS & DIALOGS (Recipient Preview & Clipboard Fallback)
+       ============================================================ */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-overlay.is-open {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-sheet {
+      background: var(--color-surface);
+      width: 100%;
+      max-width: 440px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+
+    .modal-title-wrap {
+      flex: 1;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .modal-subtitle {
+      font-size: 12px;
+      color: var(--text-subtle);
+      margin-top: 2px;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      border-radius: var(--radius-sm);
+    }
+
+    .modal-close-btn:focus-visible {
+      box-shadow: var(--shadow-focus);
+    }
+
+    /* Recipient Demo Content */
+    .recipient-demo-notice {
+      background: var(--color-primary-light);
+      border: 1px solid rgba(226, 58, 40, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 12.5px;
+      color: #922B21;
+      line-height: 1.45;
+    }
+
+    .recipient-mock-card {
+      background: var(--color-surface-warm);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .recipient-brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .recipient-thought-text {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.55;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .recipient-meaning-box {
+      background: var(--color-surface);
+      border-left: 3px solid var(--color-accent-gold);
+      padding: 8px 12px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .recipient-attribution {
+      font-size: 11px;
+      color: var(--text-subtle);
+      font-style: italic;
+    }
+
+    .recipient-invite-banner {
+      background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+      border: 1px solid #FFCC80;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .recipient-invite-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #E65100;
+    }
+
+    .recipient-invite-desc {
+      font-size: 12px;
+      color: #795548;
+      line-height: 1.35;
+    }
+
+    .btn-recipient-play {
+      min-height: 44px;
+      background: var(--color-primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 18px;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 6px rgba(226, 58, 40, 0.25);
+    }
+
+    .btn-recipient-play:hover {
+      background: var(--color-primary-hover);
+    }
+
+    /* Clipboard Copy Fallback Modal */
+    .copy-textarea {
+      width: 100%;
+      height: 130px;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.5;
+      resize: none;
+      color: var(--text-main);
+      background: var(--color-surface-soft);
+    }
+
+    .copy-textarea:focus {
+      outline: none;
+      box-shadow: var(--shadow-focus);
+    }
+
+    /* Toast Notification Banner */
+    .toast-pill {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1C1C1C;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-lg);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-pill.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Footer Brand Bar */
+    .app-footer {
+      margin-top: auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--text-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .footer-brand {
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* Focus visible utility */
+    button:focus-visible, a:focus-visible {
+      outline: none;
+      box-shadow: var(--shadow-focus);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Accent Bar -->
+  <div class="top-accent-bar" aria-hidden="true"></div>
+
+  <!-- Main Mobile-First Shell -->
+  <main class="app-container" id="app">
+
+    <!-- Header / Masthead -->
+    <header class="header-masthead">
+      <div class="brand-row">
+        <div class="brand-identity" id="brand-identity-label">
+          <svg class="brand-sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span>भास्कर खेल · डेमो</span>
+        </div>
+        <div class="brand-mood-tag">शांत विचार · 1 मिनट</div>
+      </div>
+
+      <div class="title-row">
+        <h1 class="game-main-title" id="game-title">आज की नीति</h1>
+        <span class="edition-tag-pill" id="current-theme-pill">समझ</span>
+      </div>
+    </header>
+
+    <!-- Edition Switcher (Three Editions) -->
+    <nav class="edition-nav-grid" aria-label="संस्करण चयन">
+      <button type="button" class="edition-tab-btn is-active" id="tab-d1" data-day="d1" aria-label="संस्करण 1 समझ">
+        <span class="tab-main">संस्करण 1</span>
+        <span class="tab-sub">समझ</span>
+        <span class="tab-status-dot" id="dot-d1" style="display: none;" title="उत्तर दिया गया"></span>
+      </button>
+      <button type="button" class="edition-tab-btn" id="tab-d2" data-day="d2" aria-label="संस्करण 2 अभ्यास">
+        <span class="tab-main">संस्करण 2</span>
+        <span class="tab-sub">अभ्यास</span>
+        <span class="tab-status-dot" id="dot-d2" style="display: none;" title="उत्तर दिया गया"></span>
+      </button>
+      <button type="button" class="edition-tab-btn" id="tab-d3" data-day="d3" aria-label="संस्करण 3 अनुभव">
+        <span class="tab-main">संस्करण 3</span>
+        <span class="tab-sub">अनुभव</span>
+        <span class="tab-status-dot" id="dot-d3" style="display: none;" title="उत्तर दिया गया"></span>
+      </button>
+    </nav>
+
+    <!-- Instruction Bar -->
+    <div class="instruction-bar" id="instruction-bar" role="status">
+      <span class="instruction-icon" aria-hidden="true">💡</span>
+      <span class="instruction-text" id="instruction-text">विचार को पूरा करने वाला विकल्प चुनिए।</span>
+    </div>
+
+    <!-- Practice Mode Notice (Only shown if opened via recipient preview) -->
+    <div class="practice-alert-bar" id="practice-alert-bar" role="alert">
+      <span>✏️ <strong>अभ्यास मोड:</strong> आपका मूल उत्तर सुरक्षित है।</span>
+      <button type="button" class="practice-return-btn" id="practice-return-btn">मूल रूप देखें</button>
+    </div>
+
+    <!-- ============================================================
+         CENTRAL THOUGHT CARD (Visual Centre of the Screen)
+         ============================================================ -->
+    <article class="thought-card" id="thought-card" aria-label="आज का विचार">
+      <span class="thought-quote-mark" aria-hidden="true">“</span>
+      
+      <p class="thought-content" id="thought-text-container">
+        <!-- Rendered dynamically with live interactive blank -->
+      </p>
+
+      <div class="thought-meta-sub">
+        <span class="thought-edition-info" id="thought-edition-label">संस्करण 1 · समझ</span>
+        <span class="thought-attribution-label">मौलिक विचार · डेमो के लिए लिखा गया</span>
+      </div>
+    </article>
+
+    <!-- ============================================================
+         OPTIONS LIST (4 Vertically Stacked Answer Buttons)
+         ============================================================ -->
+    <section class="options-section" aria-labelledby="options-label">
+      <div class="options-heading-label" id="options-label">
+        <span>चार विकल्प में से एक चुनें:</span>
+      </div>
+
+      <div class="options-list" id="options-list" role="radiogroup" aria-label="विकल्प सूची">
+        <!-- Rendered dynamically: 4 stacked options with min 48px height -->
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CONFIRMATION BUTTON
+         ============================================================ -->
+    <div class="confirm-action-row" id="confirm-action-row">
+      <button type="button" class="btn-confirm-action" id="btn-confirm" disabled aria-disabled="true">
+        <span>यही उत्तर चुनें</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <!-- ============================================================
+         RESULT SECTION (Revealed after Confirmation)
+         ============================================================ -->
+    <section class="result-section" id="result-section" aria-live="polite">
+      
+      <!-- Outcome Feedback Banner -->
+      <div class="outcome-feedback-banner is-correct" id="outcome-banner">
+        <span class="outcome-icon" id="outcome-icon">✓</span>
+        <div class="outcome-text-wrap">
+          <div class="outcome-title" id="outcome-title">विचार पूरा हुआ</div>
+          <div class="outcome-subtext" id="outcome-subtext">आपने विचार को उसके मौलिक रूप में पूरा किया।</div>
+        </div>
+      </div>
+
+      <!-- Meaning Card -->
+      <div class="meaning-card">
+        <div class="meaning-header">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          <span>विचार का अर्थ</span>
+        </div>
+        <p class="meaning-text" id="meaning-text">
+          <!-- Populated from CONTENT -->
+        </p>
+
+        <p class="subtle-explain-note">
+          यह इस मौलिक विचार का चुना हुआ पूरा रूप है।
+        </p>
+
+        <div class="attribution-note-box">
+          <span>✍️ मौलिक विचार · डेमो के लिए लिखा गया</span>
+        </div>
+      </div>
+
+      <!-- Optional Related Article Link (Only shown if URL configured) -->
+      <div class="related-article-wrap" id="related-article-wrap">
+        <a href="#" class="btn-related-article" id="related-article-link" target="_blank" rel="noopener noreferrer">
+          <span>जुड़ा लेख पढ़ें</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons-group">
+        <!-- Primary Action: Share Card -->
+        <button type="button" class="btn-primary-share" id="btn-share-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+          <span>कार्ड साझा करें</span>
+        </button>
+
+        <!-- Always-Visible Action: Download Card -->
+        <button type="button" class="btn-download-card" id="btn-download-card">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>कार्ड डाउनलोड करें (1080×1350 PNG)</span>
+        </button>
+
+        <!-- Secondary Actions Row -->
+        <div class="secondary-actions-row">
+          <button type="button" class="btn-secondary-action" id="btn-view-thought-again">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span>विचार फिर देखें</span>
+          </button>
+
+          <button type="button" class="btn-secondary-action" id="btn-recipient-preview">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>पाने वाले को कैसा दिखेगा?</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- In-Page Preview of the Generated Share Card -->
+      <section class="card-preview-section" aria-labelledby="card-preview-title-id">
+        <div class="card-preview-header">
+          <div class="card-preview-title" id="card-preview-title-id">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span>साझा करने योग्य कार्ड का पूर्वावलोकन</span>
+          </div>
+          <span class="card-preview-badge">1080 × 1350 HD</span>
+        </div>
+
+        <div class="card-preview-container">
+          <img id="card-preview-img" class="card-preview-img" src="" alt="आज की नीति साझा कार्ड पूर्वावलोकन">
+        </div>
+
+        <div class="card-preview-tools">
+          <button type="button" class="btn-card-tool" id="btn-copy-thought-text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>विचार कॉपी करें</span>
+          </button>
+          <button type="button" class="btn-card-tool" id="btn-download-preview-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>PNG डाउनलोड करें</span>
+          </button>
+        </div>
+      </section>
+
+    </section>
+
+    <!-- Footer Identity -->
+    <footer class="app-footer">
+      <div class="footer-brand">दैनिक भास्कर · खेल लैब 2026</div>
+      <div>आज की नीति — शांत, दैनिक विचार पूर्ति एवं साझा कार्ड डेमो</div>
+    </footer>
+
+  </main>
+
+  <!-- ============================================================
+       HIDDEN OFF-SCREEN CANVAS (1080 x 1350 High-Res Render)
+       ============================================================ -->
+  <canvas id="shareCanvas" width="1080" height="1350" aria-hidden="true"></canvas>
+
+  <!-- ============================================================
+       RECIPIENT PREVIEW MODAL (“पाने वाले को कैसा दिखेगा?”)
+       ============================================================ -->
+  <div class="modal-overlay" id="recipient-modal" role="dialog" aria-modal="true" aria-labelledby="modal-recipient-title">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <h2 class="modal-title" id="modal-recipient-title">साझा लिंक पूर्वावलोकन</h2>
+          <div class="modal-subtitle">प्रस्तावित साझा अनुभव (Demo Preview)</div>
+        </div>
+        <button type="button" class="modal-close-btn" id="btn-close-recipient-modal" aria-label="बंद करें">✕</button>
+      </div>
+
+      <div class="recipient-demo-notice">
+        ℹ️ <strong>डेमो सूचना:</strong> यह एक पूर्वावलोकन है कि जब कोई पाठक आपका साझा किया हुआ लिंक खोलेगा, तो उसे क्या दिखेगा। वास्तविक सार्वजनिक लिंक अभी लाइव नहीं है।
+      </div>
+
+      <!-- Simulated Recipient Web Card -->
+      <div class="recipient-mock-card">
+        <div class="recipient-brand-header">
+          <span>दैनिक भास्कर · आज की नीति</span>
+          <span id="recipient-edition-tag">संस्करण 1</span>
+        </div>
+
+        <div class="recipient-thought-text" id="recipient-thought-text">
+          <!-- Populated with full thought -->
+        </div>
+
+        <div class="recipient-meaning-box">
+          <strong>अर्थ:</strong> <span id="recipient-meaning-text"></span>
+        </div>
+
+        <div class="recipient-attribution">
+          मौलिक विचार · डेमो के लिए लिखा गया
+        </div>
+      </div>
+
+      <!-- Invitation CTA -->
+      <div class="recipient-invite-banner">
+        <div class="recipient-invite-title">आप भी आज की नीति खेलें</div>
+        <div class="recipient-invite-desc">
+          क्योंकि इस पूर्वावलोकन में विचार का पूरा रूप पहले ही दिख चुका है, आप इसे अभ्यास मोड में खेल सकते हैं जिससे आपका मूल सहेजा हुआ परिणाम नहीं बदलेगा।
+        </div>
+        <button type="button" class="btn-recipient-play" id="btn-recipient-play">
+          अभ्यास मोड में खेलें
+        </button>
+      </div>
+
+      <button type="button" class="btn-download-card" id="btn-close-recipient-modal-bottom">
+        बंद करें
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       CLIPBOARD COPY FALLBACK MODAL (If browser clipboard API fails)
+       ============================================================ -->
+  <div class="modal-overlay" id="copy-modal" role="dialog" aria-modal="true" aria-labelledby="modal-copy-title">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <h2 class="modal-title" id="modal-copy-title">विचार कॉपी करें</h2>
+          <div class="modal-subtitle">नीचे दिए गए टेक्स्ट को चुनें और कॉपी करें</div>
+        </div>
+        <button type="button" class="modal-close-btn" id="btn-close-copy-modal" aria-label="बंद करें">✕</button>
+      </div>
+
+      <textarea class="copy-textarea" id="copy-modal-textarea" readonly aria-label="विचार टेक्स्ट"></textarea>
+
+      <button type="button" class="btn-confirm-action" id="btn-copy-modal-select-all">
+        टेक्स्ट चुनें
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Notification Pill -->
+  <div class="toast-pill" id="toast-pill" role="status" aria-live="polite">
+    <span id="toast-msg">कार्ड डाउनलोड हो रहा है...</span>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT LOGIC
+       Self-contained, Plain JS, No build step, Offline-capable
+       ============================================================ -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ============================================================
+         CONTENT DEFINITION
+         Editable object with stable option IDs and exact demo thoughts
+         Attribution: "मौलिक विचार · डेमो के लिए लिखा गया"
+         ============================================================ */
+      const CONTENT = {
+        d1: {
+          id: 'd1',
+          dayNum: 1,
+          theme: 'समझ',
+          incomplete: 'किसी को समझने की शुरुआत, अपनी बात कहने से पहले ____ से होती है।',
+          blankPrefix: 'किसी को समझने की शुरुआत, अपनी बात कहने से पहले ',
+          blankSuffix: ' से होती है।',
+          options: [
+            { id: 'opt_1_1', text: 'उसकी बात सुनने', isCorrect: true },
+            { id: 'opt_1_2', text: 'अपनी राय बनाने', isCorrect: false },
+            { id: 'opt_1_3', text: 'तुरंत सलाह देने', isCorrect: false },
+            { id: 'opt_1_4', text: 'विषय बदलने', isCorrect: false }
+          ],
+          fullThought: 'किसी को समझने की शुरुआत, अपनी बात कहने से पहले उसकी बात सुनने से होती है।',
+          meaning: 'ध्यान से सुनने पर हमें दूसरे व्यक्ति का अनुभव और नज़रिया समझने का अवसर मिलता है।',
+          attribution: 'मौलिक विचार · डेमो के लिए लिखा गया',
+          relatedArticleUrl: '' // Empty by default; show 'जुड़ा लेख पढ़ें' only when configured
+        },
+        d2: {
+          id: 'd2',
+          dayNum: 2,
+          theme: 'अभ्यास',
+          incomplete: 'सीख को आदत बनाने के लिए, बड़े इरादों के साथ ____ भी ज़रूरी है।',
+          blankPrefix: 'सीख को आदत बनाने के लिए, बड़े इरादों के साथ ',
+          blankSuffix: ' भी ज़रूरी है।',
+          options: [
+            { id: 'opt_2_1', text: 'सही मौके का इंतज़ार', isCorrect: false },
+            { id: 'opt_2_2', text: 'दूसरों से तुलना', isCorrect: false },
+            { id: 'opt_2_3', text: 'नियमित छोटा अभ्यास', isCorrect: true },
+            { id: 'opt_2_4', text: 'जल्दी परिणाम की उम्मीद', isCorrect: false }
+          ],
+          fullThought: 'सीख को आदत बनाने के लिए, बड़े इरादों के साथ नियमित छोटा अभ्यास भी ज़रूरी है।',
+          meaning: 'थोड़ा-थोड़ा अभ्यास नियमित रूप से करना, सीखी हुई बात को रोज़मर्रा के काम में लाने में मदद करता है।',
+          attribution: 'मौलिक विचार · डेमो के लिए लिखा गया',
+          relatedArticleUrl: ''
+        },
+        d3: {
+          id: 'd3',
+          dayNum: 3,
+          theme: 'अनुभव',
+          incomplete: 'बीते अनुभव अगला कदम बेहतर बनाते हैं, जब हम उन्हें ____।',
+          blankPrefix: 'बीते अनुभव अगला कदम बेहतर बनाते हैं, जब हम उन्हें ',
+          blankSuffix: '।',
+          options: [
+            { id: 'opt_3_1', text: 'ज्यों का त्यों दोहराते हैं', isCorrect: false },
+            { id: 'opt_3_2', text: 'समझकर उनसे सीखते हैं', isCorrect: true },
+            { id: 'opt_3_3', text: 'केवल याद रखते हैं', isCorrect: false },
+            { id: 'opt_3_4', text: 'दूसरों पर लागू करते हैं', isCorrect: false }
+          ],
+          fullThought: 'बीते अनुभव अगला कदम बेहतर बनाते हैं, जब हम उन्हें समझकर उनसे सीखते हैं।',
+          meaning: 'बीती बातों पर विचार करके हम समझ सकते हैं कि अगली बार क्या बनाए रखना है और क्या बदलना है।',
+          attribution: 'मौलिक विचार · डेमो के लिए लिखा गया',
+          relatedArticleUrl: ''
+        }
+      };
+
+      /* Devanagari numerals / markers */
+      const DEVANAGARI_MARKERS = ['क', 'ख', 'ग', 'घ'];
+
+      /* ============================================================
+         STATE & LOCALSTORAGE MANAGEMENT
+         Storage key format: db-jam:v2:niti:<dayId>
+         ============================================================ */
+      const STORAGE_PREFIX = 'db-jam:v2:niti:';
+      const memoryFallbackStore = {};
+
+      let currentDayId = 'd1';
+      let selectedOptionId = null;
+      let isPracticeMode = false;
+      let practiceSelectedOptionId = null;
+
+      function getStorageKey(dayId) {
+        return STORAGE_PREFIX + dayId;
+      }
+
+      function loadStoredEdition(dayId) {
+        try {
+          const raw = localStorage.getItem(getStorageKey(dayId));
+          if (raw) {
+            return JSON.parse(raw);
+          }
+        } catch (err) {
+          console.warn('localStorage read error, falling back to memory:', err);
+          return memoryFallbackStore[dayId] || null;
+        }
+        return memoryFallbackStore[dayId] || null;
+      }
+
+      function saveStoredEdition(dayId, data) {
+        try {
+          localStorage.setItem(getStorageKey(dayId), JSON.stringify(data));
+        } catch (err) {
+          console.warn('localStorage write error, saving in memory:', err);
+        }
+        memoryFallbackStore[dayId] = data;
+      }
+
+      /* Read URL Query Parameter (?day=d1, d2 or d3; default d1) */
+      function getInitialDayFromUrl() {
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const day = params.get('day');
+          if (day && CONTENT[day]) {
+            return day;
+          }
+        } catch (e) {
+          /* ignore */
+        }
+        return 'd1';
+      }
+
+      function updateUrlDay(dayId) {
+        try {
+          const url = new URL(window.location);
+          url.searchParams.set('day', dayId);
+          window.history.replaceState({}, '', url);
+        } catch (e) {
+          /* ignore */
+        }
+      }
+
+      /* ============================================================
+         DOM ELEMENT REFERENCES
+         ============================================================ */
+      const els = {
+        themePill: document.getElementById('current-theme-pill'),
+        thoughtEditionLabel: document.getElementById('thought-edition-label'),
+        instructionText: document.getElementById('instruction-text'),
+        practiceAlertBar: document.getElementById('practice-alert-bar'),
+        practiceReturnBtn: document.getElementById('practice-return-btn'),
+        thoughtCard: document.getElementById('thought-card'),
+        thoughtContainer: document.getElementById('thought-text-container'),
+        optionsList: document.getElementById('options-list'),
+        confirmRow: document.getElementById('confirm-action-row'),
+        btnConfirm: document.getElementById('btn-confirm'),
+        resultSection: document.getElementById('result-section'),
+        outcomeBanner: document.getElementById('outcome-banner'),
+        outcomeIcon: document.getElementById('outcome-icon'),
+        outcomeTitle: document.getElementById('outcome-title'),
+        outcomeSubtext: document.getElementById('outcome-subtext'),
+        meaningText: document.getElementById('meaning-text'),
+        relatedArticleWrap: document.getElementById('related-article-wrap'),
+        relatedArticleLink: document.getElementById('related-article-link'),
+        btnSharePrimary: document.getElementById('btn-share-primary'),
+        btnDownloadCard: document.getElementById('btn-download-card'),
+        btnViewThoughtAgain: document.getElementById('btn-view-thought-again'),
+        btnRecipientPreview: document.getElementById('btn-recipient-preview'),
+        cardPreviewImg: document.getElementById('card-preview-img'),
+        btnCopyThoughtText: document.getElementById('btn-copy-thought-text'),
+        btnDownloadPreviewBtn: document.getElementById('btn-download-preview-btn'),
+        shareCanvas: document.getElementById('shareCanvas'),
+        recipientModal: document.getElementById('recipient-modal'),
+        btnCloseRecipientModal: document.getElementById('btn-close-recipient-modal'),
+        btnCloseRecipientModalBottom: document.getElementById('btn-close-recipient-modal-bottom'),
+        btnRecipientPlay: document.getElementById('btn-recipient-play'),
+        recipientEditionTag: document.getElementById('recipient-edition-tag'),
+        recipientThoughtText: document.getElementById('recipient-thought-text'),
+        recipientMeaningText: document.getElementById('recipient-meaning-text'),
+        copyModal: document.getElementById('copy-modal'),
+        btnCloseCopyModal: document.getElementById('btn-close-copy-modal'),
+        copyModalTextarea: document.getElementById('copy-modal-textarea'),
+        btnCopyModalSelectAll: document.getElementById('btn-copy-modal-select-all'),
+        toastPill: document.getElementById('toast-pill'),
+        toastMsg: document.getElementById('toast-msg'),
+        tabs: {
+          d1: document.getElementById('tab-d1'),
+          d2: document.getElementById('tab-d2'),
+          d3: document.getElementById('tab-d3')
+        },
+        dots: {
+          d1: document.getElementById('dot-d1'),
+          d2: document.getElementById('dot-d2'),
+          d3: document.getElementById('dot-d3')
+        }
+      };
+
+      /* ============================================================
+         TOAST FEEDBACK HELPER
+         ============================================================ */
+      let toastTimer = null;
+      function showToast(message) {
+        if (!els.toastPill) return;
+        els.toastMsg.textContent = message;
+        els.toastPill.classList.add('is-visible');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          els.toastPill.classList.remove('is-visible');
+        }, 2600);
+      }
+
+      /* ============================================================
+         RENDER GAME VIEW
+         ============================================================ */
+      function renderCurrentEdition() {
+        const data = CONTENT[currentDayId];
+        const saved = loadStoredEdition(currentDayId);
+
+        // Update active tab styles
+        Object.keys(els.tabs).forEach(day => {
+          if (els.tabs[day]) {
+            els.tabs[day].classList.toggle('is-active', day === currentDayId);
+            els.tabs[day].setAttribute('aria-selected', day === currentDayId ? 'true' : 'false');
+          }
+          // Update completion dot
+          const editionSaved = loadStoredEdition(day);
+          if (els.dots[day]) {
+            els.dots[day].style.display = (editionSaved && editionSaved.confirmed) ? 'inline-block' : 'none';
+          }
+        });
+
+        // Update header badges
+        els.themePill.textContent = data.theme;
+        els.thoughtEditionLabel.textContent = `संस्करण ${data.dayNum} · ${data.theme}`;
+
+        // Practice mode alert
+        if (isPracticeMode) {
+          els.practiceAlertBar.classList.add('is-visible');
+        } else {
+          els.practiceAlertBar.classList.remove('is-visible');
+        }
+
+        // Determine effective state (either from localStorage or in-progress practice)
+        const isConfirmed = isPracticeMode ? false : (saved && saved.confirmed);
+        const effectiveSelectedId = isPracticeMode ? practiceSelectedOptionId : (isConfirmed ? saved.selectedOption : selectedOptionId);
+
+        // 1. Render Thought with Blank (The Visual Centre)
+        renderThoughtText(data, effectiveSelectedId, isConfirmed, saved);
+
+        // 2. Render Options Stack
+        renderOptions(data, effectiveSelectedId, isConfirmed, saved);
+
+        // 3. Confirm Button State
+        if (isConfirmed) {
+          els.confirmRow.style.display = 'none';
+          els.btnConfirm.disabled = true;
+        } else {
+          els.confirmRow.style.display = 'block';
+          els.btnConfirm.disabled = !effectiveSelectedId;
+          els.btnConfirm.setAttribute('aria-disabled', !effectiveSelectedId ? 'true' : 'false');
+        }
+
+        // 4. Result Section
+        if (isConfirmed) {
+          renderResultSection(data, saved);
+        } else {
+          els.resultSection.classList.remove('is-active');
+          els.instructionText.textContent = isPracticeMode 
+            ? 'अभ्यास मोड: एक विकल्प चुनकर विचार पूरा करें।' 
+            : 'विचार को पूरा करने वाला विकल्प चुनिए।';
+        }
+      }
+
+      /* Render the central thought text with interactive/completed blank */
+      function renderThoughtText(data, currentChosenId, isConfirmed, saved) {
+        els.thoughtContainer.innerHTML = '';
+
+        const prefixNode = document.createTextNode(data.blankPrefix);
+        els.thoughtContainer.appendChild(prefixNode);
+
+        const blankSpan = document.createElement('span');
+        blankSpan.id = 'thought-blank-slot';
+        blankSpan.className = 'thought-blank-slot';
+
+        if (isConfirmed) {
+          const isCorrect = saved ? saved.firstAnswerCorrect : false;
+          // Authored completion is always shown in full thought
+          const correctOpt = data.options.find(o => o.isCorrect);
+          blankSpan.textContent = correctOpt ? correctOpt.text : '...';
+          blankSpan.classList.add(isCorrect ? 'is-correct' : 'is-correct');
+          blankSpan.setAttribute('aria-label', `पूर्ण विचार: ${correctOpt ? correctOpt.text : ''}`);
+        } else if (currentChosenId) {
+          // Live preview of selected option inside the thought!
+          const chosenOpt = data.options.find(o => o.id === currentChosenId);
+          blankSpan.textContent = chosenOpt ? chosenOpt.text : '';
+          blankSpan.classList.add('is-preview');
+          blankSpan.setAttribute('aria-label', `चयनित विकल्प: ${chosenOpt ? chosenOpt.text : ''}`);
+        } else {
+          // Empty state with dashed blank
+          blankSpan.textContent = '____';
+          blankSpan.classList.add('is-empty');
+          blankSpan.setAttribute('aria-label', 'खाली स्थान');
+        }
+
+        els.thoughtContainer.appendChild(blankSpan);
+
+        const suffixNode = document.createTextNode(data.blankSuffix);
+        els.thoughtContainer.appendChild(suffixNode);
+      }
+
+      /* Render 4 Vertically Stacked Options */
+      function renderOptions(data, effectiveSelectedId, isConfirmed, saved) {
+        els.optionsList.innerHTML = '';
+
+        data.options.forEach((opt, index) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'option-item-btn';
+          btn.id = `opt-btn-${opt.id}`;
+          btn.dataset.optId = opt.id;
+          btn.setAttribute('role', 'radio');
+
+          const marker = document.createElement('div');
+          marker.className = 'option-marker';
+          marker.textContent = DEVANAGARI_MARKERS[index] || (index + 1);
+
+          const textWrap = document.createElement('div');
+          textWrap.className = 'option-text-wrap';
+          textWrap.textContent = opt.text;
+
+          const badge = document.createElement('div');
+          badge.className = 'option-feedback-badge';
+
+          btn.appendChild(marker);
+          btn.appendChild(textWrap);
+          btn.appendChild(badge);
+
+          if (isConfirmed) {
+            btn.disabled = true;
+            btn.setAttribute('aria-disabled', 'true');
+
+            const isUserChoice = (saved && saved.selectedOption === opt.id);
+            const isAuthoredCorrect = opt.isCorrect;
+
+            if (isAuthoredCorrect) {
+              btn.classList.add('is-authored-correct');
+              btn.setAttribute('aria-checked', 'true');
+              badge.textContent = isUserChoice ? '✓ आपका सही उत्तर' : '✓ मौलिक रूप';
+            } else if (isUserChoice) {
+              btn.classList.add('is-user-wrong');
+              btn.setAttribute('aria-checked', 'true');
+              badge.textContent = '✕ आपका चयन';
+            } else {
+              btn.classList.add('is-dimmed');
+              btn.setAttribute('aria-checked', 'false');
+            }
+          } else {
+            // Interactive state
+            const isSelected = (opt.id === effectiveSelectedId);
+            if (isSelected) {
+              btn.classList.add('is-selected');
+              btn.setAttribute('aria-checked', 'true');
+            } else {
+              btn.setAttribute('aria-checked', 'false');
+            }
+
+            btn.addEventListener('click', () => {
+              handleOptionSelect(opt.id);
+            });
+          }
+
+          els.optionsList.appendChild(btn);
+        });
+      }
+
+      /* Option Selection (before confirmation) */
+      function handleOptionSelect(optId) {
+        if (isPracticeMode) {
+          practiceSelectedOptionId = optId;
+        } else {
+          selectedOptionId = optId;
+        }
+        renderCurrentEdition();
+      }
+
+      /* Confirm Answer Action */
+      function handleConfirm() {
+        const data = CONTENT[currentDayId];
+        const chosenId = isPracticeMode ? practiceSelectedOptionId : selectedOptionId;
+
+        if (!chosenId) return;
+
+        const chosenOpt = data.options.find(o => o.id === chosenId);
+        const isCorrect = chosenOpt ? chosenOpt.isCorrect : false;
+
+        if (isPracticeMode) {
+          // Practice mode feedback without overwriting original score
+          showToast(isCorrect ? 'शाबाश! सही विचार चुना।' : 'मौलिक रूप देखें।');
+          isPracticeMode = false;
+          practiceSelectedOptionId = null;
+          renderCurrentEdition();
+          return;
+        }
+
+        // Save first and permanent score for this edition
+        const savePayload = {
+          dayId: currentDayId,
+          selectedOption: chosenId,
+          confirmed: true,
+          firstAnswerCorrect: isCorrect,
+          confirmedAt: new Date().toISOString()
+        };
+
+        saveStoredEdition(currentDayId, savePayload);
+        selectedOptionId = null;
+
+        // Render result & generate card
+        renderCurrentEdition();
+
+        // Smooth scroll to outcome feedback
+        setTimeout(() => {
+          if (els.outcomeBanner) {
+            els.outcomeBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 100);
+      }
+
+      /* Render Result Section with Meaning & Share Card */
+      function renderResultSection(data, saved) {
+        els.resultSection.classList.add('is-active');
+
+        const isCorrect = saved ? saved.firstAnswerCorrect : false;
+
+        // Banner styling & copy
+        if (isCorrect) {
+          els.outcomeBanner.className = 'outcome-feedback-banner is-correct';
+          els.outcomeIcon.textContent = '✓';
+          els.outcomeTitle.textContent = 'विचार पूरा हुआ';
+          els.outcomeSubtext.textContent = 'आपने इस विचार को उसके मौलिक रूप में पूर्ण किया।';
+          els.instructionText.textContent = 'विचार पूरा हुआ · नीचे इसका अर्थ समझें और साझा करें।';
+        } else {
+          els.outcomeBanner.className = 'outcome-feedback-banner is-wrong';
+          els.outcomeIcon.textContent = '📖';
+          els.outcomeTitle.textContent = 'इस विचार का पूरा रूप पढ़ें';
+          els.outcomeSubtext.textContent = 'यह इस मौलिक विचार का चुना हुआ लेखक रूप है।';
+          els.instructionText.textContent = 'इस विचार का पूरा रूप पढ़ें · नीचे इसका अर्थ समझें।';
+        }
+
+        // Meaning
+        els.meaningText.textContent = data.meaning;
+
+        // Configurable Related Article URL
+        if (data.relatedArticleUrl && data.relatedArticleUrl.trim() !== '') {
+          els.relatedArticleWrap.classList.add('is-visible');
+          els.relatedArticleLink.href = data.relatedArticleUrl.trim();
+        } else {
+          els.relatedArticleWrap.classList.remove('is-visible');
+          els.relatedArticleLink.href = '#';
+        }
+
+        // Generate and update Canvas Share Card
+        generateShareCard(data);
+      }
+
+      /* ============================================================
+         CANVAS SHARE CARD GENERATION (1080 x 1350 High-Res PNG)
+         Features:
+         - Word-wrapped Hindi lines (never splits characters)
+         - Safe margins (>= 80px)
+         - Authentic editorial Dainik Bhaskar aesthetics
+         - Complete thought, meaning, edition and attribution
+         - No selected answer, scores or user correctness badge
+         ============================================================ */
+      function wrapTextLines(ctx, text, maxWidth) {
+        const words = text.split(/\s+/);
+        const lines = [];
+        let currentLine = '';
+
+        for (let i = 0; i < words.length; i++) {
+          const word = words[i];
+          const testLine = currentLine ? (currentLine + ' ' + word) : word;
+          const metrics = ctx.measureText(testLine);
+
+          if (metrics.width > maxWidth && currentLine !== '') {
+            lines.push(currentLine);
+            currentLine = word;
+          } else {
+            currentLine = testLine;
+          }
+        }
+        if (currentLine) {
+          lines.push(currentLine);
+        }
+        return lines;
+      }
+
+      async function generateShareCard(data) {
+        const canvas = els.shareCanvas;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        // Ensure fonts are ready before drawing
+        if (document.fonts && document.fonts.ready) {
+          try {
+            await document.fonts.ready;
+          } catch (e) {
+            /* ignore */
+          }
+        }
+
+        const width = 1080;
+        const height = 1350;
+        const marginX = 100; // >= 80px safe margin
+        const contentWidth = width - (marginX * 2);
+
+        // 1. Warm Paper Gradient Background
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+        bgGrad.addColorStop(0, '#FAF8F4');
+        bgGrad.addColorStop(0.5, '#F9F7F2');
+        bgGrad.addColorStop(1, '#F4F0E6');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, width, height);
+
+        // 2. Refined Double Border / Frame
+        // Outer Bhaskar red hairline border
+        ctx.strokeStyle = 'rgba(226, 58, 40, 0.45)';
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(38, 38, width - 76, height - 76);
+
+        // Inner subtle ink border
+        ctx.strokeStyle = 'rgba(28, 28, 28, 0.12)';
+        ctx.lineWidth = 1.2;
+        ctx.strokeRect(50, 50, width - 100, height - 100);
+
+        // Corner Ornamental Accents (Bhaskar Red diamonds)
+        const cornerInset = 44;
+        const drawDiamond = (cx, cy, r) => {
+          ctx.fillStyle = '#E23A28';
+          ctx.beginPath();
+          ctx.moveTo(cx, cy - r);
+          ctx.lineTo(cx + r, cy);
+          ctx.lineTo(cx, cy + r);
+          ctx.lineTo(cx - r, cy);
+          ctx.closePath();
+          ctx.fill();
+        };
+        drawDiamond(cornerInset, cornerInset, 4);
+        drawDiamond(width - cornerInset, cornerInset, 4);
+        drawDiamond(cornerInset, height - cornerInset, 4);
+        drawDiamond(width - cornerInset, height - cornerInset, 4);
+
+        // 3. Top Identity & Sun Motif
+        let curY = 130;
+
+        // Draw Dainik Bhaskar Red Sun Emblem
+        ctx.save();
+        ctx.translate(width / 2, curY);
+        ctx.fillStyle = '#E23A28';
+        ctx.beginPath();
+        ctx.arc(0, 0, 14, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Sun Rays
+        ctx.strokeStyle = '#E23A28';
+        ctx.lineWidth = 3;
+        for (let i = 0; i < 8; i++) {
+          const angle = (i * Math.PI) / 4;
+          const x1 = Math.cos(angle) * 19;
+          const y1 = Math.sin(angle) * 19;
+          const x2 = Math.cos(angle) * 26;
+          const y2 = Math.sin(angle) * 26;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        curY += 52;
+
+        // Label: भास्कर खेल · डेमो
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#E23A28';
+        ctx.font = 'bold 28px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        ctx.fillText('भास्कर खेल · डेमो', width / 2, curY);
+
+        curY += 54;
+
+        // Edition Tag Pill
+        const editionPillText = `आज की नीति · संस्करण ${data.dayNum} (${data.theme})`;
+        ctx.font = 'bold 26px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        const pillWidth = ctx.measureText(editionPillText).width + 44;
+        const pillHeight = 44;
+
+        ctx.fillStyle = '#FDECE9';
+        ctx.beginPath();
+        ctx.roundRect((width - pillWidth) / 2, curY - 30, pillWidth, pillHeight, 22);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(226, 58, 40, 0.35)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = '#C52C1C';
+        ctx.fillText(editionPillText, width / 2, curY);
+
+        curY += 90;
+
+        // 4. Large Ornamental Quote Mark
+        ctx.fillStyle = 'rgba(226, 58, 40, 0.22)';
+        ctx.font = 'bold 120px "Georgia", "Cambria", serif';
+        ctx.fillText('“', width / 2, curY);
+
+        curY += 24;
+
+        // 5. Complete Thought (Centerpiece)
+        ctx.fillStyle = '#1C1C1C';
+        ctx.font = 'bold 50px "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif';
+        const thoughtLines = wrapTextLines(ctx, `“${data.fullThought}”`, contentWidth);
+        const thoughtLineHeight = 82;
+
+        thoughtLines.forEach(line => {
+          ctx.fillText(line, width / 2, curY);
+          curY += thoughtLineHeight;
+        });
+
+        curY += 20;
+
+        // 6. Ornamental Divider with center jewel
+        ctx.strokeStyle = 'rgba(28, 28, 28, 0.16)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(width / 2 - 140, curY);
+        ctx.lineTo(width / 2 - 20, curY);
+        ctx.moveTo(width / 2 + 20, curY);
+        ctx.lineTo(width / 2 + 140, curY);
+        ctx.stroke();
+
+        drawDiamond(width / 2, curY, 6);
+
+        curY += 66;
+
+        // 7. Meaning Header
+        ctx.fillStyle = '#D35400';
+        ctx.font = 'bold 28px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        ctx.fillText('विचार का अर्थ', width / 2, curY);
+
+        curY += 54;
+
+        // Meaning Body Lines
+        ctx.fillStyle = '#383838';
+        ctx.font = '400 36px "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif';
+        const meaningLines = wrapTextLines(ctx, data.meaning, contentWidth - 40);
+        const meaningLineHeight = 60;
+
+        meaningLines.forEach(line => {
+          ctx.fillText(line, width / 2, curY);
+          curY += meaningLineHeight;
+        });
+
+        curY += 36;
+
+        // 8. Attribution Pill
+        ctx.font = '500 24px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        const attrText = 'मौलिक विचार · डेमो के लिए लिखा गया';
+        const attrWidth = ctx.measureText(attrText).width + 36;
+        const attrHeight = 40;
+
+        ctx.fillStyle = '#ECE7DE';
+        ctx.beginPath();
+        ctx.roundRect((width - attrWidth) / 2, curY - 26, attrWidth, attrHeight, 20);
+        ctx.fill();
+
+        ctx.fillStyle = '#666666';
+        ctx.fillText(attrText, width / 2, curY);
+
+        // 9. Footer Brand Line at Bottom
+        const footerY = 1270;
+        ctx.strokeStyle = 'rgba(28, 28, 28, 0.1)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(width / 2 - 180, footerY - 32);
+        ctx.lineTo(width / 2 + 180, footerY - 32);
+        ctx.stroke();
+
+        ctx.fillStyle = '#888888';
+        ctx.font = 'bold 24px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        ctx.fillText('दैनिक भास्कर · dainikbhaskar.com', width / 2, footerY);
+
+        // Update in-page preview image
+        try {
+          const dataUrl = canvas.toDataURL('image/png');
+          if (els.cardPreviewImg) {
+            els.cardPreviewImg.src = dataUrl;
+          }
+        } catch (err) {
+          console.warn('Canvas toDataURL error:', err);
+        }
+      }
+
+      /* ============================================================
+         DOWNLOAD CARD (Always Visible & Directly Available)
+         ============================================================ */
+      function downloadCard() {
+        const canvas = els.shareCanvas;
+        if (!canvas) return;
+        const data = CONTENT[currentDayId];
+        const filename = `aaj-ki-niti-sanskaran-${data.dayNum}-${data.theme}.png`;
+
+        try {
+          if (canvas.toBlob) {
+            canvas.toBlob(blob => {
+              if (!blob) {
+                fallbackDownload(canvas.toDataURL('image/png'), filename);
+                return;
+              }
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = filename;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              setTimeout(() => URL.revokeObjectURL(url), 2000);
+              showToast('कार्ड डाउनलोड हो गया!');
+            }, 'image/png');
+          } else {
+            fallbackDownload(canvas.toDataURL('image/png'), filename);
+          }
+        } catch (e) {
+          console.warn('Download error:', e);
+          fallbackDownload(canvas.toDataURL('image/png'), filename);
+        }
+      }
+
+      function fallbackDownload(dataUrl, filename) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast('कार्ड डाउनलोड हो गया!');
+      }
+
+      /* ============================================================
+         SHARE CARD & COPY TEXT
+         - Use native file sharing only when navigator.canShare supports files
+         - Fallback to PNG download + copy thought text
+         - Cancelled share returns quietly
+         - No localhost or file:// URLs
+         ============================================================ */
+      function getFormattedShareText(data) {
+        return `आज की नीति · संस्करण ${data.dayNum} (${data.theme})\n\n"${data.fullThought}"\n\nअर्थ: ${data.meaning}\n\n— मौलिक विचार · डेमो के लिए लिखा गया\nदैनिक भास्कर खेल`;
+      }
+
+      async function handleShareAction() {
+        const data = CONTENT[currentDayId];
+        const canvas = els.shareCanvas;
+
+        // Check if native file sharing is supported
+        if (navigator.share && navigator.canShare && canvas && canvas.toBlob) {
+          try {
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            if (blob) {
+              const file = new File([blob], `aaj-ki-niti-${data.id}.png`, { type: 'image/png' });
+              const shareData = {
+                title: `आज की नीति · ${data.theme}`,
+                text: getFormattedShareText(data),
+                files: [file]
+              };
+
+              if (navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+                showToast('कार्ड सफलतापूर्वक साझा किया गया!');
+                return;
+              }
+            }
+          } catch (err) {
+            // User cancelled share quietly
+            if (err.name === 'AbortError') {
+              return;
+            }
+            console.warn('Native share failed or unhandled:', err);
+          }
+        }
+
+        // Fallback: download card and copy text
+        downloadCard();
+        await copyThoughtToClipboard();
+      }
+
+      async function copyThoughtToClipboard() {
+        const data = CONTENT[currentDayId];
+        const shareText = getFormattedShareText(data);
+
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(shareText);
+            showToast('विचार टेक्स्ट कॉपी हो गया!');
+            return;
+          }
+        } catch (err) {
+          console.warn('Clipboard writeText failed:', err);
+        }
+
+        // Fallback modal if clipboard API is restricted
+        openCopyFallbackModal(shareText);
+      }
+
+      function openCopyFallbackModal(text) {
+        els.copyModalTextarea.value = text;
+        els.copyModal.classList.add('is-open');
+        setTimeout(() => {
+          els.copyModalTextarea.focus();
+          els.copyModalTextarea.select();
+        }, 100);
+      }
+
+      /* ============================================================
+         RECIPIENT PREVIEW (“पाने वाले को कैसा दिखेगा?”)
+         ============================================================ */
+      function openRecipientModal() {
+        const data = CONTENT[currentDayId];
+        els.recipientEditionTag.textContent = `संस्करण ${data.dayNum} · ${data.theme}`;
+        els.recipientThoughtText.textContent = `“${data.fullThought}”`;
+        els.recipientMeaningText.textContent = data.meaning;
+        els.recipientModal.classList.add('is-open');
+      }
+
+      function closeRecipientModal() {
+        els.recipientModal.classList.remove('is-open');
+      }
+
+      function handleRecipientPlayClick() {
+        closeRecipientModal();
+        // Start Practice Mode without erasing or altering saved score
+        isPracticeMode = true;
+        practiceSelectedOptionId = null;
+        renderCurrentEdition();
+        showToast('अभ्यास मोड शुरू हुआ');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function handlePracticeReturn() {
+        isPracticeMode = false;
+        practiceSelectedOptionId = null;
+        renderCurrentEdition();
+        showToast('मूल परिणाम बहाल हुआ');
+      }
+
+      /* ============================================================
+         VIEW THOUGHT AGAIN ACTION (Secondary Action)
+         ============================================================ */
+      function viewThoughtAgain() {
+        els.thoughtCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        els.thoughtCard.classList.remove('is-highlighted');
+        // Trigger reflow to restart pulse animation
+        void els.thoughtCard.offsetWidth;
+        els.thoughtCard.classList.add('is-highlighted');
+        setTimeout(() => {
+          els.thoughtCard.classList.remove('is-highlighted');
+        }, 1300);
+      }
+
+      /* ============================================================
+         SWITCH EDITIONS (?day=d1, d2, d3)
+         ============================================================ */
+      function switchEdition(newDayId) {
+        if (!CONTENT[newDayId]) return;
+        currentDayId = newDayId;
+        selectedOptionId = null;
+        isPracticeMode = false;
+        practiceSelectedOptionId = null;
+
+        updateUrlDay(newDayId);
+        renderCurrentEdition();
+      }
+
+      /* ============================================================
+         EVENT LISTENERS & BINDINGS
+         ============================================================ */
+      function initEventListeners() {
+        // Tab clicks
+        Object.keys(els.tabs).forEach(dayId => {
+          if (els.tabs[dayId]) {
+            els.tabs[dayId].addEventListener('click', () => {
+              switchEdition(dayId);
+            });
+          }
+        });
+
+        // Confirm button
+        els.btnConfirm.addEventListener('click', handleConfirm);
+
+        // Share & Download Buttons
+        els.btnSharePrimary.addEventListener('click', handleShareAction);
+        els.btnDownloadCard.addEventListener('click', downloadCard);
+        els.btnDownloadPreviewBtn.addEventListener('click', downloadCard);
+        els.btnCopyThoughtText.addEventListener('click', copyThoughtToClipboard);
+
+        // Secondary Actions
+        els.btnViewThoughtAgain.addEventListener('click', viewThoughtAgain);
+        els.btnRecipientPreview.addEventListener('click', openRecipientModal);
+
+        // Practice Mode Return
+        els.practiceReturnBtn.addEventListener('click', handlePracticeReturn);
+
+        // Recipient Modal
+        els.btnCloseRecipientModal.addEventListener('click', closeRecipientModal);
+        els.btnCloseRecipientModalBottom.addEventListener('click', closeRecipientModal);
+        els.btnRecipientPlay.addEventListener('click', handleRecipientPlayClick);
+        els.recipientModal.addEventListener('click', (e) => {
+          if (e.target === els.recipientModal) closeRecipientModal();
+        });
+
+        // Copy Fallback Modal
+        els.btnCloseCopyModal.addEventListener('click', () => {
+          els.copyModal.classList.remove('is-open');
+        });
+        els.btnCopyModalSelectAll.addEventListener('click', () => {
+          els.copyModalTextarea.select();
+          document.execCommand('copy');
+          showToast('टेक्स्ट कॉपी हो गया!');
+        });
+        els.copyModal.addEventListener('click', (e) => {
+          if (e.target === els.copyModal) els.copyModal.classList.remove('is-open');
+        });
+
+        // Keyboard ESC to close modals
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeRecipientModal();
+            els.copyModal.classList.remove('is-open');
+          }
+        });
+
+        // Popstate for browser back/forward
+        window.addEventListener('popstate', () => {
+          currentDayId = getInitialDayFromUrl();
+          renderCurrentEdition();
+        });
+      }
+
+      /* ============================================================
+         INITIALIZATION
+         ============================================================ */
+      function init() {
+        currentDayId = getInitialDayFromUrl();
+        initEventListeners();
+        renderCurrentEdition();
+      }
+
+      // Start on DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+  </script>
+</body>
+</html>
