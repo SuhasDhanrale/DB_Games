@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>जोड़ो · भास्कर खेल डेमो | Dainik Bhaskar Jodo</title>
-  <meta name="description" content="जोड़ो — चार वस्तुओं और उनके संबंधित तथ्यों को मिलाने का दैनिक ज्ञानवर्धक खेल। नोड ड्रैगिंग और टैप कनेक्शन।">
+  <title>जोड़ो · भास्कर खेल | Dainik Bhaskar Jodo</title>
+  <meta name="description" content="जोड़ो — चार वस्तुओं और उनके संबंधित तथ्यों को मिलाने का दैनिक ज्ञानवर्धक खेल।">
   <meta name="theme-color" content="#F9F9F7">
 
   <style>
     /* ============================================================
        DAINIK BHASKAR — जोड़ो (JODO) MATCHING GAME
-       Hindi-first, Mobile-first, Self-contained Editorial Game
-       Featuring Intuitive Node-Type Drag & Drop Connections
+       Clean, Mobile-first, Fast & Frictionless Interactive Game
        ============================================================ */
     :root {
       --color-primary: #E23A28;         /* Dainik Bhaskar Red */
@@ -42,6 +41,27 @@
       --radius-md: 10px;
       --radius-lg: 14px;
       --radius-full: 9999px;
+
+      /* Pair Distinct Colors */
+      --pair-0-color: #2563EB;
+      --pair-0-bg: #EFF6FF;
+      --pair-0-border: #93C5FD;
+      --pair-0-text: #1E40AF;
+
+      --pair-1-color: #D97706;
+      --pair-1-bg: #FFFBEB;
+      --pair-1-border: #FCD34D;
+      --pair-1-text: #92400E;
+
+      --pair-2-color: #059669;
+      --pair-2-bg: #ECFDF5;
+      --pair-2-border: #6EE7B7;
+      --pair-2-text: #065F46;
+
+      --pair-3-color: #7C3AED;
+      --pair-3-bg: #F5F3FF;
+      --pair-3-border: #C4B5FD;
+      --pair-3-text: #5B21B6;
     }
 
     * {
@@ -55,19 +75,18 @@
       background-color: var(--color-bg);
       color: var(--text-main);
       font-family: var(--font-stack);
-      line-height: 1.5;
+      line-height: 1.45;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 0;
       overflow-x: hidden;
-      font-size: 16px;
+      font-size: 15px;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    /* Screen Reader Only Utility */
     .sr-only {
       position: absolute;
       width: 1px;
@@ -80,179 +99,61 @@
       border: 0;
     }
 
-    /* Top Red-Orange Accent Line */
+    /* Top Accent Line */
     .top-accent-bar {
       width: 100%;
-      height: 4px;
+      height: 3px;
       background: linear-gradient(90deg, #E23A28 0%, #F39C12 100%);
       position: sticky;
       top: 0;
       z-index: 100;
     }
 
-    /* Main Container (Mobile envelope 360-430px up to 520px desktop) */
+    /* Main Container */
     .app-container {
       width: 100%;
       max-width: 520px;
-      min-height: calc(100vh - 4px);
+      min-height: calc(100vh - 3px);
       display: flex;
       flex-direction: column;
       background-color: var(--color-bg);
-      padding: 12px 14px 40px;
+      padding: 10px 14px 28px;
       position: relative;
     }
 
-    /* Header / Masthead */
-    .game-header {
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 12px;
-    }
-
-    .brand-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .brand-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--color-primary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .brand-sun {
-      width: 14px;
-      height: 14px;
-      fill: var(--color-primary);
-    }
-
-    .hub-link {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 8px;
-      border-radius: var(--radius-sm);
-      background: var(--color-surface-subtle);
-      border: 1px solid var(--border-subtle);
-      transition: all 0.15s ease;
-    }
-    .hub-link:hover, .hub-link:focus-visible {
-      color: var(--color-primary);
-      border-color: var(--color-primary);
-    }
-
-    .title-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .game-title {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .theme-pill {
-      font-size: 13px;
-      font-weight: 600;
-      background: var(--color-primary-light);
-      color: var(--color-primary);
-      padding: 3px 10px;
-      border-radius: var(--radius-full);
-      white-space: nowrap;
-    }
-
-    /* Edition Tabs */
-    .edition-nav {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-
-    .edition-tab {
-      min-height: 44px;
-      border: 1.5px solid var(--border-subtle);
-      background: var(--color-surface);
-      color: var(--text-muted);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 6px;
-      transition: all 0.15s ease;
-    }
-
-    .edition-tab span.tab-title {
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .edition-tab span.tab-sub {
-      font-size: 11px;
-      font-weight: 500;
-      opacity: 0.85;
-    }
-
-    .edition-tab:hover {
-      background: var(--color-surface-hover);
-      border-color: var(--border-medium);
-      color: var(--text-main);
-    }
-
-    .edition-tab.is-active {
-      border-color: var(--color-primary);
-      background: var(--color-primary-light);
-      color: var(--color-primary);
-      box-shadow: 0 2px 6px rgba(226, 58, 40, 0.15);
-    }
-
-    .edition-tab:focus-visible {
-      outline: none;
-      box-shadow: var(--shadow-focus);
-    }
-
-    /* Instruction & Progress Banner */
+    /* Single Streamlined Direction & Progress Bar */
     .info-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       background: var(--color-surface);
-      padding: 10px 12px;
+      padding: 9px 14px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-subtle);
-      margin-bottom: 10px;
+      margin-bottom: 14px;
+      min-height: 44px;
+      transition: all 0.2s ease;
+    }
+
+    .info-bar.has-error {
+      background: var(--color-danger-bg);
+      border-color: rgba(231, 76, 60, 0.35);
+      animation: shake 0.35s ease-in-out;
     }
 
     .instruction-text {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--text-muted);
-      line-height: 1.35;
+      line-height: 1.3;
       flex: 1;
+      transition: color 0.15s ease;
+    }
+
+    .info-bar.has-error .instruction-text {
+      color: var(--color-danger);
+      font-weight: 700;
     }
 
     .progress-pill {
@@ -261,44 +162,12 @@
       color: var(--color-success);
       background: var(--color-success-bg);
       border: 1px solid var(--color-success-border);
-      padding: 4px 10px;
+      padding: 3px 10px;
       border-radius: var(--radius-full);
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-    }
-
-    /* Feedback Banner */
-    .feedback-banner {
-      min-height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 6px 12px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .feedback-banner.feedback-neutral {
-      background: transparent;
-      color: var(--text-muted);
-    }
-
-    .feedback-banner.feedback-wrong {
-      background: var(--color-danger-bg);
-      color: var(--color-danger);
-      border: 1px solid rgba(231, 76, 60, 0.3);
-    }
-
-    .feedback-banner.feedback-correct {
-      background: var(--color-success-bg);
-      color: var(--color-success);
-      border: 1px solid var(--color-success-border);
+      gap: 4px;
     }
 
     /* ============================================================
@@ -306,7 +175,7 @@
        ============================================================ */
     .board-container {
       position: relative;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       touch-action: pan-y;
     }
 
@@ -315,7 +184,7 @@
       cursor: crosshair;
     }
 
-    /* Full-Overlay SVG Canvas for Drawing Node Lines */
+    /* SVG Overlay for Connection Cables */
     .connections-svg {
       position: absolute;
       top: 0;
@@ -327,28 +196,35 @@
       overflow: visible;
     }
 
+    /* Increased distance between lists for clear visual separation */
     .board-header-row {
       display: grid;
-      grid-template-columns: minmax(95px, 1.1fr) minmax(170px, 2.25fr);
-      gap: 38px;
-      margin-bottom: 6px;
+      grid-template-columns: minmax(105px, 1.05fr) minmax(140px, 1.65fr);
+      gap: 52px;
+      margin-bottom: 8px;
       padding: 0 4px;
     }
 
     .col-header {
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--text-subtle);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
 
     .board-grid {
       display: grid;
-      grid-template-columns: minmax(95px, 1.1fr) minmax(170px, 2.25fr);
-      gap: 38px; /* Generous gap: cards not too close, ample space for connection cables */
+      grid-template-columns: minmax(105px, 1.05fr) minmax(140px, 1.65fr);
+      gap: 52px;
       position: relative;
       z-index: 1;
+    }
+
+    @media (min-width: 440px) {
+      .board-header-row,
+      .board-grid {
+        gap: 60px;
+      }
     }
 
     .card-column {
@@ -357,10 +233,10 @@
       gap: 12px;
     }
 
-    /* Cards as Accessible Buttons with Connector Ports */
+    /* Cards as Interactive Buttons */
     .card-btn {
       width: 100%;
-      min-height: 64px;
+      min-height: 60px;
       background: var(--color-surface);
       border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-md);
@@ -380,20 +256,37 @@
       touch-action: pan-y;
     }
 
-    /* Left column is shorter and single-word focused */
     .card-btn[data-side="left"] {
-      padding: 10px 11px;
-      font-size: 15px;
+      padding: 10px 12px;
+      font-size: 14.5px;
       font-weight: 700;
       letter-spacing: -0.2px;
     }
 
-    /* Right column has comfortable space for descriptive facts */
     .card-btn[data-side="right"] {
-      padding: 10px 14px;
-      font-size: 13.5px;
-      line-height: 1.42;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.4;
       font-weight: 600;
+    }
+
+    .card-content-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .card-text {
+      flex: 1;
+    }
+
+    .matched-tick {
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1;
+      flex-shrink: 0;
     }
 
     .card-btn:hover:not(:disabled):not(.is-matched) {
@@ -405,11 +298,10 @@
 
     .card-btn:focus-visible {
       outline: none;
-      border-color: var(--color-primary);
       box-shadow: var(--shadow-focus);
     }
 
-    /* Node Connector Port Dots (The visual drag handles) */
+    /* Connector Ports: Neutral by default, NO color before matching! */
     .card-port {
       position: absolute;
       top: 50%;
@@ -437,29 +329,57 @@
       transition: all 0.2s ease;
     }
 
-    /* Left card's port sits on the right edge */
     .card-btn[data-side="left"] .card-port {
-      right: -7px;
+      right: -8px;
     }
 
-    /* Right card's port sits on the left edge */
     .card-btn[data-side="right"] .card-port {
-      left: -7px;
+      left: -8px;
     }
 
-    .card-btn:hover:not(.is-matched) .card-port,
-    .card-btn.is-selected .card-port {
+    /* Distinct subtle left accent ONLY for List A cards, so wires can be identified */
+    .card-btn[data-pair-idx="0"][data-side="left"] {
+      border-left: 3.5px solid var(--pair-0-color);
+    }
+    .card-btn[data-pair-idx="1"][data-side="left"] {
+      border-left: 3.5px solid var(--pair-1-color);
+    }
+    .card-btn[data-pair-idx="2"][data-side="left"] {
+      border-left: 3.5px solid var(--pair-2-color);
+    }
+    .card-btn[data-pair-idx="3"][data-side="left"] {
+      border-left: 3.5px solid var(--pair-3-color);
+    }
+
+    /* Selected State */
+    .card-btn.is-selected {
       border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(226, 58, 40, 0.2);
+      background: var(--color-primary-light);
+      box-shadow: 0 0 0 2px var(--color-primary);
     }
 
-    .card-btn:hover:not(.is-matched) .card-port::after,
-    .card-btn.is-selected .card-port::after {
-      background: var(--color-primary);
-      transform: scale(1.3);
+    .card-btn.is-selected[data-side="left"][data-pair-idx="0"] {
+      border-color: var(--pair-0-color);
+      background: var(--pair-0-bg);
+      box-shadow: 0 0 0 2px var(--pair-0-color);
+    }
+    .card-btn.is-selected[data-side="left"][data-pair-idx="1"] {
+      border-color: var(--pair-1-color);
+      background: var(--pair-1-bg);
+      box-shadow: 0 0 0 2px var(--pair-1-color);
+    }
+    .card-btn.is-selected[data-side="left"][data-pair-idx="2"] {
+      border-color: var(--pair-2-color);
+      background: var(--pair-2-bg);
+      box-shadow: 0 0 0 2px var(--pair-2-color);
+    }
+    .card-btn.is-selected[data-side="left"][data-pair-idx="3"] {
+      border-color: var(--pair-3-color);
+      background: var(--pair-3-bg);
+      box-shadow: 0 0 0 2px var(--pair-3-color);
     }
 
-    /* Drag Target Ready / Snap Halo */
+    /* Drag Target Halo */
     .card-btn.is-drag-target {
       border-color: var(--color-accent) !important;
       background: #FFF9E6 !important;
@@ -469,28 +389,16 @@
 
     .card-btn.is-drag-target .card-port {
       border-color: var(--color-accent);
-      box-shadow: 0 0 0 5px rgba(243, 156, 18, 0.4);
+      box-shadow: 0 0 0 4px rgba(243, 156, 18, 0.4);
       transform: translateY(-50%) scale(1.25);
     }
 
-    .card-btn.is-drag-target .card-port::after {
-      background: var(--color-accent);
-    }
-
-    /* Card Selected State */
-    .card-btn.is-selected {
-      border-color: var(--color-primary);
-      background: var(--color-primary-light);
-      color: var(--color-primary);
-      box-shadow: 0 0 0 2px var(--color-primary);
-    }
-
-    /* Card Wrong State */
+    /* Wrong Match Shake */
     .card-btn.is-wrong {
       border-color: var(--color-danger) !important;
       background: var(--color-danger-bg) !important;
       color: var(--color-danger) !important;
-      animation: shake 0.4s ease-in-out;
+      animation: shake 0.35s ease-in-out;
     }
 
     @keyframes shake {
@@ -499,52 +407,77 @@
       40%, 80% { transform: translateX(4px); }
     }
 
-    /* Card Matched / Locked State */
+    /* Matched State: Styled with its pair's color */
     .card-btn.is-matched {
-      border-color: var(--color-success-border);
-      background: var(--color-success-bg);
-      color: #196F3D;
       cursor: default;
       box-shadow: none;
       opacity: 0.98;
     }
 
-    .card-btn.is-matched .card-port {
-      border-color: var(--color-success);
-      background: var(--color-success-bg);
-      cursor: default;
+    .card-btn.is-matched[data-pair-idx="0"] {
+      background: var(--pair-0-bg);
+      border-color: var(--pair-0-border);
+      color: var(--pair-0-text);
+    }
+    .card-btn.is-matched[data-pair-idx="0"] .card-port {
+      border-color: var(--pair-0-color);
+      background: var(--pair-0-bg);
+    }
+    .card-btn.is-matched[data-pair-idx="0"] .matched-tick {
+      color: var(--pair-0-color);
     }
 
-    .card-btn.is-matched .card-port::after {
-      background: var(--color-success);
+    .card-btn.is-matched[data-pair-idx="1"] {
+      background: var(--pair-1-bg);
+      border-color: var(--pair-1-border);
+      color: var(--pair-1-text);
+    }
+    .card-btn.is-matched[data-pair-idx="1"] .card-port {
+      border-color: var(--pair-1-color);
+      background: var(--pair-1-bg);
+    }
+    .card-btn.is-matched[data-pair-idx="1"] .matched-tick {
+      color: var(--pair-1-color);
     }
 
-    .matched-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--color-success);
-      margin-top: 4px;
+    .card-btn.is-matched[data-pair-idx="2"] {
+      background: var(--pair-2-bg);
+      border-color: var(--pair-2-border);
+      color: var(--pair-2-text);
+    }
+    .card-btn.is-matched[data-pair-idx="2"] .card-port {
+      border-color: var(--pair-2-color);
+      background: var(--pair-2-bg);
+    }
+    .card-btn.is-matched[data-pair-idx="2"] .matched-tick {
+      color: var(--pair-2-color);
+    }
+
+    .card-btn.is-matched[data-pair-idx="3"] {
+      background: var(--pair-3-bg);
+      border-color: var(--pair-3-border);
+      color: var(--pair-3-text);
+    }
+    .card-btn.is-matched[data-pair-idx="3"] .card-port {
+      border-color: var(--pair-3-color);
+      background: var(--pair-3-bg);
+    }
+    .card-btn.is-matched[data-pair-idx="3"] .matched-tick {
+      color: var(--pair-3-color);
     }
 
     /* SVG Cable Styling */
     .active-drag-cable {
-      stroke: var(--color-primary);
       stroke-width: 3.5px;
       stroke-linecap: round;
       fill: none;
-      filter: drop-shadow(0 2px 4px rgba(226, 58, 40, 0.25));
     }
 
     .matched-cable {
-      stroke: var(--color-success);
-      stroke-width: 3px;
+      stroke-width: 3.5px;
       stroke-linecap: round;
       fill: none;
-      filter: drop-shadow(0 2px 4px rgba(39, 174, 96, 0.2));
-      animation: cableDraw 0.35s ease-out;
+      animation: cableDraw 0.28s ease-out;
     }
 
     @keyframes cableDraw {
@@ -557,140 +490,59 @@
       stroke-width: 3px;
       stroke-linecap: round;
       fill: none;
-      filter: drop-shadow(0 2px 4px rgba(231, 76, 60, 0.3));
-      animation: recoilFade 0.5s ease-out forwards;
+      animation: recoilFade 0.4s ease-out forwards;
     }
 
     @keyframes recoilFade {
       0% { opacity: 1; }
-      50% { opacity: 0.8; }
       100% { opacity: 0; stroke-width: 1px; }
     }
 
-    /* Explanation Area (shown after match, blocks further moves until 'आगे') */
-    .explanation-panel {
-      background: var(--color-surface);
-      border: 1.5px solid var(--color-success-border);
-      border-radius: var(--radius-lg);
-      padding: 14px 16px;
-      box-shadow: var(--shadow-md);
-      margin-top: 14px;
-      animation: slideUp 0.25s ease-out;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .explanation-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .explanation-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--color-success);
-      background: var(--color-success-bg);
-      padding: 3px 10px;
-      border-radius: var(--radius-full);
-    }
-
-    .explanation-tag.is-assisted {
-      color: #B7791F;
-      background: #FEFCBF;
-    }
-
-    .explanation-pair-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 6px;
-    }
-
-    .explanation-body {
-      font-size: 14px;
-      line-height: 1.55;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-    }
-
-    .btn-next-action {
-      width: 100%;
-      min-height: 44px;
-      background: var(--color-primary);
-      color: var(--text-white);
-      border: none;
-      border-radius: var(--radius-md);
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background 0.15s ease;
-    }
-    .btn-next-action:hover, .btn-next-action:focus-visible {
-      background: var(--color-primary-hover);
-      outline: none;
-    }
-
-    /* Actions Row (Help / Secondary action) */
+    /* Subtle Bottom Hint Control */
     .controls-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 8px;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 6px;
     }
 
-    .btn-secondary {
-      min-height: 44px;
-      padding: 0 16px;
-      border: 1.5px solid var(--border-subtle);
+    .btn-hint {
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--border-subtle);
       background: var(--color-surface);
-      color: var(--text-main);
+      color: var(--text-muted);
       font-family: inherit;
-      font-size: 14px;
+      font-size: 12.5px;
       font-weight: 600;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-full);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.15s ease;
     }
-    .btn-secondary:hover:not(:disabled) {
-      background: var(--color-surface-hover);
+    .btn-hint:hover:not(:disabled) {
+      color: var(--text-main);
       border-color: var(--border-medium);
+      background: var(--color-surface-hover);
     }
-    .btn-secondary:focus-visible {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: var(--shadow-focus);
-    }
-    .btn-secondary:disabled {
-      opacity: 0.5;
+    .btn-hint:disabled {
+      opacity: 0.45;
       cursor: not-allowed;
     }
 
-    /* Result Panel */
+    /* ============================================================
+       STEP 2: FINAL RESULT & REVEAL PANEL (Ultra-compact, No-Scroll)
+       ============================================================ */
     .result-panel {
       background: var(--color-surface);
       border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 20px 18px;
+      padding: 12px 14px;
       box-shadow: var(--shadow-md);
-      margin-top: 14px;
-      animation: fadeIn 0.3s ease-out;
+      animation: fadeIn 0.25s ease-out;
     }
 
     @keyframes fadeIn {
@@ -698,145 +550,154 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    .result-hero {
-      text-align: center;
-      padding-bottom: 16px;
+    .result-header-minimal {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 8px;
       border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 16px;
+      margin-bottom: 8px;
     }
 
-    .result-icon {
-      font-size: 38px;
+    .result-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .result-badge-icon {
+      font-size: 18px;
       line-height: 1;
-      margin-bottom: 6px;
     }
 
-    .result-heading {
-      font-size: 24px;
+    .result-minimal-title {
+      font-size: 16px;
       font-weight: 800;
       color: var(--text-main);
-      margin-bottom: 4px;
+      margin: 0;
     }
 
-    .result-subhead {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .score-card {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin: 14px 0;
-      padding: 12px;
-      background: var(--color-surface-subtle);
-      border-radius: var(--radius-md);
-    }
-
-    .score-badge {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .score-num {
-      font-size: 32px;
-      font-weight: 900;
+    .result-score-chip {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 3px;
+      background: var(--color-primary-light);
       color: var(--color-primary);
-      line-height: 1;
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
     }
 
-    .score-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-subtle);
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .stat-chip {
-      font-size: 12px;
+    .result-score-chip small {
+      font-size: 11px;
       font-weight: 600;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      opacity: 0.9;
     }
 
-    .stat-chip strong {
-      font-size: 16px;
-      color: var(--text-main);
-      font-weight: 700;
-    }
-
-    /* Review list of all pairs */
+    /* Review of all 4 pairs with concise explanations */
     .review-section {
-      margin: 16px 0;
+      margin: 6px 0 10px;
     }
 
     .review-title {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 10px;
+      color: var(--text-subtle);
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
     }
 
     .review-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
     }
 
     .review-item {
-      background: var(--color-surface-subtle);
-      border-left: 3px solid var(--color-primary);
-      padding: 10px 12px;
+      padding: 6px 10px;
       border-radius: var(--radius-sm);
     }
 
+    .review-item[data-pair-idx="0"] {
+      background: var(--pair-0-bg);
+      border-left: 3px solid var(--pair-0-color);
+    }
+    .review-item[data-pair-idx="1"] {
+      background: var(--pair-1-bg);
+      border-left: 3px solid var(--pair-1-color);
+    }
+    .review-item[data-pair-idx="2"] {
+      background: var(--pair-2-bg);
+      border-left: 3px solid var(--pair-2-color);
+    }
+    .review-item[data-pair-idx="3"] {
+      background: var(--pair-3-bg);
+      border-left: 3px solid var(--pair-3-color);
+    }
+
     .review-pair-name {
-      font-size: 14px;
+      font-size: 12.5px;
       font-weight: 700;
       color: var(--text-main);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+      line-height: 1.3;
     }
 
     .review-explanation {
-      font-size: 13px;
+      font-size: 11.5px;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.35;
     }
 
-    .result-actions {
+    /* Side-by-side Action Buttons */
+    .result-actions-row {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 16px;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      width: 100%;
     }
 
-    .btn-primary {
-      min-height: 46px;
-      background: var(--color-primary);
-      color: var(--text-white);
-      border: none;
+    .btn-action {
+      flex: 1;
+      min-height: 42px;
       border-radius: var(--radius-md);
       font-family: inherit;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: background 0.15s ease;
-    }
-    .btn-primary:hover, .btn-primary:focus-visible {
-      background: var(--color-primary-hover);
-      outline: none;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
     }
 
-    /* Article Panel Modal Overlay */
+    .btn-action-news {
+      background: var(--color-surface);
+      color: var(--color-primary);
+      border: 1.5px solid var(--color-primary);
+    }
+    .btn-action-news:hover {
+      background: var(--color-primary-light);
+    }
+
+    .btn-action-next {
+      background: var(--color-primary);
+      color: var(--text-white);
+      border: 1.5px solid var(--color-primary);
+      box-shadow: 0 3px 10px rgba(226, 58, 40, 0.25);
+    }
+    .btn-action-next:hover {
+      background: var(--color-primary-hover);
+      border-color: var(--color-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Article Modal */
     .article-modal {
       display: none;
       position: fixed;
@@ -855,11 +716,11 @@
     .article-sheet {
       width: 100%;
       max-width: 500px;
-      max-height: 90vh;
+      max-height: 88vh;
       background: var(--color-bg);
       border-radius: 18px 18px 0 0;
       overflow-y: auto;
-      padding: 18px 18px 36px;
+      padding: 18px 18px 32px;
       box-shadow: var(--shadow-lg);
       animation: sheetUp 0.25s ease-out;
     }
@@ -875,7 +736,7 @@
       justify-content: space-between;
       border-bottom: 1px solid var(--border-subtle);
       padding-bottom: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .article-badge {
@@ -890,23 +751,23 @@
       border-radius: var(--radius-full);
     }
 
-    .btn-close-article {
+    .btn-close-sheet {
       background: transparent;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-full);
-      padding: 5px 12px;
+      padding: 4px 12px;
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
       color: var(--text-main);
       cursor: pointer;
     }
-    .btn-close-article:hover {
+    .btn-close-sheet:hover {
       background: var(--color-surface-subtle);
     }
 
     .article-category {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: var(--color-primary);
       text-transform: uppercase;
@@ -915,7 +776,7 @@
     }
 
     .article-title {
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 800;
       line-height: 1.35;
       color: var(--text-main);
@@ -923,20 +784,20 @@
     }
 
     .article-summary {
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.45;
       margin-bottom: 14px;
       padding-left: 10px;
       border-left: 3px solid var(--color-primary);
     }
 
     .article-body p {
-      font-size: 15px;
-      line-height: 1.65;
+      font-size: 14.5px;
+      line-height: 1.6;
       color: var(--text-main);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .article-source-note {
@@ -951,98 +812,115 @@
     }
 
     .article-footer-actions {
-      margin-top: 20px;
+      margin-top: 18px;
+    }
+
+    /* Rules Modal */
+    .rules-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(2px);
+      z-index: 210;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .rules-modal.is-open {
+      display: flex;
+    }
+
+    .rules-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      box-shadow: var(--shadow-lg);
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .rules-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .rules-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rules-list {
+      list-style: none;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
     }
 
-    .external-article-link {
+    .rules-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .rules-list li span.step-num {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      min-height: 44px;
-      border: 1.5px solid var(--border-medium);
-      border-radius: var(--radius-md);
-      text-decoration: none;
+      width: 22px;
+      height: 22px;
+      background: var(--color-primary-light);
       color: var(--color-primary);
+      border-radius: 50%;
+      font-size: 12px;
       font-weight: 700;
-      font-size: 14px;
-      background: var(--color-surface);
+      flex-shrink: 0;
+      margin-top: 1px;
     }
 
-    /* Footer disclosure */
-    .game-footer {
-      margin-top: auto;
-      padding-top: 24px;
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-subtle);
-      border-top: 1px solid var(--border-subtle);
+    .btn-primary-block {
+      width: 100%;
+      min-height: 44px;
+      background: var(--color-primary);
+      color: var(--text-white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <!-- Top Red-Orange Accent Line -->
+  <!-- Top Accent Line -->
   <div class="top-accent-bar" role="presentation"></div>
 
-  <!-- Screen Reader Live Region for Accessible Feedback -->
+  <!-- Screen Reader Live Region -->
   <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Main Mobile-First Shell -->
+  <!-- Main Shell -->
   <main class="app-container" id="app">
-    <!-- Header / Masthead -->
-    <header class="game-header">
-      <div class="brand-bar">
-        <div class="brand-badge">
-          <svg class="brand-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="5"></circle>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-          </svg>
-          <span>भास्कर खेल · डेमो</span>
-        </div>
-        <a href="./news.html" class="hub-link" title="समाचार पृष्ठ खोलें" id="news-hub-link">
-          <span>📰 समाचार फ़ीड</span>
-        </a>
-      </div>
 
-      <div class="title-row">
-        <h1 class="game-title" id="game-main-title">
-          <span>जोड़ो</span>
-        </h1>
-        <span class="theme-pill" id="theme-pill">अंतरिक्ष</span>
-      </div>
-    </header>
-
-    <!-- Edition Tabs (दिन / संस्करण 1, 2, 3) -->
-    <nav class="edition-nav" aria-label="संस्करण चयन">
-      <button type="button" class="edition-tab is-active" id="tab-d1" data-day="d1" aria-selected="true">
-        <span class="tab-title">संस्करण 1</span>
-        <span class="tab-sub">अंतरिक्ष</span>
-      </button>
-      <button type="button" class="edition-tab" id="tab-d2" data-day="d2" aria-selected="false">
-        <span class="tab-title">संस्करण 2</span>
-        <span class="tab-sub">पेरिस 2024</span>
-      </button>
-      <button type="button" class="edition-tab" id="tab-d3" data-day="d3" aria-selected="false">
-        <span class="tab-title">संस्करण 3</span>
-        <span class="tab-sub">धरोहर</span>
-      </button>
-    </nav>
-
-    <!-- Instruction & Dynamic Progress Pill -->
-    <div class="info-bar">
-      <p class="instruction-text" id="instruction-text">कार्ड या नोड खींचकर (ड्रैग करके) या चुनकर सही जोड़ी बनाइए।</p>
+    <!-- Single Streamlined Direction & Progress Bar -->
+    <div class="info-bar" id="info-bar">
+      <span class="instruction-text" id="instruction-text">एक कार्ड से दूसरे कार्ड तक रेखा खींचें या टैप करें</span>
       <div class="progress-pill" id="progress-pill" aria-label="प्रगति">
         <span aria-hidden="true">✓</span>
         <span id="progress-count">0/4 जोड़ियाँ</span>
       </div>
-    </div>
-
-    <!-- Feedback Message Banner -->
-    <div class="feedback-banner feedback-neutral" id="feedback-banner" role="status">
-      <span id="feedback-text">एक कार्ड से दूसरे कार्ड तक रेखा खींचें या टैप करें।</span>
     </div>
 
     <!-- Game Board (2 Columns with SVG Overlay for Node-type Dragging) -->
@@ -1050,12 +928,8 @@
       <!-- SVG Connecting Cables Overlay -->
       <svg class="connections-svg" id="connections-svg">
         <defs>
-          <linearGradient id="dragGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#E23A28" />
-            <stop offset="100%" stop-color="#F39C12" />
-          </linearGradient>
-          <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(39, 174, 96, 0.35)" />
+          <filter id="cableGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(0, 0, 0, 0.2)" />
           </filter>
         </defs>
 
@@ -1067,7 +941,7 @@
 
         <!-- Active interactive drag line -->
         <path id="active-drag-line" class="active-drag-cable" d="" style="display: none;" />
-        <circle id="active-drag-head" r="5" fill="#E23A28" style="display: none;" />
+        <circle id="active-drag-head" r="5.5" fill="#E23A28" style="display: none;" />
       </svg>
 
       <div class="board-header-row">
@@ -1086,84 +960,47 @@
           <!-- Rendered via JS -->
         </div>
       </div>
-    </section>
 
-    <!-- Active Pair Explanation Area (Revealed on match / help) -->
-    <section class="explanation-panel" id="explanation-panel" style="display: none;" aria-label="जोड़ी का विवरण">
-      <div class="explanation-header">
-        <span class="explanation-tag" id="explanation-badge">✓ सही जोड़ी</span>
-        <span id="explanation-counter" style="font-size: 12px; color: var(--text-subtle); font-weight: 600;"></span>
+      <!-- Hint Control -->
+      <div class="controls-row" id="controls-row">
+        <button type="button" class="btn-hint" id="btn-show-pair" title="एक जोड़ी स्वतः मिलाकर देखें">
+          <span aria-hidden="true">💡</span>
+          <span>एक जोड़ी दिखाएँ</span>
+        </button>
       </div>
-      <h2 class="explanation-pair-title" id="explanation-pair-title"></h2>
-      <p class="explanation-body" id="explanation-body"></p>
-      <button type="button" class="btn-next-action" id="btn-next-step">
-        <span>आगे बढ़ें</span>
-        <span aria-hidden="true">→</span>
-      </button>
     </section>
 
-    <!-- Secondary Actions Row -->
-    <div class="controls-row" id="controls-row">
-      <button type="button" class="btn-secondary" id="btn-show-pair" title="एक जोड़ी स्वतः मिलाकर देखें">
-        <span aria-hidden="true">💡</span>
-        <span>एक जोड़ी दिखाएँ</span>
-      </button>
-      <button type="button" class="btn-secondary" id="btn-open-article-inline" title="इस विषय से जुड़ी खबर पढ़ें">
-        <span aria-hidden="true">📖</span>
-        <span>जुड़ी खबर पढ़ें</span>
-      </button>
-    </div>
-
-    <!-- Final Result Panel (Shown once all 4 pairs are complete) -->
+    <!-- STEP 2: Final Result Panel (Ultra-compact, No-Scroll) -->
     <section class="result-panel" id="result-panel" style="display: none;" aria-label="खेल परिणाम">
-      <div class="result-hero">
-        <div class="result-icon" aria-hidden="true">🏆</div>
-        <h2 class="result-heading">4 जोड़ियाँ पूरी!</h2>
-        <p class="result-subhead" id="result-subhead">आपने सभी जोड़ियाँ सफलतापूर्वक समझीं।</p>
-      </div>
-
-      <div class="score-card">
-        <div class="score-badge">
-          <span class="score-num" id="score-display">100</span>
-          <span class="score-label">अंक (100 में से)</span>
+      <div class="result-header-minimal">
+        <div class="result-title-wrap">
+          <span class="result-badge-icon" aria-hidden="true">🎉</span>
+          <h2 class="result-minimal-title">4 जोड़ियाँ पूरी हुईं!</h2>
         </div>
-        <div class="stat-chip">
-          <span>गलत प्रयास</span>
-          <strong id="stat-wrong">0</strong>
-        </div>
-        <div class="stat-chip">
-          <span>मदद ली गई</span>
-          <strong id="stat-assisted">0</strong>
+        <div class="result-score-chip">
+          <span id="score-display">100</span> <small>अंक</small>
         </div>
       </div>
 
-      <div id="first-result-note" style="display: none; text-align: center; font-size: 12px; color: var(--text-muted); margin-bottom: 12px; background: #FFF9E6; padding: 6px 10px; border-radius: 6px; border: 1px solid #FFEAA7;">
-        <span>★ पहला आधिकारिक स्कोर: <strong id="first-score-val">100</strong> अंक</span>
-      </div>
-
-      <!-- Complete Review of all 4 Pairs & Explanations -->
+      <!-- Concise Review of all 4 Pairs & Explanations -->
       <div class="review-section">
-        <h3 class="review-title">जोड़ियों का विवरण व सीख:</h3>
+        <div class="review-title">जोड़ियों का विवरण व सीख:</div>
         <div class="review-list" id="review-list">
-          <!-- Rendered via JS -->
+          <!-- Rendered via JS with distinct pair colors -->
         </div>
       </div>
 
-      <div class="result-actions">
-        <button type="button" class="btn-primary" id="btn-result-article">
-          <span>📖 जुड़ी खबर पढ़ें</span>
+      <!-- Side-by-side Action Buttons -->
+      <div class="result-actions-row">
+        <button type="button" class="btn-action btn-action-news" id="btn-result-article">
+          <span>📖 जुड़ी ख़बरें</span>
         </button>
-        <button type="button" class="btn-secondary" id="btn-play-again" style="justify-content: center;">
-          <span>🔄 फिर खेलें (अभ्यास)</span>
+        <button type="button" class="btn-action btn-action-next" id="btn-next-game">
+          <span>🎮 अगला खेल</span>
         </button>
       </div>
     </section>
 
-    <!-- Footer Identity & Clarification -->
-    <footer class="game-footer">
-      <p>दैनिक भास्कर गेम लैब · जोड़ो प्रोटोटाइप</p>
-      <p style="margin-top: 4px; font-size: 11px;">डेमो संदर्भ खेल · स्रोतों पर आधारित तथ्य</p>
-    </footer>
   </main>
 
   <!-- In-File Article Reader Panel Modal -->
@@ -1171,8 +1008,8 @@
     <div class="article-sheet">
       <div class="article-top-bar">
         <span class="article-badge">डेमो संदर्भ लेख</span>
-        <button type="button" class="btn-close-article" id="btn-close-article-top">
-          ← खेल पर लौटें
+        <button type="button" class="btn-close-sheet" id="btn-close-article-top">
+          ✕ बंद करें
         </button>
       </div>
 
@@ -1189,40 +1026,93 @@
       </div>
 
       <div class="article-footer-actions">
-        <!-- Optional External Article Link (only shown if configured) -->
-        <a href="#" class="external-article-link" id="article-external-link" target="_blank" rel="noopener noreferrer" style="display: none;">
-          <span>संबंधित समाचार पृष्ठ खोलें ↗</span>
-        </a>
-
-        <button type="button" class="btn-primary" id="btn-close-article-bottom">
-          <span>← खेल पर लौटें</span>
+        <button type="button" class="btn-primary-block" id="btn-close-article-bottom">
+          खेल पर लौटें
         </button>
       </div>
     </div>
   </div>
 
+  <!-- Rules Modal -->
+  <div class="rules-modal" id="rules-modal" role="dialog" aria-modal="true" aria-labelledby="rules-modal-title">
+    <div class="rules-card">
+      <div class="rules-header">
+        <h2 class="rules-title" id="rules-modal-title">
+          <span>🧩 जोड़ो के नियम</span>
+        </h2>
+        <button type="button" class="btn-close-sheet" id="btn-close-rules">✕</button>
+      </div>
+
+      <ul class="rules-list">
+        <li>
+          <span class="step-num">1</span>
+          <span>सूची (क) और सूची (ख) में संबंधित तथ्यों को पहचानें।</span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>एक कार्ड से दूसरे कार्ड तक रेखा खींचें (ड्रैग करें) या दोनों कार्डों पर बारी-बारी से टैप करें।</span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>प्रत्येक सही जोड़ी का रंग अलग होगा। सभी 4 जोड़ियाँ मिलाने पर संपूर्ण सीख और स्कोर देखें।</span>
+        </li>
+      </ul>
+
+      <button type="button" class="btn-primary-block" id="btn-rules-ok">
+        समझ गया, खेलें
+      </button>
+    </div>
+  </div>
+
   <script>
     /* ============================================================
-       CONTENT DEFINITION (Completely self-contained & editable)
+       CONTENT DEFINITION & PAIR THEMES
        ============================================================ */
+    const PAIR_THEMES = [
+      {
+        idx: 0,
+        color: '#2563EB',      // Royal Blue
+        bg: '#EFF6FF',
+        border: '#93C5FD',
+        text: '#1E40AF'
+      },
+      {
+        idx: 1,
+        color: '#D97706',      // Warm Amber
+        bg: '#FFFBEB',
+        border: '#FCD34D',
+        text: '#92400E'
+      },
+      {
+        idx: 2,
+        color: '#059669',      // Emerald Green
+        bg: '#ECFDF5',
+        border: '#6EE7B7',
+        text: '#065F46'
+      },
+      {
+        idx: 3,
+        color: '#7C3AED',      // Purple
+        bg: '#F5F3FF',
+        border: '#C4B5FD',
+        text: '#5B21B6'
+      }
+    ];
+
     const CONTENT = {
-      brandLabel: "भास्कर खेल · डेमो",
       editions: [
         {
           id: "d1",
           title: "संस्करण 1",
           theme: "अंतरिक्ष",
-          instruction: "दोनों तरफ़ से एक-एक कार्ड चुनकर या नोड खींचकर सही जोड़ी बनाइए।",
-          articleUrl: "", // Configurable external URL; empty by default
           article: {
             category: "विज्ञान",
             title: "भारत के चार अंतरिक्ष मिशन क्या खोजते हैं",
             summary: "चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के अलग-अलग तरीके।",
-            period: "अंतरिक्ष मिशनों पर संदर्भ लेख",
             body: [
               "भारत के अंतरिक्ष मिशनों के काम एक जैसे नहीं हैं। चंद्रयान-3 के उद्देश्यों में चंद्रमा पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था। आदित्य-L1 सूर्य के अध्ययन के लिए बनाया गया भारतीय मिशन है।",
               "मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल का अध्ययन शामिल था। एस्ट्रोसैट खगोलीय स्रोतों का अलग-अलग तरंगदैर्घ्यों में एक साथ अध्ययन करता है।",
-              "इस डेमो संस्करण के जोड़ो खेल में हर मिशन को उसके मुख्य काम से मिलाइए। यह संदर्भ सामग्री है, किसी नई घटना की खबर नहीं।"
+              "इस संस्करण के जोड़ो खेल में हर मिशन को उसके मुख्य काम से मिलाइए।"
             ],
             sourceNote: "इसरो (ISRO) आधिकारिक मिशन विवरण पर आधारित डेमो संदर्भ सामग्री।"
           },
@@ -1249,31 +1139,25 @@
               id: "d1-p4",
               left: "एस्ट्रोसैट",
               right: "कई तरंगदैर्घ्यों में खगोलीय अध्ययन",
-              explanation: "एस्ट्रोसैट खगोलीय स्रोतों का अलग-अलग तरंगदैर्घ्यों में अध्ययन करता है।"
+              explanation: "एस्ट्रोसैट खगोलीय स्रोतों का अलग-अलग तरंगदैर्घ्यों में एक साथ अध्ययन करता है।"
             }
           ],
-          // Left cards in supplied order: 1, 2, 3, 4
           leftOrder: [1, 2, 3, 4],
-          // Right cards in specified order: pairs 3, 1, 4, 2
           rightOrder: [3, 1, 4, 2]
         },
         {
           id: "d2",
           title: "संस्करण 2",
-          theme: "पेरिस ओलंपिक 2024",
-          instruction: "दोनों तरफ़ से एक-एक कार्ड चुनकर या नोड खींचकर सही जोड़ी बनाइए।",
-          articleUrl: "",
+          theme: "पेरिस 2024",
           article: {
             category: "खेल",
             title: "पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते",
             summary: "चार नाम, चार अलग स्पर्धाएँ। पदक के साथ स्पर्धा पहचानिए।",
-            period: "ऐतिहासिक संदर्भ · पेरिस ओलंपिक 2024",
             body: [
               "पेरिस ओलंपिक 2024 में मनु भाकर ने महिला 10 मीटर एयर पिस्टल स्पर्धा में कांस्य पदक जीता। नीरज चोपड़ा ने पुरुष भाला फेंक स्पर्धा में रजत पदक जीता।",
-              "स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल थ्री पोज़िशन्स स्पर्धा में कांस्य पदक जीता। अमन सहरावत ने पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा स्पर्धा में कांस्य पदक जीता।",
-              "इन चार उपलब्धियों को सही स्पर्धा के साथ पहचानना आज के जोड़ो खेल की चुनौती है। यह चयन पूरी भारतीय पदक सूची नहीं है।"
+              "स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल थ्री पोज़िशन्स स्पर्धा में कांस्य पदक जीता। अमन सहरावत ने पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा स्पर्धा में कांस्य पदक जीता।"
             ],
-            sourceNote: "पीआईबी (PIB) और ओलंपिक रिकॉर्ड्स पर आधारित डेमो संदर्भ सामग्री।"
+            sourceNote: "पीआईबी (PIB) और ओलंपिक रिकॉर्ड्स पर आधारित संदर्भ सामग्री।"
           },
           pairs: [
             {
@@ -1291,80 +1175,70 @@
             {
               id: "d2-p3",
               left: "स्वप्निल कुसाले",
-              right: "पुरुष 50 मीटर राइफल थ्री पोज़िशन्स में कांस्य",
-              explanation: "स्वप्निल कुसाले ने पेरिस 2024 की पुरुष 50 मीटर राइफल थ्री पोज़िशन्स स्पर्धा में कांस्य पदक जीता।"
+              right: "पुरुष 50 मीटर राइफल 3P में कांस्य",
+              explanation: "स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल थ्री पोज़िशन्स स्पर्धा में कांस्य पदक जीता।"
             },
             {
               id: "d2-p4",
               left: "अमन सहरावत",
               right: "पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा में कांस्य",
-              explanation: "अमन सहरावत ने पेरिस 2024 की पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा स्पर्धा में कांस्य पदक जीता।"
+              explanation: "अमन सहरावत ने पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा स्पर्धा में कांस्य पदक जीता।"
             }
           ],
-          // Left cards: 1, 2, 3, 4
           leftOrder: [1, 2, 3, 4],
-          // Right cards: pairs 2, 4, 1, 3
           rightOrder: [2, 4, 1, 3]
         },
         {
           id: "d3",
           title: "संस्करण 3",
-          theme: "भारत की धरोहर",
-          instruction: "दोनों तरफ़ से एक-एक कार्ड चुनकर या नोड खींचकर सही जोड़ी बनाइए।",
-          articleUrl: "",
+          theme: "धरोहर",
           article: {
             category: "संस्कृति",
             title: "भारत की चार धरोहरें और उनके राज्य",
             summary: "गुजरात से ओडिशा तक, चार जगहों की पहचान और इतिहास।",
-            period: "विश्व धरोहर स्थलों पर संदर्भ लेख",
             body: [
               "धोलावीरा गुजरात में हड़प्पा सभ्यता का एक स्थल है, जो अपनी सुदृढ़ जल व्यवस्था और नगर योजना के लिए जाना जाता है। कर्नाटक के हम्पी में विजयनगर साम्राज्य के ऐतिहासिक अवशेष हैं।",
-              "मध्य प्रदेश का साँची अपने ऐतिहासिक बौद्ध स्मारकों के लिए प्रसिद्ध है। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना पर आधारित अपनी बनावट के लिए जाना जाता है।",
-              "आज के जोड़ो में इन स्थानों को उनके राज्यों से मिलाइए। यह संदर्भ लेख है; किसी नए अभियान का दावा नहीं करता।"
+              "मध्य प्रदेश का साँची अपने ऐतिहासिक बौद्ध स्मारकों के लिए प्रसिद्ध है। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना पर आधारित अपनी बनावट के लिए जाना जाता है।"
             ],
-            sourceNote: "यूनेस्को (UNESCO) विश्व धरोहर अभिलेखों पर आधारित डेमो संदर्भ सामग्री।"
+            sourceNote: "यूनेस्को (UNESCO) विश्व धरोहर अभिलेखों पर आधारित संदर्भ सामग्री।"
           },
           pairs: [
             {
               id: "d3-p1",
               left: "धोलावीरा",
-              right: "गुजरात",
+              right: "गुजरात (हड़प्पा जल योजना)",
               explanation: "गुजरात का धोलावीरा हड़प्पा सभ्यता का स्थल है, जो अपनी जल व्यवस्था के लिए जाना जाता है।"
             },
             {
               id: "d3-p2",
               left: "हम्पी",
-              right: "कर्नाटक",
+              right: "कर्नाटक (विजयनगर साम्राज्य)",
               explanation: "कर्नाटक के हम्पी में विजयनगर साम्राज्य के ऐतिहासिक अवशेष हैं।"
             },
             {
               id: "d3-p3",
               left: "साँची",
-              right: "मध्य प्रदेश",
+              right: "मध्य प्रदेश (बौद्ध स्तूप)",
               explanation: "मध्य प्रदेश का साँची अपने बौद्ध स्मारकों के लिए जाना जाता है।"
             },
             {
               id: "d3-p4",
-              left: "कोणार्क सूर्य मंदिर",
-              right: "ओडिशा",
-              explanation: "ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना पर आधारित अपनी बनावट के लिए जाना जाता है।"
+              left: "कोणार्क",
+              right: "ओडिशा (सूर्य मंदिर)",
+              explanation: "ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना पर आधारित बनावट के लिए प्रसिद्ध है।"
             }
           ],
-          // Left cards: 1, 2, 3, 4
           leftOrder: [1, 2, 3, 4],
-          // Right cards: pairs 4, 3, 2, 1
           rightOrder: [4, 3, 2, 1]
         }
       ]
     };
 
     /* ============================================================
-       APPLICATION STATE & STORAGE MANAGEMENT
-       Storage keys: db-jam:v2:jodo:<dayId>
+       APPLICATION STATE
        ============================================================ */
     const STORAGE_PREFIX = "db-jam:v2:jodo:";
-    
-    // In-memory fallback if localStorage is unavailable
+    const DEFAULT_INSTRUCTION = "एक कार्ड से दूसरे कार्ड तक रेखा खींचें या टैप करें";
     const memoryStore = {};
 
     function safeGetStorage(key) {
@@ -1373,9 +1247,7 @@
           const val = window.localStorage.getItem(key);
           if (val) return JSON.parse(val);
         }
-      } catch (err) {
-        console.warn("Storage access failed, using memory store:", err);
-      }
+      } catch (err) {}
       return memoryStore[key] || null;
     }
 
@@ -1384,22 +1256,19 @@
         if (typeof window !== "undefined" && window.localStorage) {
           window.localStorage.setItem(key, JSON.stringify(value));
         }
-      } catch (err) {
-        console.warn("Storage write failed, using memory store:", err);
-      }
+      } catch (err) {}
       memoryStore[key] = value;
     }
 
     function createInitialState() {
       return {
-        matchedPairIds: [],        // Matched pair IDs
-        assistedPairIds: [],       // Pairs unlocked via "एक जोड़ी दिखाएँ"
-        wrongMatches: 0,           // Incorrect attempts in this round
-        assistedPairs: 0,          // Assisted pairs in this round
-        pendingExplanationPairId: null, // Active explanation pair
-        isCompleted: false,        // True if all 4 pairs matched and confirmed
-        isPractice: false,         // True if in practice replay mode
-        firstResult: null          // Preserved first completion
+        matchedPairIds: [],
+        assistedPairIds: [],
+        wrongMatches: 0,
+        assistedPairs: 0,
+        isCompleted: false,
+        isPractice: false,
+        firstResult: null
       };
     }
 
@@ -1408,16 +1277,14 @@
     let selectedLeftId = null;
     let selectedRightId = null;
     let isProcessing = false;
+    let feedbackTimer = null;
 
     // Node Dragging State
     let isPointerDown = false;
     let isDragging = false;
-    let dragSource = null; // { side: 'left'|'right', pairId: string, el: HTMLElement, portX: number, portY: number }
-    let currentDragTarget = null; // Candidate HTMLElement currently hovered over
+    let dragSource = null;
+    let currentDragTarget = null;
 
-    /* ============================================================
-       URL PARAMETER PARSING
-       ============================================================ */
     function getDayFromUrl() {
       try {
         const params = new URLSearchParams(window.location.search);
@@ -1437,9 +1304,6 @@
       } catch (e) {}
     }
 
-    /* ============================================================
-       STATE LOAD & PERSISTENCE
-       ============================================================ */
     function loadEditionState(dayId) {
       const saved = safeGetStorage(STORAGE_PREFIX + dayId);
       if (saved) {
@@ -1448,7 +1312,6 @@
           assistedPairIds: Array.isArray(saved.assistedPairIds) ? saved.assistedPairIds : [],
           wrongMatches: typeof saved.wrongMatches === "number" ? saved.wrongMatches : 0,
           assistedPairs: typeof saved.assistedPairs === "number" ? saved.assistedPairs : 0,
-          pendingExplanationPairId: saved.pendingExplanationPairId || null,
           isCompleted: !!saved.isCompleted,
           isPractice: !!saved.isPractice,
           firstResult: saved.firstResult || null
@@ -1474,6 +1337,11 @@
       return edition.pairs.find(p => p.id === pairId);
     }
 
+    function getPairIndex(pairId) {
+      const edition = getCurrentEdition();
+      return edition.pairs.findIndex(p => p.id === pairId);
+    }
+
     function calculateScore(wrong, assisted) {
       return Math.max(0, 100 - (10 * wrong) - (15 * assisted));
     }
@@ -1482,42 +1350,44 @@
       const el = document.getElementById("sr-announcer");
       if (el) {
         el.textContent = "";
-        setTimeout(() => {
-          el.textContent = message;
-        }, 50);
+        setTimeout(() => { el.textContent = message; }, 40);
       }
     }
 
-    function setFeedback(text, type = "neutral") {
-      const banner = document.getElementById("feedback-banner");
-      const textEl = document.getElementById("feedback-text");
-      if (!banner || !textEl) return;
+    function setInstruction(text, isError = false) {
+      const bar = document.getElementById("info-bar");
+      const textEl = document.getElementById("instruction-text");
+      if (!bar || !textEl) return;
 
-      banner.className = `feedback-banner feedback-${type}`;
+      if (feedbackTimer) clearTimeout(feedbackTimer);
+
       textEl.textContent = text;
+      if (isError) {
+        bar.classList.add("has-error");
+        feedbackTimer = setTimeout(() => {
+          bar.classList.remove("has-error");
+          textEl.textContent = DEFAULT_INSTRUCTION;
+        }, 1200);
+      } else {
+        bar.classList.remove("has-error");
+      }
     }
 
     /* ============================================================
        SVG BEZIER CURVE CALCULATION
        ============================================================ */
     function makeBezierPath(x1, y1, x2, y2, pairIndex = 0) {
-      const midX = (x1 + x2) / 2;
-      
-      // Horizontal straight line if both cards are in the same row
-      if (Math.abs(y2 - y1) < 6) {
+      if (Math.abs(y2 - y1) < 4) {
         return `M ${x1} ${y1} L ${x2} ${y2}`;
       }
-
-      // Parallel lane routing across the generous 38px gap so wires never overlap!
-      // Offsets for pairs: -8px, -2.5px, +2.5px, +8px
-      const laneOffset = ((pairIndex % 4) - 1.5) * 5.5;
+      const midX = (x1 + x2) / 2;
+      const laneOffset = ((pairIndex % 4) - 1.5) * 6;
       const transitX = midX + laneOffset;
-
       return `M ${x1} ${y1} C ${transitX} ${y1}, ${transitX} ${y2}, ${x2} ${y2}`;
     }
 
     function makeActiveDragPath(x1, y1, x2, y2, startSide) {
-      const dx = Math.max(18, Math.abs(x2 - x1) * 0.45);
+      const dx = Math.max(22, Math.abs(x2 - x1) * 0.45);
       if (startSide === "left") {
         return `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
       } else {
@@ -1530,8 +1400,6 @@
       if (!board || !cardEl) return { x: 0, y: 0 };
 
       const boardRect = board.getBoundingClientRect();
-      const cardRect = cardEl.getBoundingClientRect();
-
       const port = cardEl.querySelector(".card-port");
       if (port) {
         const portRect = port.getBoundingClientRect();
@@ -1541,7 +1409,7 @@
         };
       }
 
-      // Fallback to card edge center
+      const cardRect = cardEl.getBoundingClientRect();
       const y = cardRect.top + cardRect.height / 2 - boardRect.top;
       const x = (side === "left")
         ? (cardRect.right - boardRect.left)
@@ -1550,18 +1418,17 @@
       return { x, y };
     }
 
-    /* Update all persistent matched connection lines */
+    /* Update persistent matched connection lines with distinct colors */
     function updateMatchedConnectionLines() {
       const group = document.getElementById("matched-lines-group");
       if (!group) return;
 
       group.innerHTML = "";
-
-      if (state.isCompleted) return; // Board is hidden when completed
+      if (state.isCompleted) return;
 
       const edition = getCurrentEdition();
 
-      state.matchedPairIds.forEach((pairId, idx) => {
+      state.matchedPairIds.forEach((pairId) => {
         const leftBtn = document.querySelector(`#left-cards-col .card-btn[data-pair-id="${pairId}"]`);
         const rightBtn = document.querySelector(`#right-cards-col .card-btn[data-pair-id="${pairId}"]`);
 
@@ -1569,31 +1436,32 @@
           const pt1 = getPortCoordinates(leftBtn, "left");
           const pt2 = getPortCoordinates(rightBtn, "right");
 
-          // Stable pair index (0 to 3) for dedicated non-overlapping wire track
           const pairIndex = edition.pairs.findIndex(p => p.id === pairId);
-          const stableIdx = pairIndex >= 0 ? pairIndex : idx;
+          const theme = PAIR_THEMES[pairIndex >= 0 ? pairIndex : 0];
 
-          const d = makeBezierPath(pt1.x, pt1.y, pt2.x, pt2.y, stableIdx);
+          const d = makeBezierPath(pt1.x, pt1.y, pt2.x, pt2.y, pairIndex);
 
-          // Draw Cable Path
+          // Draw cable in pair's distinct color
           const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
           path.setAttribute("class", "matched-cable");
           path.setAttribute("d", d);
+          path.style.stroke = theme.color;
+          path.style.filter = `drop-shadow(0 2px 4px ${theme.color}44)`;
           group.appendChild(path);
 
-          // Sleek terminal glow dots at endpoints
+          // Terminal glow circles
           const dot1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
           dot1.setAttribute("cx", pt1.x);
           dot1.setAttribute("cy", pt1.y);
-          dot1.setAttribute("r", "4.5");
-          dot1.setAttribute("fill", "#27AE60");
+          dot1.setAttribute("r", "5");
+          dot1.setAttribute("fill", theme.color);
           group.appendChild(dot1);
 
           const dot2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
           dot2.setAttribute("cx", pt2.x);
           dot2.setAttribute("cy", pt2.y);
-          dot2.setAttribute("r", "4.5");
-          dot2.setAttribute("fill", "#27AE60");
+          dot2.setAttribute("r", "5");
+          dot2.setAttribute("fill", theme.color);
           group.appendChild(dot2);
         }
       });
@@ -1609,9 +1477,7 @@
       path.setAttribute("d", makeActiveDragPath(pt1.x, pt1.y, pt2.x, pt2.y, startSide));
       recoilGroup.appendChild(path);
 
-      setTimeout(() => {
-        path.remove();
-      }, 500);
+      setTimeout(() => { path.remove(); }, 400);
     }
 
     /* ============================================================
@@ -1620,20 +1486,6 @@
     function render() {
       const edition = getCurrentEdition();
 
-      // Header Theme & Instruction
-      document.getElementById("theme-pill").textContent = edition.theme;
-      document.getElementById("instruction-text").textContent = edition.instruction;
-
-      // Edition Tabs
-      ["d1", "d2", "d3"].forEach(dId => {
-        const tab = document.getElementById("tab-" + dId);
-        if (tab) {
-          const isActive = (dId === currentDayId);
-          tab.classList.toggle("is-active", isActive);
-          tab.setAttribute("aria-selected", isActive ? "true" : "false");
-        }
-      });
-
       // Progress Counter
       const matchedCount = state.matchedPairIds.length;
       document.getElementById("progress-count").textContent = `${matchedCount}/4 जोड़ियाँ`;
@@ -1641,17 +1493,13 @@
       // Render Board Columns
       renderBoard(edition);
 
-      // Render Active Explanation Panel
-      renderExplanationPanel();
-
-      // Render Results Panel
+      // Render Results Panel if completed
       renderResultPanel();
 
-      // Update Controls State
+      // Hint button disabled state
       const btnShowPair = document.getElementById("btn-show-pair");
       if (btnShowPair) {
-        const canUseHelp = (matchedCount < 4) && !state.pendingExplanationPairId && !isProcessing;
-        btnShowPair.disabled = !canUseHelp;
+        btnShowPair.disabled = (matchedCount >= 4) || isProcessing || state.isCompleted;
       }
 
       // Draw SVG Connection Lines
@@ -1671,12 +1519,13 @@
       const leftCards = edition.leftOrder.map(num => edition.pairs[num - 1]);
       const rightCards = edition.rightOrder.map(num => edition.pairs[num - 1]);
 
-      const isBoardBlocked = isProcessing || (state.pendingExplanationPairId !== null) || state.isCompleted;
+      const isBoardBlocked = isProcessing || state.isCompleted;
 
       // Left Column Cards
       leftCards.forEach((pair, idx) => {
         const isMatched = state.matchedPairIds.includes(pair.id);
         const isSelected = (selectedLeftId === pair.id);
+        const pairIdx = getPairIndex(pair.id);
 
         const btn = document.createElement("button");
         btn.type = "button";
@@ -1684,25 +1533,30 @@
         btn.className = "card-btn";
         btn.dataset.side = "left";
         btn.dataset.pairId = pair.id;
+        btn.dataset.pairIdx = pairIdx;
 
         if (isMatched) {
           btn.classList.add("is-matched");
           btn.setAttribute("aria-disabled", "true");
           btn.innerHTML = `
-            <span>${escapeHtml(pair.left)}</span>
-            <span class="matched-badge" aria-label="सही जोड़ी"><span aria-hidden="true">✓</span> सही जोड़ी</span>
+            <div class="card-content-wrap">
+              <span class="card-text">${escapeHtml(pair.left)}</span>
+              <span class="matched-tick" aria-hidden="true">✓</span>
+            </div>
             <span class="card-port" aria-hidden="true"></span>
           `;
         } else {
           if (isSelected) btn.classList.add("is-selected");
           btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
           btn.innerHTML = `
-            <span>${escapeHtml(pair.left)}</span>
+            <div class="card-content-wrap">
+              <span class="card-text">${escapeHtml(pair.left)}</span>
+            </div>
             <span class="card-port" title="खींचकर जोड़ी बनाएँ" aria-hidden="true"></span>
           `;
 
           if (!isBoardBlocked) {
-            setupCardDragAndClick(btn, "left", pair.id);
+            setupCardDragAndClick(btn, "left", pair.id, pairIdx);
           } else {
             btn.style.cursor = "default";
           }
@@ -1715,6 +1569,7 @@
       rightCards.forEach((pair, idx) => {
         const isMatched = state.matchedPairIds.includes(pair.id);
         const isSelected = (selectedRightId === pair.id);
+        const pairIdx = getPairIndex(pair.id);
 
         const btn = document.createElement("button");
         btn.type = "button";
@@ -1722,25 +1577,30 @@
         btn.className = "card-btn";
         btn.dataset.side = "right";
         btn.dataset.pairId = pair.id;
+        btn.dataset.pairIdx = pairIdx;
 
         if (isMatched) {
           btn.classList.add("is-matched");
           btn.setAttribute("aria-disabled", "true");
           btn.innerHTML = `
-            <span>${escapeHtml(pair.right)}</span>
-            <span class="matched-badge" aria-label="सही जोड़ी"><span aria-hidden="true">✓</span> सही जोड़ी</span>
+            <div class="card-content-wrap">
+              <span class="card-text">${escapeHtml(pair.right)}</span>
+              <span class="matched-tick" aria-hidden="true">✓</span>
+            </div>
             <span class="card-port" aria-hidden="true"></span>
           `;
         } else {
           if (isSelected) btn.classList.add("is-selected");
           btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
           btn.innerHTML = `
-            <span>${escapeHtml(pair.right)}</span>
+            <div class="card-content-wrap">
+              <span class="card-text">${escapeHtml(pair.right)}</span>
+            </div>
             <span class="card-port" title="खींचकर जोड़ी बनाएँ" aria-hidden="true"></span>
           `;
 
           if (!isBoardBlocked) {
-            setupCardDragAndClick(btn, "right", pair.id);
+            setupCardDragAndClick(btn, "right", pair.id, pairIdx);
           } else {
             btn.style.cursor = "default";
           }
@@ -1751,17 +1611,15 @@
     }
 
     /* ============================================================
-       DUAL INTERACTION: NODE DRAGGING + CLICK/TAP
+       INTERACTION: DRAG & DROP + TAP/CLICK
        ============================================================ */
-    function setupCardDragAndClick(cardBtn, side, pairId) {
+    function setupCardDragAndClick(cardBtn, side, pairId, pairIdx) {
       let pointerStartX = 0;
       let pointerStartY = 0;
       let hasDragged = false;
 
       cardBtn.addEventListener("pointerdown", (e) => {
-        if (isProcessing || state.pendingExplanationPairId !== null || state.isCompleted) return;
-
-        // Ignore secondary mouse clicks
+        if (isProcessing || state.isCompleted) return;
         if (e.button && e.button !== 0) return;
 
         isPointerDown = true;
@@ -1773,12 +1631,12 @@
         dragSource = {
           side: side,
           pairId: pairId,
+          pairIdx: pairIdx,
           el: cardBtn,
           portX: portPt.x,
           portY: portPt.y
         };
 
-        // Pointer tracking
         window.addEventListener("pointermove", onPointerMove);
         window.addEventListener("pointerup", onPointerUp);
         window.addEventListener("pointercancel", onPointerUp);
@@ -1796,25 +1654,26 @@
             cardBtn.classList.add("is-selected");
           }
 
-          // Active dragging line
           const board = document.getElementById("board-container");
           const boardRect = board.getBoundingClientRect();
           const curX = e.clientX - boardRect.left;
           const curY = e.clientY - boardRect.top;
 
-          // Check for hovered card in opposite column
           const elemUnder = document.elementFromPoint(e.clientX, e.clientY)?.closest(".card-btn");
           const activePath = document.getElementById("active-drag-line");
           const activeHead = document.getElementById("active-drag-head");
 
-          // Remove drag target halo from previously hovered cards
+          // Wire color matches dragged item's dedicated color
+          const theme = PAIR_THEMES[dragSource.pairIdx >= 0 ? dragSource.pairIdx : 0];
+          activePath.style.stroke = theme.color;
+          activeHead.setAttribute("fill", theme.color);
+
           if (currentDragTarget && currentDragTarget !== elemUnder) {
             currentDragTarget.classList.remove("is-drag-target");
             currentDragTarget = null;
           }
 
           if (elemUnder && elemUnder.dataset.side !== dragSource.side && !elemUnder.classList.contains("is-matched")) {
-            // SNAP TO TARGET CARD'S NODE!
             currentDragTarget = elemUnder;
             elemUnder.classList.add("is-drag-target");
 
@@ -1828,7 +1687,6 @@
             activeHead.setAttribute("cy", targetPt.y);
             activeHead.style.display = "block";
           } else {
-            // Freeform curve to cursor
             const d = makeActiveDragPath(dragSource.portX, dragSource.portY, curX, curY, dragSource.side);
             activePath.setAttribute("d", d);
             activePath.style.display = "block";
@@ -1864,32 +1722,24 @@
         dragSource = null;
 
         if (wasDragged) {
-          // --- RELEASED AFTER DRAGGING ---
           const elemUnder = document.elementFromPoint(e.clientX, e.clientY)?.closest(".card-btn");
           if (elemUnder && elemUnder.dataset.side !== source.side && !elemUnder.classList.contains("is-matched")) {
-            const targetSide = elemUnder.dataset.side;
             const targetPairId = elemUnder.dataset.pairId;
-
             const leftId = (source.side === "left") ? source.pairId : targetPairId;
             const rightId = (source.side === "right") ? source.pairId : targetPairId;
 
-            // Trigger match evaluation via drag drop!
-            executePairEvaluation(leftId, rightId, source, elemUnder);
+            executePairEvaluation(leftId, rightId);
           } else {
-            // Dropped in empty space: cancel drag gracefully
             cardBtn.classList.remove("is-selected");
-            setFeedback("कनेक्शन रद्द हुआ। किसी कार्ड तक खींचकर छोड़ें।", "neutral");
           }
         } else {
-          // --- STANDARD TAP / CLICK (no drag threshold) ---
           handleCardClick(side, pairId);
         }
       }
     }
 
-    /* Card Click / Tap Handler */
     function handleCardClick(side, pairId) {
-      if (isProcessing || state.pendingExplanationPairId !== null || state.isCompleted) return;
+      if (isProcessing || state.isCompleted) return;
 
       const pair = getPairById(pairId);
       if (!pair) return;
@@ -1897,67 +1747,84 @@
       if (side === "left") {
         if (selectedLeftId === pairId) {
           selectedLeftId = null;
-          announce("चयन हटाया गया");
-          setFeedback("चयन हटाया गया। नया कार्ड चुनें।", "neutral");
+          setInstruction(DEFAULT_INSTRUCTION);
           render();
           return;
         }
         selectedLeftId = pairId;
-        announce(`बाईं ओर से चुना: ${pair.left}`);
+        announce(`चुना: ${pair.left}`);
 
         if (selectedRightId) {
           executePairEvaluation(selectedLeftId, selectedRightId);
         } else {
-          setFeedback(`"${pair.left}" चुना गया। अब दाईं ओर कार्ड खींचें या टैप करें।`, "neutral");
+          setInstruction(`"${pair.left}" चुना गया। अब दाईं ओर सही कार्ड चुनें या खींचें।`);
           render();
         }
       } else if (side === "right") {
         if (selectedRightId === pairId) {
           selectedRightId = null;
-          announce("चयन हटाया गया");
-          setFeedback("चयन हटाया गया। नया कार्ड चुनें।", "neutral");
+          setInstruction(DEFAULT_INSTRUCTION);
           render();
           return;
         }
         selectedRightId = pairId;
-        announce(`दाईं ओर से चुना: ${pair.right}`);
+        announce(`चुना: ${pair.right}`);
 
         if (selectedLeftId) {
           executePairEvaluation(selectedLeftId, selectedRightId);
         } else {
-          setFeedback(`"${pair.right}" चुना गया। अब बाईं ओर कार्ड खींचें या टैप करें।`, "neutral");
+          setInstruction(`"${pair.right}" चुना गया। अब बाईं ओर सही कार्ड चुनें या खींचें।`);
           render();
         }
       }
     }
 
-    /* Core Pair Evaluation (Shared between Drag and Tap) */
-    function executePairEvaluation(leftId, rightId, dragStartSource, dragTargetEl) {
+    /* Core Pair Evaluation: NO mid-game interruption! */
+    function executePairEvaluation(leftId, rightId) {
       const leftPair = getPairById(leftId);
       const rightPair = getPairById(rightId);
 
       if (leftId === rightId) {
         // --- CORRECT MATCH ---
-        state.matchedPairIds.push(leftId);
+        if (!state.matchedPairIds.includes(leftId)) {
+          state.matchedPairIds.push(leftId);
+        }
         selectedLeftId = null;
         selectedRightId = null;
-        state.pendingExplanationPairId = leftId;
-
-        if (state.matchedPairIds.length === 4 && !state.firstResult) {
-          const finalScore = calculateScore(state.wrongMatches, state.assistedPairs);
-          state.firstResult = {
-            score: finalScore,
-            wrongMatches: state.wrongMatches,
-            assistedPairs: state.assistedPairs,
-            completedAt: new Date().toISOString()
-          };
-          notifyGamePlatform("WIN", finalScore);
-        }
 
         saveEditionState();
-        setFeedback("सही जोड़ी! विवरण पढ़ें और 'आगे' दबाएँ।", "correct");
-        announce(`सही जोड़ी बनी: ${leftPair.left} और ${leftPair.right}। ${leftPair.explanation}`);
-        render();
+        announce(`सही जोड़ी बनी: ${leftPair.left} और ${leftPair.right}`);
+
+        const totalMatched = state.matchedPairIds.length;
+
+        if (totalMatched === 4) {
+          // All 4 pairs connected!
+          setInstruction("🎉 बहुत बढ़िया! सभी 4 जोड़ियाँ पूरी हुईं।");
+
+          const finalScore = calculateScore(state.wrongMatches, state.assistedPairs);
+          if (!state.firstResult) {
+            state.firstResult = {
+              score: finalScore,
+              wrongMatches: state.wrongMatches,
+              assistedPairs: state.assistedPairs,
+              completedAt: new Date().toISOString()
+            };
+            notifyGamePlatform("WIN", finalScore);
+          }
+
+          render();
+
+          // Smooth transition to Step 2 after viewing the completed cables
+          setTimeout(() => {
+            state.isCompleted = true;
+            saveEditionState();
+            render();
+          }, 650);
+
+        } else {
+          setInstruction(DEFAULT_INSTRUCTION);
+          render();
+        }
 
       } else {
         // --- WRONG MATCH ---
@@ -1965,13 +1832,11 @@
         isProcessing = true;
         saveEditionState();
 
-        setFeedback("यह जोड़ी नहीं है। फिर चुनें।", "wrong");
-        announce("यह जोड़ी नहीं है। फिर चुनें।");
+        setInstruction("यह जोड़ी नहीं है, पुनः प्रयास करें!", true);
+        announce("यह जोड़ी नहीं है, पुनः प्रयास करें");
 
-        // Visual shake & error highlight
         highlightWrongCards(leftId, rightId);
 
-        // If matched via dragging, draw a transient red recoil line
         const leftBtn = document.querySelector(`#left-cards-col .card-btn[data-pair-id="${leftId}"]`);
         const rightBtn = document.querySelector(`#right-cards-col .card-btn[data-pair-id="${rightId}"]`);
         if (leftBtn && rightBtn) {
@@ -1985,9 +1850,8 @@
           selectedLeftId = null;
           selectedRightId = null;
           isProcessing = false;
-          setFeedback("दोनों तरफ़ से एक-एक कार्ड चुनकर या नोड खींचकर सही जोड़ी बनाइए।", "neutral");
           render();
-        }, 500);
+        }, 400);
       }
     }
 
@@ -2004,11 +1868,9 @@
       document.querySelectorAll(".card-btn").forEach(b => b.classList.remove("is-wrong"));
     }
 
-    /* ============================================================
-       HELP: "एक जोड़ी दिखाएँ"
-       ============================================================ */
+    /* Hint: "एक जोड़ी दिखाएँ" */
     function handleShowPairHelp() {
-      if (isProcessing || state.pendingExplanationPairId !== null || state.isCompleted) return;
+      if (isProcessing || state.isCompleted) return;
 
       const edition = getCurrentEdition();
       const unmatchedPair = edition.pairs.find(p => !state.matchedPairIds.includes(p.id));
@@ -2020,123 +1882,67 @@
 
       selectedLeftId = null;
       selectedRightId = null;
-      state.pendingExplanationPairId = unmatchedPair.id;
 
-      if (state.matchedPairIds.length === 4 && !state.firstResult) {
+      saveEditionState();
+      announce(`जोड़ी दिखाई गई: ${unmatchedPair.left} और ${unmatchedPair.right}`);
+
+      if (state.matchedPairIds.length === 4) {
         const finalScore = calculateScore(state.wrongMatches, state.assistedPairs);
-        state.firstResult = {
-          score: finalScore,
-          wrongMatches: state.wrongMatches,
-          assistedPairs: state.assistedPairs,
-          completedAt: new Date().toISOString()
-        };
-        notifyGamePlatform("WIN", finalScore);
-      }
-
-      saveEditionState();
-      setFeedback("एक जोड़ी दिखाई गई। विवरण पढ़ें और आगे बढ़ें।", "correct");
-      announce(`जोड़ी दिखाई गई: ${unmatchedPair.left} और ${unmatchedPair.right}। ${unmatchedPair.explanation}`);
-      render();
-    }
-
-    /* Explanation "आगे" Button */
-    function handleNextStep() {
-      state.pendingExplanationPairId = null;
-
-      if (state.matchedPairIds.length >= 4) {
-        state.isCompleted = true;
-        announce("बधाई! सभी 4 जोड़ियाँ पूरी हुईं। अपना परिणाम देखें।");
+        if (!state.firstResult) {
+          state.firstResult = {
+            score: finalScore,
+            wrongMatches: state.wrongMatches,
+            assistedPairs: state.assistedPairs,
+            completedAt: new Date().toISOString()
+          };
+          notifyGamePlatform("WIN", finalScore);
+        }
+        render();
+        setTimeout(() => {
+          state.isCompleted = true;
+          saveEditionState();
+          render();
+        }, 650);
       } else {
-        setFeedback("अगली जोड़ी के लिए कार्ड खींचें या टैप करें।", "neutral");
-        announce("अगली जोड़ी के लिए कार्ड चुनें।");
+        render();
       }
-
-      saveEditionState();
-      render();
     }
 
-    function renderExplanationPanel() {
-      const panel = document.getElementById("explanation-panel");
-      if (!panel) return;
-
-      if (!state.pendingExplanationPairId) {
-        panel.style.display = "none";
-        return;
-      }
-
-      const pair = getPairById(state.pendingExplanationPairId);
-      if (!pair) {
-        panel.style.display = "none";
-        return;
-      }
-
-      const isAssisted = state.assistedPairIds.includes(pair.id);
-      const badgeEl = document.getElementById("explanation-badge");
-      if (badgeEl) {
-        badgeEl.textContent = isAssisted ? "💡 जोड़ी दिखाई गई" : "✓ सही जोड़ी";
-        badgeEl.className = isAssisted ? "explanation-tag is-assisted" : "explanation-tag";
-      }
-
-      const titleEl = document.getElementById("explanation-pair-title");
-      if (titleEl) {
-        titleEl.textContent = `${pair.left} ➔ ${pair.right}`;
-      }
-
-      const bodyEl = document.getElementById("explanation-body");
-      if (bodyEl) {
-        bodyEl.textContent = pair.explanation;
-      }
-
-      const counterEl = document.getElementById("explanation-counter");
-      if (counterEl) {
-        counterEl.textContent = `(${state.matchedPairIds.length}/4 पूरी)`;
-      }
-
-      panel.style.display = "block";
-      panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-
+    /* ============================================================
+       STEP 2: RESULT SCREEN RENDER
+       ============================================================ */
     function renderResultPanel() {
       const resultPanel = document.getElementById("result-panel");
       const boardContainer = document.getElementById("board-container");
-      const controlsRow = document.getElementById("controls-row");
-      const feedbackBanner = document.getElementById("feedback-banner");
+      const infoBar = document.getElementById("info-bar");
 
       if (!resultPanel) return;
 
       if (!state.isCompleted) {
         resultPanel.style.display = "none";
         if (boardContainer) boardContainer.style.display = "block";
-        if (controlsRow) controlsRow.style.display = "flex";
+        if (infoBar) infoBar.style.display = "flex";
         return;
       }
 
+      // Hide board and info bar
       if (boardContainer) boardContainer.style.display = "none";
-      if (controlsRow) controlsRow.style.display = "none";
-      if (feedbackBanner) feedbackBanner.style.display = "none";
+      if (infoBar) infoBar.style.display = "none";
 
       const currentScore = calculateScore(state.wrongMatches, state.assistedPairs);
-      document.getElementById("score-display").textContent = currentScore;
-      document.getElementById("stat-wrong").textContent = state.wrongMatches;
-      document.getElementById("stat-assisted").textContent = state.assistedPairs;
+      const scoreEl = document.getElementById("score-display");
+      if (scoreEl) scoreEl.textContent = currentScore;
 
-      const firstNote = document.getElementById("first-result-note");
-      if (firstNote) {
-        if (state.isPractice && state.firstResult) {
-          firstNote.style.display = "block";
-          document.getElementById("first-score-val").textContent = state.firstResult.score;
-        } else {
-          firstNote.style.display = "none";
-        }
-      }
-
+      // Populate Short Explanations with matching pair colors
       const reviewList = document.getElementById("review-list");
       if (reviewList) {
         reviewList.innerHTML = "";
         const edition = getCurrentEdition();
-        edition.pairs.forEach(pair => {
+
+        edition.pairs.forEach((pair, idx) => {
           const item = document.createElement("div");
           item.className = "review-item";
+          item.dataset.pairIdx = idx;
           item.innerHTML = `
             <div class="review-pair-name">${escapeHtml(pair.left)} ➔ ${escapeHtml(pair.right)}</div>
             <div class="review-explanation">${escapeHtml(pair.explanation)}</div>
@@ -2151,13 +1957,11 @@
 
     function handlePlayAgainPractice() {
       const preservedFirst = state.firstResult;
-      
       state = {
         matchedPairIds: [],
         assistedPairIds: [],
         wrongMatches: 0,
         assistedPairs: 0,
-        pendingExplanationPairId: null,
         isCompleted: false,
         isPractice: true,
         firstResult: preservedFirst
@@ -2168,12 +1972,31 @@
       isProcessing = false;
 
       saveEditionState();
-      setFeedback("अभ्यास राउंड शुरू! कार्ड खींचकर या चुनकर जोड़ियाँ बनाइए।", "neutral");
-      announce("अभ्यास राउंड शुरू। दोनों तरफ़ से कार्ड चुनकर जोड़ी बनाइए।");
+      setInstruction(DEFAULT_INSTRUCTION);
       render();
     }
 
-    /* Article Modal */
+    function handleNextGame() {
+      if (window.parent && window.parent.location) {
+        window.parent.location.hash = "#/game/superover";
+      } else {
+        handlePlayAgainPractice();
+      }
+    }
+
+    function switchEdition(newDayId) {
+      if (newDayId === currentDayId) return;
+
+      saveEditionState();
+      currentDayId = newDayId;
+      syncUrlWithDay(newDayId);
+      loadEditionState(newDayId);
+
+      setInstruction(DEFAULT_INSTRUCTION);
+      render();
+    }
+
+    /* Modal Handlers */
     function openArticleModal() {
       const edition = getCurrentEdition();
       const article = edition.article;
@@ -2193,42 +2016,25 @@
 
       document.getElementById("article-source-note").textContent = article.sourceNote || "डेमो संदर्भ लेख।";
 
-      const extLink = document.getElementById("article-external-link");
-      if (edition.articleUrl && edition.articleUrl.trim().length > 0) {
-        extLink.href = edition.articleUrl;
-        extLink.style.display = "inline-flex";
-      } else {
-        extLink.style.display = "none";
-      }
-
       const modal = document.getElementById("article-modal");
       modal.classList.add("is-open");
       announce("संदर्भ लेख खुला: " + article.title);
-
-      setTimeout(() => {
-        const closeBtn = document.getElementById("btn-close-article-top");
-        if (closeBtn) closeBtn.focus();
-      }, 100);
     }
 
     function closeArticleModal() {
       const modal = document.getElementById("article-modal");
       modal.classList.remove("is-open");
-      announce("संदर्भ लेख बंद हुआ। खेल पर लौटे।");
+      announce("संदर्भ लेख बंद हुआ");
     }
 
-    function switchEdition(newDayId) {
-      if (newDayId === currentDayId) return;
+    function openRulesModal() {
+      const modal = document.getElementById("rules-modal");
+      if (modal) modal.classList.add("is-open");
+    }
 
-      saveEditionState();
-      currentDayId = newDayId;
-      syncUrlWithDay(newDayId);
-      loadEditionState(newDayId);
-
-      const edition = getCurrentEdition();
-      setFeedback(`संस्करण बदल गया: ${edition.title} (${edition.theme})`, "neutral");
-      announce(`संस्करण बदल गया: ${edition.title} (${edition.theme})`);
-      render();
+    function closeRulesModal() {
+      const modal = document.getElementById("rules-modal");
+      if (modal) modal.classList.remove("is-open");
     }
 
     function notifyGamePlatform(status, score) {
@@ -2236,9 +2042,6 @@
         if (window.parent && window.parent.DBGameLab) {
           if (typeof window.parent.DBGameLab.addScore === "function") {
             window.parent.DBGameLab.addScore(score);
-          }
-          if (typeof window.parent.DBGameLab.endGame === "function") {
-            window.parent.DBGameLab.endGame(status === "WIN");
           }
         }
         if (window.parent && window.parent !== window) {
@@ -2263,38 +2066,37 @@
         .replace(/'/g, "&#039;");
     }
 
-    /* Window Resize: Re-align SVG Lines */
+    /* Resize Listener */
     window.addEventListener("resize", () => {
       updateMatchedConnectionLines();
     });
+
+    /* PostMessage Listener from parent shell */
+    window.addEventListener("message", (e) => {
+      if (e.data && e.data.type === "OPEN_RULES") {
+        openRulesModal();
+      }
+    });
+
+    // Expose openHelpModal for parent bridge
+    window.openHelpModal = openRulesModal;
 
     /* DOM Ready */
     document.addEventListener("DOMContentLoaded", () => {
       currentDayId = getDayFromUrl();
       loadEditionState(currentDayId);
 
-      // Edition Nav Tabs
-      ["d1", "d2", "d3"].forEach(dId => {
-        const tab = document.getElementById("tab-" + dId);
-        if (tab) {
-          tab.addEventListener("click", () => switchEdition(dId));
-        }
-      });
-
       // Controls
       const btnShowPair = document.getElementById("btn-show-pair");
       if (btnShowPair) btnShowPair.addEventListener("click", handleShowPairHelp);
 
-      const btnNextStep = document.getElementById("btn-next-step");
-      if (btnNextStep) btnNextStep.addEventListener("click", handleNextStep);
-
       const btnPlayAgain = document.getElementById("btn-play-again");
       if (btnPlayAgain) btnPlayAgain.addEventListener("click", handlePlayAgainPractice);
 
-      // Article Reader
-      const btnOpenArticle = document.getElementById("btn-open-article-inline");
-      if (btnOpenArticle) btnOpenArticle.addEventListener("click", openArticleModal);
+      const btnNextGame = document.getElementById("btn-next-game");
+      if (btnNextGame) btnNextGame.addEventListener("click", handleNextGame);
 
+      // Article Reader
       const btnResultArticle = document.getElementById("btn-result-article");
       if (btnResultArticle) btnResultArticle.addEventListener("click", openArticleModal);
 
@@ -2311,9 +2113,24 @@
         });
       }
 
+      // Rules Modal
+      const btnCloseRules = document.getElementById("btn-close-rules");
+      if (btnCloseRules) btnCloseRules.addEventListener("click", closeRulesModal);
+
+      const btnRulesOk = document.getElementById("btn-rules-ok");
+      if (btnRulesOk) btnRulesOk.addEventListener("click", closeRulesModal);
+
+      const rulesModal = document.getElementById("rules-modal");
+      if (rulesModal) {
+        rulesModal.addEventListener("click", (e) => {
+          if (e.target === rulesModal) closeRulesModal();
+        });
+      }
+
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && articleModal && articleModal.classList.contains("is-open")) {
+        if (e.key === "Escape") {
           closeArticleModal();
+          closeRulesModal();
         }
       });
 

@@ -7,45 +7,50 @@
   <meta name="description" content="आज की नीति — शांत, दैनिक विचार पूर्ति खेल। एक विचार को पूरा करें, उसका गहरा अर्थ समझें और सुंदर विचार-कार्ड साझा करें।">
   <meta name="theme-color" content="#F9F9F7">
 
+  <!-- Google Fonts for Authentic Indian Editorial & Festive Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Yatra+One&family=Martel:wght@600;700;800&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     /* ============================================================
        आज की नीति (AAJ KI NITI) — DAINIK BHASKAR GAMES
-       Hindi-first, Mobile-first, Self-contained Editorial Daily Game
+       Refined 2-Step Architecture:
+       Step 1: Answer & Meaning (No scroll, 2x2 grid A B C D)
+       Step 2: Masterpiece 1080x1350 Greeting Card Studio
+               (Responsive Scaling, Theme Tabs Above Card,
+               Non-redundant Name Signature, Unified Heading)
        ============================================================ */
 
     :root {
-      --color-primary: #E23A28;         /* Dainik Bhaskar Signature Red */
+      --color-primary: #E23A28;         /* Dainik Bhaskar Red */
       --color-primary-hover: #C52C1C;
       --color-primary-light: #FDECE9;
-      --color-primary-subtle: #FFF5F4;
       --color-accent-gold: #D35400;      /* Warm Saffron / Gold */
-      --color-accent-amber: #B7791F;
-      --color-success: #1E824C;         /* Editorial Forest Green */
+      --color-success: #1E824C;         /* Forest Green */
       --color-success-bg: #E8F8F0;
       --color-success-border: #A3E4D7;
-      --color-wrong: #A93226;           /* Subtle Editorial Error Red */
+      --color-wrong: #C0392B;           /* Error Red */
       --color-wrong-bg: #FDEDEC;
       --color-wrong-border: #F5B7B1;
-      --color-bg: #F9F9F7;              /* Warm Newsprint Paper */
+      --color-bg: #F7F6F2;              /* Warm Newsprint Paper */
       --color-surface: #FFFFFF;
-      --color-surface-soft: #F4F1EA;
-      --color-surface-warm: #FAF8F5;
-      --text-main: #1C1C1C;             /* Deep Editorial Ink */
+      --color-surface-soft: #F2EFE9;
+      --color-surface-warm: #FAF8F4;
+      --text-main: #1A1A1A;             /* Deep Editorial Ink */
       --text-muted: #555555;
       --text-subtle: #7A7A7A;
-      --text-white: #FFFFFF;
-      --border-subtle: rgba(28, 28, 28, 0.12);
-      --border-medium: rgba(28, 28, 28, 0.22);
+      --border-subtle: rgba(26, 26, 26, 0.1);
+      --border-medium: rgba(26, 26, 26, 0.2);
       --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.07);
-      --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.11);
-      --shadow-focus: 0 0 0 3px rgba(226, 58, 40, 0.28);
-      --font-stack: "Noto Sans Devanagari", "Nirmala UI", "Mangal", "Devanagari Sangam MN", "Kohinoor Devanagari", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-serif: "Rozha One", "Martel", "Georgia", "Cambria", serif;
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 14px;
-      --radius-xl: 18px;
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.14);
+      --shadow-focus: 0 0 0 3px rgba(226, 58, 40, 0.25);
+      --font-stack: "Noto Sans Devanagari", "Nirmala UI", "Mangal", "Devanagari Sangam MN", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-serif: "Rozha One", "Martel", "Georgia", serif;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
       --radius-full: 9999px;
     }
 
@@ -56,259 +61,97 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
+    html, body {
+      height: 100%;
       background-color: var(--color-bg);
       color: var(--text-main);
       font-family: var(--font-stack);
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0;
-      overflow-x: hidden;
-      font-size: 16px;
-    }
-
-    /* Screen Reader Only Utility */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
+      line-height: 1.45;
       overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+      font-size: 15px;
     }
 
-    /* Top Red-Orange Accent Bar */
+    /* Top Accent Line */
     .top-accent-bar {
       width: 100%;
-      height: 4px;
+      height: 3px;
       background: linear-gradient(90deg, #E23A28 0%, #F39C12 100%);
-      position: sticky;
+      position: absolute;
       top: 0;
+      left: 0;
       z-index: 100;
     }
 
-    /* App Shell Container (Mobile-first 360-430px up to 500px desktop) */
+    /* Mobile Container Shell */
     .app-container {
       width: 100%;
       max-width: 480px;
-      min-height: calc(100vh - 4px);
+      height: 100%;
+      margin: 0 auto;
+      padding: 6px 12px 8px;
       display: flex;
       flex-direction: column;
-      background-color: var(--color-bg);
-      padding: 12px 16px 40px;
       position: relative;
+      background-color: var(--color-bg);
+      overflow: hidden;
     }
 
-    /* Header & Masthead */
-    .header-masthead {
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 12px;
+    /* Step Container Views */
+    .step-view {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+      animation: fadeIn 0.22s ease-out;
     }
 
-    .brand-row {
+    .step-view.is-active {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
     }
 
-    .brand-identity {
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       STEP 1: ANSWER VIEW (Clean, Focused, 2x2 Grid)
+       ============================================================ */
+    .step1-content-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .thought-category-pill {
+      align-self: center;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       font-size: 12px;
       font-weight: 700;
       color: var(--color-primary);
+      background: var(--color-primary-light);
+      padding: 3px 14px;
+      border-radius: var(--radius-full);
       letter-spacing: 0.3px;
     }
 
-    .brand-sun-icon {
-      width: 14px;
-      height: 14px;
-      fill: var(--color-primary);
-      flex-shrink: 0;
-    }
-
-    .brand-mood-tag {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      background: var(--color-surface-soft);
-      padding: 2px 8px;
-      border-radius: var(--radius-full);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .title-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .game-main-title {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      line-height: 1.25;
-    }
-
-    .edition-tag-pill {
-      font-size: 13px;
-      font-weight: 700;
-      background: var(--color-primary-light);
-      color: var(--color-primary);
-      padding: 3px 10px;
-      border-radius: var(--radius-full);
-      white-space: nowrap;
-    }
-
-    /* Edition Switcher Tabs */
-    .edition-nav-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-
-    .edition-tab-btn {
-      min-height: 48px;
-      border: 1.5px solid var(--border-subtle);
-      background: var(--color-surface);
-      color: var(--text-muted);
-      font-family: inherit;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 4px;
-      transition: all 0.16s ease;
-      text-align: center;
-    }
-
-    .edition-tab-btn .tab-main {
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .edition-tab-btn .tab-sub {
-      font-size: 11px;
-      font-weight: 600;
-      opacity: 0.85;
-      margin-top: 1px;
-    }
-
-    .edition-tab-btn:hover {
-      background: var(--color-surface-warm);
-      border-color: var(--border-medium);
-      color: var(--text-main);
-    }
-
-    .edition-tab-btn.is-active {
-      border-color: var(--color-primary);
-      background: var(--color-primary-light);
-      color: var(--color-primary);
-      box-shadow: 0 2px 6px rgba(226, 58, 40, 0.12);
-    }
-
-    .edition-tab-btn:focus-visible {
-      outline: none;
-      box-shadow: var(--shadow-focus);
-    }
-
-    .edition-tab-btn .tab-status-dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: var(--color-success);
-      margin-top: 3px;
-    }
-
-    /* Instruction Row */
-    .instruction-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--color-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 9px 12px;
-      margin-bottom: 14px;
-    }
-
-    .instruction-icon {
-      color: var(--color-primary);
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    .instruction-text {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-muted);
-      line-height: 1.35;
-    }
-
-    /* Practice Mode Alert Banner */
-    .practice-alert-bar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      background: #FFF8E1;
-      border: 1px solid #FFE082;
-      color: #8D6E63;
-      padding: 8px 12px;
-      border-radius: var(--radius-md);
-      margin-bottom: 12px;
-      font-size: 12.5px;
-      font-weight: 600;
-    }
-
-    .practice-alert-bar.is-visible {
-      display: flex;
-    }
-
-    .practice-return-btn {
-      background: #FFFFFF;
-      border: 1px solid #D7CCC8;
-      color: #5D4037;
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 4px 8px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-family: inherit;
-      white-space: nowrap;
-    }
-
-    /* ============================================================
-       CENTRAL THOUGHT CARD (Visual Center of the Screen)
-       ============================================================ */
+    /* Central Thought Card */
     .thought-card {
       background: var(--color-surface);
       border: 1.5px solid var(--border-subtle);
-      border-radius: var(--radius-xl);
-      padding: 22px 18px 20px;
-      margin-bottom: 18px;
+      border-radius: var(--radius-lg);
+      padding: 16px 18px 14px;
       box-shadow: var(--shadow-sm);
       position: relative;
       transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
     }
 
     .thought-card::before {
@@ -318,15 +161,15 @@
       left: 20px;
       right: 20px;
       height: 3px;
-      background: linear-gradient(90deg, rgba(226, 58, 40, 0.6) 0%, rgba(243, 156, 18, 0.4) 100%);
+      background: linear-gradient(90deg, rgba(226, 58, 40, 0.7) 0%, rgba(243, 156, 18, 0.5) 100%);
       border-radius: 3px 3px 0 0;
     }
 
     .thought-quote-mark {
-      font-size: 34px;
+      font-size: 30px;
       line-height: 1;
       color: var(--color-primary);
-      opacity: 0.25;
+      opacity: 0.35;
       font-family: var(--font-serif);
       margin-bottom: -6px;
       display: block;
@@ -334,30 +177,29 @@
     }
 
     .thought-content {
-      font-size: 19px;
-      line-height: 1.65;
+      font-size: 18px;
+      line-height: 1.6;
       font-weight: 600;
       color: var(--text-main);
       letter-spacing: -0.2px;
     }
 
-    /* Thought Blank Elements */
+    /* Interactive Blank Slot */
     .thought-blank-slot {
       display: inline-block;
       vertical-align: middle;
       margin: 0 4px;
-      min-width: 140px;
+      min-width: 110px;
       text-align: center;
       transition: all 0.2s ease;
     }
 
     .thought-blank-slot.is-empty {
-      border-bottom: 2px dashed rgba(226, 58, 40, 0.5);
-      padding: 1px 12px;
+      border-bottom: 2px dashed rgba(226, 58, 40, 0.55);
+      padding: 0 8px;
       color: rgba(28, 28, 28, 0.4);
-      background: rgba(226, 58, 40, 0.04);
+      background: rgba(226, 58, 40, 0.05);
       border-radius: var(--radius-sm);
-      font-style: normal;
       font-weight: 500;
     }
 
@@ -366,10 +208,9 @@
       border: 1.5px solid #FFC107;
       color: #B7791F;
       border-radius: var(--radius-sm);
-      padding: 1px 10px;
+      padding: 1px 9px;
       font-weight: 700;
-      box-shadow: 0 1px 4px rgba(255, 193, 7, 0.2);
-      animation: pulseSubtle 1.8s infinite alternate;
+      box-shadow: 0 1px 4px rgba(255, 193, 7, 0.25);
     }
 
     .thought-blank-slot.is-correct {
@@ -390,104 +231,97 @@
       font-weight: 700;
     }
 
-    @keyframes pulseSubtle {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.02); }
-    }
-
-    .thought-meta-sub {
+    .thought-card-footer {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 14px;
-      padding-top: 10px;
-      border-top: 1px dashed var(--border-subtle);
-      font-size: 12px;
+      justify-content: flex-end;
+      margin-top: 8px;
+      font-size: 11.5px;
       color: var(--text-subtle);
     }
 
-    .thought-attribution-label {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      font-weight: 500;
+    /* Meaning Box */
+    .meaning-reveal-box {
+      display: none;
+      background: var(--color-surface-warm);
+      border: 1px solid rgba(211, 84, 0, 0.2);
+      border-left: 3.5px solid var(--color-accent-gold);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      animation: fadeInSlideUp 0.3s ease-out forwards;
     }
 
-    /* Subtle pulse animation when user clicks "विचार फिर देखें" */
-    .thought-card.is-highlighted {
-      animation: cardPulse 1.2s ease-out;
+    .meaning-reveal-box.is-visible {
+      display: block;
     }
 
-    @keyframes cardPulse {
-      0% { box-shadow: 0 0 0 0 rgba(226, 58, 40, 0.4); transform: scale(1); }
-      30% { box-shadow: 0 0 0 8px rgba(226, 58, 40, 0.15); transform: scale(1.015); }
-      100% { box-shadow: var(--shadow-sm); transform: scale(1); }
+    @keyframes fadeInSlideUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ============================================================
-       OPTIONS STACK (4 Vertically Stacked Answer Buttons)
-       ============================================================ */
-    .options-section {
-      margin-bottom: 16px;
-    }
-
-    .options-heading-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 8px;
+    .meaning-label {
       display: flex;
       align-items: center;
       gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-accent-gold);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
 
-    .options-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .meaning-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-main);
+      font-weight: 500;
     }
 
-    .option-item-btn {
+    /* 2x2 Options Grid */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 10px;
+      margin-top: 2px;
+    }
+
+    .opt-card-btn {
       min-height: 50px;
-      width: 100%;
       background: var(--color-surface);
       border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 12px 14px;
+      padding: 8px 10px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       font-family: inherit;
-      font-size: 15.5px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text-main);
       text-align: left;
       cursor: pointer;
       transition: all 0.16s ease;
       position: relative;
+      box-shadow: var(--shadow-sm);
+      user-select: none;
     }
 
-    .option-item-btn:hover:not(:disabled) {
+    .opt-card-btn:hover:not(:disabled) {
       border-color: var(--border-medium);
       background: var(--color-surface-warm);
       transform: translateY(-1px);
-      box-shadow: var(--shadow-sm);
     }
 
-    .option-item-btn:focus-visible {
-      outline: none;
-      box-shadow: var(--shadow-focus);
-    }
-
-    /* Option Marker (Letter Badge: क, ख, ग, घ) */
-    .option-marker {
-      width: 28px;
-      height: 28px;
+    .opt-badge {
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
       background: var(--color-surface-soft);
       border: 1px solid var(--border-subtle);
       color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -495,97 +329,68 @@
       transition: all 0.16s ease;
     }
 
-    .option-text-wrap {
+    .opt-text {
       flex: 1;
-      line-height: 1.4;
+      line-height: 1.35;
+      font-size: 13.5px;
     }
 
-    .option-feedback-badge {
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: var(--radius-full);
-      display: none;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-    }
-
-    /* Selected state (before confirmation) */
-    .option-item-btn.is-selected {
+    .opt-card-btn.is-selected {
       border-color: var(--color-primary);
       background: var(--color-primary-light);
       color: var(--color-primary-hover);
-      box-shadow: 0 2px 8px rgba(226, 58, 40, 0.12);
+      box-shadow: 0 2px 8px rgba(226, 58, 40, 0.15);
     }
 
-    .option-item-btn.is-selected .option-marker {
+    .opt-card-btn.is-selected .opt-badge {
       background: var(--color-primary);
       color: #FFFFFF;
       border-color: var(--color-primary);
     }
 
-    /* Confirmed States */
-    .option-item-btn:disabled {
+    .opt-card-btn:disabled {
       cursor: default;
       transform: none;
     }
 
-    /* Author's correct completion */
-    .option-item-btn.is-authored-correct {
+    .opt-card-btn.is-correct {
       border-color: var(--color-success);
       background: var(--color-success-bg);
       color: var(--color-success);
+      font-weight: 700;
     }
 
-    .option-item-btn.is-authored-correct .option-marker {
+    .opt-card-btn.is-correct .opt-badge {
       background: var(--color-success);
       color: #FFFFFF;
       border-color: var(--color-success);
     }
 
-    .option-item-btn.is-authored-correct .option-feedback-badge {
-      display: inline-flex;
-      background: #FFFFFF;
-      color: var(--color-success);
-      border: 1px solid var(--color-success-border);
-    }
-
-    /* Selected Wrong Choice */
-    .option-item-btn.is-user-wrong {
+    .opt-card-btn.is-wrong {
       border-color: var(--color-wrong);
       background: var(--color-wrong-bg);
       color: var(--color-wrong);
     }
 
-    .option-item-btn.is-user-wrong .option-marker {
+    .opt-card-btn.is-wrong .opt-badge {
       background: var(--color-wrong);
       color: #FFFFFF;
       border-color: var(--color-wrong);
     }
 
-    .option-item-btn.is-user-wrong .option-feedback-badge {
-      display: inline-flex;
-      background: #FFFFFF;
-      color: var(--color-wrong);
-      border: 1px solid var(--color-wrong-border);
-    }
-
-    /* Other neutral unselected options once confirmed */
-    .option-item-btn.is-dimmed {
-      opacity: 0.55;
+    .opt-card-btn.is-dimmed {
+      opacity: 0.45;
       background: var(--color-surface-soft);
       border-color: var(--border-subtle);
     }
 
-    /* ============================================================
-       CONFIRMATION BUTTON
-       ============================================================ */
-    .confirm-action-row {
-      margin-bottom: 20px;
+    /* Bottom Action Controls */
+    .step-bottom-bar {
+      margin-top: auto;
+      padding-top: 8px;
     }
 
-    .btn-confirm-action {
+    .btn-main-action {
       min-height: 48px;
       width: 100%;
       background: var(--color-primary);
@@ -593,7 +398,7 @@
       border: none;
       border-radius: var(--radius-md);
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -604,13 +409,12 @@
       transition: all 0.16s ease;
     }
 
-    .btn-confirm-action:hover:not(:disabled) {
+    .btn-main-action:hover:not(:disabled) {
       background: var(--color-primary-hover);
       transform: translateY(-1px);
-      box-shadow: 0 5px 14px rgba(226, 58, 40, 0.3);
     }
 
-    .btn-confirm-action:disabled {
+    .btn-main-action:disabled {
       background: #D8D8D8;
       color: #888888;
       box-shadow: none;
@@ -618,565 +422,556 @@
       transform: none;
     }
 
-    .btn-confirm-action:focus-visible {
-      outline: none;
-      box-shadow: var(--shadow-focus);
+    .btn-main-action.is-goto-card {
+      background: linear-gradient(135deg, #E23A28 0%, #D35400 100%);
+      box-shadow: 0 4px 14px rgba(226, 58, 40, 0.35);
+      animation: pulseButton 2s infinite alternate;
+    }
+
+    @keyframes pulseButton {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.015); }
     }
 
     /* ============================================================
-       RESULT SECTION (Revealed after Confirmation)
+       STEP 2: CARD STUDIO (Themes Above Card + Responsive Scaling)
        ============================================================ */
-    .result-section {
-      display: none;
-      animation: fadeInSlideUp 0.35s ease-out forwards;
-    }
-
-    .result-section.is-active {
-      display: block;
-    }
-
-    @keyframes fadeInSlideUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Outcome Feedback Banner */
-    .outcome-feedback-banner {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: var(--radius-md);
-      margin-bottom: 16px;
-      font-size: 14.5px;
-      font-weight: 700;
-    }
-
-    .outcome-feedback-banner.is-correct {
-      background: var(--color-success-bg);
-      border: 1px solid var(--color-success-border);
-      color: var(--color-success);
-    }
-
-    .outcome-feedback-banner.is-wrong {
-      background: var(--color-wrong-bg);
-      border: 1px solid var(--color-wrong-border);
-      color: var(--color-wrong);
-    }
-
-    .outcome-icon {
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .outcome-text-wrap {
+    .step2-layout {
       flex: 1;
-    }
-
-    .outcome-title {
-      font-size: 15px;
-      font-weight: 800;
-      line-height: 1.25;
-    }
-
-    .outcome-subtext {
-      font-size: 12.5px;
-      font-weight: 500;
-      opacity: 0.9;
-      margin-top: 2px;
-    }
-
-    /* Complete Meaning Card */
-    .meaning-card {
-      background: var(--color-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 18px 16px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .meaning-header {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--color-accent-gold);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .meaning-text {
-      font-size: 15.5px;
-      line-height: 1.6;
-      color: var(--text-main);
-      font-weight: 500;
-    }
-
-    .subtle-explain-note {
-      font-size: 12.5px;
-      color: var(--text-subtle);
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px dashed var(--border-subtle);
-      line-height: 1.45;
-      font-style: italic;
-    }
-
-    .attribution-note-box {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      background: var(--color-surface-soft);
-      padding: 6px 12px;
-      border-radius: var(--radius-sm);
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 8px;
-    }
-
-    /* Related Article Button (Configurable) */
-    .related-article-wrap {
-      display: none;
-      margin-bottom: 16px;
-    }
-
-    .related-article-wrap.is-visible {
-      display: block;
-    }
-
-    .btn-related-article {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      min-height: 44px;
-      background: var(--color-surface-soft);
-      color: var(--color-primary);
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-md);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 8px 14px;
-      transition: all 0.16s ease;
-    }
-
-    .btn-related-article:hover {
-      background: var(--color-primary-light);
-      border-color: var(--color-primary);
-    }
-
-    /* Primary & Action Buttons Group */
-    .action-buttons-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 22px;
+      height: 100%;
+      min-height: 0;
+      min-width: 0;
+      gap: 8px;
+      overflow: hidden;
     }
 
-    .btn-primary-share {
-      min-height: 48px;
-      width: 100%;
-      background: var(--color-primary);
-      color: #FFFFFF;
-      border: none;
+    /* 3 Themes Studio Bar (Prominently Highlighted Above Card) */
+    .theme-segmented-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      background: var(--color-surface);
+      border: 1.5px solid var(--border-medium);
+      padding: 5px 6px;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .theme-tab-btn {
+      border: 1.5px solid var(--border-subtle);
+      background: var(--color-surface-warm);
       border-radius: var(--radius-md);
+      padding: 7px 4px;
       font-family: inherit;
-      font-size: 16px;
+      font-size: 13px;
       font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(226, 58, 40, 0.22);
-      transition: all 0.16s ease;
+      gap: 5px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     }
 
-    .btn-primary-share:hover {
-      background: var(--color-primary-hover);
+    .theme-tab-btn:hover {
+      color: var(--text-main);
+      border-color: var(--border-medium);
       transform: translateY(-1px);
     }
 
-    .btn-download-card {
-      min-height: 44px;
-      width: 100%;
-      background: var(--color-surface);
-      color: var(--text-main);
-      border: 1.5px solid var(--border-medium);
-      border-radius: var(--radius-md);
-      font-family: inherit;
-      font-size: 14.5px;
-      font-weight: 700;
+    /* Active Indicator Dot */
+    .theme-tab-btn .theme-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: transparent;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    /* Subtle theme identity hints on buttons */
+    .theme-tab-btn[data-theme="classic"] {
+      border-color: rgba(226, 58, 40, 0.18);
+    }
+    .theme-tab-btn[data-theme="navratri"] {
+      border-color: rgba(192, 57, 43, 0.2);
+    }
+    .theme-tab-btn[data-theme="diwali"] {
+      border-color: rgba(241, 196, 15, 0.35);
+    }
+
+    /* Eye-catching, rich active states */
+    .theme-tab-btn.is-active {
+      transform: translateY(-1.5px);
+      font-weight: 800;
+    }
+
+    .theme-tab-btn[data-theme="classic"].is-active {
+      background: linear-gradient(135deg, #FFF5F2 0%, #FDEAE6 100%);
+      color: #C52C1C;
+      border-color: #E23A28;
+      box-shadow: 0 3px 10px rgba(226, 58, 40, 0.22);
+    }
+    .theme-tab-btn[data-theme="classic"].is-active .theme-dot {
+      background: #E23A28;
+      box-shadow: 0 0 6px rgba(226, 58, 40, 0.6);
+    }
+
+    .theme-tab-btn[data-theme="navratri"].is-active {
+      background: linear-gradient(135deg, #FFF6ED 0%, #FEEBDA 100%);
+      color: #922B21;
+      border-color: #C0392B;
+      box-shadow: 0 3px 10px rgba(192, 57, 43, 0.22);
+    }
+    .theme-tab-btn[data-theme="navratri"].is-active .theme-dot {
+      background: #C0392B;
+      box-shadow: 0 0 6px rgba(192, 57, 43, 0.6);
+    }
+
+    .theme-tab-btn[data-theme="diwali"].is-active {
+      background: linear-gradient(135deg, #2D0B3B 0%, #16041F 100%);
+      color: #F7DC6F;
+      border-color: #F1C40F;
+      box-shadow: 0 4px 14px rgba(241, 196, 15, 0.35);
+    }
+    .theme-tab-btn[data-theme="diwali"].is-active .theme-dot {
+      background: #F1C40F;
+      box-shadow: 0 0 8px rgba(241, 196, 15, 0.9);
+    }
+
+    /* Subtle focus guidance when entering Step 2 */
+    @keyframes themeBarGlowIntro {
+      0% {
+        box-shadow: 0 0 0 0 rgba(226, 58, 40, 0.4);
+        transform: scale(0.98);
+      }
+      50% {
+        box-shadow: 0 0 0 4px rgba(226, 58, 40, 0.18);
+        transform: scale(1.01);
+      }
+      100% {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        transform: scale(1);
+      }
+    }
+
+    .step-view.is-active .theme-segmented-bar {
+      animation: themeBarGlowIntro 0.5s ease-out;
+    }
+
+    /* Card Showcase Stage (Adapts to ANY phone aspect ratio without overflow) */
+    .card-stage {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: all 0.16s ease;
-    }
-
-    .btn-download-card:hover {
-      background: var(--color-surface-warm);
-      border-color: var(--text-main);
-    }
-
-    .secondary-actions-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .btn-secondary-action {
-      min-height: 44px;
-      background: var(--color-surface-soft);
-      color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      padding: 6px 10px;
-      transition: all 0.16s ease;
-      text-align: center;
-    }
-
-    .btn-secondary-action:hover {
-      background: var(--color-surface);
-      color: var(--text-main);
-      border-color: var(--border-medium);
-    }
-
-    /* In-Page Share Card Preview Box */
-    .card-preview-section {
-      background: var(--color-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .card-preview-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .card-preview-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .card-preview-badge {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--color-primary);
-      background: var(--color-primary-light);
-      padding: 2px 7px;
-      border-radius: var(--radius-full);
-    }
-
-    .card-preview-container {
-      width: 100%;
-      background: #F4F1EA;
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      border: 1px solid var(--border-subtle);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      min-height: 0;
+      min-width: 0;
       position: relative;
-      display: flex;
+      padding: 4px 6px;
+      overflow: hidden;
+    }
+
+    .card-preview-frame {
+      position: relative;
+      max-height: 100%;
+      max-width: 100%;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      aspect-ratio: 4 / 5;
+    }
+
+    /* Ambient halo behind preview card */
+    .card-preview-frame::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 16px;
+      background: rgba(226, 58, 40, 0.12);
+      filter: blur(14px);
+      z-index: 1;
+      transition: background 0.3s ease;
+      pointer-events: none;
+    }
+
+    .card-stage[data-active-theme="diwali"] .card-preview-frame::before {
+      background: rgba(241, 196, 15, 0.22);
+    }
+
+    .card-stage[data-active-theme="navratri"] .card-preview-frame::before {
+      background: rgba(192, 57, 43, 0.18);
     }
 
     .card-preview-img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      transition: opacity 0.2s ease;
-    }
-
-    .card-preview-tools {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .btn-card-tool {
-      flex: 1;
-      min-height: 44px;
-      background: var(--color-surface-soft);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 12.5px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .btn-card-tool:hover {
-      background: var(--color-surface);
-      border-color: var(--border-medium);
-    }
-
-    /* Off-screen canvas for 1080x1350 generation */
-    #shareCanvas {
-      display: none;
-    }
-
-    /* ============================================================
-       MODALS & DIALOGS (Recipient Preview & Clipboard Fallback)
-       ============================================================ */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(3px);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      animation: fadeIn 0.2s ease-out;
-    }
-
-    .modal-overlay.is-open {
-      display: flex;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .modal-sheet {
-      background: var(--color-surface);
-      width: 100%;
-      max-width: 440px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      box-shadow: var(--shadow-lg);
       position: relative;
+      z-index: 2;
+      display: block;
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: #FFFFFF;
+      transition: transform 0.2s ease;
+    }
+
+    /* Quick Share Floating Button at Top-Right Corner of Card */
+    .card-quick-share-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(0, 0, 0, 0.12);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+      transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .card-quick-share-btn:hover {
+      transform: scale(1.1);
+      background: #FFFFFF;
+      color: var(--color-primary-hover);
+      box-shadow: 0 6px 18px rgba(226, 58, 40, 0.28);
+    }
+
+    .card-quick-share-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Streamlined Studio Dock (Compact: Name + Share + Nav) */
+    .card-studio-dock {
+      background: var(--color-surface);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 8px 10px 8px;
+      box-shadow: var(--shadow-md);
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
-    .modal-header {
+    /* Name Input Row */
+    .name-input-bar {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 10px;
-    }
-
-    .modal-title-wrap {
-      flex: 1;
-    }
-
-    .modal-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .modal-subtitle {
-      font-size: 12px;
-      color: var(--text-subtle);
-      margin-top: 2px;
-    }
-
-    .modal-close-btn {
-      background: none;
-      border: none;
-      font-size: 20px;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 4px;
-      line-height: 1;
-      border-radius: var(--radius-sm);
-    }
-
-    .modal-close-btn:focus-visible {
-      box-shadow: var(--shadow-focus);
-    }
-
-    /* Recipient Demo Content */
-    .recipient-demo-notice {
-      background: var(--color-primary-light);
-      border: 1px solid rgba(226, 58, 40, 0.2);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      font-size: 12.5px;
-      color: #922B21;
-      line-height: 1.45;
-    }
-
-    .recipient-mock-card {
+      align-items: center;
+      gap: 6px;
       background: var(--color-surface-warm);
       border: 1.5px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 16px;
-      box-shadow: var(--shadow-sm);
-      position: relative;
+      padding: 5px 10px;
+      transition: all 0.15s ease;
     }
 
-    .recipient-brand-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin-bottom: 10px;
-      text-transform: uppercase;
+    .name-input-bar:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-focus);
+      background: #FFFFFF;
     }
 
-    .recipient-thought-text {
-      font-size: 17px;
-      font-weight: 700;
-      line-height: 1.55;
-      color: var(--text-main);
-      margin-bottom: 12px;
-    }
-
-    .recipient-meaning-box {
-      background: var(--color-surface);
-      border-left: 3px solid var(--color-accent-gold);
-      padding: 8px 12px;
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    .name-input-field {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: inherit;
       font-size: 13.5px;
-      line-height: 1.45;
-      color: var(--text-muted);
-      margin-bottom: 10px;
+      font-weight: 700;
+      color: var(--text-main);
+      outline: none;
     }
 
-    .recipient-attribution {
-      font-size: 11px;
+    .name-input-field::placeholder {
       color: var(--text-subtle);
-      font-style: italic;
+      font-weight: 500;
+      font-size: 12.5px;
     }
 
-    .recipient-invite-banner {
-      background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
-      border: 1px solid #FFCC80;
-      border-radius: var(--radius-md);
-      padding: 12px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      align-items: center;
+    .name-clear-btn {
+      background: none;
+      border: none;
+      color: var(--text-subtle);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 2px 6px;
+      border-radius: 50%;
     }
 
-    .recipient-invite-title {
-      font-size: 14.5px;
-      font-weight: 800;
-      color: #E65100;
+    .name-clear-btn:hover {
+      color: var(--text-main);
     }
 
-    .recipient-invite-desc {
-      font-size: 12px;
-      color: #795548;
-      line-height: 1.35;
-    }
-
-    .btn-recipient-play {
-      min-height: 44px;
-      background: var(--color-primary);
+    /* Primary Hero Share Button */
+    .btn-share-hero {
+      min-height: 42px;
+      width: 100%;
+      background: linear-gradient(135deg, #E23A28 0%, #D35400 100%);
       color: #FFFFFF;
       border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(226, 58, 40, 0.28);
+      transition: all 0.16s ease;
+    }
+
+    .btn-share-hero:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(226, 58, 40, 0.35);
+    }
+
+    /* Navigation Row: Home & Next Edition */
+    .dock-actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 6px;
+    }
+
+    .btn-dock-action {
+      min-height: 32px;
+      background: var(--color-surface-soft);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
       font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-dock-action:hover {
+      background: #FFFFFF;
+      color: var(--text-main);
+      border-color: var(--border-medium);
+    }
+
+    .btn-dock-action.is-next-pill {
+      background: var(--color-primary-light);
+      border-color: rgba(226, 58, 40, 0.3);
+      color: var(--color-primary);
+    }
+
+    .btn-dock-action.is-next-pill:hover {
+      background: var(--color-primary);
+      color: #FFFFFF;
+    }
+
+    /* ============================================================
+       SHARE ACTION MODAL SHEET (Bundled WhatsApp, PNG, Copy)
+       ============================================================ */
+    .share-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 1500;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+
+    .share-sheet-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .share-sheet-modal {
+      background: #FFFFFF;
+      border-radius: 20px 20px 0 0;
+      padding: 12px 16px 20px;
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.25);
+      transform: translateY(100%);
+      transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 480px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .share-sheet-backdrop.is-open .share-sheet-modal {
+      transform: translateY(0);
+    }
+
+    .share-sheet-handle {
+      width: 38px;
+      height: 4.5px;
+      background: #D8D8D8;
+      border-radius: 3px;
+      align-self: center;
+      margin-bottom: 2px;
+    }
+
+    .share-sheet-header {
+      text-align: center;
+    }
+
+    .share-sheet-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .share-sheet-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .share-sheet-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .share-opt-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--color-surface-warm);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+      text-align: left;
+    }
+
+    .share-opt-row:hover {
+      background: #FFFFFF;
+      border-color: var(--border-medium);
+      transform: translateY(-1px);
+    }
+
+    .share-opt-row.is-whatsapp {
+      background: #F0FDF4;
+      border-color: #86EFAC;
+    }
+
+    .share-opt-row.is-whatsapp .share-opt-icon {
+      background: #22C55E;
+      color: #FFFFFF;
+    }
+
+    .share-opt-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--color-surface-soft);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .share-opt-icon.is-download {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+    }
+
+    .share-opt-icon.is-copy {
+      background: #FEF3C7;
+      color: #D97706;
+    }
+
+    .share-opt-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .share-opt-title {
       font-size: 14px;
       font-weight: 700;
-      padding: 8px 18px;
-      cursor: pointer;
-      margin-top: 4px;
-      transition: all 0.15s ease;
-      box-shadow: 0 2px 6px rgba(226, 58, 40, 0.25);
+      color: var(--text-main);
     }
 
-    .btn-recipient-play:hover {
-      background: var(--color-primary-hover);
+    .share-opt-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
     }
 
-    /* Clipboard Copy Fallback Modal */
-    .copy-textarea {
-      width: 100%;
-      height: 130px;
-      border: 1px solid var(--border-medium);
-      border-radius: var(--radius-sm);
+    .share-opt-arrow {
+      font-size: 16px;
+      color: var(--text-subtle);
+      font-weight: 700;
+    }
+
+    .share-sheet-cancel-btn {
+      background: var(--color-surface-soft);
+      border: none;
+      border-radius: var(--radius-md);
       padding: 10px;
       font-family: inherit;
-      font-size: 14px;
-      line-height: 1.5;
-      resize: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background 0.15s ease;
+    }
+
+    .share-sheet-cancel-btn:hover {
       color: var(--text-main);
-      background: var(--color-surface-soft);
+      background: #EAE6DF;
     }
 
-    .copy-textarea:focus {
-      outline: none;
-      box-shadow: var(--shadow-focus);
-    }
-
-    /* Toast Notification Banner */
+    /* Toast Notification Pill */
     .toast-pill {
       position: fixed;
-      bottom: 24px;
+      bottom: 16px;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      transform: translateX(-50%) translateY(80px);
       background: #1C1C1C;
       color: #FFFFFF;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
-      padding: 10px 18px;
+      padding: 7px 16px;
       border-radius: var(--radius-full);
       box-shadow: var(--shadow-lg);
       z-index: 2000;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .toast-pill.is-visible {
@@ -1184,29 +979,9 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Footer Brand Bar */
-    .app-footer {
-      margin-top: auto;
-      padding-top: 24px;
-      border-top: 1px solid var(--border-subtle);
-      text-align: center;
-      font-size: 11.5px;
-      color: var(--text-subtle);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: center;
-    }
-
-    .footer-brand {
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    /* Focus visible utility */
-    button:focus-visible, a:focus-visible {
-      outline: none;
-      box-shadow: var(--shadow-focus);
+    /* Off-Screen High-Res Canvas (1080x1350) */
+    #shareCanvas {
+      display: none;
     }
   </style>
 </head>
@@ -1218,341 +993,230 @@
   <!-- Main Mobile-First Shell -->
   <main class="app-container" id="app">
 
-    <!-- Header / Masthead -->
-    <header class="header-masthead">
-      <div class="brand-row">
-        <div class="brand-identity" id="brand-identity-label">
-          <svg class="brand-sun-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="5"></circle>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <span>भास्कर खेल · डेमो</span>
-        </div>
-        <div class="brand-mood-tag">शांत विचार · 1 मिनट</div>
-      </div>
-
-      <div class="title-row">
-        <h1 class="game-main-title" id="game-title">आज की नीति</h1>
-        <span class="edition-tag-pill" id="current-theme-pill">समझ</span>
-      </div>
-    </header>
-
-    <!-- Edition Switcher (Three Editions) -->
-    <nav class="edition-nav-grid" aria-label="संस्करण चयन">
-      <button type="button" class="edition-tab-btn is-active" id="tab-d1" data-day="d1" aria-label="संस्करण 1 समझ">
-        <span class="tab-main">संस्करण 1</span>
-        <span class="tab-sub">समझ</span>
-        <span class="tab-status-dot" id="dot-d1" style="display: none;" title="उत्तर दिया गया"></span>
-      </button>
-      <button type="button" class="edition-tab-btn" id="tab-d2" data-day="d2" aria-label="संस्करण 2 अभ्यास">
-        <span class="tab-main">संस्करण 2</span>
-        <span class="tab-sub">अभ्यास</span>
-        <span class="tab-status-dot" id="dot-d2" style="display: none;" title="उत्तर दिया गया"></span>
-      </button>
-      <button type="button" class="edition-tab-btn" id="tab-d3" data-day="d3" aria-label="संस्करण 3 अनुभव">
-        <span class="tab-main">संस्करण 3</span>
-        <span class="tab-sub">अनुभव</span>
-        <span class="tab-status-dot" id="dot-d3" style="display: none;" title="उत्तर दिया गया"></span>
-      </button>
-    </nav>
-
-    <!-- Instruction Bar -->
-    <div class="instruction-bar" id="instruction-bar" role="status">
-      <span class="instruction-icon" aria-hidden="true">💡</span>
-      <span class="instruction-text" id="instruction-text">विचार को पूरा करने वाला विकल्प चुनिए।</span>
-    </div>
-
-    <!-- Practice Mode Notice (Only shown if opened via recipient preview) -->
-    <div class="practice-alert-bar" id="practice-alert-bar" role="alert">
-      <span>✏️ <strong>अभ्यास मोड:</strong> आपका मूल उत्तर सुरक्षित है।</span>
-      <button type="button" class="practice-return-btn" id="practice-return-btn">मूल रूप देखें</button>
-    </div>
-
     <!-- ============================================================
-         CENTRAL THOUGHT CARD (Visual Centre of the Screen)
+         STEP 1: ANSWER VIEW (First Step)
          ============================================================ -->
-    <article class="thought-card" id="thought-card" aria-label="आज का विचार">
-      <span class="thought-quote-mark" aria-hidden="true">“</span>
+    <div class="step-view is-active" id="step-answer">
       
-      <p class="thought-content" id="thought-text-container">
-        <!-- Rendered dynamically with live interactive blank -->
-      </p>
-
-      <div class="thought-meta-sub">
-        <span class="thought-edition-info" id="thought-edition-label">संस्करण 1 · समझ</span>
-        <span class="thought-attribution-label">मौलिक विचार · डेमो के लिए लिखा गया</span>
-      </div>
-    </article>
-
-    <!-- ============================================================
-         OPTIONS LIST (4 Vertically Stacked Answer Buttons)
-         ============================================================ -->
-    <section class="options-section" aria-labelledby="options-label">
-      <div class="options-heading-label" id="options-label">
-        <span>चार विकल्प में से एक चुनें:</span>
-      </div>
-
-      <div class="options-list" id="options-list" role="radiogroup" aria-label="विकल्प सूची">
-        <!-- Rendered dynamically: 4 stacked options with min 48px height -->
-      </div>
-    </section>
-
-    <!-- ============================================================
-         CONFIRMATION BUTTON
-         ============================================================ -->
-    <div class="confirm-action-row" id="confirm-action-row">
-      <button type="button" class="btn-confirm-action" id="btn-confirm" disabled aria-disabled="true">
-        <span>यही उत्तर चुनें</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-      </button>
-    </div>
-
-    <!-- ============================================================
-         RESULT SECTION (Revealed after Confirmation)
-         ============================================================ -->
-    <section class="result-section" id="result-section" aria-live="polite">
-      
-      <!-- Outcome Feedback Banner -->
-      <div class="outcome-feedback-banner is-correct" id="outcome-banner">
-        <span class="outcome-icon" id="outcome-icon">✓</span>
-        <div class="outcome-text-wrap">
-          <div class="outcome-title" id="outcome-title">विचार पूरा हुआ</div>
-          <div class="outcome-subtext" id="outcome-subtext">आपने विचार को उसके मौलिक रूप में पूरा किया।</div>
+      <div class="step1-content-wrap">
+        <!-- Minimal Tag Pill -->
+        <div class="thought-category-pill" id="thought-category-pill">
+          <span>✨ आज का विचार · <span id="theme-name-text">समझ</span></span>
         </div>
-      </div>
 
-      <!-- Meaning Card -->
-      <div class="meaning-card">
-        <div class="meaning-header">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-          </svg>
-          <span>विचार का अर्थ</span>
-        </div>
-        <p class="meaning-text" id="meaning-text">
-          <!-- Populated from CONTENT -->
-        </p>
+        <!-- Central Thought Card -->
+        <article class="thought-card" id="thought-card" aria-label="आज का विचार">
+          <span class="thought-quote-mark" aria-hidden="true">“</span>
+          
+          <p class="thought-content" id="thought-text-container">
+            <!-- Rendered dynamically with live interactive blank -->
+          </p>
 
-        <p class="subtle-explain-note">
-          यह इस मौलिक विचार का चुना हुआ पूरा रूप है।
-        </p>
-
-        <div class="attribution-note-box">
-          <span>✍️ मौलिक विचार · डेमो के लिए लिखा गया</span>
-        </div>
-      </div>
-
-      <!-- Optional Related Article Link (Only shown if URL configured) -->
-      <div class="related-article-wrap" id="related-article-wrap">
-        <a href="#" class="btn-related-article" id="related-article-link" target="_blank" rel="noopener noreferrer">
-          <span>जुड़ा लेख पढ़ें</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
-          </svg>
-        </a>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="action-buttons-group">
-        <!-- Primary Action: Share Card -->
-        <button type="button" class="btn-primary-share" id="btn-share-primary">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
-            <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-          </svg>
-          <span>कार्ड साझा करें</span>
-        </button>
-
-        <!-- Always-Visible Action: Download Card -->
-        <button type="button" class="btn-download-card" id="btn-download-card">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          <span>कार्ड डाउनलोड करें (1080×1350 PNG)</span>
-        </button>
-
-        <!-- Secondary Actions Row -->
-        <div class="secondary-actions-row">
-          <button type="button" class="btn-secondary-action" id="btn-view-thought-again">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-            <span>विचार फिर देखें</span>
-          </button>
-
-          <button type="button" class="btn-secondary-action" id="btn-recipient-preview">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-            <span>पाने वाले को कैसा दिखेगा?</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- In-Page Preview of the Generated Share Card -->
-      <section class="card-preview-section" aria-labelledby="card-preview-title-id">
-        <div class="card-preview-header">
-          <div class="card-preview-title" id="card-preview-title-id">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <circle cx="8.5" cy="8.5" r="1.5"></circle>
-              <polyline points="21 15 16 10 5 21"></polyline>
-            </svg>
-            <span>साझा करने योग्य कार्ड का पूर्वावलोकन</span>
+          <div class="thought-card-footer">
+            <span>दैनिक भास्कर खेल</span>
           </div>
-          <span class="card-preview-badge">1080 × 1350 HD</span>
-        </div>
+        </article>
 
-        <div class="card-preview-container">
-          <img id="card-preview-img" class="card-preview-img" src="" alt="आज की नीति साझा कार्ड पूर्वावलोकन">
-        </div>
-
-        <div class="card-preview-tools">
-          <button type="button" class="btn-card-tool" id="btn-copy-thought-text">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        <!-- Meaning Box: Revealed after answering -->
+        <div class="meaning-reveal-box" id="meaning-reveal-box" aria-live="polite">
+          <div class="meaning-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
             </svg>
-            <span>विचार कॉपी करें</span>
+            <span>विचार का अर्थ</span>
+          </div>
+          <p class="meaning-text" id="meaning-text">
+            <!-- Populated from CONTENT -->
+          </p>
+        </div>
+
+        <!-- 4 Options in 2x2 Grid (A, B on top, C, D on bottom) -->
+        <div class="options-grid" id="options-grid" role="radiogroup" aria-label="चार विकल्प">
+          <!-- Rendered dynamically as 2x2 grid -->
+        </div>
+      </div>
+
+      <!-- Bottom Action Bar -->
+      <div class="step-bottom-bar">
+        <button type="button" class="btn-main-action" id="btn-step1-action" disabled>
+          <span id="btn-step1-label">उत्तर चुनें</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ============================================================
+         STEP 2: CARD STUDIO (Theme Tabs Above Card + Responsive Frame)
+         ============================================================ */ -->
+    <div class="step-view" id="step-card">
+      <div class="step2-layout">
+
+        <!-- 1. Top Theme Switcher Bar (Placed directly above the card) -->
+        <div class="theme-segmented-bar" id="theme-selector-row" role="radiogroup" aria-label="कार्ड थीम">
+          <button type="button" class="theme-tab-btn is-active" data-theme="classic" aria-label="सामान्य कार्ड">
+            <span class="theme-dot" aria-hidden="true"></span>
+            <span>🗞️ सामान्य</span>
           </button>
-          <button type="button" class="btn-card-tool" id="btn-download-preview-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            <span>PNG डाउनलोड करें</span>
+          <button type="button" class="theme-tab-btn" data-theme="navratri" aria-label="नवरात्रि कार्ड">
+            <span class="theme-dot" aria-hidden="true"></span>
+            <span>🌸 नवरात्रि</span>
+          </button>
+          <button type="button" class="theme-tab-btn" data-theme="diwali" aria-label="दिवाली कार्ड">
+            <span class="theme-dot" aria-hidden="true"></span>
+            <span>🪔 दिवाली</span>
           </button>
         </div>
-      </section>
 
-    </section>
+        <!-- 2. Center Card Showcase Stage (Adapts to all phone dimensions) -->
+        <div class="card-stage" id="card-stage" data-active-theme="classic">
+          <div class="card-preview-frame">
+            <img id="card-preview-img" class="card-preview-img" src="" alt="विचार कार्ड पूर्वावलोकन">
 
-    <!-- Footer Identity -->
-    <footer class="app-footer">
-      <div class="footer-brand">दैनिक भास्कर · खेल लैब 2026</div>
-      <div>आज की नीति — शांत, दैनिक विचार पूर्ति एवं साझा कार्ड डेमो</div>
-    </footer>
+            <!-- Top-Right Corner Floating Share Button -->
+            <button type="button" class="card-quick-share-btn" id="btn-corner-share" title="कार्ड साझा करें" aria-label="कार्ड साझा करें">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Bottom Compact Studio Dock: Name Input + Share CTA + Nav -->
+        <div class="card-studio-dock">
+          
+          <!-- Name Personalization Input -->
+          <div class="name-input-bar">
+            <span style="font-size: 14px; opacity: 0.8;" aria-hidden="true">✍️</span>
+            <input type="text" id="card-user-name" class="name-input-field" placeholder="कार्ड पर नाम (उदा. सुहास और परिवार)" maxlength="32" autocomplete="name">
+            <button type="button" id="btn-clear-name" class="name-clear-btn" title="नाम हटाएं" style="display: none;">✕</button>
+          </div>
+
+          <!-- Primary Hero Share CTA: Opens Share Options Sheet -->
+          <button type="button" class="btn-share-hero" id="btn-share-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            <span>कार्ड साझा करें</span>
+          </button>
+
+          <!-- Navigation Row: Home & Next Edition -->
+          <div class="dock-actions-row">
+            <button type="button" class="btn-dock-action" id="btn-go-home">
+              <span>🏠 मुख्य पृष्ठ</span>
+            </button>
+            <button type="button" class="btn-dock-action is-next-pill" id="btn-go-next-edition">
+              <span id="next-edition-label">अगला विचार (2) →</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
 
   </main>
 
   <!-- ============================================================
-       HIDDEN OFF-SCREEN CANVAS (1080 x 1350 High-Res Render)
+       SHARE ACTION MODAL SHEET (Bundled WhatsApp, PNG, Copy)
        ============================================================ -->
-  <canvas id="shareCanvas" width="1080" height="1350" aria-hidden="true"></canvas>
-
-  <!-- ============================================================
-       RECIPIENT PREVIEW MODAL (“पाने वाले को कैसा दिखेगा?”)
-       ============================================================ -->
-  <div class="modal-overlay" id="recipient-modal" role="dialog" aria-modal="true" aria-labelledby="modal-recipient-title">
-    <div class="modal-sheet">
-      <div class="modal-header">
-        <div class="modal-title-wrap">
-          <h2 class="modal-title" id="modal-recipient-title">साझा लिंक पूर्वावलोकन</h2>
-          <div class="modal-subtitle">प्रस्तावित साझा अनुभव (Demo Preview)</div>
-        </div>
-        <button type="button" class="modal-close-btn" id="btn-close-recipient-modal" aria-label="बंद करें">✕</button>
+  <div class="share-sheet-backdrop" id="share-sheet-backdrop" aria-hidden="true">
+    <div class="share-sheet-modal" role="dialog" aria-modal="true" aria-label="कार्ड साझा करें विकल्प">
+      <div class="share-sheet-handle"></div>
+      <div class="share-sheet-header">
+        <h3 class="share-sheet-title">कार्ड साझा करें</h3>
+        <p class="share-sheet-subtitle">अपने नाम के साथ विचार साझा करें या डाउनलोड करें</p>
       </div>
+      
+      <div class="share-sheet-options">
+        <!-- 1. WhatsApp / Web Share -->
+        <button type="button" class="share-opt-row is-whatsapp" id="sheet-btn-whatsapp">
+          <div class="share-opt-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <div class="share-opt-info">
+            <span class="share-opt-title">व्हाट्सएप / ऐप्स पर भेजें</span>
+            <span class="share-opt-desc">इमेज और विचार सीधे शेयर करें</span>
+          </div>
+          <span class="share-opt-arrow">→</span>
+        </button>
 
-      <div class="recipient-demo-notice">
-        ℹ️ <strong>डेमो सूचना:</strong> यह एक पूर्वावलोकन है कि जब कोई पाठक आपका साझा किया हुआ लिंक खोलेगा, तो उसे क्या दिखेगा। वास्तविक सार्वजनिक लिंक अभी लाइव नहीं है।
-      </div>
+        <!-- 2. Download High-Res PNG -->
+        <button type="button" class="share-opt-row" id="sheet-btn-download">
+          <div class="share-opt-icon is-download">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <div class="share-opt-info">
+            <span class="share-opt-title">PNG इमेज डाउनलोड करें</span>
+            <span class="share-opt-desc">गैलरी में 1080×1350 कार्ड सेव करें</span>
+          </div>
+          <span class="share-opt-arrow">→</span>
+        </button>
 
-      <!-- Simulated Recipient Web Card -->
-      <div class="recipient-mock-card">
-        <div class="recipient-brand-header">
-          <span>दैनिक भास्कर · आज की नीति</span>
-          <span id="recipient-edition-tag">संस्करण 1</span>
-        </div>
-
-        <div class="recipient-thought-text" id="recipient-thought-text">
-          <!-- Populated with full thought -->
-        </div>
-
-        <div class="recipient-meaning-box">
-          <strong>अर्थ:</strong> <span id="recipient-meaning-text"></span>
-        </div>
-
-        <div class="recipient-attribution">
-          मौलिक विचार · डेमो के लिए लिखा गया
-        </div>
-      </div>
-
-      <!-- Invitation CTA -->
-      <div class="recipient-invite-banner">
-        <div class="recipient-invite-title">आप भी आज की नीति खेलें</div>
-        <div class="recipient-invite-desc">
-          क्योंकि इस पूर्वावलोकन में विचार का पूरा रूप पहले ही दिख चुका है, आप इसे अभ्यास मोड में खेल सकते हैं जिससे आपका मूल सहेजा हुआ परिणाम नहीं बदलेगा।
-        </div>
-        <button type="button" class="btn-recipient-play" id="btn-recipient-play">
-          अभ्यास मोड में खेलें
+        <!-- 3. Copy Text -->
+        <button type="button" class="share-opt-row" id="sheet-btn-copy">
+          <div class="share-opt-icon is-copy">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </div>
+          <div class="share-opt-info">
+            <span class="share-opt-title">विचार टेक्स्ट कॉपी करें</span>
+            <span class="share-opt-desc">मैसेज या स्टेटस के लिए टेक्स्ट</span>
+          </div>
+          <span class="share-opt-arrow">→</span>
         </button>
       </div>
 
-      <button type="button" class="btn-download-card" id="btn-close-recipient-modal-bottom">
-        बंद करें
-      </button>
+      <button type="button" class="share-sheet-cancel-btn" id="sheet-btn-cancel">बंद करें</button>
     </div>
   </div>
 
-  <!-- ============================================================
-       CLIPBOARD COPY FALLBACK MODAL (If browser clipboard API fails)
-       ============================================================ -->
-  <div class="modal-overlay" id="copy-modal" role="dialog" aria-modal="true" aria-labelledby="modal-copy-title">
-    <div class="modal-sheet">
-      <div class="modal-header">
-        <div class="modal-title-wrap">
-          <h2 class="modal-title" id="modal-copy-title">विचार कॉपी करें</h2>
-          <div class="modal-subtitle">नीचे दिए गए टेक्स्ट को चुनें और कॉपी करें</div>
-        </div>
-        <button type="button" class="modal-close-btn" id="btn-close-copy-modal" aria-label="बंद करें">✕</button>
-      </div>
-
-      <textarea class="copy-textarea" id="copy-modal-textarea" readonly aria-label="विचार टेक्स्ट"></textarea>
-
-      <button type="button" class="btn-confirm-action" id="btn-copy-modal-select-all">
-        टेक्स्ट चुनें
-      </button>
-    </div>
-  </div>
+  <!-- Off-Screen High-Resolution Canvas (1080 x 1350) -->
+  <canvas id="shareCanvas" width="1080" height="1350" aria-hidden="true"></canvas>
 
   <!-- Toast Notification Pill -->
   <div class="toast-pill" id="toast-pill" role="status" aria-live="polite">
-    <span id="toast-msg">कार्ड डाउनलोड हो रहा है...</span>
+    <span id="toast-msg">कार्ड तैयार हो रहा है...</span>
   </div>
 
-  <!-- ============================================================
-       JAVASCRIPT LOGIC
-       Self-contained, Plain JS, No build step, Offline-capable
-       ============================================================ -->
+  <!-- JavaScript Logic -->
   <script>
     (function () {
       'use strict';
 
       /* ============================================================
-         CONTENT DEFINITION
-         Editable object with stable option IDs and exact demo thoughts
-         Attribution: "मौलिक विचार · डेमो के लिए लिखा गया"
+         CONTENT DEFINITIONS (3 Days / Editions)
          ============================================================ */
       const CONTENT = {
         d1: {
           id: 'd1',
           dayNum: 1,
           theme: 'समझ',
+          nextDayId: 'd2',
+          nextLabel: 'अगला विचार (संस्करण 2) →',
           incomplete: 'किसी को समझने की शुरुआत, अपनी बात कहने से पहले ____ से होती है।',
           blankPrefix: 'किसी को समझने की शुरुआत, अपनी बात कहने से पहले ',
           blankSuffix: ' से होती है।',
@@ -1563,14 +1227,14 @@
             { id: 'opt_1_4', text: 'विषय बदलने', isCorrect: false }
           ],
           fullThought: 'किसी को समझने की शुरुआत, अपनी बात कहने से पहले उसकी बात सुनने से होती है।',
-          meaning: 'ध्यान से सुनने पर हमें दूसरे व्यक्ति का अनुभव और नज़रिया समझने का अवसर मिलता है।',
-          attribution: 'मौलिक विचार · डेमो के लिए लिखा गया',
-          relatedArticleUrl: '' // Empty by default; show 'जुड़ा लेख पढ़ें' only when configured
+          meaning: 'ध्यान से सुनने पर हमें दूसरे व्यक्ति का अनुभव और नज़रिया समझने का अवसर मिलता है।'
         },
         d2: {
           id: 'd2',
           dayNum: 2,
           theme: 'अभ्यास',
+          nextDayId: 'd3',
+          nextLabel: 'अगला विचार (संस्करण 3) →',
           incomplete: 'सीख को आदत बनाने के लिए, बड़े इरादों के साथ ____ भी ज़रूरी है।',
           blankPrefix: 'सीख को आदत बनाने के लिए, बड़े इरादों के साथ ',
           blankSuffix: ' भी ज़रूरी है।',
@@ -1581,14 +1245,14 @@
             { id: 'opt_2_4', text: 'जल्दी परिणाम की उम्मीद', isCorrect: false }
           ],
           fullThought: 'सीख को आदत बनाने के लिए, बड़े इरादों के साथ नियमित छोटा अभ्यास भी ज़रूरी है।',
-          meaning: 'थोड़ा-थोड़ा अभ्यास नियमित रूप से करना, सीखी हुई बात को रोज़मर्रा के काम में लाने में मदद करता है।',
-          attribution: 'मौलिक विचार · डेमो के लिए लिखा गया',
-          relatedArticleUrl: ''
+          meaning: 'थोड़ा-थोड़ा अभ्यास नियमित रूप से करना, सीखी हुई बात को रोज़मर्रा के काम में लाने में मदद करता है।'
         },
         d3: {
           id: 'd3',
           dayNum: 3,
           theme: 'अनुभव',
+          nextDayId: 'd1',
+          nextLabel: 'पहला विचार (संस्करण 1) ↺',
           incomplete: 'बीते अनुभव अगला कदम बेहतर बनाते हैं, जब हम उन्हें ____।',
           blankPrefix: 'बीते अनुभव अगला कदम बेहतर बनाते हैं, जब हम उन्हें ',
           blankSuffix: '।',
@@ -1599,26 +1263,29 @@
             { id: 'opt_3_4', text: 'दूसरों पर लागू करते हैं', isCorrect: false }
           ],
           fullThought: 'बीते अनुभव अगला कदम बेहतर बनाते हैं, जब हम उन्हें समझकर उनसे सीखते हैं।',
-          meaning: 'बीती बातों पर विचार करके हम समझ सकते हैं कि अगली बार क्या बनाए रखना है और क्या बदलना है।',
-          attribution: 'मौलिक विचार · डेमो के लिए लिखा गया',
-          relatedArticleUrl: ''
+          meaning: 'बीती बातों पर विचार करके हम समझ सकते हैं कि अगली बार क्या बनाए रखना है और क्या बदलना है।'
         }
       };
 
-      /* Devanagari numerals / markers */
-      const DEVANAGARI_MARKERS = ['क', 'ख', 'ग', 'घ'];
+      const OPTION_LETTERS = ['A', 'B', 'C', 'D'];
 
       /* ============================================================
-         STATE & LOCALSTORAGE MANAGEMENT
-         Storage key format: db-jam:v2:niti:<dayId>
+         STATE MANAGEMENT
          ============================================================ */
       const STORAGE_PREFIX = 'db-jam:v2:niti:';
-      const memoryFallbackStore = {};
+      const USER_NAME_KEY = 'db_niti_user_name';
+      const THEME_KEY = 'db_niti_active_theme';
 
       let currentDayId = 'd1';
       let selectedOptionId = null;
-      let isPracticeMode = false;
-      let practiceSelectedOptionId = null;
+      let activeTheme = 'classic';
+      let userName = '';
+
+      try {
+        userName = localStorage.getItem(USER_NAME_KEY) || '';
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        if (savedTheme) activeTheme = savedTheme;
+      } catch (e) {}
 
       function getStorageKey(dayId) {
         return STORAGE_PREFIX + dayId;
@@ -1627,265 +1294,195 @@
       function loadStoredEdition(dayId) {
         try {
           const raw = localStorage.getItem(getStorageKey(dayId));
-          if (raw) {
-            return JSON.parse(raw);
-          }
-        } catch (err) {
-          console.warn('localStorage read error, falling back to memory:', err);
-          return memoryFallbackStore[dayId] || null;
-        }
-        return memoryFallbackStore[dayId] || null;
+          if (raw) return JSON.parse(raw);
+        } catch (err) {}
+        return null;
       }
 
       function saveStoredEdition(dayId, data) {
         try {
           localStorage.setItem(getStorageKey(dayId), JSON.stringify(data));
-        } catch (err) {
-          console.warn('localStorage write error, saving in memory:', err);
-        }
-        memoryFallbackStore[dayId] = data;
+        } catch (err) {}
       }
 
-      /* Read URL Query Parameter (?day=d1, d2 or d3; default d1) */
       function getInitialDayFromUrl() {
         try {
           const params = new URLSearchParams(window.location.search);
           const day = params.get('day');
-          if (day && CONTENT[day]) {
-            return day;
-          }
-        } catch (e) {
-          /* ignore */
-        }
+          if (day && CONTENT[day]) return day;
+        } catch (e) {}
         return 'd1';
       }
 
-      function updateUrlDay(dayId) {
-        try {
-          const url = new URL(window.location);
-          url.searchParams.set('day', dayId);
-          window.history.replaceState({}, '', url);
-        } catch (e) {
-          /* ignore */
-        }
-      }
-
       /* ============================================================
-         DOM ELEMENT REFERENCES
+         DOM ELEMENT REFS
          ============================================================ */
       const els = {
-        themePill: document.getElementById('current-theme-pill'),
-        thoughtEditionLabel: document.getElementById('thought-edition-label'),
-        instructionText: document.getElementById('instruction-text'),
-        practiceAlertBar: document.getElementById('practice-alert-bar'),
-        practiceReturnBtn: document.getElementById('practice-return-btn'),
+        stepAnswer: document.getElementById('step-answer'),
+        stepCard: document.getElementById('step-card'),
+        cardStage: document.getElementById('card-stage'),
+        themeNameText: document.getElementById('theme-name-text'),
         thoughtCard: document.getElementById('thought-card'),
         thoughtContainer: document.getElementById('thought-text-container'),
-        optionsList: document.getElementById('options-list'),
-        confirmRow: document.getElementById('confirm-action-row'),
-        btnConfirm: document.getElementById('btn-confirm'),
-        resultSection: document.getElementById('result-section'),
-        outcomeBanner: document.getElementById('outcome-banner'),
-        outcomeIcon: document.getElementById('outcome-icon'),
-        outcomeTitle: document.getElementById('outcome-title'),
-        outcomeSubtext: document.getElementById('outcome-subtext'),
+        meaningRevealBox: document.getElementById('meaning-reveal-box'),
         meaningText: document.getElementById('meaning-text'),
-        relatedArticleWrap: document.getElementById('related-article-wrap'),
-        relatedArticleLink: document.getElementById('related-article-link'),
-        btnSharePrimary: document.getElementById('btn-share-primary'),
-        btnDownloadCard: document.getElementById('btn-download-card'),
-        btnViewThoughtAgain: document.getElementById('btn-view-thought-again'),
-        btnRecipientPreview: document.getElementById('btn-recipient-preview'),
+        optionsGrid: document.getElementById('options-grid'),
+        btnStep1Action: document.getElementById('btn-step1-action'),
+        btnStep1Label: document.getElementById('btn-step1-label'),
         cardPreviewImg: document.getElementById('card-preview-img'),
-        btnCopyThoughtText: document.getElementById('btn-copy-thought-text'),
-        btnDownloadPreviewBtn: document.getElementById('btn-download-preview-btn'),
+        btnCornerShare: document.getElementById('btn-corner-share'),
+        themeButtons: document.querySelectorAll('.theme-tab-btn'),
+        cardUserNameInput: document.getElementById('card-user-name'),
+        btnClearName: document.getElementById('btn-clear-name'),
+        btnSharePrimary: document.getElementById('btn-share-primary'),
+        btnGoHome: document.getElementById('btn-go-home'),
+        btnGoNextEdition: document.getElementById('btn-go-next-edition'),
+        nextEditionLabel: document.getElementById('next-edition-label'),
         shareCanvas: document.getElementById('shareCanvas'),
-        recipientModal: document.getElementById('recipient-modal'),
-        btnCloseRecipientModal: document.getElementById('btn-close-recipient-modal'),
-        btnCloseRecipientModalBottom: document.getElementById('btn-close-recipient-modal-bottom'),
-        btnRecipientPlay: document.getElementById('btn-recipient-play'),
-        recipientEditionTag: document.getElementById('recipient-edition-tag'),
-        recipientThoughtText: document.getElementById('recipient-thought-text'),
-        recipientMeaningText: document.getElementById('recipient-meaning-text'),
-        copyModal: document.getElementById('copy-modal'),
-        btnCloseCopyModal: document.getElementById('btn-close-copy-modal'),
-        copyModalTextarea: document.getElementById('copy-modal-textarea'),
-        btnCopyModalSelectAll: document.getElementById('btn-copy-modal-select-all'),
         toastPill: document.getElementById('toast-pill'),
         toastMsg: document.getElementById('toast-msg'),
-        tabs: {
-          d1: document.getElementById('tab-d1'),
-          d2: document.getElementById('tab-d2'),
-          d3: document.getElementById('tab-d3')
-        },
-        dots: {
-          d1: document.getElementById('dot-d1'),
-          d2: document.getElementById('dot-d2'),
-          d3: document.getElementById('dot-d3')
-        }
+        // Share Action Sheet Modal
+        shareSheetBackdrop: document.getElementById('share-sheet-backdrop'),
+        sheetBtnWhatsapp: document.getElementById('sheet-btn-whatsapp'),
+        sheetBtnDownload: document.getElementById('sheet-btn-download'),
+        sheetBtnCopy: document.getElementById('sheet-btn-copy'),
+        sheetBtnCancel: document.getElementById('sheet-btn-cancel')
       };
 
-      /* ============================================================
-         TOAST FEEDBACK HELPER
-         ============================================================ */
+      /* Toast Notification */
       let toastTimer = null;
-      function showToast(message) {
+      function showToast(msg) {
         if (!els.toastPill) return;
-        els.toastMsg.textContent = message;
+        els.toastMsg.textContent = msg;
         els.toastPill.classList.add('is-visible');
         if (toastTimer) clearTimeout(toastTimer);
         toastTimer = setTimeout(() => {
           els.toastPill.classList.remove('is-visible');
-        }, 2600);
+        }, 2200);
       }
 
       /* ============================================================
-         RENDER GAME VIEW
+         SHARE ACTION SHEET (MODAL) CONTROLS
          ============================================================ */
-      function renderCurrentEdition() {
-        const data = CONTENT[currentDayId];
-        const saved = loadStoredEdition(currentDayId);
+      function openShareSheet() {
+        if (!els.shareSheetBackdrop) return;
+        els.shareSheetBackdrop.classList.add('is-open');
+        els.shareSheetBackdrop.setAttribute('aria-hidden', 'false');
+      }
 
-        // Update active tab styles
-        Object.keys(els.tabs).forEach(day => {
-          if (els.tabs[day]) {
-            els.tabs[day].classList.toggle('is-active', day === currentDayId);
-            els.tabs[day].setAttribute('aria-selected', day === currentDayId ? 'true' : 'false');
+      function closeShareSheet() {
+        if (!els.shareSheetBackdrop) return;
+        els.shareSheetBackdrop.classList.remove('is-open');
+        els.shareSheetBackdrop.setAttribute('aria-hidden', 'true');
+      }
+
+      /* ============================================================
+         STEP SWITCHING
+         ============================================================ */
+      function showStep(stepNum) {
+        if (stepNum === 1) {
+          els.stepAnswer.classList.add('is-active');
+          els.stepCard.classList.remove('is-active');
+        } else if (stepNum === 2) {
+          els.stepAnswer.classList.remove('is-active');
+          els.stepCard.classList.add('is-active');
+          if (els.cardStage) {
+            els.cardStage.setAttribute('data-active-theme', activeTheme);
           }
-          // Update completion dot
-          const editionSaved = loadStoredEdition(day);
-          if (els.dots[day]) {
-            els.dots[day].style.display = (editionSaved && editionSaved.confirmed) ? 'inline-block' : 'none';
-          }
-        });
-
-        // Update header badges
-        els.themePill.textContent = data.theme;
-        els.thoughtEditionLabel.textContent = `संस्करण ${data.dayNum} · ${data.theme}`;
-
-        // Practice mode alert
-        if (isPracticeMode) {
-          els.practiceAlertBar.classList.add('is-visible');
-        } else {
-          els.practiceAlertBar.classList.remove('is-visible');
-        }
-
-        // Determine effective state (either from localStorage or in-progress practice)
-        const isConfirmed = isPracticeMode ? false : (saved && saved.confirmed);
-        const effectiveSelectedId = isPracticeMode ? practiceSelectedOptionId : (isConfirmed ? saved.selectedOption : selectedOptionId);
-
-        // 1. Render Thought with Blank (The Visual Centre)
-        renderThoughtText(data, effectiveSelectedId, isConfirmed, saved);
-
-        // 2. Render Options Stack
-        renderOptions(data, effectiveSelectedId, isConfirmed, saved);
-
-        // 3. Confirm Button State
-        if (isConfirmed) {
-          els.confirmRow.style.display = 'none';
-          els.btnConfirm.disabled = true;
-        } else {
-          els.confirmRow.style.display = 'block';
-          els.btnConfirm.disabled = !effectiveSelectedId;
-          els.btnConfirm.setAttribute('aria-disabled', !effectiveSelectedId ? 'true' : 'false');
-        }
-
-        // 4. Result Section
-        if (isConfirmed) {
-          renderResultSection(data, saved);
-        } else {
-          els.resultSection.classList.remove('is-active');
-          els.instructionText.textContent = isPracticeMode 
-            ? 'अभ्यास मोड: एक विकल्प चुनकर विचार पूरा करें।' 
-            : 'विचार को पूरा करने वाला विकल्प चुनिए।';
+          updateNextButtonLabel();
+          generateShareCard();
         }
       }
 
-      /* Render the central thought text with interactive/completed blank */
-      function renderThoughtText(data, currentChosenId, isConfirmed, saved) {
-        els.thoughtContainer.innerHTML = '';
+      function updateNextButtonLabel() {
+        const data = CONTENT[currentDayId];
+        if (els.nextEditionLabel && data) {
+          els.nextEditionLabel.textContent = data.nextLabel;
+        }
+      }
 
-        const prefixNode = document.createTextNode(data.blankPrefix);
-        els.thoughtContainer.appendChild(prefixNode);
+      /* ============================================================
+         RENDER STEP 1 (Answer View)
+         ============================================================ */
+      function renderStep1() {
+        const data = CONTENT[currentDayId];
+        const saved = loadStoredEdition(currentDayId);
+        const isConfirmed = !!(saved && saved.confirmed);
+        const effectiveSelectedId = isConfirmed ? saved.selectedOption : selectedOptionId;
+
+        els.themeNameText.textContent = data.theme;
+
+        // Render Thought with Interactive Blank Slot
+        els.thoughtContainer.innerHTML = '';
+        els.thoughtContainer.appendChild(document.createTextNode(data.blankPrefix));
 
         const blankSpan = document.createElement('span');
         blankSpan.id = 'thought-blank-slot';
         blankSpan.className = 'thought-blank-slot';
 
         if (isConfirmed) {
-          const isCorrect = saved ? saved.firstAnswerCorrect : false;
-          // Authored completion is always shown in full thought
           const correctOpt = data.options.find(o => o.isCorrect);
           blankSpan.textContent = correctOpt ? correctOpt.text : '...';
-          blankSpan.classList.add(isCorrect ? 'is-correct' : 'is-correct');
-          blankSpan.setAttribute('aria-label', `पूर्ण विचार: ${correctOpt ? correctOpt.text : ''}`);
-        } else if (currentChosenId) {
-          // Live preview of selected option inside the thought!
-          const chosenOpt = data.options.find(o => o.id === currentChosenId);
+          blankSpan.classList.add('is-correct');
+        } else if (effectiveSelectedId) {
+          const chosenOpt = data.options.find(o => o.id === effectiveSelectedId);
           blankSpan.textContent = chosenOpt ? chosenOpt.text : '';
           blankSpan.classList.add('is-preview');
-          blankSpan.setAttribute('aria-label', `चयनित विकल्प: ${chosenOpt ? chosenOpt.text : ''}`);
         } else {
-          // Empty state with dashed blank
           blankSpan.textContent = '____';
           blankSpan.classList.add('is-empty');
-          blankSpan.setAttribute('aria-label', 'खाली स्थान');
+        }
+        els.thoughtContainer.appendChild(blankSpan);
+        els.thoughtContainer.appendChild(document.createTextNode(data.blankSuffix));
+
+        // Meaning Box
+        if (isConfirmed) {
+          els.meaningText.textContent = data.meaning;
+          els.meaningRevealBox.classList.add('is-visible');
+        } else {
+          els.meaningRevealBox.classList.remove('is-visible');
         }
 
-        els.thoughtContainer.appendChild(blankSpan);
-
-        const suffixNode = document.createTextNode(data.blankSuffix);
-        els.thoughtContainer.appendChild(suffixNode);
-      }
-
-      /* Render 4 Vertically Stacked Options */
-      function renderOptions(data, effectiveSelectedId, isConfirmed, saved) {
-        els.optionsList.innerHTML = '';
-
+        // 2x2 Options Grid (A, B on top, C, D on bottom)
+        els.optionsGrid.innerHTML = '';
         data.options.forEach((opt, index) => {
           const btn = document.createElement('button');
           btn.type = 'button';
-          btn.className = 'option-item-btn';
+          btn.className = 'opt-card-btn';
           btn.id = `opt-btn-${opt.id}`;
           btn.dataset.optId = opt.id;
           btn.setAttribute('role', 'radio');
 
-          const marker = document.createElement('div');
-          marker.className = 'option-marker';
-          marker.textContent = DEVANAGARI_MARKERS[index] || (index + 1);
-
-          const textWrap = document.createElement('div');
-          textWrap.className = 'option-text-wrap';
-          textWrap.textContent = opt.text;
+          const letter = OPTION_LETTERS[index] || (index + 1);
 
           const badge = document.createElement('div');
-          badge.className = 'option-feedback-badge';
+          badge.className = 'opt-badge';
+          badge.textContent = letter;
 
-          btn.appendChild(marker);
-          btn.appendChild(textWrap);
+          const textWrap = document.createElement('div');
+          textWrap.className = 'opt-text';
+          textWrap.textContent = opt.text;
+
           btn.appendChild(badge);
+          btn.appendChild(textWrap);
 
           if (isConfirmed) {
             btn.disabled = true;
             btn.setAttribute('aria-disabled', 'true');
 
-            const isUserChoice = (saved && saved.selectedOption === opt.id);
+            const isUserChoice = (saved.selectedOption === opt.id);
             const isAuthoredCorrect = opt.isCorrect;
 
             if (isAuthoredCorrect) {
-              btn.classList.add('is-authored-correct');
-              btn.setAttribute('aria-checked', 'true');
-              badge.textContent = isUserChoice ? '✓ आपका सही उत्तर' : '✓ मौलिक रूप';
+              btn.classList.add('is-correct');
+              badge.textContent = '✓';
             } else if (isUserChoice) {
-              btn.classList.add('is-user-wrong');
-              btn.setAttribute('aria-checked', 'true');
-              badge.textContent = '✕ आपका चयन';
+              btn.classList.add('is-wrong');
+              badge.textContent = '✕';
             } else {
               btn.classList.add('is-dimmed');
-              btn.setAttribute('aria-checked', 'false');
             }
           } else {
-            // Interactive state
             const isSelected = (opt.id === effectiveSelectedId);
             if (isSelected) {
               btn.classList.add('is-selected');
@@ -1895,133 +1492,73 @@
             }
 
             btn.addEventListener('click', () => {
-              handleOptionSelect(opt.id);
+              selectedOptionId = opt.id;
+              renderStep1();
             });
           }
 
-          els.optionsList.appendChild(btn);
+          els.optionsGrid.appendChild(btn);
         });
-      }
 
-      /* Option Selection (before confirmation) */
-      function handleOptionSelect(optId) {
-        if (isPracticeMode) {
-          practiceSelectedOptionId = optId;
+        // Bottom Action Button
+        if (isConfirmed) {
+          els.btnStep1Action.disabled = false;
+          els.btnStep1Action.classList.add('is-goto-card');
+          els.btnStep1Label.textContent = 'विचार कार्ड बनाएं एवं साझा करें →';
+          els.btnStep1Action.querySelector('svg').style.display = 'none';
         } else {
-          selectedOptionId = optId;
+          els.btnStep1Action.classList.remove('is-goto-card');
+          els.btnStep1Label.textContent = 'उत्तर चुनें';
+          els.btnStep1Action.querySelector('svg').style.display = 'inline-block';
+          els.btnStep1Action.disabled = !effectiveSelectedId;
         }
-        renderCurrentEdition();
       }
 
-      /* Confirm Answer Action */
-      function handleConfirm() {
+      function handleStep1Confirm() {
         const data = CONTENT[currentDayId];
-        const chosenId = isPracticeMode ? practiceSelectedOptionId : selectedOptionId;
+        const saved = loadStoredEdition(currentDayId);
 
-        if (!chosenId) return;
-
-        const chosenOpt = data.options.find(o => o.id === chosenId);
-        const isCorrect = chosenOpt ? chosenOpt.isCorrect : false;
-
-        if (isPracticeMode) {
-          // Practice mode feedback without overwriting original score
-          showToast(isCorrect ? 'शाबाश! सही विचार चुना।' : 'मौलिक रूप देखें।');
-          isPracticeMode = false;
-          practiceSelectedOptionId = null;
-          renderCurrentEdition();
+        if (saved && saved.confirmed) {
+          showStep(2);
           return;
         }
 
-        // Save first and permanent score for this edition
-        const savePayload = {
-          dayId: currentDayId,
-          selectedOption: chosenId,
+        if (!selectedOptionId) return;
+
+        const chosenOpt = data.options.find(o => o.id === selectedOptionId);
+        const isCorrect = chosenOpt ? chosenOpt.isCorrect : false;
+
+        saveStoredEdition(currentDayId, {
           confirmed: true,
-          firstAnswerCorrect: isCorrect,
-          confirmedAt: new Date().toISOString()
-        };
+          selectedOption: selectedOptionId,
+          isCorrect: isCorrect,
+          answeredAt: new Date().toISOString()
+        });
 
-        saveStoredEdition(currentDayId, savePayload);
-        selectedOptionId = null;
-
-        // Sync with host platform DBGameLab
+        // Host reporting
         try {
-          const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
-          const points = isCorrect ? 100 : 40;
-          if (lab) {
-            if (typeof lab.addScore === 'function') lab.addScore(points);
-            if (typeof lab.endGame === 'function') lab.endGame(points);
+          if (window.DBGameLab && typeof window.DBGameLab.reportScore === 'function') {
+            window.DBGameLab.reportScore(isCorrect ? 10 : 5);
           }
           if (window.parent && window.parent !== window) {
             window.parent.postMessage({
               type: 'GAME_COMPLETE',
-              game: 'niti',
-              dayId: currentDayId,
-              score: points,
-              status: isCorrect ? 'WIN' : 'COMPLETE'
+              gameId: 'niti',
+              score: isCorrect ? 10 : 5,
+              edition: currentDayId
             }, '*');
           }
-        } catch(e) {}
+        } catch (e) {}
 
-        // Render result & generate card
-        renderCurrentEdition();
-
-        // Smooth scroll to outcome feedback
-        setTimeout(() => {
-          if (els.outcomeBanner) {
-            els.outcomeBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        }, 100);
-      }
-
-      /* Render Result Section with Meaning & Share Card */
-      function renderResultSection(data, saved) {
-        els.resultSection.classList.add('is-active');
-
-        const isCorrect = saved ? saved.firstAnswerCorrect : false;
-
-        // Banner styling & copy
-        if (isCorrect) {
-          els.outcomeBanner.className = 'outcome-feedback-banner is-correct';
-          els.outcomeIcon.textContent = '✓';
-          els.outcomeTitle.textContent = 'विचार पूरा हुआ';
-          els.outcomeSubtext.textContent = 'आपने इस विचार को उसके मौलिक रूप में पूर्ण किया।';
-          els.instructionText.textContent = 'विचार पूरा हुआ · नीचे इसका अर्थ समझें और साझा करें।';
-        } else {
-          els.outcomeBanner.className = 'outcome-feedback-banner is-wrong';
-          els.outcomeIcon.textContent = '📖';
-          els.outcomeTitle.textContent = 'इस विचार का पूरा रूप पढ़ें';
-          els.outcomeSubtext.textContent = 'यह इस मौलिक विचार का चुना हुआ लेखक रूप है।';
-          els.instructionText.textContent = 'इस विचार का पूरा रूप पढ़ें · नीचे इसका अर्थ समझें।';
-        }
-
-        // Meaning
-        els.meaningText.textContent = data.meaning;
-
-        // Configurable Related Article URL
-        if (data.relatedArticleUrl && data.relatedArticleUrl.trim() !== '') {
-          els.relatedArticleWrap.classList.add('is-visible');
-          els.relatedArticleLink.href = data.relatedArticleUrl.trim();
-        } else {
-          els.relatedArticleWrap.classList.remove('is-visible');
-          els.relatedArticleLink.href = '#';
-        }
-
-        // Generate and update Canvas Share Card
-        generateShareCard(data);
+        renderStep1();
+        showToast(isCorrect ? 'उत्कृष्ट! विचार का अर्थ समझें' : 'विचार का सही अर्थ नीचे देखें');
       }
 
       /* ============================================================
-         CANVAS SHARE CARD GENERATION (1080 x 1350 High-Res PNG)
-         Features:
-         - Word-wrapped Hindi lines (never splits characters)
-         - Safe margins (>= 80px)
-         - Authentic editorial Dainik Bhaskar aesthetics
-         - Complete thought, meaning, edition and attribution
-         - No selected answer, scores or user correctness badge
+         TEXT WRAPPING UTILITY FOR CANVAS
          ============================================================ */
       function wrapTextLines(ctx, text, maxWidth) {
-        const words = text.split(/\s+/);
+        const words = text.split(' ');
         const lines = [];
         let currentLine = '';
 
@@ -2037,203 +1574,922 @@
             currentLine = testLine;
           }
         }
-        if (currentLine) {
-          lines.push(currentLine);
-        }
+        if (currentLine) lines.push(currentLine);
         return lines;
       }
 
-      async function generateShareCard(data) {
+      /* ============================================================
+         PROCEDURAL ARTWORK & DECORATIVE ILLUSTRATIONS
+         ============================================================ */
+
+      // 1. Draw Glowing Clay Diya
+      function drawDiya(ctx, x, y, scale = 1) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+
+        // Radiant Golden Aura
+        const glow = ctx.createRadialGradient(0, -22, 6, 0, -22, 75);
+        glow.addColorStop(0, 'rgba(255, 235, 59, 0.95)');
+        glow.addColorStop(0.35, 'rgba(255, 152, 0, 0.5)');
+        glow.addColorStop(1, 'rgba(255, 152, 0, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, -22, 75, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Diya Flame (Inner white, middle gold, outer orange)
+        ctx.beginPath();
+        ctx.moveTo(0, -52);
+        ctx.quadraticCurveTo(15, -25, 10, -5);
+        ctx.quadraticCurveTo(0, 0, -10, -5);
+        ctx.quadraticCurveTo(-15, -25, 0, -52);
+        const flameGrad = ctx.createLinearGradient(0, -52, 0, 0);
+        flameGrad.addColorStop(0, '#FFFFFF');
+        flameGrad.addColorStop(0.3, '#FFF59D');
+        flameGrad.addColorStop(0.7, '#FF9800');
+        flameGrad.addColorStop(1, '#D84315');
+        ctx.fillStyle = flameGrad;
+        ctx.fill();
+
+        // Blue inner flame core
+        ctx.beginPath();
+        ctx.ellipse(0, -4, 4, 7, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(66, 165, 245, 0.7)';
+        ctx.fill();
+
+        // Terracotta Diya Bowl
+        ctx.beginPath();
+        ctx.moveTo(-42, -5);
+        ctx.quadraticCurveTo(-46, 28, 0, 30);
+        ctx.quadraticCurveTo(46, 28, 42, -5);
+        ctx.quadraticCurveTo(24, 3, 0, 3);
+        ctx.quadraticCurveTo(-24, 3, -42, -5);
+        const diyaGrad = ctx.createLinearGradient(0, -5, 0, 30);
+        diyaGrad.addColorStop(0, '#E67E22');
+        diyaGrad.addColorStop(0.5, '#D35400');
+        diyaGrad.addColorStop(1, '#873600');
+        ctx.fillStyle = diyaGrad;
+        ctx.fill();
+
+        // Golden Rim & Pearl Details
+        ctx.strokeStyle = '#F1C40F';
+        ctx.lineWidth = 2.8;
+        ctx.stroke();
+
+        ctx.fillStyle = '#F1C40F';
+        [-26, -13, 0, 13, 26].forEach(dotX => {
+          ctx.beginPath();
+          ctx.arc(dotX, 14 - Math.abs(dotX) * 0.15, 2.8, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.restore();
+      }
+
+      // 2. Draw Crossed Festive Dandiya Sticks with Tassels (Large Scale)
+      function drawCrossedDandiyas(ctx, x, y, scale = 1.8) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+
+        const drawStick = (angle) => {
+          ctx.save();
+          ctx.rotate((angle * Math.PI) / 180);
+
+          // Stick body
+          ctx.beginPath();
+          ctx.roundRect(-8, -80, 16, 160, 8);
+          const stickGrad = ctx.createLinearGradient(-8, 0, 8, 0);
+          stickGrad.addColorStop(0, '#F39C12');
+          stickGrad.addColorStop(0.5, '#F1C40F');
+          stickGrad.addColorStop(1, '#D35400');
+          ctx.fillStyle = stickGrad;
+          ctx.fill();
+          ctx.strokeStyle = '#B03A2E';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Wrapped colorful ribbon bands
+          const bands = [-60, -38, -16, 6, 28, 50];
+          bands.forEach((bY, idx) => {
+            ctx.fillStyle = idx % 2 === 0 ? '#C0392B' : '#27AE60';
+            ctx.fillRect(-8, bY, 16, 10);
+            ctx.strokeStyle = '#F1C40F';
+            ctx.lineWidth = 1.4;
+            ctx.strokeRect(-8, bY, 16, 10);
+          });
+
+          // Golden bell at handle
+          ctx.fillStyle = '#F1C40F';
+          ctx.beginPath();
+          ctx.arc(0, 88, 8, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Tassel threads
+          ctx.strokeStyle = '#E74C3C';
+          ctx.lineWidth = 2.8;
+          ctx.beginPath();
+          ctx.moveTo(0, 96);
+          ctx.lineTo(-7, 114);
+          ctx.moveTo(0, 96);
+          ctx.lineTo(7, 114);
+          ctx.stroke();
+
+          ctx.restore();
+        };
+
+        drawStick(-32);
+        drawStick(32);
+
+        // Center tie flower
+        ctx.fillStyle = '#C0392B';
+        ctx.beginPath();
+        ctx.arc(0, 0, 16, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#F1C40F';
+        ctx.beginPath();
+        ctx.arc(0, 0, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // 3. Draw Grand Surya-Kamal (Sun & Lotus) Mandala Artwork for Classic Theme (Grand Scale)
+      function drawSuryaKamalMedallion(ctx, cx, cy, radius = 110) {
+        ctx.save();
+        ctx.translate(cx, cy);
+
+        // Ambient radiant halo
+        const haloGrad = ctx.createRadialGradient(0, 0, 15, 0, 0, radius * 1.35);
+        haloGrad.addColorStop(0, 'rgba(243, 156, 18, 0.28)');
+        haloGrad.addColorStop(0.55, 'rgba(226, 58, 40, 0.1)');
+        haloGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = haloGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 1.35, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 16 Radiant Triangular Sun Rays
+        ctx.fillStyle = '#E23A28';
+        for (let i = 0; i < 16; i++) {
+          ctx.save();
+          ctx.rotate((i * Math.PI) / 8);
+          ctx.beginPath();
+          ctx.moveTo(0, -radius * 0.72);
+          ctx.lineTo(9, -radius);
+          ctx.lineTo(-9, -radius);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Inner Sun Circle
+        ctx.fillStyle = '#F39C12';
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 0.7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#D35400';
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+
+        // 12 Delicate Lotus Petals
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 2.6;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+        for (let j = 0; j < 12; j++) {
+          ctx.save();
+          ctx.rotate((j * Math.PI) / 6);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.quadraticCurveTo(18, -radius * 0.38, 0, -radius * 0.65);
+          ctx.quadraticCurveTo(-18, -radius * 0.38, 0, 0);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Center Golden Bindu & Core
+        ctx.fillStyle = '#E23A28';
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 0.22, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#F1C40F';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = '#F1C40F';
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 0.1, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Flanking graceful ornamental leafy vines
+        const drawVine = (direction) => {
+          ctx.save();
+          ctx.scale(direction, 1);
+          ctx.strokeStyle = '#D35400';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(radius * 1.05, 0);
+          ctx.quadraticCurveTo(radius * 1.55, -24, radius * 2.2, 0);
+          ctx.stroke();
+
+          // Leaf florets
+          [-15, 12].forEach(offsetY => {
+            ctx.fillStyle = '#E23A28';
+            ctx.beginPath();
+            ctx.ellipse(radius * 1.65, offsetY, 10, 5, Math.PI / 4, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          ctx.restore();
+        };
+
+        drawVine(1);
+        drawVine(-1);
+
+        ctx.restore();
+      }
+
+      // 4. Draw Traditional Gujarati Checkered Bandhani Border
+      function drawCheckeredBorder(ctx, width, height, inset, thickness) {
+        ctx.save();
+        const colors = ['#C0392B', '#F1C40F', '#27AE60', '#E67E22'];
+        const size = thickness;
+
+        const countX = Math.floor((width - inset * 2) / size);
+        for (let i = 0; i < countX; i++) {
+          ctx.fillStyle = colors[i % colors.length];
+          ctx.fillRect(inset + i * size, inset, size, size);
+          ctx.fillStyle = colors[(i + 2) % colors.length];
+          ctx.fillRect(inset + i * size, height - inset - size, size, size);
+        }
+
+        const countY = Math.floor((height - inset * 2) / size);
+        for (let j = 0; j < countY; j++) {
+          ctx.fillStyle = colors[(j + 1) % colors.length];
+          ctx.fillRect(inset, inset + j * size, size, size);
+          ctx.fillStyle = colors[(j + 3) % colors.length];
+          ctx.fillRect(width - inset - size, inset + j * size, size, size);
+        }
+
+        ctx.restore();
+      }
+
+      // 5. Draw Hanging Marigold & Mango Leaf Toran (Bandhanwar)
+      function drawHangingToran(ctx, width, startY) {
+        ctx.save();
+        const segments = 9;
+        const segWidth = (width - 120) / segments;
+        const startX = 60;
+
+        ctx.strokeStyle = '#D35400';
+        ctx.lineWidth = 2.5;
+
+        for (let i = 0; i < segments; i++) {
+          const x1 = startX + i * segWidth;
+          const x2 = x1 + segWidth;
+          const midX = (x1 + x2) / 2;
+          const dropY = startY + 22;
+
+          // Hanging rope loop
+          ctx.beginPath();
+          ctx.moveTo(x1, startY);
+          ctx.quadraticCurveTo(midX, dropY, x2, startY);
+          ctx.stroke();
+
+          // Green mango leaf (आम्रपल्लव)
+          ctx.fillStyle = '#27AE60';
+          ctx.beginPath();
+          ctx.ellipse(midX, dropY + 12, 6, 16, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Orange Marigold floret (गेंदा फूल)
+          ctx.fillStyle = '#F39C12';
+          ctx.beginPath();
+          ctx.arc(midX, dropY + 2, 7, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#C0392B';
+          ctx.beginPath();
+          ctx.arc(midX, dropY + 2, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+
+      // 6. Draw Hanging Festive Kandil / Lantern for Diwali Corners
+      function drawHangingLantern(ctx, x, y, scale = 1) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+
+        // Hanging string
+        ctx.strokeStyle = '#F1C40F';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(0, -40);
+        ctx.lineTo(0, 0);
+        ctx.stroke();
+
+        // Lantern Diamond Frame
+        ctx.fillStyle = '#F39C12';
+        ctx.beginPath();
+        ctx.moveTo(0, -18);
+        ctx.lineTo(18, 0);
+        ctx.lineTo(0, 18);
+        ctx.lineTo(-18, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#F1C40F';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Inner glowing core
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(0, 0, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Tassels hanging below
+        ctx.strokeStyle = '#E74C3C';
+        ctx.lineWidth = 2;
+        [-10, 0, 10].forEach(tX => {
+          ctx.beginPath();
+          ctx.moveTo(tX * 0.6, 18);
+          ctx.lineTo(tX * 0.9, 36);
+          ctx.stroke();
+        });
+
+        ctx.restore();
+      }
+
+      // 7. Draw Background Mandala Watermark
+      function drawMandalaWatermark(ctx, cx, cy, radius, color) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 0.35, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 0.7, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        for (let i = 0; i < 12; i++) {
+          ctx.save();
+          ctx.rotate((i * Math.PI) / 6);
+          ctx.beginPath();
+          ctx.moveTo(0, radius * 0.35);
+          ctx.quadraticCurveTo(radius * 0.25, radius * 0.65, 0, radius);
+          ctx.quadraticCurveTo(-radius * 0.25, radius * 0.65, 0, radius * 0.35);
+          ctx.stroke();
+          ctx.restore();
+        }
+        ctx.restore();
+      }
+
+      /* ============================================================
+         CANVAS SHARE CARD GENERATION (1080 x 1350 High-Res)
+         No duplicate name, Unified "विचार का आलोक (अर्थ)", Grand Signature!
+         ============================================================ */
+      async function generateShareCard() {
         const canvas = els.shareCanvas;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
+        const data = CONTENT[currentDayId];
 
-        // Ensure fonts are ready before drawing
         if (document.fonts && document.fonts.ready) {
-          try {
-            await document.fonts.ready;
-          } catch (e) {
-            /* ignore */
-          }
+          try { await document.fonts.ready; } catch (e) {}
         }
 
         const width = 1080;
         const height = 1350;
-        const marginX = 100; // >= 80px safe margin
-        const contentWidth = width - (marginX * 2);
+        const marginX = 75;
+        const contentWidth = width - (marginX * 2); // 930px
 
-        // 1. Warm Paper Gradient Background
-        const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
-        bgGrad.addColorStop(0, '#FAF8F4');
-        bgGrad.addColorStop(0.5, '#F9F7F2');
-        bgGrad.addColorStop(1, '#F4F0E6');
-        ctx.fillStyle = bgGrad;
-        ctx.fillRect(0, 0, width, height);
+        // Sanitize & Format User Name
+        const rawName = userName.trim();
+        const familyName = rawName || 'सुहास और परिवार';
 
-        // 2. Refined Double Border / Frame
-        // Outer Bhaskar red hairline border
-        ctx.strokeStyle = 'rgba(226, 58, 40, 0.45)';
-        ctx.lineWidth = 2.5;
-        ctx.strokeRect(38, 38, width - 76, height - 76);
+        // -------------------------------------------------------------
+        // THEME 1: DIWALI (दिवाली विशेष)
+        // -------------------------------------------------------------
+        if (activeTheme === 'diwali') {
+          // Rich royal festive background gradient
+          const bgGrad = ctx.createRadialGradient(width / 2, height * 0.45, 80, width / 2, height * 0.5, 920);
+          bgGrad.addColorStop(0, '#2D0B3B');
+          bgGrad.addColorStop(0.5, '#1B0625');
+          bgGrad.addColorStop(1, '#0D0214');
+          ctx.fillStyle = bgGrad;
+          ctx.fillRect(0, 0, width, height);
 
-        // Inner subtle ink border
-        ctx.strokeStyle = 'rgba(28, 28, 28, 0.12)';
-        ctx.lineWidth = 1.2;
-        ctx.strokeRect(50, 50, width - 100, height - 100);
+          // Golden Mandala Watermark in center
+          drawMandalaWatermark(ctx, width / 2, height * 0.48, 420, 'rgba(241, 196, 15, 0.08)');
 
-        // Corner Ornamental Accents (Bhaskar Red diamonds)
-        const cornerInset = 44;
-        const drawDiamond = (cx, cy, r) => {
+          // Double Gold Frame with Corner Stars
+          ctx.strokeStyle = '#F1C40F';
+          ctx.lineWidth = 3.5;
+          ctx.strokeRect(36, 36, width - 72, height - 72);
+
+          ctx.strokeStyle = 'rgba(241, 196, 15, 0.4)';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(48, 48, width - 96, height - 96);
+
+          // Corner Stars
+          [42, width - 42].forEach(cx => {
+            [42, height - 42].forEach(cy => {
+              ctx.fillStyle = '#F39C12';
+              ctx.beginPath();
+              ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+              ctx.fill();
+            });
+          });
+
+          // Hanging festive lanterns on top left and right corners
+          drawHangingLantern(ctx, 110, 85, 0.9);
+          drawHangingLantern(ctx, width - 110, 85, 0.9);
+
+          // Top Header Diya
+          drawDiya(ctx, width / 2, 98, 1.05);
+
+          // Top Festive Heading (Grand & Prominent)
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#F7DC6F';
+          ctx.font = 'bold 44px "Noto Sans Devanagari", "Martel", serif';
+          ctx.fillText(`🪔 शुभ दीपावली 🪔`, width / 2, 175);
+
+          // Thematic Subtitle Pill (Clean editorial tagline, no duplicate name!)
+          const subText = `✨ दीप पर्व · अमृत विचार ✨`;
+          ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
+          const badgeW = ctx.measureText(subText).width + 56;
+          ctx.fillStyle = 'rgba(241, 196, 15, 0.22)';
+          ctx.beginPath();
+          ctx.roundRect((width - badgeW) / 2, 206, badgeW, 40, 20);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(241, 196, 15, 0.6)';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.fillStyle = '#FFF8E1';
+          ctx.fillText(subText, width / 2, 234);
+
+          // Stylized Opening Quote
+          ctx.fillStyle = 'rgba(241, 196, 15, 0.32)';
+          ctx.font = 'bold 120px "Georgia", serif';
+          ctx.fillText('“', width / 2, 325);
+
+          // HERO: Central Thought Text (High Weight, 70px Bold Serif)
+          ctx.fillStyle = '#FFFDF5';
+          ctx.font = 'bold 70px "Noto Sans Devanagari", "Rozha One", serif';
+          const thoughtLines = wrapTextLines(ctx, `“${data.fullThought}”`, contentWidth);
+          const tLineHeight = 98;
+          let tY = 385;
+          thoughtLines.forEach(line => {
+            ctx.fillText(line, width / 2, tY);
+            tY += tLineHeight;
+          });
+
+          // Golden Sparkle Divider
+          const divY = tY + 14;
+          ctx.strokeStyle = 'rgba(241, 196, 15, 0.45)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(width / 2 - 180, divY);
+          ctx.lineTo(width / 2 - 35, divY);
+          ctx.moveTo(width / 2 + 35, divY);
+          ctx.lineTo(width / 2 + 180, divY);
+          ctx.stroke();
+          ctx.font = '28px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('✨', width / 2, divY + 9);
+
+          // Meaning Box: Substantial Illuminated Plaque (Unified Title)
+          const boxY = divY + 44;
+          ctx.font = 'bold 40px "Noto Sans Devanagari", sans-serif';
+          const meaningLines = wrapTextLines(ctx, data.meaning, contentWidth - 80);
+          const mLineHeight = 62;
+          const boxHeight = 74 + (meaningLines.length * mLineHeight) + 26;
+
+          // Box Background
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+          ctx.beginPath();
+          ctx.roundRect((width - contentWidth) / 2, boxY, contentWidth, boxHeight, 20);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(241, 196, 15, 0.55)';
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+
+          // Left Gold Bar
+          ctx.fillStyle = '#F39C12';
+          ctx.beginPath();
+          ctx.roundRect((width - contentWidth) / 2, boxY, 7, boxHeight, [20, 0, 0, 20]);
+          ctx.fill();
+
+          // Unified Meaning Header: विचार का आलोक (अर्थ)
+          ctx.fillStyle = '#F39C12';
+          ctx.font = 'bold 30px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('🪔 विचार का आलोक (अर्थ)', width / 2, boxY + 46);
+
+          // Meaning Text
+          let mTextY = boxY + 108;
+          ctx.fillStyle = '#EAEFF5';
+          ctx.font = '600 38px "Noto Sans Devanagari", sans-serif';
+          meaningLines.forEach(line => {
+            ctx.fillText(line, width / 2, mTextY);
+            mTextY += mLineHeight;
+          });
+
+          // Row of 5 Glowing Diyas on an illuminated Rangoli base
+          const diyaRowY = boxY + boxHeight + 94;
+
+          // Glowing Rangoli platform curve
+          ctx.strokeStyle = 'rgba(241, 196, 15, 0.38)';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(110, diyaRowY + 18);
+          ctx.quadraticCurveTo(width / 2, diyaRowY + 40, width - 110, diyaRowY + 18);
+          ctx.stroke();
+
+          const diyaPositions = [180, 360, 540, 720, 900];
+          diyaPositions.forEach((dX, idx) => {
+            const dScale = idx === 2 ? 1.45 : 1.15;
+            drawDiya(ctx, dX, diyaRowY, dScale);
+          });
+
+          // Grand Bottom Sender Signature (2-Line, No Overlaps, Big Name)
+          const wishY = diyaRowY + 104;
+          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
+          const nameW = ctx.measureText(familyName).width;
+          const sigBoxW = Math.max(nameW + 100, 560);
+          const sigBoxH = 88;
+
+          ctx.fillStyle = 'rgba(241, 196, 15, 0.22)';
+          ctx.beginPath();
+          ctx.roundRect((width - sigBoxW) / 2, wishY - 34, sigBoxW, sigBoxH, 22);
+          ctx.fill();
+          ctx.strokeStyle = '#F1C40F';
+          ctx.lineWidth = 1.8;
+          ctx.stroke();
+
+          // Line 1: सप्रेम प्रेषक · दीपावली शुभकामनाएं
+          ctx.fillStyle = '#F7DC6F';
+          ctx.font = 'bold 21px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('🪔 सप्रेम प्रेषक · दीपावली शुभकामनाएं 🪔', width / 2, wishY - 8);
+
+          // Line 2: Big Bold Family Name
+          ctx.fillStyle = '#FFF8E1';
+          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
+          ctx.fillText(familyName, width / 2, wishY + 36);
+
+          // Footer Baseline
+          ctx.fillStyle = '#A592B8';
+          ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('॥ तमसो मा ज्योतिर्गमय ॥ · दैनिक भास्कर खेल', width / 2, 1260);
+
+        // -------------------------------------------------------------
+        // THEME 2: NAVRATRI (नवरात्रि विशेष)
+        // -------------------------------------------------------------
+        } else if (activeTheme === 'navratri') {
+          // Radiant festive saffron gradient
+          const bgGrad = ctx.createRadialGradient(width / 2, height * 0.42, 80, width / 2, height / 2, 900);
+          bgGrad.addColorStop(0, '#FFFDF8');
+          bgGrad.addColorStop(0.55, '#FEEFDA');
+          bgGrad.addColorStop(1, '#FCDCB8');
+          ctx.fillStyle = bgGrad;
+          ctx.fillRect(0, 0, width, height);
+
+          // Center Mandala Watermark
+          drawMandalaWatermark(ctx, width / 2, height * 0.48, 420, 'rgba(211, 84, 0, 0.08)');
+
+          // Traditional Gujarati Checkered Bandhani Border
+          drawCheckeredBorder(ctx, width, height, 28, 16);
+
+          // Inner Sindoori & Gold Border
+          ctx.strokeStyle = '#C0392B';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(48, 48, width - 96, height - 96);
+
+          ctx.strokeStyle = 'rgba(212, 175, 55, 0.55)';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(58, 58, width - 116, height - 116);
+
+          // Hanging Marigold & Mango Leaf Toran across top
+          drawHangingToran(ctx, width, 58);
+
+          // Top Sindoori Lotus Emblem
+          ctx.save();
+          ctx.translate(width / 2, 116);
+          ctx.fillStyle = '#C0392B';
+          ctx.beginPath();
+          ctx.arc(0, 0, 18, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#D4AF37';
+          ctx.lineWidth = 3.5;
+          ctx.stroke();
+          ctx.fillStyle = '#D4AF37';
+          ctx.beginPath();
+          ctx.arc(0, -6, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          // Top Festive Heading (Grand & Prominent)
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#922B21';
+          ctx.font = 'bold 44px "Noto Sans Devanagari", "Martel", serif';
+          ctx.fillText(`🌸 शुभ नवरात्रि 🌸`, width / 2, 178);
+
+          // Thematic Subtitle Pill (Clean tagline, no duplicate name!)
+          const subText = `🌺 पावन पर्व · अमृत विचार 🌺`;
+          ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
+          const badgeW = ctx.measureText(subText).width + 56;
+          ctx.fillStyle = '#FBEAE4';
+          ctx.beginPath();
+          ctx.roundRect((width - badgeW) / 2, 208, badgeW, 40, 20);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(192, 57, 43, 0.5)';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.fillStyle = '#922B21';
+          ctx.fillText(subText, width / 2, 235);
+
+          // Large Quote Mark
+          ctx.fillStyle = 'rgba(230, 126, 34, 0.32)';
+          ctx.font = 'bold 120px "Georgia", serif';
+          ctx.fillText('“', width / 2, 325);
+
+          // HERO: Central Thought Text (High Weight, 70px Bold Serif)
+          ctx.fillStyle = '#2E1106';
+          ctx.font = 'bold 70px "Noto Sans Devanagari", "Rozha One", serif';
+          const thoughtLines = wrapTextLines(ctx, `“${data.fullThought}”`, contentWidth);
+          const tLineHeight = 98;
+          let tY = 385;
+          thoughtLines.forEach(line => {
+            ctx.fillText(line, width / 2, tY);
+            tY += tLineHeight;
+          });
+
+          // Lotus Divider Line
+          const divY = tY + 14;
+          ctx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(width / 2 - 180, divY);
+          ctx.lineTo(width / 2 - 35, divY);
+          ctx.moveTo(width / 2 + 35, divY);
+          ctx.lineTo(width / 2 + 180, divY);
+          ctx.stroke();
+          ctx.font = '28px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('🌺', width / 2, divY + 9);
+
+          // Meaning Box: Solid, Warm Parchment Plaque (Unified Title)
+          const boxY = divY + 44;
+          ctx.font = 'bold 40px "Noto Sans Devanagari", sans-serif';
+          const meaningLines = wrapTextLines(ctx, data.meaning, contentWidth - 80);
+          const mLineHeight = 62;
+          const boxHeight = 74 + (meaningLines.length * mLineHeight) + 26;
+
+          // Box Background
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.roundRect((width - contentWidth) / 2, boxY, contentWidth, boxHeight, 20);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(212, 175, 55, 0.65)';
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+
+          // Left Saffron Bar
+          ctx.fillStyle = '#E67E22';
+          ctx.beginPath();
+          ctx.roundRect((width - contentWidth) / 2, boxY, 7, boxHeight, [20, 0, 0, 20]);
+          ctx.fill();
+
+          // Unified Meaning Header: विचार का आलोक (अर्थ)
+          ctx.fillStyle = '#B03A2E';
+          ctx.font = 'bold 30px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('🌸 विचार का आलोक (अर्थ)', width / 2, boxY + 46);
+
+          // Meaning Text
+          let mTextY = boxY + 108;
+          ctx.fillStyle = '#3E1C12';
+          ctx.font = '600 38px "Noto Sans Devanagari", sans-serif';
+          meaningLines.forEach(line => {
+            ctx.fillText(line, width / 2, mTextY);
+            mTextY += mLineHeight;
+          });
+
+          // Grand Crossed Dandiya Centerpiece
+          const dandiyaY = boxY + boxHeight + 98;
+          drawCrossedDandiyas(ctx, width / 2, dandiyaY, 1.85);
+
+          // Grand Bottom Sender Signature (2-Line, No Overlaps, Big Name)
+          const wishY = dandiyaY + 110;
+          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
+          const nameW = ctx.measureText(familyName).width;
+          const sigBoxW = Math.max(nameW + 100, 560);
+          const sigBoxH = 88;
+
+          ctx.fillStyle = '#FBEAE4';
+          ctx.beginPath();
+          ctx.roundRect((width - sigBoxW) / 2, wishY - 34, sigBoxW, sigBoxH, 22);
+          ctx.fill();
+          ctx.strokeStyle = '#C0392B';
+          ctx.lineWidth = 1.8;
+          ctx.stroke();
+
+          // Line 1: सप्रेम प्रेषक · पावन शुभकामनाएं
+          ctx.fillStyle = '#C0392B';
+          ctx.font = 'bold 21px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('🌸 सप्रेम प्रेषक · पावन नवरात्रि शुभकामनाएं 🌸', width / 2, wishY - 8);
+
+          // Line 2: Big Bold Family Name
+          ctx.fillStyle = '#922B21';
+          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
+          ctx.fillText(familyName, width / 2, wishY + 36);
+
+          // Footer Baseline
+          ctx.fillStyle = '#8D6E63';
+          ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('॥ ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे ॥ · दैनिक भास्कर खेल', width / 2, 1260);
+
+        // -------------------------------------------------------------
+        // THEME 3: CLASSIC / NORMAL (सामान्य) — Fully Balanced & Glorious
+        // -------------------------------------------------------------
+        } else {
+          // Warm editorial handmade parchment gradient
+          const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+          bgGrad.addColorStop(0, '#FAF7EE');
+          bgGrad.addColorStop(1, '#F2EAE0');
+          ctx.fillStyle = bgGrad;
+          ctx.fillRect(0, 0, width, height);
+
+          // Warm subtle Mandala Watermark in center
+          drawMandalaWatermark(ctx, width / 2, height * 0.48, 420, 'rgba(226, 58, 40, 0.06)');
+
+          // Outer Dainik Bhaskar Red Frame
+          ctx.strokeStyle = '#E23A28';
+          ctx.lineWidth = 3.5;
+          ctx.strokeRect(36, 36, width - 72, height - 72);
+
+          // Inner Golden Bronze Frame
+          ctx.strokeStyle = 'rgba(211, 84, 0, 0.35)';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(48, 48, width - 96, height - 96);
+
+          // Ornate Corner Filigree / Brackets
+          [48, width - 48].forEach(cx => {
+            [48, height - 48].forEach(cy => {
+              ctx.strokeStyle = '#E23A28';
+              ctx.lineWidth = 2.5;
+              ctx.beginPath();
+              ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.fillStyle = '#D35400';
+              ctx.beginPath();
+              ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
+              ctx.fill();
+            });
+          });
+
+          // Top Golden Sun (Surya) Emblem
+          ctx.save();
+          ctx.translate(width / 2, 98);
           ctx.fillStyle = '#E23A28';
           ctx.beginPath();
-          ctx.moveTo(cx, cy - r);
-          ctx.lineTo(cx + r, cy);
-          ctx.lineTo(cx, cy + r);
-          ctx.lineTo(cx - r, cy);
-          ctx.closePath();
+          ctx.arc(0, 0, 18, 0, Math.PI * 2);
           ctx.fill();
-        };
-        drawDiamond(cornerInset, cornerInset, 4);
-        drawDiamond(width - cornerInset, cornerInset, 4);
-        drawDiamond(cornerInset, height - cornerInset, 4);
-        drawDiamond(width - cornerInset, height - cornerInset, 4);
+          ctx.strokeStyle = '#D35400';
+          ctx.lineWidth = 3.5;
+          for (let i = 0; i < 8; i++) {
+            const angle = (i * Math.PI) / 4;
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(angle) * 23, Math.sin(angle) * 23);
+            ctx.lineTo(Math.cos(angle) * 31, Math.sin(angle) * 31);
+            ctx.stroke();
+          }
+          ctx.restore();
 
-        // 3. Top Identity & Sun Motif
-        let curY = 130;
+          // Masthead: Dainik Bhaskar · Aaj Ki Niti
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#E23A28';
+          ctx.font = 'bold 44px "Noto Sans Devanagari", "Martel", serif';
+          ctx.fillText(`दैनिक भास्कर · आज की नीति`, width / 2, 175);
 
-        // Draw Dainik Bhaskar Red Sun Emblem
-        ctx.save();
-        ctx.translate(width / 2, curY);
-        ctx.fillStyle = '#E23A28';
-        ctx.beginPath();
-        ctx.arc(0, 0, 14, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Sun Rays
-        ctx.strokeStyle = '#E23A28';
-        ctx.lineWidth = 3;
-        for (let i = 0; i < 8; i++) {
-          const angle = (i * Math.PI) / 4;
-          const x1 = Math.cos(angle) * 19;
-          const y1 = Math.sin(angle) * 19;
-          const x2 = Math.cos(angle) * 26;
-          const y2 = Math.sin(angle) * 26;
+          // Thematic Subtitle Pill (Clean editorial tagline, no duplicate name!)
+          const subText = `✨ अमृत विचार · जीवन दर्शन ✨`;
+          ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
+          const badgeW = ctx.measureText(subText).width + 56;
+          ctx.fillStyle = '#FDECE9';
           ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
+          ctx.roundRect((width - badgeW) / 2, 206, badgeW, 40, 20);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(226, 58, 40, 0.45)';
+          ctx.lineWidth = 1.5;
           ctx.stroke();
+          ctx.fillStyle = '#C52C1C';
+          ctx.fillText(subText, width / 2, 234);
+
+          // Large Quote Mark
+          ctx.fillStyle = 'rgba(226, 58, 40, 0.28)';
+          ctx.font = 'bold 120px "Georgia", serif';
+          ctx.fillText('“', width / 2, 325);
+
+          // HERO: Central Thought Text (High Weight, 70px Bold Serif)
+          ctx.fillStyle = '#1A1A1A';
+          ctx.font = 'bold 70px "Noto Sans Devanagari", "Rozha One", serif';
+          const thoughtLines = wrapTextLines(ctx, `“${data.fullThought}”`, contentWidth);
+          const tLineHeight = 98;
+          let tY = 385;
+          thoughtLines.forEach(line => {
+            ctx.fillText(line, width / 2, tY);
+            tY += tLineHeight;
+          });
+
+          // Sunburst Center Divider
+          const divY = tY + 14;
+          ctx.strokeStyle = 'rgba(211, 84, 0, 0.45)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(width / 2 - 180, divY);
+          ctx.lineTo(width / 2 - 35, divY);
+          ctx.moveTo(width / 2 + 35, divY);
+          ctx.lineTo(width / 2 + 180, divY);
+          ctx.stroke();
+          ctx.font = '28px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('☀️', width / 2, divY + 9);
+
+          // Meaning Box: Solid, Warm Textured Plaque (Unified Title)
+          const boxY = divY + 44;
+          ctx.font = 'bold 40px "Noto Sans Devanagari", sans-serif';
+          const meaningLines = wrapTextLines(ctx, data.meaning, contentWidth - 80);
+          const mLineHeight = 62;
+          const boxHeight = 74 + (meaningLines.length * mLineHeight) + 26;
+
+          // Box Background
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.roundRect((width - contentWidth) / 2, boxY, contentWidth, boxHeight, 20);
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(211, 84, 0, 0.38)';
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+
+          // Left Terracotta Bar
+          ctx.fillStyle = '#D35400';
+          ctx.beginPath();
+          ctx.roundRect((width - contentWidth) / 2, boxY, 7, boxHeight, [20, 0, 0, 20]);
+          ctx.fill();
+
+          // Unified Meaning Header: विचार का आलोक (अर्थ)
+          ctx.fillStyle = '#D35400';
+          ctx.font = 'bold 30px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('📖 विचार का आलोक (अर्थ)', width / 2, boxY + 46);
+
+          // Meaning Text
+          let mTextY = boxY + 108;
+          ctx.fillStyle = '#2B2B2B';
+          ctx.font = '600 38px "Noto Sans Devanagari", sans-serif';
+          meaningLines.forEach(line => {
+            ctx.fillText(line, width / 2, mTextY);
+            mTextY += mLineHeight;
+          });
+
+          // Grand Surya-Kamal (Sun & Lotus) Mandala Artwork (Large Centerpiece)
+          const mandalaY = boxY + boxHeight + 96;
+          drawSuryaKamalMedallion(ctx, width / 2, mandalaY, 115);
+
+          // Grand Bottom Sender Signature (2-Line, No Overlaps, Big Name)
+          const wishY = mandalaY + 112;
+          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
+          const nameW = ctx.measureText(familyName).width;
+          const sigBoxW = Math.max(nameW + 100, 560);
+          const sigBoxH = 88;
+
+          ctx.fillStyle = '#FDECE9';
+          ctx.beginPath();
+          ctx.roundRect((width - sigBoxW) / 2, wishY - 34, sigBoxW, sigBoxH, 22);
+          ctx.fill();
+          ctx.strokeStyle = '#E23A28';
+          ctx.lineWidth = 1.8;
+          ctx.stroke();
+
+          // Line 1: सप्रेम प्रेषक
+          ctx.fillStyle = '#C52C1C';
+          ctx.font = 'bold 21px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('🌸 सप्रेम प्रेषक 🌸', width / 2, wishY - 8);
+
+          // Line 2: Big Bold Family Name
+          ctx.fillStyle = '#1A1A1A';
+          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
+          ctx.fillText(familyName, width / 2, wishY + 36);
+
+          // Footer Baseline
+          ctx.fillStyle = '#666666';
+          ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
+          ctx.fillText('सत्यमेव जयते · अमृत विचार · दैनिक भास्कर खेल', width / 2, 1260);
         }
-        ctx.restore();
-
-        curY += 52;
-
-        // Label: भास्कर खेल · डेमो
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#E23A28';
-        ctx.font = 'bold 28px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
-        ctx.fillText('भास्कर खेल · डेमो', width / 2, curY);
-
-        curY += 54;
-
-        // Edition Tag Pill
-        const editionPillText = `आज की नीति · संस्करण ${data.dayNum} (${data.theme})`;
-        ctx.font = 'bold 26px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
-        const pillWidth = ctx.measureText(editionPillText).width + 44;
-        const pillHeight = 44;
-
-        ctx.fillStyle = '#FDECE9';
-        ctx.beginPath();
-        ctx.roundRect((width - pillWidth) / 2, curY - 30, pillWidth, pillHeight, 22);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(226, 58, 40, 0.35)';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.fillStyle = '#C52C1C';
-        ctx.fillText(editionPillText, width / 2, curY);
-
-        curY += 90;
-
-        // 4. Large Ornamental Quote Mark
-        ctx.fillStyle = 'rgba(226, 58, 40, 0.22)';
-        ctx.font = 'bold 120px "Georgia", "Cambria", serif';
-        ctx.fillText('“', width / 2, curY);
-
-        curY += 24;
-
-        // 5. Complete Thought (Centerpiece)
-        ctx.fillStyle = '#1C1C1C';
-        ctx.font = 'bold 50px "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif';
-        const thoughtLines = wrapTextLines(ctx, `“${data.fullThought}”`, contentWidth);
-        const thoughtLineHeight = 82;
-
-        thoughtLines.forEach(line => {
-          ctx.fillText(line, width / 2, curY);
-          curY += thoughtLineHeight;
-        });
-
-        curY += 20;
-
-        // 6. Ornamental Divider with center jewel
-        ctx.strokeStyle = 'rgba(28, 28, 28, 0.16)';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(width / 2 - 140, curY);
-        ctx.lineTo(width / 2 - 20, curY);
-        ctx.moveTo(width / 2 + 20, curY);
-        ctx.lineTo(width / 2 + 140, curY);
-        ctx.stroke();
-
-        drawDiamond(width / 2, curY, 6);
-
-        curY += 66;
-
-        // 7. Meaning Header
-        ctx.fillStyle = '#D35400';
-        ctx.font = 'bold 28px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
-        ctx.fillText('विचार का अर्थ', width / 2, curY);
-
-        curY += 54;
-
-        // Meaning Body Lines
-        ctx.fillStyle = '#383838';
-        ctx.font = '400 36px "Noto Sans Devanagari", "Nirmala UI", "Mangal", sans-serif';
-        const meaningLines = wrapTextLines(ctx, data.meaning, contentWidth - 40);
-        const meaningLineHeight = 60;
-
-        meaningLines.forEach(line => {
-          ctx.fillText(line, width / 2, curY);
-          curY += meaningLineHeight;
-        });
-
-        curY += 36;
-
-        // 8. Attribution Pill
-        ctx.font = '500 24px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
-        const attrText = 'मौलिक विचार · डेमो के लिए लिखा गया';
-        const attrWidth = ctx.measureText(attrText).width + 36;
-        const attrHeight = 40;
-
-        ctx.fillStyle = '#ECE7DE';
-        ctx.beginPath();
-        ctx.roundRect((width - attrWidth) / 2, curY - 26, attrWidth, attrHeight, 20);
-        ctx.fill();
-
-        ctx.fillStyle = '#666666';
-        ctx.fillText(attrText, width / 2, curY);
-
-        // 9. Footer Brand Line at Bottom
-        const footerY = 1270;
-        ctx.strokeStyle = 'rgba(28, 28, 28, 0.1)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(width / 2 - 180, footerY - 32);
-        ctx.lineTo(width / 2 + 180, footerY - 32);
-        ctx.stroke();
-
-        ctx.fillStyle = '#888888';
-        ctx.font = 'bold 24px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
-        ctx.fillText('दैनिक भास्कर · dainikbhaskar.com', width / 2, footerY);
 
         // Update in-page preview image
         try {
@@ -2241,19 +2497,17 @@
           if (els.cardPreviewImg) {
             els.cardPreviewImg.src = dataUrl;
           }
-        } catch (err) {
-          console.warn('Canvas toDataURL error:', err);
-        }
+        } catch (err) {}
       }
 
       /* ============================================================
-         DOWNLOAD CARD (Always Visible & Directly Available)
+         DOWNLOAD & SHARE ACTIONS
          ============================================================ */
       function downloadCard() {
         const canvas = els.shareCanvas;
         if (!canvas) return;
         const data = CONTENT[currentDayId];
-        const filename = `aaj-ki-niti-sanskaran-${data.dayNum}-${data.theme}.png`;
+        const filename = `aaj-ki-niti-${data.id}-${activeTheme}.png`;
 
         try {
           if (canvas.toBlob) {
@@ -2276,7 +2530,6 @@
             fallbackDownload(canvas.toDataURL('image/png'), filename);
           }
         } catch (e) {
-          console.warn('Download error:', e);
           fallbackDownload(canvas.toDataURL('image/png'), filename);
         }
       }
@@ -2291,27 +2544,28 @@
         showToast('कार्ड डाउनलोड हो गया!');
       }
 
-      /* ============================================================
-         SHARE CARD & COPY TEXT
-         - Use native file sharing only when navigator.canShare supports files
-         - Fallback to PNG download + copy thought text
-         - Cancelled share returns quietly
-         - No localhost or file:// URLs
-         ============================================================ */
       function getFormattedShareText(data) {
-        return `आज की नीति · संस्करण ${data.dayNum} (${data.theme})\n\n"${data.fullThought}"\n\nअर्थ: ${data.meaning}\n\n— मौलिक विचार · डेमो के लिए लिखा गया\nदैनिक भास्कर खेल`;
+        const familyName = userName.trim() || 'सुहास और परिवार';
+        let festGreeting = '';
+        if (activeTheme === 'diwali') {
+          festGreeting = `🪔 शुभ दीपावली — ${familyName} 🪔\n\n`;
+        } else if (activeTheme === 'navratri') {
+          festGreeting = `🌸 शुभ नवरात्रि — ${familyName} 🌸\n\n`;
+        } else {
+          festGreeting = `🌸 आज की नीति — सप्रेम प्रेषक: ${familyName} 🌸\n\n`;
+        }
+        return `${festGreeting}"${data.fullThought}"\n\nविचार का आलोक (अर्थ): ${data.meaning}\n\nदैनिक भास्कर खेल`;
       }
 
       async function handleShareAction() {
         const data = CONTENT[currentDayId];
         const canvas = els.shareCanvas;
 
-        // Check if native file sharing is supported
         if (navigator.share && navigator.canShare && canvas && canvas.toBlob) {
           try {
             const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
             if (blob) {
-              const file = new File([blob], `aaj-ki-niti-${data.id}.png`, { type: 'image/png' });
+              const file = new File([blob], `aaj-ki-niti-${data.id}-${activeTheme}.png`, { type: 'image/png' });
               const shareData = {
                 title: `आज की नीति · ${data.theme}`,
                 text: getFormattedShareText(data),
@@ -2320,22 +2574,17 @@
 
               if (navigator.canShare(shareData)) {
                 await navigator.share(shareData);
-                showToast('कार्ड सफलतापूर्वक साझा किया गया!');
+                showToast('कार्ड साझा किया गया!');
                 return;
               }
             }
           } catch (err) {
-            // User cancelled share quietly
-            if (err.name === 'AbortError') {
-              return;
-            }
-            console.warn('Native share failed or unhandled:', err);
+            if (err.name === 'AbortError') return;
           }
         }
 
-        // Fallback: download card and copy text
         downloadCard();
-        await copyThoughtToClipboard();
+        copyThoughtToClipboard();
       }
 
       async function copyThoughtToClipboard() {
@@ -2348,146 +2597,141 @@
             showToast('विचार टेक्स्ट कॉपी हो गया!');
             return;
           }
-        } catch (err) {
-          console.warn('Clipboard writeText failed:', err);
+        } catch (err) {}
+
+        window.prompt('विचार टेक्स्ट कॉपी करें (Ctrl+C):', shareText);
+      }
+
+      /* Navigation Actions: Home & Next Edition */
+      function navigateHome() {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.location.hash = '#/';
+          } else {
+            window.location.hash = '#/';
+            window.location.href = '/#/';
+          }
+        } catch (e) {
+          window.location.href = '/';
         }
-
-        // Fallback modal if clipboard API is restricted
-        openCopyFallbackModal(shareText);
       }
 
-      function openCopyFallbackModal(text) {
-        els.copyModalTextarea.value = text;
-        els.copyModal.classList.add('is-open');
-        setTimeout(() => {
-          els.copyModalTextarea.focus();
-          els.copyModalTextarea.select();
-        }, 100);
-      }
+      function navigateNextEdition() {
+        const currentData = CONTENT[currentDayId];
+        const nextId = currentData.nextDayId || 'd1';
 
-      /* ============================================================
-         RECIPIENT PREVIEW (“पाने वाले को कैसा दिखेगा?”)
-         ============================================================ */
-      function openRecipientModal() {
-        const data = CONTENT[currentDayId];
-        els.recipientEditionTag.textContent = `संस्करण ${data.dayNum} · ${data.theme}`;
-        els.recipientThoughtText.textContent = `“${data.fullThought}”`;
-        els.recipientMeaningText.textContent = data.meaning;
-        els.recipientModal.classList.add('is-open');
-      }
-
-      function closeRecipientModal() {
-        els.recipientModal.classList.remove('is-open');
-      }
-
-      function handleRecipientPlayClick() {
-        closeRecipientModal();
-        // Start Practice Mode without erasing or altering saved score
-        isPracticeMode = true;
-        practiceSelectedOptionId = null;
-        renderCurrentEdition();
-        showToast('अभ्यास मोड शुरू हुआ');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
-      function handlePracticeReturn() {
-        isPracticeMode = false;
-        practiceSelectedOptionId = null;
-        renderCurrentEdition();
-        showToast('मूल परिणाम बहाल हुआ');
-      }
-
-      /* ============================================================
-         VIEW THOUGHT AGAIN ACTION (Secondary Action)
-         ============================================================ */
-      function viewThoughtAgain() {
-        els.thoughtCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        els.thoughtCard.classList.remove('is-highlighted');
-        // Trigger reflow to restart pulse animation
-        void els.thoughtCard.offsetWidth;
-        els.thoughtCard.classList.add('is-highlighted');
-        setTimeout(() => {
-          els.thoughtCard.classList.remove('is-highlighted');
-        }, 1300);
-      }
-
-      /* ============================================================
-         SWITCH EDITIONS (?day=d1, d2, d3)
-         ============================================================ */
-      function switchEdition(newDayId) {
-        if (!CONTENT[newDayId]) return;
-        currentDayId = newDayId;
+        currentDayId = nextId;
         selectedOptionId = null;
-        isPracticeMode = false;
-        practiceSelectedOptionId = null;
 
-        updateUrlDay(newDayId);
-        renderCurrentEdition();
+        try {
+          const url = new URL(window.location);
+          url.searchParams.set('day', nextId);
+          window.history.replaceState({}, '', url);
+        } catch (e) {}
+
+        renderStep1();
+        showStep(1);
+        showToast(`संस्करण ${CONTENT[nextId].dayNum} शुरू`);
       }
 
       /* ============================================================
          EVENT LISTENERS & BINDINGS
          ============================================================ */
       function initEventListeners() {
-        // Tab clicks
-        Object.keys(els.tabs).forEach(dayId => {
-          if (els.tabs[dayId]) {
-            els.tabs[dayId].addEventListener('click', () => {
-              switchEdition(dayId);
-            });
-          }
+        // Step 1 Confirm Action
+        els.btnStep1Action.addEventListener('click', handleStep1Confirm);
+
+        // 3 Theme Tabs (Above Card): सामान्य, नवरात्रि, दिवाली
+        els.themeButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const themeKey = btn.dataset.theme;
+            activeTheme = themeKey;
+            try { localStorage.setItem(THEME_KEY, activeTheme); } catch (e) {}
+
+            els.themeButtons.forEach(b => b.classList.toggle('is-active', b === btn));
+            if (els.cardStage) {
+              els.cardStage.setAttribute('data-active-theme', activeTheme);
+            }
+            generateShareCard();
+            const labelText = btn.querySelector('span:last-child')?.textContent?.trim() || btn.textContent.trim();
+            showToast(`थीम: ${labelText}`);
+          });
         });
 
-        // Confirm button
-        els.btnConfirm.addEventListener('click', handleConfirm);
+        // User Name Input (Real-time card re-rendering)
+        if (els.cardUserNameInput) {
+          els.cardUserNameInput.value = userName;
+          if (userName.trim()) els.btnClearName.style.display = 'inline-block';
 
-        // Share & Download Buttons
-        els.btnSharePrimary.addEventListener('click', handleShareAction);
-        els.btnDownloadCard.addEventListener('click', downloadCard);
-        els.btnDownloadPreviewBtn.addEventListener('click', downloadCard);
-        els.btnCopyThoughtText.addEventListener('click', copyThoughtToClipboard);
+          let nameDebounceTimer = null;
+          els.cardUserNameInput.addEventListener('input', (e) => {
+            userName = e.target.value;
+            els.btnClearName.style.display = userName.trim() ? 'inline-block' : 'none';
 
-        // Secondary Actions
-        els.btnViewThoughtAgain.addEventListener('click', viewThoughtAgain);
-        els.btnRecipientPreview.addEventListener('click', openRecipientModal);
+            try { localStorage.setItem(USER_NAME_KEY, userName); } catch (err) {}
 
-        // Practice Mode Return
-        els.practiceReturnBtn.addEventListener('click', handlePracticeReturn);
+            if (nameDebounceTimer) clearTimeout(nameDebounceTimer);
+            nameDebounceTimer = setTimeout(() => {
+              generateShareCard();
+            }, 100);
+          });
 
-        // Recipient Modal
-        els.btnCloseRecipientModal.addEventListener('click', closeRecipientModal);
-        els.btnCloseRecipientModalBottom.addEventListener('click', closeRecipientModal);
-        els.btnRecipientPlay.addEventListener('click', handleRecipientPlayClick);
-        els.recipientModal.addEventListener('click', (e) => {
-          if (e.target === els.recipientModal) closeRecipientModal();
-        });
+          els.btnClearName.addEventListener('click', () => {
+            userName = '';
+            els.cardUserNameInput.value = '';
+            els.btnClearName.style.display = 'none';
+            try { localStorage.removeItem(USER_NAME_KEY); } catch (e) {}
+            generateShareCard();
+          });
+        }
 
-        // Copy Fallback Modal
-        els.btnCloseCopyModal.addEventListener('click', () => {
-          els.copyModal.classList.remove('is-open');
-        });
-        els.btnCopyModalSelectAll.addEventListener('click', () => {
-          els.copyModalTextarea.select();
-          document.execCommand('copy');
-          showToast('टेक्स्ट कॉपी हो गया!');
-        });
-        els.copyModal.addEventListener('click', (e) => {
-          if (e.target === els.copyModal) els.copyModal.classList.remove('is-open');
-        });
+        // Corner Share Button: opens share modal sheet
+        if (els.btnCornerShare) {
+          els.btnCornerShare.addEventListener('click', openShareSheet);
+        }
 
-        // Keyboard ESC to close modals
-        window.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') {
-            closeRecipientModal();
-            els.copyModal.classList.remove('is-open');
-          }
-        });
+        // Primary Hero Share CTA: opens share modal sheet
+        if (els.btnSharePrimary) {
+          els.btnSharePrimary.addEventListener('click', openShareSheet);
+        }
 
-        // Popstate for browser back/forward
-        window.addEventListener('popstate', () => {
-          currentDayId = getInitialDayFromUrl();
-          renderCurrentEdition();
-        });
+        // Inside Share Modal Sheet:
+        if (els.sheetBtnWhatsapp) {
+          els.sheetBtnWhatsapp.addEventListener('click', () => {
+            closeShareSheet();
+            handleShareAction();
+          });
+        }
+
+        if (els.sheetBtnDownload) {
+          els.sheetBtnDownload.addEventListener('click', () => {
+            closeShareSheet();
+            downloadCard();
+          });
+        }
+
+        if (els.sheetBtnCopy) {
+          els.sheetBtnCopy.addEventListener('click', () => {
+            closeShareSheet();
+            copyThoughtToClipboard();
+          });
+        }
+
+        if (els.sheetBtnCancel) {
+          els.sheetBtnCancel.addEventListener('click', closeShareSheet);
+        }
+
+        if (els.shareSheetBackdrop) {
+          els.shareSheetBackdrop.addEventListener('click', (e) => {
+            if (e.target === els.shareSheetBackdrop) {
+              closeShareSheet();
+            }
+          });
+        }
+
+        // Navigation (Home & Next Edition)
+        els.btnGoHome.addEventListener('click', navigateHome);
+        els.btnGoNextEdition.addEventListener('click', navigateNextEdition);
       }
 
       /* ============================================================
@@ -2496,10 +2740,26 @@
       function init() {
         currentDayId = getInitialDayFromUrl();
         initEventListeners();
-        renderCurrentEdition();
+
+        // Restore active theme tab
+        els.themeButtons.forEach(btn => {
+          btn.classList.toggle('is-active', btn.dataset.theme === activeTheme);
+        });
+
+        if (els.cardStage) {
+          els.cardStage.setAttribute('data-active-theme', activeTheme);
+        }
+
+        renderStep1();
+
+        const saved = loadStoredEdition(currentDayId);
+        if (saved && saved.confirmed) {
+          showStep(1);
+        } else {
+          showStep(1);
+        }
       }
 
-      // Start on DOM ready
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
       } else {

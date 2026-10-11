@@ -1,43 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Carrom Puzzles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>कैरम पहेलियाँ | Carrom Puzzles - Dainik Bhaskar Game Lab</title>
 
-    <!-- Tailwind CSS for UI styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans Devanagari -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <!-- Matter.js for 2D Physics -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        /* ============================================================
+           DAINIK BHASKAR GAME LAB — कैरम पहेली (Carrom Puzzles)
+           Rich Warm Mahogany Tabletop Atmosphere & Clean Minimal HUD
+           ============================================================ */
+        :root {
+            --color-primary: #E23A28;         /* Dainik Bhaskar Signature Crimson */
+            --color-primary-dark: #BA2313;
+            --color-accent: #F39C12;          /* Gold / Amber */
+            --color-accent-light: #FEF3C7;
+            --text-light: #FDF8F0;
+            --font-family: 'Noto Sans Devanagari', 'Inter', system-ui, -apple-system, sans-serif;
+        }
 
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            background-color: #121212;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-family);
             touch-action: none;
-            /* Prevents pull-to-refresh on mobile */
+        }
+
+        /* Warm dark mahogany wooden tabletop background */
+        body {
+            background: radial-gradient(circle at 50% 40%, #2A1D15 0%, #1A120D 60%, #0F0A07 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            width: 100vw;
+        }
+
+        /* Main Game Layout */
+        .carrom-layout {
+            width: 100%;
+            height: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 14px 14px 14px;
+            position: relative;
+            box-sizing: border-box;
+            gap: 12px;
+        }
+
+        /* ------------------------------------------------------------
+           TOP SECTION: Single Uncluttered, Non-truncated Banner
+           ------------------------------------------------------------ */
+        .top-section {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .objective-banner {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 7px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .level-pill {
+            background: linear-gradient(135deg, #E23A28 0%, #BA2313 100%);
+            color: #FFFFFF;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(226, 58, 40, 0.35);
+        }
+
+        .objective-main-text {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-light);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        /* ------------------------------------------------------------
+           MIDDLE SECTION: Carrom Board + Higher Slider Bar
+           ------------------------------------------------------------ */
+        .board-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
         }
 
         #game-container {
             position: relative;
-            width: 100%;
-            max-width: 600px;
             aspect-ratio: 1 / 1;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border-radius: 1rem;
+            width: 100%;
+            max-width: min(88vw, calc(100vh - 200px));
+            max-height: min(88vw, calc(100vh - 200px));
+            border-radius: 18px;
+            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.55), 0 4px 14px rgba(0, 0, 0, 0.35);
             overflow: hidden;
+            background-color: #3E2723;
+            border: 3px solid #2D1A11;
         }
 
         canvas {
@@ -45,119 +149,299 @@
             width: 100%;
             height: 100%;
             touch-action: none;
+            border-radius: 15px;
+            cursor: default;
         }
 
-        /* Custom Range Slider */
+        /* Small sleek dragging line placed HIGHER directly below board */
+        .small-slider-line-wrap {
+            width: 100%;
+            max-width: 300px;
+            margin: 12px auto 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 8px;
+            transition: opacity 0.2s ease;
+        }
+
+        .small-slider-line-wrap.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Custom Sleek Slider Line */
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
             background: transparent;
-        }
-
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            background: #Edf2f7;
-            border: 3px solid #0984E3;
+            margin: 0;
             cursor: pointer;
-            margin-top: -9px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         input[type=range]::-webkit-slider-runnable-track {
             width: 100%;
             height: 6px;
-            cursor: pointer;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 3px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3.5px solid #2563EB;
+            cursor: grab;
+            margin-top: -8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.1s ease;
+        }
+
+        input[type=range]:active::-webkit-slider-thumb {
+            transform: scale(1.15);
+            cursor: grabbing;
         }
 
         input[type=range]:focus {
             outline: none;
         }
+
+        /* Bottom section with centered Retry button */
+        .bottom-section {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 4px;
+            z-index: 10;
+        }
+
+        /* Dedicated Retry Button */
+        .btn-retry {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            background: linear-gradient(135deg, #E23A28 0%, #BA2313 100%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
+            font-family: var(--font-family);
+            font-size: 0.92rem;
+            font-weight: 800;
+            padding: 8px 24px;
+            border-radius: 999px;
+            box-shadow: 0 4px 16px rgba(226, 58, 40, 0.4);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            height: 40px;
+        }
+
+        .btn-retry:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(226, 58, 40, 0.55);
+        }
+
+        .btn-retry:active {
+            transform: scale(0.96);
+            background: #BA2313;
+        }
+
+        .btn-retry-icon {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-retry:active .btn-retry-icon {
+            transform: rotate(-180deg);
+        }
+
+        /* ------------------------------------------------------------
+           MODAL DIALOG (Only for Winning & Rules)
+           ------------------------------------------------------------ */
+        .modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(14, 10, 8, 0.75);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 100;
+            opacity: 1;
+            transition: opacity 0.25s ease;
+            pointer-events: auto;
+        }
+
+        .modal-backdrop.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            border-radius: 22px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+            padding: 24px 20px;
+            max-width: 320px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(1);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-backdrop.hidden .modal-card {
+            transform: scale(0.9);
+        }
+
+        .modal-icon-badge {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E8F8F0 0%, #C8E6C9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.15);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #1C1C1C;
+            margin-bottom: 6px;
+        }
+
+        .modal-desc {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: #5C5C5C;
+            line-height: 1.45;
+            margin-bottom: 20px;
+            white-space: pre-line;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #E23A28 0%, #BA2313 100%);
+            color: #FFFFFF;
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            font-weight: 800;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            border: none;
+            width: 100%;
+            box-shadow: 0 4px 14px rgba(226, 58, 40, 0.35);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .modal-btn:active {
+            transform: scale(0.96);
+        }
     </style>
 </head>
 
 <body>
-    <div id="game-container">
-        <!-- Game Canvas -->
-        <canvas id="gameCanvas" width="600" height="600"></canvas>
-
-        <!-- UI Overlay Layer -->
-        <div id="ui-layer"
-            class="absolute inset-0 pointer-events-none flex flex-col items-center justify-center p-4 z-10">
-
-            <!-- Top HUD -->
-            <div id="top-bar"
-                class="absolute top-4 left-4 right-4 flex flex-col sm:flex-row sm:justify-between items-center text-white drop-shadow-md opacity-0 transition-opacity duration-300">
-                <span id="level-display"
-                    class="font-black text-2xl tracking-tight bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm mb-2 sm:mb-0">Level
-                    1</span>
-                <span id="objective-display"
-                    class="text-sm font-bold bg-amber-600/90 px-4 py-1.5 rounded-full backdrop-blur-sm text-center">Pot
-                    the white</span>
+    <div class="carrom-layout">
+        <!-- ============================================================
+             1. TOP SECTION (Single Clean Banner - Zero Clutter)
+             ============================================================ -->
+        <header class="top-section">
+            <div class="objective-banner" id="objective-banner">
+                <span class="level-pill" id="level-display">स्तर 1</span>
+                <span class="objective-main-text" id="objective-display">सफेद गोटी पॉकेट में डालें</span>
             </div>
+        </header>
 
-            <!-- Striker Position Slider -->
-            <div id="slider-container"
-                class="absolute bottom-6 left-0 right-0 flex flex-col items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none">
-                <span
-                    class="text-white/80 text-xs font-bold mb-2 bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm shadow-md">POSITION
-                    STRIKER</span>
-                <input type="range" id="position-slider" min="150" max="450" value="300"
-                    class="w-3/4 max-w-[300px] pointer-events-auto">
+        <!-- ============================================================
+             2. CENTER SECTION: Carrom Board Canvas + Higher Slider Bar
+             ============================================================ -->
+        <main class="board-wrapper">
+            <div id="game-container">
+                <canvas id="gameCanvas" width="600" height="600"></canvas>
             </div>
+            <!-- Small sleek dragging line placed HIGHER directly below board -->
+            <div class="small-slider-line-wrap" id="slider-wrap">
+                <input type="range" id="position-slider" min="150" max="450" value="300" aria-label="स्ट्राइकर स्थिति">
+            </div>
+        </main>
 
-            <!-- Interactive Modal -->
-            <div id="modal"
-                class="bg-slate-50/95 backdrop-blur-md pointer-events-auto p-8 rounded-3xl shadow-2xl text-center max-w-xs w-full transition-all duration-300 transform opacity-100 scale-100 flex flex-col items-center border border-white/20">
-                <div class="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center mb-4 shadow-inner">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                </div>
-                <h1 id="modal-title" class="text-2xl font-black mb-2 text-slate-800">Carrom Puzzles</h1>
-                <p id="modal-desc" class="text-slate-600 mb-8 font-medium">Solve the board in one shot.</p>
-                <button id="modal-btn"
-                    class="bg-slate-800 hover:bg-slate-900 active:scale-95 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all w-full text-lg uppercase tracking-wide">
-                    Play
-                </button>
-            </div>
+        <!-- ============================================================
+             3. BOTTOM SECTION: Centered Retry Button
+             ============================================================ -->
+        <footer class="bottom-section">
+            <button id="retry-btn" class="btn-retry" type="button" title="स्तर पुनः प्रारंभ करें">
+                <span class="btn-retry-icon">🔄</span>
+                <span class="btn-retry-text">पुनः प्रयास</span>
+            </button>
+        </footer>
+    </div>
+
+    <!-- ============================================================
+         4. MODAL DIALOG OVERLAY (Only for Winning & Rules)
+         ============================================================ -->
+    <div id="modal-backdrop" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="modal-icon-badge" id="modal-icon">🎉</div>
+            <h2 id="modal-title" class="modal-title">शानदार शॉट!</h2>
+            <div id="modal-desc" class="modal-desc">आपने लक्ष्य सफलतापूर्वक पूरा कर लिया!</div>
+            <button id="modal-btn" class="modal-btn" type="button">अगला स्तर ➡️</button>
         </div>
     </div>
 
     <script>
-        // Configuration
+        // ============================================================
+        // 5. EXACT PHYSICS & GEOMETRY CONSTANTS (Do NOT change math)
+        // ============================================================
         const CANVAS_SIZE = 600;
         const POCKET_RADIUS = 28;
         const STRIKER_RADIUS = 20;
         const COIN_RADIUS = 15;
 
-        // State
-        let gameState = 'MENU'; // MENU, IDLE, AIMING, MOVING, EVALUATE
+        // Game states: 'IDLE', 'AIMING', 'MOVING', 'EVALUATE'
+        let gameState = 'IDLE';
         let currentLevelIndex = 0;
         let currentLevel = null;
         let potted = { white: 0, black: 0, red: 0, striker: 0 };
         let restTicks = 0;
 
         // Interaction state
+        let dragMode = null;
         let dragStart = null;
         let dragCurrent = null;
         let strikerBody = null;
+        let dragOriginPos = null;
+        let strikerStartX = 300;
 
         // Audio state
         let audioCtx = null;
         let lastClackTime = 0;
 
+        // Auto-reset timer reference on miss
+        let autoResetTimeout = null;
+
+        // ============================================================
+        // 6. SHORT, CRISP, NON-TRUNCATING LEVEL OBJECTIVES
+        // ============================================================
         const LEVELS = [
             {
-                title: "Level 1",
-                objective: "Pot the White coin.",
+                levelNum: 1,
+                title: "स्तर 1",
+                objective: "सफेद गोटी पॉकेट में डालें",
                 coins: [
                     { x: 300, y: 150, type: 'white' }
                 ],
@@ -165,51 +449,58 @@
                 check: (p) => p.white > 0 ? 'win' : 'lose'
             },
             {
-                title: "Level 2",
-                objective: "Bank shot! Pot the White. Avoid the Black.",
+                levelNum: 2,
+                title: "स्तर 2",
+                objective: "बैंक शॉट: सफेद गोटी डालें, काली से बचें",
                 coins: [
                     { x: 300, y: 150, type: 'white' },
-                    { x: 300, y: 250, type: 'black' } // Blocks direct shot from center
+                    { x: 300, y: 250, type: 'black' }
                 ],
                 striker: { x: 300, y: 485 },
                 check: (p) => (p.white > 0 && p.black === 0) ? 'win' : 'lose'
             },
             {
-                title: "Level 3",
-                objective: "Cut shot! Pot the Red. Don't pot Blacks.",
+                levelNum: 3,
+                title: "स्तर 3",
+                objective: "कट शॉट: लाल गोटी (रानी) डालें",
                 coins: [
-                    { x: 450, y: 150, type: 'red' }, // Near top right pocket
-                    { x: 400, y: 220, type: 'black' }, // Blocks straight path
-                    { x: 300, y: 300, type: 'black' }  // Extra obstacle
+                    { x: 450, y: 150, type: 'red' },
+                    { x: 400, y: 220, type: 'black' },
+                    { x: 300, y: 300, type: 'black' }
                 ],
                 striker: { x: 300, y: 485 },
                 check: (p) => (p.red > 0 && p.black === 0) ? 'win' : 'lose'
             },
             {
-                title: "Level 4",
-                objective: "Thread the needle. Pot the White.",
+                levelNum: 4,
+                title: "स्तर 4",
+                objective: "गोटियों के बीच से सफेद गोटी डालें",
                 coins: [
                     { x: 300, y: 100, type: 'white' },
                     { x: 260, y: 220, type: 'black' },
-                    { x: 340, y: 220, type: 'black' } // Narrow gap in the middle
+                    { x: 340, y: 220, type: 'black' }
                 ],
                 striker: { x: 300, y: 485 },
                 check: (p) => (p.white > 0 && p.black === 0) ? 'win' : 'lose'
             },
             {
-                title: "Level 5",
-                objective: "The Fortress. Pot the Red coin.",
+                levelNum: 5,
+                title: "स्तर 5",
+                objective: "चक्रव्यूह: लाल गोटी पॉकेट करें",
                 coins: [
-                    { x: 120, y: 120, type: 'red' }, // Top left pocket
-                    { x: 180, y: 120, type: 'black' }, // Guard right
-                    { x: 120, y: 180, type: 'black' }, // Guard bottom
-                    { x: 250, y: 250, type: 'black' }  // Mid board obstacle
+                    { x: 120, y: 120, type: 'red' },
+                    { x: 180, y: 120, type: 'black' },
+                    { x: 120, y: 180, type: 'black' },
+                    { x: 250, y: 250, type: 'black' }
                 ],
                 striker: { x: 300, y: 485 },
                 check: (p) => (p.red > 0 && p.black === 0) ? 'win' : 'lose'
             }
         ];
 
+        // ============================================================
+        // 7. AUDIO SYSTEM
+        // ============================================================
         function initAudio() {
             try {
                 if (!audioCtx) {
@@ -224,7 +515,7 @@
         function playClack(volume = 1) {
             if (!audioCtx || audioCtx.state !== 'running') return;
             const now = Date.now();
-            if (now - lastClackTime < 40) return; // limit rapid fire sounds
+            if (now - lastClackTime < 40) return;
             lastClackTime = now;
 
             const osc = audioCtx.createOscillator();
@@ -247,10 +538,10 @@
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.15);
+            osc.frequency.setValueAtTime(320, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.15);
 
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
             gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
 
             osc.connect(gain);
@@ -259,8 +550,25 @@
             osc.stop(audioCtx.currentTime + 0.2);
         }
 
+        function playTapSound() {
+            if (!audioCtx || audioCtx.state !== 'running') return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(550, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.07);
+        }
+
+        // ============================================================
+        // 8. MATTER.JS PHYSICS SETUP (Unchanged Engine Parameters)
+        // ============================================================
         const engine = Matter.Engine.create({
-            gravity: { x: 0, y: 0, scale: 0 } // Top-down perspective
+            gravity: { x: 0, y: 0, scale: 0 }
         });
         const world = engine.world;
 
@@ -268,73 +576,118 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
+        // UI Element References
         const ui = {
-            modal: document.getElementById('modal'),
-            title: document.getElementById('modal-title'),
-            desc: document.getElementById('modal-desc'),
-            btn: document.getElementById('modal-btn'),
-            topBar: document.getElementById('top-bar'),
-            level: document.getElementById('level-display'),
-            objective: document.getElementById('objective-display'),
-            sliderContainer: document.getElementById('slider-container'),
-            positionSlider: document.getElementById('position-slider')
+            modalBackdrop: document.getElementById('modal-backdrop'),
+            modalIcon: document.getElementById('modal-icon'),
+            modalTitle: document.getElementById('modal-title'),
+            modalDesc: document.getElementById('modal-desc'),
+            modalBtn: document.getElementById('modal-btn'),
+            levelDisplay: document.getElementById('level-display'),
+            objectiveDisplay: document.getElementById('objective-display'),
+            sliderWrap: document.getElementById('slider-wrap'),
+            positionSlider: document.getElementById('position-slider'),
+            retryBtn: document.getElementById('retry-btn')
         };
 
-        // State Manager Function
         function setGameState(newState) {
             gameState = newState;
             if (gameState === 'IDLE') {
-                ui.sliderContainer.classList.add('opacity-100');
-                ui.sliderContainer.classList.remove('opacity-0', 'pointer-events-none');
+                ui.sliderWrap.classList.remove('disabled');
             } else {
-                ui.sliderContainer.classList.remove('opacity-100');
-                ui.sliderContainer.classList.add('opacity-0', 'pointer-events-none');
+                ui.sliderWrap.classList.add('disabled');
             }
         }
 
-        // Slider Event
+        // Direct Striker Positioning
+        function updateStrikerX(newX) {
+            if (!strikerBody) return;
+            const clampedX = Math.max(150, Math.min(450, newX));
+            Matter.Body.setPosition(strikerBody, { x: clampedX, y: currentLevel.striker.y });
+            Matter.Body.setVelocity(strikerBody, { x: 0, y: 0 });
+            if (ui.positionSlider && parseFloat(ui.positionSlider.value) !== clampedX) {
+                ui.positionSlider.value = clampedX;
+            }
+        }
+
+        // Slider Input Event
         ui.positionSlider.addEventListener('input', (e) => {
-            if (gameState === 'IDLE' && strikerBody) {
-                Matter.Body.setPosition(strikerBody, {
-                    x: parseFloat(e.target.value),
-                    y: currentLevel.striker.y
-                });
-                Matter.Body.setVelocity(strikerBody, { x: 0, y: 0 });
+            if (gameState === 'IDLE') {
+                updateStrikerX(parseFloat(e.target.value));
             }
         });
 
-        function showModal(title, desc, btnText, callback) {
-            ui.modal.classList.remove('opacity-0', 'scale-90', 'pointer-events-none');
-            ui.modal.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
-            ui.title.innerText = title;
-            ui.desc.innerText = desc;
-            ui.btn.innerText = btnText;
-            ui.btn.onclick = () => {
+        // Retry Button Event
+        ui.retryBtn.addEventListener('click', () => {
+            if (autoResetTimeout) {
+                clearTimeout(autoResetTimeout);
+                autoResetTimeout = null;
+            }
+            initAudio();
+            playTapSound();
+            hideModal();
+            loadLevel(currentLevelIndex);
+        });
+
+        function showModal(title, desc, btnText, callback, icon = '🎉') {
+            ui.modalBackdrop.classList.remove('hidden');
+            ui.modalTitle.innerText = title;
+            ui.modalDesc.innerText = desc;
+            ui.modalBtn.innerText = btnText;
+            ui.modalIcon.innerText = icon;
+            ui.modalBtn.onclick = () => {
                 initAudio();
+                playTapSound();
                 callback();
             };
         }
 
         function hideModal() {
-            ui.modal.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
-            ui.modal.classList.add('opacity-0', 'scale-90', 'pointer-events-none');
+            ui.modalBackdrop.classList.add('hidden');
         }
 
+        function showRulesModal() {
+            initAudio();
+            showModal(
+                "कैरम पहेली के नियम",
+                "१. कर्सर से स्ट्राइकर को बेसलाइन पर बाएँ/दाएँ ड्रैग करें।\n२. स्ट्राइकर पर टच करके पीछे की ओर खींचें और निशाना साधें।\n३. छोड़ते ही स्ट्राइकर शॉट लगाएगा।\n४. लक्ष्य पूरा करने के लिए केवल १ शॉट है।\n५. रीसेट करने के लिए नीचे 'पुनः प्रयास' दबाएँ।",
+                "समझ गए",
+                () => {
+                    hideModal();
+                    setGameState('IDLE');
+                },
+                "ℹ️"
+            );
+        }
+
+        window.openHelpModal = showRulesModal;
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'OPEN_RULES') {
+                showRulesModal();
+            }
+        });
+
+        // ============================================================
+        // 9. BOARD PHYSICS WALLS & SETUP (Unchanged Dimensions)
+        // ============================================================
         function setupBoard() {
-            // Precise frame bounds - 4 sides matching the visual frame exactly
             const THICKNESS = 35;
             const wOpt = { isStatic: true, label: 'wall', restitution: 0.9, friction: 0 };
 
-            // Physics walls aligned perfectly with the inner visual edges of the board
             Matter.World.add(world, [
-                Matter.Bodies.rectangle(CANVAS_SIZE / 2, THICKNESS / 2, CANVAS_SIZE, THICKNESS, wOpt), // Top
-                Matter.Bodies.rectangle(CANVAS_SIZE / 2, CANVAS_SIZE - THICKNESS / 2, CANVAS_SIZE, THICKNESS, wOpt), // Bottom
-                Matter.Bodies.rectangle(THICKNESS / 2, CANVAS_SIZE / 2, THICKNESS, CANVAS_SIZE, wOpt), // Left
-                Matter.Bodies.rectangle(CANVAS_SIZE - THICKNESS / 2, CANVAS_SIZE / 2, THICKNESS, CANVAS_SIZE, wOpt) // Right
+                Matter.Bodies.rectangle(CANVAS_SIZE / 2, THICKNESS / 2, CANVAS_SIZE, THICKNESS, wOpt),
+                Matter.Bodies.rectangle(CANVAS_SIZE / 2, CANVAS_SIZE - THICKNESS / 2, CANVAS_SIZE, THICKNESS, wOpt),
+                Matter.Bodies.rectangle(THICKNESS / 2, CANVAS_SIZE / 2, THICKNESS, CANVAS_SIZE, wOpt),
+                Matter.Bodies.rectangle(CANVAS_SIZE - THICKNESS / 2, CANVAS_SIZE / 2, THICKNESS, CANVAS_SIZE, wOpt)
             ]);
         }
 
         function loadLevel(index) {
+            if (autoResetTimeout) {
+                clearTimeout(autoResetTimeout);
+                autoResetTimeout = null;
+            }
+
             Matter.World.clear(world);
             Matter.Engine.clear(engine);
             setupBoard();
@@ -345,8 +698,8 @@
 
             const physOptions = {
                 restitution: 0.9,
-                friction: 0, // 0 contact friction ensures perfect geometric deflection angles
-                frictionAir: 0.015, // Sliding friction against the board surface
+                friction: 0,
+                frictionAir: 0.015,
                 density: 0.005
             };
 
@@ -359,47 +712,30 @@
                 Matter.World.add(world, body);
             });
 
-            // Spawn Obstacles
-            if (currentLevel.obstacles) {
-                currentLevel.obstacles.forEach(o => {
-                    let body = Matter.Bodies.rectangle(o.x, o.y, o.w, o.h, {
-                        isStatic: true,
-                        angle: o.angle || 0,
-                        label: 'obstacle',
-                        restitution: 0.9,
-                        friction: 0
-                    });
-                    Matter.World.add(world, body);
-                });
-            }
-
             // Spawn Striker
             strikerBody = Matter.Bodies.circle(currentLevel.striker.x, currentLevel.striker.y, STRIKER_RADIUS, {
                 restitution: 0.9,
                 friction: 0,
                 frictionAir: 0.012,
-                density: 0.012, // Heavier than coins
+                density: 0.012,
                 label: 'striker'
             });
             Matter.World.add(world, strikerBody);
 
-            // Update UI State
-            ui.level.innerText = currentLevel.title;
-            ui.objective.innerText = currentLevel.objective;
-            ui.topBar.classList.add('opacity-100');
-            ui.topBar.classList.remove('opacity-0');
-
+            // Update Top HUD
+            ui.levelDisplay.innerText = "स्तर " + currentLevel.levelNum;
+            ui.objectiveDisplay.innerText = currentLevel.objective;
             ui.positionSlider.value = currentLevel.striker.x;
 
-            showModal(currentLevel.title, currentLevel.objective, "Start", () => {
-                hideModal();
-                setGameState('IDLE');
-            });
+            setGameState('IDLE');
         }
 
         function evaluateLevel() {
             if (potted.striker > 0) {
-                showModal("Foul!", "You potted the striker. Try again.", "Retry", () => loadLevel(currentLevelIndex));
+                // Striker foul: auto-reset after 1.2s, NO popup modal!
+                autoResetTimeout = setTimeout(() => {
+                    loadLevel(currentLevelIndex);
+                }, 1200);
                 return;
             }
 
@@ -411,43 +747,70 @@
                         lab.addScore(100);
                     }
                 } catch(e) {}
+                try {
+                    window.parent.postMessage({ type: 'ADD_SCORE', points: 100 }, '*');
+                } catch(e) {}
+
                 if (currentLevelIndex < LEVELS.length - 1) {
-                    showModal("Success!", "Excellent shot.", "Next Level", () => {
-                        currentLevelIndex++;
-                        loadLevel(currentLevelIndex);
-                    });
+                    showModal(
+                        "शानदार शॉट! 🎉",
+                        "आपने लक्ष्य सफलतापूर्वक पूरा कर लिया!",
+                        "अगला स्तर ➡️",
+                        () => {
+                            hideModal();
+                            currentLevelIndex++;
+                            loadLevel(currentLevelIndex);
+                        },
+                        "🎉"
+                    );
                 } else {
+                    const finalScore = LEVELS.length * 100;
                     try {
                         const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
                         if (lab && typeof lab.endGame === 'function') {
-                            lab.endGame(LEVELS.length * 100);
+                            lab.endGame(finalScore);
                         }
                     } catch(e) {}
-                    showModal("Game Cleared!", "You beat all the puzzles! Amazing striking skills.", "Play Again", () => {
-                        currentLevelIndex = 0;
-                        loadLevel(currentLevelIndex);
-                    });
+                    try {
+                        window.parent.postMessage({ type: 'GAME_COMPLETE', score: finalScore }, '*');
+                    } catch(e) {}
+
+                    showModal(
+                        "अद्भुत विजय! 🏆",
+                        "बधाई हो! आपने सभी कैरम पहेलियाँ पार कर लीं।\nसटीक निशानेबाजी कौशल!",
+                        "फिर से खेलें",
+                        () => {
+                            hideModal();
+                            currentLevelIndex = 0;
+                            loadLevel(currentLevelIndex);
+                        },
+                        "🏆"
+                    );
                 }
             } else {
-                showModal("Missed!", "You didn't complete the objective.", "Retry", () => loadLevel(currentLevelIndex));
+                // Missed shot: auto-reset after 1.2s, NO popup modal!
+                autoResetTimeout = setTimeout(() => {
+                    loadLevel(currentLevelIndex);
+                }, 1200);
             }
         }
 
+        // ============================================================
+        // 10. COLLISION & POCKET DETECTION (Unchanged Math)
+        // ============================================================
         let bodiesToRemove = [];
         Matter.Events.on(engine, 'collisionStart', (e) => {
             e.pairs.forEach(pair => {
                 const { bodyA, bodyB } = pair;
-                // Play clack sound on strong physical impacts
                 if (bodyA.speed > 1 || bodyB.speed > 1) {
                     playClack(Math.min(1, (bodyA.speed + bodyB.speed) / 15));
                 }
             });
         });
 
-        // Track and remove pocketed bodies accurately
         Matter.Events.on(engine, 'afterUpdate', () => {
             const POCKET_OFFSET = 40;
-            const POCKET_FALL_RADIUS = 24; // Distance threshold for piece to fall over the lip
+            const POCKET_FALL_RADIUS = 24;
             const corners = [
                 [POCKET_OFFSET, POCKET_OFFSET],
                 [CANVAS_SIZE - POCKET_OFFSET, POCKET_OFFSET],
@@ -482,6 +845,9 @@
             }
         });
 
+        // ============================================================
+        // 11. BOARD & PIECES RENDERING
+        // ============================================================
         function drawBoard() {
             const THICKNESS = 35;
 
@@ -489,19 +855,28 @@
             ctx.fillStyle = '#3E2723';
             ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
+            // Subtle inner frame wood rim
+            ctx.fillStyle = '#4E342E';
+            ctx.fillRect(4, 4, CANVAS_SIZE - 8, CANVAS_SIZE - 8);
+
             // Inner Light Wood Board
             ctx.fillStyle = '#E8C396';
             ctx.fillRect(THICKNESS, THICKNESS, CANVAS_SIZE - THICKNESS * 2, CANVAS_SIZE - THICKNESS * 2);
 
-            // Frame joints (Diagonal lines at the corners of the frame)
-            ctx.strokeStyle = '#2D1A11';
-            ctx.lineWidth = 2;
+            // Frame joints
+            ctx.strokeStyle = '#27160C';
+            ctx.lineWidth = 2.5;
             ctx.beginPath();
             ctx.moveTo(0, 0); ctx.lineTo(THICKNESS, THICKNESS);
             ctx.moveTo(CANVAS_SIZE, 0); ctx.lineTo(CANVAS_SIZE - THICKNESS, THICKNESS);
             ctx.moveTo(0, CANVAS_SIZE); ctx.lineTo(THICKNESS, CANVAS_SIZE - THICKNESS);
             ctx.moveTo(CANVAS_SIZE, CANVAS_SIZE); ctx.lineTo(CANVAS_SIZE - THICKNESS, CANVAS_SIZE - THICKNESS);
             ctx.stroke();
+
+            // Inner shadow rim
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.18)';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(THICKNESS + 1.5, THICKNESS + 1.5, CANVAS_SIZE - (THICKNESS + 1.5) * 2, CANVAS_SIZE - (THICKNESS + 1.5) * 2);
 
             // Center Decorations
             const cx = CANVAS_SIZE / 2;
@@ -515,30 +890,29 @@
             ctx.setLineDash([]);
 
             // Middle rings
-            ctx.strokeStyle = '#A13333'; // Deep red
+            ctx.strokeStyle = '#A13333';
             ctx.lineWidth = 3;
             ctx.beginPath(); ctx.arc(cx, cy, 75, 0, Math.PI * 2); ctx.stroke();
 
-            ctx.strokeStyle = '#222'; // Inner black
+            ctx.strokeStyle = '#222222';
             ctx.lineWidth = 1.5;
             ctx.beginPath(); ctx.arc(cx, cy, 65, 0, Math.PI * 2); ctx.stroke();
 
             // Bullseye
             ctx.fillStyle = '#A13333';
             ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.fill();
-            ctx.strokeStyle = '#222';
+            ctx.strokeStyle = '#222222';
             ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.stroke();
 
             // Center dot
             ctx.fillStyle = '#E8C396';
             ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
 
-            // Baselines (All 4 sides)
+            // Baselines
             const drawBaseline = (x, y, w, h, isVertical) => {
                 ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
                 ctx.lineWidth = 1.5;
 
-                // Parallel lines
                 if (isVertical) {
                     ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + h); ctx.stroke();
                     ctx.beginPath(); ctx.moveTo(x + w, y); ctx.lineTo(x + w, y + h); ctx.stroke();
@@ -547,7 +921,6 @@
                     ctx.beginPath(); ctx.moveTo(x, y + h); ctx.lineTo(x + w, y + h); ctx.stroke();
                 }
 
-                // Red corner intersection circles
                 const r = 15;
                 const drawEnd = (endX, endY) => {
                     ctx.fillStyle = '#A13333';
@@ -569,31 +942,51 @@
             const bLength = 300;
             const bThick = 26;
 
-            drawBaseline(bOffset, 472, bLength, bThick, false); // Bottom
+            drawBaseline(bOffset, 472, bLength, bThick, false); // Bottom baseline
             drawBaseline(bOffset, 102, bLength, bThick, false); // Top
             drawBaseline(102, bOffset, bThick, bLength, true);  // Left
             drawBaseline(472, bOffset, bThick, bLength, true);  // Right
 
-            // Pocket Holes (Rendered with deep realistic shadow)
+            // Visual guide on baseline for direct cursor drag
+            if (gameState === 'IDLE' && strikerBody) {
+                ctx.strokeStyle = 'rgba(37, 99, 235, 0.22)';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(150, 485);
+                ctx.lineTo(450, 485);
+                ctx.stroke();
+
+                const sx = strikerBody.position.x;
+                ctx.fillStyle = '#2563EB';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                if (sx > 175) ctx.fillText('◀', sx - 29, 485);
+                if (sx < 425) ctx.fillText('▶', sx + 29, 485);
+            }
+
+            // Pockets
             const offset = 40;
             const pRadius = POCKET_RADIUS;
-            const corners = [[offset, offset], [CANVAS_SIZE - offset, offset], [offset, CANVAS_SIZE - offset], [CANVAS_SIZE - offset, CANVAS_SIZE - offset]];
+            const corners = [
+                [offset, offset],
+                [CANVAS_SIZE - offset, offset],
+                [offset, CANVAS_SIZE - offset],
+                [CANVAS_SIZE - offset, CANVAS_SIZE - offset]
+            ];
 
             corners.forEach(c => {
-                // Deep Hole
-                ctx.fillStyle = '#111';
+                ctx.fillStyle = '#111111';
                 ctx.beginPath();
                 ctx.arc(c[0], c[1], pRadius, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Inner drop shadow rim
                 ctx.strokeStyle = '#2a2a2a';
                 ctx.lineWidth = 4;
                 ctx.beginPath();
                 ctx.arc(c[0], c[1], pRadius - 2, 0, Math.PI * 2);
                 ctx.stroke();
 
-                // Outer wood cut rim
                 ctx.lineWidth = 2;
                 ctx.strokeStyle = '#3E2723';
                 ctx.beginPath();
@@ -606,24 +999,7 @@
             ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
             drawBoard();
 
-            // Draw Obstacles
-            ctx.fillStyle = '#5A351D'; // Dark Wood
-            world.bodies.forEach(b => {
-                if (b.label === 'obstacle') {
-                    ctx.beginPath();
-                    b.vertices.forEach((v, i) => {
-                        if (i === 0) ctx.moveTo(v.x, v.y);
-                        else ctx.lineTo(v.x, v.y);
-                    });
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.lineWidth = 2;
-                    ctx.strokeStyle = '#382010';
-                    ctx.stroke();
-                }
-            });
-
-            // Draw Pieces with 3D gradient look
+            // Draw Pieces
             world.bodies.forEach(b => {
                 if (b.label.startsWith('coin') || b.label === 'striker') {
                     ctx.translate(b.position.x, b.position.y);
@@ -651,7 +1027,6 @@
                         ctx.fill();
                         ctx.lineWidth = 1; ctx.strokeStyle = '#BBA480'; ctx.stroke();
 
-                        // Detail rings
                         ctx.strokeStyle = '#C5B293'; ctx.lineWidth = 1.5;
                         ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
                         ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
@@ -663,7 +1038,6 @@
                         ctx.fill();
                         ctx.lineWidth = 1; ctx.strokeStyle = '#000000'; ctx.stroke();
 
-                        // Detail rings
                         ctx.strokeStyle = '#333333'; ctx.lineWidth = 1.5;
                         ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
                         ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
@@ -675,7 +1049,6 @@
                         ctx.fill();
                         ctx.lineWidth = 1; ctx.strokeStyle = '#7A0F04'; ctx.stroke();
 
-                        // Detail rings
                         ctx.strokeStyle = '#9C1305'; ctx.lineWidth = 1.5;
                         ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
                         ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
@@ -687,15 +1060,12 @@
                         ctx.fill();
                         ctx.lineWidth = 1.5; ctx.strokeStyle = '#1E3A8A'; ctx.stroke();
 
-                        // Detail rings
                         ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 2;
                         ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.65, 0, Math.PI * 2); ctx.stroke();
 
-                        // Center dot
                         ctx.fillStyle = '#2563EB';
                         ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.2, 0, Math.PI * 2); ctx.fill();
 
-                        // Aiming indicator (rotational pip)
                         ctx.fillStyle = '#1E3A8A';
                         ctx.beginPath(); ctx.arc(0, -b.circleRadius * 0.45, 3, 0, Math.PI * 2); ctx.fill();
                     }
@@ -705,6 +1075,7 @@
                 }
             });
 
+            // AIMING GUIDE & POWER METER
             if (gameState === 'AIMING' && dragStart && dragCurrent && strikerBody) {
                 const dx = dragStart.x - dragCurrent.x;
                 const dy = dragStart.y - dragCurrent.y;
@@ -714,16 +1085,13 @@
 
                 if (clampedDist > 15) {
                     const angle = Math.atan2(dy, dx);
-
                     const startX = strikerBody.position.x;
                     const startY = strikerBody.position.y;
                     const dirX = Math.cos(angle);
                     const dirY = Math.sin(angle);
 
                     let t_min = Infinity;
-                    let hitCoin = null;
 
-                    // 1. Check distance to Walls
                     const minX = 35 + STRIKER_RADIUS;
                     const maxX = CANVAS_SIZE - 35 - STRIKER_RADIUS;
                     const minY = 35 + STRIKER_RADIUS;
@@ -735,24 +1103,18 @@
                     if (dirY > 0) t_min = Math.min(t_min, (maxY - startY) / dirY);
                     else if (dirY < 0) t_min = Math.min(t_min, (minY - startY) / dirY);
 
-                    // 2. Check distance to Coins (Circle Sweep Collision)
                     world.bodies.forEach(b => {
                         if (b.label.startsWith('coin')) {
                             const vecX = startX - b.position.x;
                             const vecY = startY - b.position.y;
-
                             const b_quad = 2 * (dirX * vecX + dirY * vecY);
                             const c_quad = (vecX * vecX + vecY * vecY) - Math.pow(STRIKER_RADIUS + b.circleRadius, 2);
-
                             const discriminant = (b_quad * b_quad) - (4 * c_quad);
 
                             if (discriminant >= 0) {
-                                // Only calculate the first intersection point (entry)
                                 const t1 = (-b_quad - Math.sqrt(discriminant)) / 2;
-
                                 if (t1 > 0.01 && t1 < t_min) {
                                     t_min = t1;
-                                    hitCoin = b;
                                 }
                             }
                         }
@@ -760,21 +1122,15 @@
 
                     const impactX = startX + dirX * t_min;
                     const impactY = startY + dirY * t_min;
-
-                    // Calculate power ratio (0.0 to 1.0)
                     const powerRatio = clampedDist / maxDist;
 
-                    // --- Draw Circular Power Meter ---
                     const ringRadius = STRIKER_RADIUS + 14;
-
-                    // Background track
                     ctx.beginPath();
                     ctx.arc(startX, startY, ringRadius, 0, Math.PI * 2);
                     ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
                     ctx.lineWidth = 4;
                     ctx.stroke();
 
-                    // Colored Power Fill
                     ctx.beginPath();
                     ctx.arc(startX, startY, ringRadius, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * powerRatio));
                     const hue = (1 - powerRatio) * 120;
@@ -783,24 +1139,25 @@
                     ctx.lineCap = 'round';
                     ctx.stroke();
 
-                    // --- Draw Trajectory Line ---
                     ctx.beginPath();
                     ctx.moveTo(startX, startY);
                     ctx.lineTo(impactX, impactY);
                     ctx.lineWidth = 2;
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
                     ctx.stroke();
 
-                    // --- Draw Ghost Striker ---
                     ctx.beginPath();
                     ctx.arc(impactX, impactY, STRIKER_RADIUS, 0, Math.PI * 2);
                     ctx.lineWidth = 2;
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
                     ctx.stroke();
                 }
             }
         }
 
+        // ============================================================
+        // 12. DIRECT CURSOR DRAGGING & TOUCH CONTROLS
+        // ============================================================
         function getTouchPos(e) {
             const rect = canvas.getBoundingClientRect();
             const scaleX = CANVAS_SIZE / rect.width;
@@ -819,65 +1176,116 @@
 
         function handleStart(e) {
             if (gameState !== 'IDLE' || !strikerBody) return;
+            initAudio();
             const pos = getTouchPos(e);
-            const dist = Math.hypot(pos.x - strikerBody.position.x, pos.y - strikerBody.position.y);
+            dragOriginPos = pos;
 
-            // Generous touch hit area
-            if (dist <= strikerBody.circleRadius + 30) {
-                setGameState('AIMING');
-                dragStart = pos;
+            const distToStriker = Math.hypot(pos.x - strikerBody.position.x, pos.y - strikerBody.position.y);
+            const isNearBaseline = Math.abs(pos.y - 485) <= 45 && pos.x >= 120 && pos.x <= 480;
+
+            if (distToStriker <= strikerBody.circleRadius + 22) {
+                dragMode = 'STRIKER_TOUCH';
+                strikerStartX = strikerBody.position.x;
+                dragStart = { x: strikerBody.position.x, y: strikerBody.position.y };
                 dragCurrent = pos;
+            } else if (isNearBaseline) {
+                dragMode = 'POSITIONING';
+                updateStrikerX(pos.x);
             }
         }
 
         function handleMove(e) {
-            if (gameState !== 'AIMING') return;
-            dragCurrent = getTouchPos(e);
-        }
+            if (!dragMode || !strikerBody) return;
+            if (e.cancelable) e.preventDefault();
+            const pos = getTouchPos(e);
 
-        function handleEnd(e) {
-            if (gameState !== 'AIMING') return;
+            if (dragMode === 'POSITIONING') {
+                updateStrikerX(pos.x);
+            } else if (dragMode === 'STRIKER_TOUCH') {
+                const deltaX = pos.x - dragOriginPos.x;
+                const deltaY = pos.y - dragOriginPos.y;
+                const dist = Math.hypot(deltaX, deltaY);
 
-            const dx = dragStart.x - dragCurrent.x;
-            const dy = dragStart.y - dragCurrent.y;
-            const dist = Math.hypot(dx, dy);
-
-            if (dist > 15) {
-                const maxDist = 150;
-                const clampedDist = Math.min(dist, maxDist);
-                const angle = Math.atan2(dy, dx);
-
-                // Max speed slightly reduced to balance the higher wall bounciness
-                const speed = (clampedDist / maxDist) * 24;
-
-                Matter.Body.setVelocity(strikerBody, {
-                    x: Math.cos(angle) * speed,
-                    y: Math.sin(angle) * speed
-                });
-
-                setGameState('MOVING');
-                ui.topBar.classList.remove('opacity-100'); // Hide HUD during shot to focus
-                ui.topBar.classList.add('opacity-0');
-            } else {
-                setGameState('IDLE'); // Cancel shot if drag was too short
+                if (dist > 8) {
+                    if (deltaY > 6 || (Math.abs(deltaY) > Math.abs(deltaX) && dist > 14)) {
+                        dragMode = 'AIMING';
+                        setGameState('AIMING');
+                        dragStart = { x: strikerBody.position.x, y: strikerBody.position.y };
+                        dragCurrent = pos;
+                    } else {
+                        dragMode = 'POSITIONING';
+                        updateStrikerX(strikerStartX + deltaX);
+                    }
+                }
+            } else if (dragMode === 'AIMING') {
+                dragCurrent = pos;
             }
         }
 
-        // Attach events
+        function handleEnd(e) {
+            if (!dragMode) return;
+
+            if (dragMode === 'AIMING') {
+                const dx = dragStart.x - dragCurrent.x;
+                const dy = dragStart.y - dragCurrent.y;
+                const dist = Math.hypot(dx, dy);
+
+                if (dist > 15) {
+                    const maxDist = 150;
+                    const clampedDist = Math.min(dist, maxDist);
+                    const angle = Math.atan2(dy, dx);
+                    const speed = (clampedDist / maxDist) * 24;
+
+                    Matter.Body.setVelocity(strikerBody, {
+                        x: Math.cos(angle) * speed,
+                        y: Math.sin(angle) * speed
+                    });
+
+                    setGameState('MOVING');
+                } else {
+                    setGameState('IDLE');
+                }
+            } else if (dragMode === 'POSITIONING' || dragMode === 'STRIKER_TOUCH') {
+                setGameState('IDLE');
+            }
+
+            dragMode = null;
+            dragStart = null;
+            dragCurrent = null;
+        }
+
         canvas.addEventListener('mousedown', handleStart);
-        canvas.addEventListener('touchstart', handleStart, { passive: true });
+        canvas.addEventListener('touchstart', handleStart, { passive: false });
 
-        // Window level binding for drag out bounds support
         window.addEventListener('mousemove', handleMove);
-        window.addEventListener('touchmove', handleMove, { passive: true });
+        window.addEventListener('touchmove', handleMove, { passive: false });
         window.addEventListener('mouseup', handleEnd);
-        window.addEventListener('touchend', handleEnd, { passive: true });
+        window.addEventListener('touchend', handleEnd, { passive: false });
 
+        canvas.addEventListener('mousemove', (e) => {
+            if (gameState === 'IDLE' && strikerBody) {
+                const pos = getTouchPos(e);
+                const dist = Math.hypot(pos.x - strikerBody.position.x, pos.y - strikerBody.position.y);
+                const isNearBaseline = Math.abs(pos.y - 485) <= 35 && pos.x >= 140 && pos.x <= 460;
+                if (dist <= strikerBody.circleRadius + 15) {
+                    canvas.style.cursor = 'grab';
+                } else if (isNearBaseline) {
+                    canvas.style.cursor = 'ew-resize';
+                } else {
+                    canvas.style.cursor = 'default';
+                }
+            } else {
+                canvas.style.cursor = 'default';
+            }
+        });
+
+        // ============================================================
+        // 13. GAME STATE LOOP
+        // ============================================================
         function checkGameState() {
             if (gameState === 'MOVING') {
                 let moving = false;
 
-                // Track moving bodies, snap slow ones to rest
                 for (let i = 0; i < world.bodies.length; i++) {
                     let b = world.bodies[i];
                     if (!b.isStatic && b.label !== 'pocket') {
@@ -892,7 +1300,7 @@
 
                 if (!moving) {
                     restTicks++;
-                    if (restTicks > 20) { // Slight delay to ensure everything rests
+                    if (restTicks > 20) {
                         setGameState('EVALUATE');
                         evaluateLevel();
                     }
@@ -902,25 +1310,18 @@
             }
         }
 
-        let lastTime = 0;
-        function loop(timestamp) {
-            // Fixed time step for physics
+        function loop() {
             Matter.Engine.update(engine, 1000 / 60);
             render();
             checkGameState();
             requestAnimationFrame(loop);
         }
 
-        // Start Application
-        showModal(
-            "Carrom Puzzles",
-            "Pull back on the striker to aim and shoot.\nComplete the objective in 1 shot.",
-            "Play",
-            () => {
-                loadLevel(0);
-                requestAnimationFrame(loop);
-            }
-        );
+        // ============================================================
+        // 14. INITIALIZE
+        // ============================================================
+        loadLevel(0);
+        requestAnimationFrame(loop);
     </script>
 </body>
 

@@ -54,4 +54,21 @@ export class HtmlIframeGame extends BaseGame {
       }
     });
   }
+
+  onRulesClick() {
+    const area = this.getGameArea();
+    const iframe = area.querySelector('iframe');
+    if (iframe) {
+      try {
+        if (iframe.contentWindow) {
+          iframe.contentWindow.postMessage({ type: 'OPEN_RULES' }, '*');
+          if (typeof iframe.contentWindow.openHelpModal === 'function') {
+            iframe.contentWindow.openHelpModal();
+          }
+        }
+      } catch (e) {
+        console.warn("Could not trigger rules in iframe:", e);
+      }
+    }
+  }
 }

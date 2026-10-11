@@ -22,6 +22,7 @@ export const translations = {
     'common.daily':         'Daily',
     'common.new':           'New',
     'common.coming_soon':   'Coming Soon',
+    'common.rules':         'Rules',
 
     // ---- Hub ----
     'hub.title':            'Game Lab',
@@ -151,6 +152,7 @@ export const translations = {
     'common.daily':         'दैनिक',
     'common.new':           'नया',
     'common.coming_soon':   'जल्द आ रहा है',
+    'common.rules':         'नियम',
 
     // ---- Hub ----
     'hub.title':            'गेम लैब',

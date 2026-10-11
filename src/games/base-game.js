@@ -65,13 +65,16 @@ export class BaseGame {
    * @abstract
    */
   async init() {
-    // Render the game header (back button + title + score)
+    // Render the game header (back button + title + rules + score)
     this.container.innerHTML = `
       <div class="screen-header">
-        <button class="screen-header__back" id="game-back-btn">←</button>
+        <button class="screen-header__back" id="game-back-btn" title="वापस">←</button>
         <h1 class="screen-header__title">${this.icon} ${t(this.titleKey)}</h1>
-        <div class="screen-header__action" id="game-score-display">
-          ${t('common.score')}: <strong id="game-score-value">0</strong>
+        <div class="screen-header__right">
+          <button type="button" class="screen-header__help-btn" id="game-rules-btn" title="${t('common.rules')}">ℹ️ ${t('common.rules')}</button>
+          <div class="screen-header__action" id="game-score-display">
+            ${t('common.score')}: <strong id="game-score-value">0</strong>
+          </div>
         </div>
       </div>
     `;
@@ -85,6 +88,14 @@ export class BaseGame {
       navigate('/');
     });
 
+    // Rules button handler
+    const rulesBtn = this.container.querySelector('#game-rules-btn');
+    if (rulesBtn) {
+      rulesBtn.addEventListener('click', () => {
+        this.showRules();
+      });
+    }
+
     // Visibility change handler (pause on tab switch)
     const visHandler = () => {
       if (document.hidden && this.isRunning && !this.isPaused) {
@@ -97,6 +108,15 @@ export class BaseGame {
     this._cleanupFns.push(() => document.removeEventListener('visibilitychange', visHandler));
 
     bus.emit(Events.GAME_LOADED, { gameId: this.id });
+  }
+
+  /**
+   * Show game rules modal/dialog (can be overridden by subclasses)
+   */
+  showRules() {
+    if (typeof this.onRulesClick === 'function') {
+      this.onRulesClick();
+    }
   }
 
   /**
