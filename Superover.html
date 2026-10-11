@@ -67,9 +67,9 @@
         /* Top HUD Strip - Clean & Uncluttered */
         .hud-strip {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
-            max-width: 480px;
+            max-width: 680px;
             margin: 0 auto;
             flex-shrink: 0;
             z-index: 20;
@@ -79,19 +79,19 @@
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 8px 12px;
+            border-radius: 16px;
+            padding: 9px 14px;
             box-shadow: var(--shadow-sm);
             min-width: 0;
         }
 
         .hud-icon-wrap {
-            font-size: 1.25rem;
-            width: 36px;
-            height: 36px;
+            font-size: 1.35rem;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -112,7 +112,7 @@
         }
 
         .hud-title {
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
             color: var(--text-secondary);
@@ -122,7 +122,7 @@
         }
 
         .hud-val {
-            font-size: 1.15rem;
+            font-size: 1.22rem;
             font-weight: 900;
             color: var(--text-primary);
             line-height: 1.2;
@@ -133,7 +133,7 @@
         }
 
         .hud-sub {
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             font-weight: 600;
             color: var(--text-tertiary);
             line-height: 1.2;
@@ -144,22 +144,22 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             width: 100%;
-            max-width: 480px;
+            max-width: 680px;
             margin: 4px auto 0 auto;
             flex-shrink: 0;
             z-index: 20;
         }
 
         .ball-badge {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 800;
             background: var(--bg-surface);
             border: 1.5px solid var(--border-subtle);
@@ -214,17 +214,17 @@
         /* Live Commentary Bar */
         .commentary-bar {
             width: 100%;
-            max-width: 480px;
+            max-width: 680px;
             margin: 4px auto 0 auto;
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: 9999px;
-            padding: 4px 14px;
+            padding: 5px 16px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 9px;
             box-shadow: var(--shadow-sm);
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             color: var(--text-secondary);
             font-weight: 600;
             flex-shrink: 0;
@@ -261,6 +261,8 @@
             justify-content: center;
             align-items: center;
             width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
             padding: 4px 0;
             position: relative;
             z-index: 5;
@@ -269,10 +271,10 @@
         #cricketCanvas {
             display: block;
             touch-action: none;
-            background: #1D753B;
+            background: #176B34;
             border-radius: 20px;
-            box-shadow: var(--shadow-board);
-            border: 1.5px solid rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.08);
+            border: 2px solid rgba(0, 0, 0, 0.18);
             cursor: grab;
         }
 
@@ -421,7 +423,7 @@
         /* Bottom Minimal Controls Strip */
         .bottom-controls {
             width: 100%;
-            max-width: 480px;
+            max-width: 680px;
             margin: 0 auto;
             flex-shrink: 0;
             z-index: 20;
@@ -1136,25 +1138,56 @@
         let speedMeterDir = 1;
         let speedMeterActive = false;
 
-        // Ball State
+        // Ball State & Hit Dynamics
         const ball = {
             active: false,
-            progress: 0,      // 0 to 1 along pitch
-            x: 0,
-            y: 0,
-            z: 0,             // Altitude off ground
-            pitchProgress: 0.65, // Where on pitch it bounces
+            isHit: false,
+            hitOutcome: null,
+            progress: 0,         // 0 to 1 along delivery path
+            x: 0,                // Ground projection X
+            y: 0,                // Ground projection Y
+            z: 0,                // 3D vertical altitude off turf
+            px: 0,               // Normalized pitch line (-0.5 to 0.5)
+            pitchProgress: 0.62, // Where along pitch it bounces (0 to 1)
             bounced: false,
-            vx: 0,
-            vy: 0,
-            vz: 0,
+            bouncesLeft: 0,
+            vx: 0,               // Ground velocity X
+            vy: 0,               // Ground velocity Y
+            vz: 0,               // Vertical velocity Z
+            gravity: 0.45,
+            groundFriction: 0.95,
+            speed: 0.0165,       // Slower realistic delivery speed for clear observation & timing
             swingCurve: 0,
             trail: []
         };
 
+        // Pitch Turf Impact Particles
+        let pitchDust = [];
+        function spawnPitchDust(x, y, count = 10) {
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const spd = (Math.random() * 3.5 + 1.2) * scale;
+                pitchDust.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * spd,
+                    vy: Math.sin(angle) * spd * 0.5,
+                    radius: (Math.random() * 3.2 + 1.8) * scale,
+                    alpha: 0.75,
+                    color: Math.random() < 0.6 ? '#D6BA8F' : '#CFA977'
+                });
+            }
+        }
+
         // Character Rig State
         const bowlerRig = { runup: 0, armAngle: 0 };
-        const batsmanRig = { swingAngle: 0, isSwinging: false, swingProgress: 0, swingDir: 'UP' };
+        const batsmanRig = { 
+            swingAngle: 0, 
+            isSwinging: false, 
+            swingProgress: 0, 
+            swingDir: 'UP',
+            stanceTimer: 0
+        };
         const stumps = { bailsOff: false, bailsY: 0, bailsRot: 0 };
 
         // Swipe Gesture Handling (8 Directions)
@@ -1310,10 +1343,18 @@
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
             const containerW = rect && rect.width > 0 ? rect.width : window.innerWidth;
-            const containerH = rect && rect.height > 0 ? rect.height : (window.innerHeight - 200);
+            const containerH = rect && rect.height > 0 ? rect.height : (window.innerHeight - 170);
 
-            width = Math.max(300, Math.min(containerW - 8, 460));
-            height = Math.max(360, Math.min(containerH - 8, 560));
+            // Much larger, spacious layout: up to 660px width and up to 720px height
+            let targetW = Math.min(containerW - 8, 660);
+            let targetH = Math.min(containerH - 6, 720);
+
+            if (targetW / targetH > 0.95) {
+                targetW = Math.min(targetW, targetH * 0.95);
+            }
+
+            width = Math.max(320, Math.round(targetW));
+            height = Math.max(420, Math.round(targetH));
 
             canvas.width = width * dpr;
             canvas.height = height * dpr;
@@ -1328,7 +1369,7 @@
             confCtx.resetTransform();
             confCtx.scale(dpr, dpr);
 
-            scale = Math.min(width / 360, height / 500);
+            scale = Math.min(width / 400, height / 540);
 
             // Default pitch target
             bowlingTarget.x = width / 2;
@@ -1340,7 +1381,7 @@
         function projectPitch(px, py, viewMode) {
             // py = 0 (far end), py = 1 (near end)
             // Tilted pitch trapezoid dimensions
-            const topY = height * 0.16;
+            const topY = height * 0.15;
             const bottomY = height * 0.86;
             const topW = width * 0.22;
             const bottomW = width * 0.46;
@@ -1368,6 +1409,9 @@
             ballOutcomes = [];
             gameState = STATES.IDLE;
             ball.active = false;
+            ball.isHit = false;
+            ball.hitOutcome = null;
+            pitchDust = [];
             stumps.bailsOff = false;
             bowlerRig.runup = 0;
 
@@ -1578,20 +1622,27 @@
         function releaseBallFlight() {
             gameState = STATES.IN_FLIGHT;
             ball.active = true;
+            ball.isHit = false;
+            ball.hitOutcome = null;
             ball.progress = 0;
             ball.bounced = false;
+            ball.bouncesLeft = 0;
             ball.trail = [];
+            ball.z = 28 * scale; // Elevated release point from bowler hand
+
+            // Slower realistic ball speed so player can track swing, pitch point and time shots
+            const deliverySpeed = 0.0165;
 
             // Calculate flight parameters
             if (currentRole === ROLES.BOWLING) {
                 const item = BOWLING_LENGTHS[selectedBowlingLength] || BOWLING_LENGTHS.GOOD;
-                ball.speed = 0.027;
+                ball.speed = deliverySpeed;
                 ball.px = selectedBowlingLine;
                 ball.pitchProgress = item.pitchProgress;
                 ball.swingCurve = bowlingTarget.swingDir * 0.12;
             } else {
-                ball.speed = 0.028;
-                ball.px = hoverArea.px + (Math.random() - 0.5) * 0.06;
+                ball.speed = deliverySpeed;
+                ball.px = hoverArea.px + (Math.random() - 0.5) * 0.05;
                 ball.pitchProgress = hoverArea.py;
                 ball.swingCurve = (Math.random() - 0.5) * 0.06;
             }
@@ -1613,22 +1664,97 @@
             lastSwipeDir = dir;
             highlightGesturePill(dir);
 
-            // Evaluate timing: sweet spot is when ball.progress is between 0.72 and 0.88
+            // Evaluate timing: sweet spot is when ball.progress is between 0.74 and 0.88
             const ballProg = ball.progress;
             let rating = 'GOOD';
-            const diff = Math.abs(ballProg - 0.80);
+            const diff = Math.abs(ballProg - 0.81);
 
-            if (ballProg < 0.62) {
+            if (ballProg < 0.65) {
                 rating = 'EARLY'; // Swung too early
             } else if (ballProg > 0.94) {
                 rating = 'LATE'; // Swung too late / beaten
-            } else if (diff < 0.06) {
+            } else if (diff < 0.065) {
                 rating = 'PERFECT';
             } else {
                 rating = 'GOOD';
             }
 
             evaluateShotOutcome(dir, rating);
+        }
+
+        // Directional Hit Physics (Ball launches away into field, never returns backward!)
+        function setupHitBallPhysics(dir, runs, isOut, outType) {
+            if (isOut && outType === 'BOWLED') {
+                ball.isHit = false;
+                return;
+            }
+
+            ball.isHit = true;
+            ball.hitOutcome = (runs === 6) ? 'six' : (runs === 4 ? 'four' : (dir === 'DOWN' ? 'defense' : (isOut ? 'caught' : 'runs')));
+
+            const isBatterPOV = (currentCameraView === CAMERA_VIEWS.BATTER);
+
+            // Angle in radians (0 = right, -PI/2 = straight UP towards outfield/bowler)
+            let angle = -Math.PI / 2;
+            if (dir === 'UP') angle = -Math.PI / 2 + (Math.random() - 0.5) * 0.15;
+            else if (dir === 'UP_RIGHT') angle = -Math.PI * 0.28;
+            else if (dir === 'UP_LEFT') angle = -Math.PI * 0.72;
+            else if (dir === 'RIGHT') angle = -Math.PI * 0.08;
+            else if (dir === 'LEFT') angle = -Math.PI * 0.92;
+            else if (dir === 'DOWN_RIGHT') angle = Math.PI * 0.18;
+            else if (dir === 'DOWN_LEFT') angle = Math.PI * 0.82;
+            else if (dir === 'DOWN') angle = -Math.PI / 2;
+
+            if (!isBatterPOV) {
+                // In Bowler POV, batsman at far end hits towards bottom
+                angle += Math.PI;
+            }
+
+            if (dir === 'DOWN') {
+                // Forward defense - softly drops right on the pitch in front of bat
+                ball.vx = (Math.random() - 0.5) * 1.5 * scale;
+                ball.vy = isBatterPOV ? (-1.5 * scale) : (1.5 * scale);
+                ball.vz = 1.2 * scale;
+                ball.gravity = 0.35 * scale;
+                ball.bouncesLeft = 1;
+                ball.groundFriction = 0.88;
+            } else if (runs === 6) {
+                // High soaring maximum into the stands!
+                const speed = 15.5 * scale;
+                ball.vx = Math.cos(angle) * speed;
+                ball.vy = Math.sin(angle) * speed;
+                ball.vz = 16.5 * scale;
+                ball.gravity = 0.38 * scale;
+                ball.bouncesLeft = 0;
+                ball.groundFriction = 0.98;
+            } else if (runs === 4) {
+                // Fast boundary skimming along turf!
+                const speed = 16.5 * scale;
+                ball.vx = Math.cos(angle) * speed;
+                ball.vy = Math.sin(angle) * speed;
+                ball.vz = 3.5 * scale;
+                ball.gravity = 0.5 * scale;
+                ball.bouncesLeft = 3;
+                ball.groundFriction = 0.97;
+            } else if (isOut && outType === 'CAUGHT') {
+                // Skier caught in the outfield
+                const speed = 9 * scale;
+                ball.vx = Math.cos(angle) * speed;
+                ball.vy = Math.sin(angle) * speed;
+                ball.vz = 13 * scale;
+                ball.gravity = 0.42 * scale;
+                ball.bouncesLeft = 0;
+                ball.groundFriction = 0.92;
+            } else {
+                // 1 or 2 runs into gaps
+                const speed = 10.5 * scale;
+                ball.vx = Math.cos(angle) * speed;
+                ball.vy = Math.sin(angle) * speed;
+                ball.vz = 4.5 * scale;
+                ball.gravity = 0.45 * scale;
+                ball.bouncesLeft = 2;
+                ball.groundFriction = 0.94;
+            }
         }
 
         function evaluateShotOutcome(dir, rating) {
@@ -1644,7 +1770,7 @@
             if (dir === 'DOWN') {
                 runs = (Math.random() < 0.35) ? 1 : 0;
                 audio.playBatHit(false);
-                setCommentary('सटीक डिफेंस! गेंद को नीचे दबाया, विकेट सुरक्षित।');
+                setCommentary(currentLang === 'hi' ? 'सटीक डिफेंस! गेंद को नीचे दबाया, विकेट सुरक्षित।' : 'Solid defense! Deadened the ball into the pitch.');
             }
             // 2. UP (Straight Drive / Six) or UP_RIGHT (Cover) or UP_LEFT (Midwicket):
             else if (['UP', 'UP_RIGHT', 'UP_LEFT'].includes(dir)) {
@@ -1655,7 +1781,7 @@
                     runs = 4;
                     audio.playBatHit(false);
                 } else if (rating === 'EARLY') {
-                    if (Math.random() < 0.55) {
+                    if (Math.random() < 0.5) {
                         isOut = true;
                         outType = 'CAUGHT';
                     } else {
@@ -1663,7 +1789,7 @@
                         audio.playBatHit(false);
                     }
                 } else { // LATE
-                    if (Math.random() < 0.6) {
+                    if (Math.random() < 0.55) {
                         isOut = true;
                         outType = 'BOWLED';
                     } else {
@@ -1674,13 +1800,13 @@
             // 3. RIGHT (Cut), LEFT (Pull), DOWN_RIGHT (Late Cut), DOWN_LEFT (Fine leg)
             else {
                 if (rating === 'PERFECT' || rating === 'GOOD') {
-                    runs = (Math.random() < 0.6) ? 4 : 2;
+                    runs = (Math.random() < 0.65) ? 4 : 2;
                     audio.playBatHit(false);
                 } else if (rating === 'EARLY') {
                     runs = 1;
                     audio.playBatHit(false);
                 } else {
-                    if (Math.random() < 0.5) {
+                    if (Math.random() < 0.45) {
                         isOut = true;
                         outType = 'CAUGHT';
                     } else {
@@ -1689,7 +1815,9 @@
                 }
             }
 
-            // Ball flight after hit
+            // Apply realistic launch trajectory in shot direction (NOT coming back!)
+            setupHitBallPhysics(dir, runs, isOut, outType);
+
             if (isOut) {
                 if (outType === 'BOWLED') {
                     stumps.bailsOff = true;
@@ -1699,7 +1827,7 @@
 
             setTimeout(() => {
                 finishBall(runs, isOut, outType);
-            }, 1200);
+            }, 1400);
         }
 
         // --- AI Batsman Shot Against Bowling Delivery ---
@@ -1799,6 +1927,9 @@
                 }
             }
 
+            // Launch AI hit ball physics
+            setupHitBallPhysics(batsmanRig.swingDir, runs, isOut, outType);
+
             if (isOut) {
                 if (outType === 'BOWLED') stumps.bailsOff = true;
                 audio.playWicketSmash();
@@ -1806,7 +1937,7 @@
 
             setTimeout(() => {
                 finishBall(runs, isOut, outType);
-            }, 1200);
+            }, 1400);
         }
 
         function finishBall(runs, isOut, outType) {
@@ -1983,60 +2114,104 @@
 
         // --- Render Engine: Tilted 3D Perspectives ---
         function updatePhysics() {
-            // Ball flight
-            if (ball.active && (gameState === STATES.IN_FLIGHT || gameState === STATES.HIT)) {
-                ball.progress += ball.speed;
+            // Batsman stance breathing clock
+            batsmanRig.stanceTimer += 0.05;
 
-                // Position calculation based on perspective
-                let curPy = ball.progress;
-                let curPx = ball.px + Math.sin(ball.progress * Math.PI) * ball.swingCurve;
+            // Ball flight & physics
+            if (ball.active) {
+                if (!ball.isHit) {
+                    // 1. DELIVERY FLIGHT PHASE
+                    ball.progress += ball.speed;
 
-                // In Bowler View, progress is inverted (0 = near bowler, 1 = far batter)
-                let projPy = (currentCameraView === CAMERA_VIEWS.BATTER) ? curPy : (1 - curPy);
-                const proj = projectPitch(curPx, projPy, currentCameraView);
+                    // Position calculation along pitch
+                    let curPy = ball.progress;
+                    let curPx = ball.px + Math.sin(ball.progress * Math.PI) * ball.swingCurve;
 
-                ball.x = proj.x;
-                ball.y = proj.y;
+                    // Perspective inversion for Bowler View
+                    let projPy = (currentCameraView === CAMERA_VIEWS.BATTER) ? curPy : (1 - curPy);
+                    const proj = projectPitch(curPx, projPy, currentCameraView);
 
-                // Bounce altitude
-                if (ball.progress >= ball.pitchProgress && !ball.bounced) {
-                    ball.bounced = true;
-                    audio.playBallBounce();
-                }
+                    ball.x = proj.x;
+                    ball.y = proj.y;
 
-                // Parabolic height (z)
-                if (ball.progress < ball.pitchProgress) {
-                    const norm = ball.progress / ball.pitchProgress;
-                    ball.z = Math.sin(norm * Math.PI) * 14 * scale;
-                } else {
-                    const normAfter = (ball.progress - ball.pitchProgress) / (1 - ball.pitchProgress);
-                    ball.z = Math.sin(normAfter * Math.PI) * 10 * scale;
-                }
-
-                ball.trail.push({ x: ball.x, y: ball.y - ball.z });
-                if (ball.trail.length > 8) ball.trail.shift();
-
-                // AI Batsman plays against bowling delivery
-                if (currentRole === ROLES.BOWLING && gameState === STATES.IN_FLIGHT && !batsmanRig.isSwinging && ball.progress >= 0.76) {
-                    aiPlayShotAgainstDelivery();
-                }
-
-                // If batter misses without swing, finish at keeper
-                if (ball.progress >= 1.05 && gameState === STATES.IN_FLIGHT) {
-                    // Check if bowled!
-                    if (Math.abs(curPx) < 0.08) {
-                        stumps.bailsOff = true;
-                        audio.playWicketSmash();
-                        finishBall(0, true, 'BOWLED');
+                    // 3D Altitude (z) and Bounce on Pitch:
+                    if (ball.progress < ball.pitchProgress) {
+                        // In the air towards landing spot: drops from bowler release down to 0 at pitch spot!
+                        const t = ball.progress / ball.pitchProgress;
+                        ball.z = Math.max(0, (1 - t) * 30 * scale + Math.sin(t * Math.PI) * 10 * scale);
                     } else {
-                        finishBall(0, false, '');
+                        // At bounce point:
+                        if (!ball.bounced) {
+                            ball.bounced = true;
+                            ball.z = 0;
+                            spawnPitchDust(ball.x, ball.y, 8);
+                            audio.playBallBounce();
+                        }
+                        // Rising up off the turf towards the batsman!
+                        const tAfter = (ball.progress - ball.pitchProgress) / (1 - ball.pitchProgress);
+                        ball.z = Math.sin(Math.min(1, tAfter) * Math.PI) * 26 * scale;
                     }
+
+                    ball.trail.push({ x: ball.x, y: ball.y - ball.z });
+                    if (ball.trail.length > 8) ball.trail.shift();
+
+                    // AI Batsman plays against bowling delivery
+                    if (currentRole === ROLES.BOWLING && gameState === STATES.IN_FLIGHT && !batsmanRig.isSwinging && ball.progress >= 0.76) {
+                        aiPlayShotAgainstDelivery();
+                    }
+
+                    // If batter misses without swing, finish at keeper / stumps
+                    if (ball.progress >= 1.05 && gameState === STATES.IN_FLIGHT) {
+                        // Check if bowled!
+                        if (Math.abs(curPx) < 0.08) {
+                            stumps.bailsOff = true;
+                            audio.playWicketSmash();
+                            finishBall(0, true, 'BOWLED');
+                        } else {
+                            finishBall(0, false, '');
+                        }
+                    }
+                } else {
+                    // 2. HIT TRAJECTORY PHASE (Ball launches AWAY into field in shot direction!)
+                    ball.x += ball.vx;
+                    ball.y += ball.vy;
+                    ball.z += ball.vz;
+                    ball.vz -= ball.gravity;
+
+                    if (ball.z <= 0) {
+                        ball.z = 0;
+                        if (ball.bouncesLeft > 0) {
+                            ball.vz = -ball.vz * 0.44;
+                            ball.bouncesLeft--;
+                            spawnPitchDust(ball.x, ball.y, 5);
+                            audio.playBallBounce();
+                        } else {
+                            ball.vz = 0;
+                            ball.vx *= ball.groundFriction;
+                            ball.vy *= ball.groundFriction;
+                        }
+                    }
+
+                    ball.trail.push({ x: ball.x, y: ball.y - ball.z });
+                    if (ball.trail.length > 12) ball.trail.shift();
+                }
+            }
+
+            // Update pitch dust particles
+            for (let i = pitchDust.length - 1; i >= 0; i--) {
+                const p = pitchDust[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.04;
+                p.radius += 0.15;
+                if (p.alpha <= 0) {
+                    pitchDust.splice(i, 1);
                 }
             }
 
             // Batsman swing animation
             if (batsmanRig.isSwinging) {
-                batsmanRig.swingProgress += 0.14;
+                batsmanRig.swingProgress += 0.055; // Smooth progression over ~18 frames
                 if (batsmanRig.swingProgress >= 1) {
                     batsmanRig.isSwinging = false;
                 }
@@ -2057,9 +2232,32 @@
         function drawStadium() {
             ctx.clearRect(0, 0, width, height);
 
-            // 1. Lush Green Field Background — Uniform Single Color (No radiating lines)
-            ctx.fillStyle = '#1D753B';
+            // 1. Lush Green Field Background with Mowed Bands & Outfield Boundary
+            ctx.fillStyle = '#176B34';
             ctx.fillRect(0, 0, width, height);
+
+            // Subtle mowed grass stripes across field
+            const stripeH = 34 * scale;
+            for (let sy = 0; sy < height; sy += stripeH * 2) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.025)';
+                ctx.fillRect(0, sy, width, stripeH);
+            }
+
+            // Faint inner circle line (30-yard circle)
+            ctx.beginPath();
+            ctx.ellipse(width / 2, height * 0.50, width * 0.42, height * 0.38, 0, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+            ctx.lineWidth = 1.5 * scale;
+            ctx.setLineDash([6 * scale, 5 * scale]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Outfield boundary rope curve at edges
+            ctx.beginPath();
+            ctx.ellipse(width / 2, height * 0.50, width * 0.485, height * 0.47, 0, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+            ctx.lineWidth = 2 * scale;
+            ctx.stroke();
 
             // 2. Tilted 3D Clay Pitch (Trapezoid Projection)
             const pFarLeft = projectPitch(-0.5, 0, currentCameraView);
@@ -2088,7 +2286,7 @@
             const isBatterPOV = (currentCameraView === CAMERA_VIEWS.BATTER);
             const bottomEndText = isBatterPOV ? 'बल्लेबाजी छोर (Batting End)' : 'गेंदबाजी छोर (Bowling End)';
 
-            // Top Crease Line (Bowling end in Batting POV / Batting end in Bowling POV)
+            // Top Crease Line
             const cFarL = projectPitch(-0.52, 0.08, currentCameraView);
             const cFarR = projectPitch(0.52, 0.08, currentCameraView);
             ctx.beginPath();
@@ -2098,7 +2296,7 @@
             ctx.lineWidth = 2 * scale;
             ctx.stroke();
 
-            // Bottom Crease Line (Near player end)
+            // Bottom Crease Line
             const cNearL = projectPitch(-0.52, 0.88, currentCameraView);
             const cNearR = projectPitch(0.52, 0.88, currentCameraView);
             ctx.beginPath();
@@ -2108,7 +2306,7 @@
             ctx.lineWidth = 2.5 * scale;
             ctx.stroke();
 
-            // Bottom End Label — Rendered exclusively below the pitch on the grass
+            // Bottom End Label
             ctx.save();
             ctx.font = `800 ${Math.max(10, 11 * scale)}px Inter, 'Noto Sans Devanagari', sans-serif`;
             ctx.textAlign = 'center';
@@ -2129,7 +2327,6 @@
 
             // 4. Hovering Pitch Area Clue & Direct Bowling Pitch Drag Targeting
             if (currentRole === ROLES.BOWLING && (gameState === STATES.IDLE || gameState === STATES.RUNUP)) {
-                // Curved delivery trajectory arc from bowler to target
                 const hoverProj = projectPitch(hoverArea.px, hoverArea.py, currentCameraView);
                 const bowlerProj = projectPitch(0, 0.90, currentCameraView);
 
@@ -2162,7 +2359,7 @@
                 ctx.stroke();
                 ctx.setLineDash([]);
 
-                // Inner core dot & crosshair
+                // Inner core dot
                 ctx.beginPath();
                 ctx.arc(hoverProj.x, hoverProj.y, 4 * scale, 0, Math.PI * 2);
                 ctx.fillStyle = '#FFFFFF';
@@ -2185,32 +2382,41 @@
                 }
             }
 
+            // Draw pitch impact dust particles
+            for (let i = 0; i < pitchDust.length; i++) {
+                const p = pitchDust[i];
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.fill();
+                ctx.restore();
+            }
+
             // 5. Stumps at Both Ends
             const farStumpPos = projectPitch(0, 0.06, currentCameraView);
             const nearStumpPos = projectPitch(0, 0.92, currentCameraView);
 
-            // In Batter POV, near stumps are batsman's; in Bowler POV, far stumps are batsman's
             drawStumpsAt(farStumpPos.x, farStumpPos.y, (currentCameraView === CAMERA_VIEWS.BOWLER) ? stumps.bailsOff : false, 0.7);
             drawStumpsAt(nearStumpPos.x, nearStumpPos.y, (currentCameraView === CAMERA_VIEWS.BATTER) ? stumps.bailsOff : false, 1.25);
 
-            // 6. Characters: Bowler Run-Up from BEHIND stumps
+            // 6. Characters
             if (currentCameraView === CAMERA_VIEWS.BATTER) {
-                // Batter in foreground
-                drawBatterFigure(nearStumpPos.x - 12 * scale, nearStumpPos.y - 12 * scale, 1.3, batsmanRig);
-
-                // Bowler runs in from behind the far stumps
+                // Bowler runs in from behind far stumps
                 const bowlerBaseY = farStumpPos.y - 42 * scale;
                 if (gameState === STATES.RUNUP) {
                     const runY = bowlerBaseY + (bowlerRig.runup * 44 * scale);
                     const runBob = Math.abs(Math.sin(bowlerRig.runup * Math.PI * 8)) * 3 * scale;
                     drawBowlerFigure(farStumpPos.x, runY - runBob, 0.75, bowlerRig);
                 } else if (gameState === STATES.IDLE) {
-                    // Waiting at the top of the mark behind stumps
                     drawBowlerFigure(farStumpPos.x, bowlerBaseY, 0.75, bowlerRig);
                 } else {
-                    // In delivery follow-through
                     drawBowlerFigure(farStumpPos.x, farStumpPos.y + 4 * scale, 0.75, bowlerRig);
                 }
+
+                // Batter in foreground
+                drawBatterFigure(nearStumpPos.x - 12 * scale, nearStumpPos.y - 12 * scale, 1.3, batsmanRig);
             } else {
                 // Bowler in foreground (Bowling POV)
                 const bowlerBaseY = nearStumpPos.y + 36 * scale;
@@ -2228,45 +2434,63 @@
                 drawBatterFigure(farStumpPos.x - 6 * scale, farStumpPos.y + 12 * scale, 0.75, batsmanRig);
             }
 
-            // 7. Ball & Shadow
+            // 7. Ball & Ground Shadow (High Clarity Depth System)
             if (ball.active) {
-                // Ball Shadow on pitch
-                const shadowRadius = Math.max(2, 5 * scale * (1 - ball.z * 0.05));
+                // GROUND SHADOW ON PITCH / TURF
+                const shadowBaseRadius = (5.5 + (ball.y / height) * 3.5) * scale;
+                const shadowRadiusX = Math.max(2.5, shadowBaseRadius * (1 - Math.min(0.55, ball.z / 85)));
+                const shadowRadiusY = shadowRadiusX * 0.45; // Perspective flattening on turf
+                const shadowAlpha = Math.max(0.12, 0.52 * (1 - Math.min(0.75, ball.z / 80)));
+
+                ctx.save();
                 ctx.beginPath();
-                ctx.arc(ball.x, ball.y, shadowRadius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+                ctx.ellipse(ball.x, ball.y, shadowRadiusX, shadowRadiusY, 0, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 0, 0, ${shadowAlpha})`;
                 ctx.fill();
+                ctx.restore();
 
                 // Ball Tracer Trail
                 if (ball.trail.length > 1) {
+                    ctx.save();
                     ctx.beginPath();
                     ctx.moveTo(ball.trail[0].x, ball.trail[0].y);
                     for (let i = 1; i < ball.trail.length; i++) {
                         ctx.lineTo(ball.trail[i].x, ball.trail[i].y);
                     }
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-                    ctx.lineWidth = 2.5 * scale;
+                    if (ball.hitOutcome === 'six') {
+                        ctx.strokeStyle = 'rgba(243, 156, 18, 0.7)';
+                        ctx.lineWidth = 3.5 * scale;
+                    } else {
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                        ctx.lineWidth = 2.5 * scale;
+                    }
                     ctx.stroke();
+                    ctx.restore();
                 }
 
-                // Ball Sphere with 3D altitude
+                // Ball Sphere with 3D altitude (ballDrawY = ball.y - ball.z)
                 const ballDrawY = ball.y - ball.z;
-                const ballRadius = Math.max(3.5, 6 * scale * (0.8 + ball.progress * 0.5));
+                const depthFactor = 0.75 + (ball.y / height) * 0.55;
+                const altitudeScale = 1 + Math.min(0.4, ball.z / 120);
+                const ballRadius = Math.max(3.5, 6.5 * scale * depthFactor * altitudeScale);
 
+                ctx.save();
                 ctx.beginPath();
                 ctx.arc(ball.x, ballDrawY, ballRadius, 0, Math.PI * 2);
+
                 const ballGrad = ctx.createRadialGradient(
-                    ball.x - 2 * scale, ballDrawY - 2 * scale, 1 * scale,
+                    ball.x - ballRadius * 0.35, ballDrawY - ballRadius * 0.35, ballRadius * 0.15,
                     ball.x, ballDrawY, ballRadius
                 );
                 ballGrad.addColorStop(0, '#FF7675');
-                ballGrad.addColorStop(0.7, '#D63031');
-                ballGrad.addColorStop(1, '#781E15');
+                ballGrad.addColorStop(0.65, '#D63031');
+                ballGrad.addColorStop(1, '#66140D');
                 ctx.fillStyle = ballGrad;
                 ctx.fill();
                 ctx.strokeStyle = '#FFFFFF';
                 ctx.lineWidth = 1 * scale;
                 ctx.stroke();
+                ctx.restore();
             }
 
             // 8. Live Swipe Trail on Canvas
@@ -2314,46 +2538,205 @@
             ctx.save();
             ctx.translate(x, y);
 
-            // Dynamic bat angle based on 8-direction swipe
-            let batAngle = -0.3;
+            const s = scale * depthScale;
+
+            // 1. Calculate dynamic bat angle & player stance
+            let batAngle = -0.25;
+            let handOffsetX = 0;
+            let handOffsetY = 0;
+            let bodyLeanX = 0;
+            let footStepY = 0;
+
             if (rig.isSwinging) {
+                const t = Math.min(1, rig.swingProgress);
+                // Swing progress with acceleration into impact and smooth follow-through
+                const easeT = Math.sin(t * Math.PI * 0.5);
                 const dir = rig.swingDir;
-                if (dir === 'DOWN') batAngle = 0.2; // Solid forward block
-                else if (dir === 'LEFT' || dir === 'UP_LEFT') batAngle = 2.4; // Pull / on-drive
-                else if (dir === 'RIGHT' || dir === 'UP_RIGHT') batAngle = -2.2; // Cut / off-drive
-                else batAngle = -0.3 + Math.sin(rig.swingProgress * Math.PI) * 2.8;
+
+                if (dir === 'UP') {
+                    // Straight Drive: Backlift (-0.5) -> Vertical impact (0.0) -> High elbow follow-through (+2.6)
+                    batAngle = -0.5 + easeT * 3.1;
+                    bodyLeanX = Math.sin(t * Math.PI) * 2 * s;
+                    handOffsetX = Math.sin(t * Math.PI) * 4 * s;
+                    handOffsetY = -Math.sin(t * Math.PI) * 8 * s;
+                } else if (dir === 'UP_RIGHT') {
+                    // Cover Drive: Off-side flowing arc
+                    batAngle = -0.6 - easeT * 1.8;
+                    bodyLeanX = easeT * 6 * s;
+                    handOffsetX = easeT * 8 * s;
+                } else if (dir === 'UP_LEFT') {
+                    // Mid-Wicket: Wristy on-drive
+                    batAngle = -0.3 + easeT * 2.9;
+                    bodyLeanX = -easeT * 6 * s;
+                    handOffsetX = -easeT * 7 * s;
+                } else if (dir === 'RIGHT') {
+                    // Square Cut: Horizontal slash through point
+                    batAngle = -0.8 - easeT * 1.8;
+                    handOffsetX = easeT * 10 * s;
+                    handOffsetY = -easeT * 4 * s;
+                } else if (dir === 'LEFT') {
+                    // Pull Shot: Swivel pull shot across chest
+                    batAngle = 0.1 + easeT * 3.0;
+                    bodyLeanX = -easeT * 7 * s;
+                    handOffsetX = -easeT * 9 * s;
+                } else if (dir === 'DOWN_RIGHT') {
+                    // Late Cut: Steer past slip
+                    batAngle = -0.4 - easeT * 1.4;
+                    handOffsetX = easeT * 6 * s;
+                } else if (dir === 'DOWN_LEFT') {
+                    // Fine Leg Glance
+                    batAngle = -0.2 + easeT * 1.8;
+                    handOffsetX = -easeT * 5 * s;
+                } else if (dir === 'DOWN') {
+                    // Solid Forward Defense
+                    batAngle = -0.15 + easeT * 0.28;
+                    handOffsetY = easeT * 5 * s;
+                    footStepY = -easeT * 4 * s;
+                }
+            } else {
+                // Stance: Active tapping or cocked backlift
+                if (gameState === STATES.RUNUP || gameState === STATES.IN_FLIGHT) {
+                    // Cocked backlift as bowler approaches
+                    batAngle = -0.45;
+                    handOffsetY = -3 * s;
+                } else {
+                    // Gentle stance bat tap
+                    const tap = Math.sin(rig.stanceTimer * 4);
+                    batAngle = -0.2 + tap * 0.08;
+                    handOffsetY = tap * 1.2 * s;
+                }
             }
 
-            // Batsman Body (Blue India Team Jersey)
+            // 2. Swing Motion Blur Arc Trail
+            if (rig.isSwinging && rig.swingProgress > 0.08 && rig.swingProgress < 0.88) {
+                ctx.save();
+                ctx.beginPath();
+                const tipRadius = 24 * s;
+                ctx.arc(handOffsetX, handOffsetY, tipRadius, batAngle - 0.7, batAngle + 0.3);
+                ctx.strokeStyle = 'rgba(243, 156, 18, 0.4)';
+                ctx.lineWidth = 5 * s;
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // 3. Batting Pads & Legs
+            // Left pad (front leg)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.lineWidth = 1 * s;
             ctx.beginPath();
-            ctx.arc(0, 0, 9 * scale * depthScale, 0, Math.PI * 2);
+            ctx.roundRect(-8 * s + bodyLeanX * 0.3, 6 * s + footStepY, 5 * s, 11 * s, 2 * s);
+            ctx.fill();
+            ctx.stroke();
+
+            // Right pad (back leg)
+            ctx.beginPath();
+            ctx.roundRect(3 * s + bodyLeanX * 0.2, 7 * s, 5 * s, 10 * s, 2 * s);
+            ctx.fill();
+            ctx.stroke();
+
+            // Pad knee rolls
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+            ctx.fillRect(-7.5 * s + bodyLeanX * 0.3, 10 * s + footStepY, 4 * s, 1.5 * s);
+            ctx.fillRect(3.5 * s + bodyLeanX * 0.2, 11 * s, 4 * s, 1.5 * s);
+
+            // 4. Batsman Torso (Team India Royal Blue Jersey)
+            ctx.save();
+            ctx.translate(bodyLeanX, 0);
+
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 10 * s, 11 * s, bodyLeanX * 0.03, 0, Math.PI * 2);
             ctx.fillStyle = '#1E3799';
             ctx.fill();
             ctx.strokeStyle = '#FFFFFF';
-            ctx.lineWidth = 1.5 * scale * depthScale;
+            ctx.lineWidth = 1.5 * s;
             ctx.stroke();
 
-            // Helmet & Grill
+            // Saffron/Orange collar accent
             ctx.beginPath();
-            ctx.arc(0, -6 * scale * depthScale, 6 * scale * depthScale, 0, Math.PI * 2);
+            ctx.arc(0, -6 * s, 4.5 * s, 0, Math.PI);
+            ctx.strokeStyle = '#FF9933';
+            ctx.lineWidth = 2 * s;
+            ctx.stroke();
+
+            // 5. Helmet & Grill
+            ctx.beginPath();
+            ctx.arc(0, -8 * s, 7 * s, 0, Math.PI * 2);
             ctx.fillStyle = '#0C2461';
             ctx.fill();
 
-            // Pads
-            ctx.fillStyle = '#F5F6FA';
-            ctx.fillRect(-7 * scale * depthScale, 7 * scale * depthScale, 4.5 * scale * depthScale, 7 * scale * depthScale);
-            ctx.fillRect(2.5 * scale * depthScale, 7 * scale * depthScale, 4.5 * scale * depthScale, 7 * scale * depthScale);
+            // Visor / Peak
+            ctx.beginPath();
+            ctx.ellipse(0, -11 * s, 6 * s, 2.5 * s, 0, 0, Math.PI);
+            ctx.fillStyle = '#1E3799';
+            ctx.fill();
 
-            // Cricket Bat
+            // Metallic protective face grille
+            ctx.strokeStyle = '#CFD8DC';
+            ctx.lineWidth = 1.2 * s;
+            ctx.beginPath();
+            ctx.moveTo(-4 * s, -6 * s);
+            ctx.lineTo(4 * s, -6 * s);
+            ctx.moveTo(-3 * s, -4 * s);
+            ctx.lineTo(3 * s, -4 * s);
+            ctx.stroke();
+
+            ctx.restore();
+
+            // 6. Cricket Bat with Wood Texture & DB Logo Branding
             ctx.save();
+            ctx.translate(handOffsetX, handOffsetY);
             ctx.rotate(batAngle);
-            ctx.fillStyle = '#D2B48C';
-            ctx.fillRect(2 * scale * depthScale, -18 * scale * depthScale, 4 * scale * depthScale, 20 * scale * depthScale);
-            ctx.fillStyle = '#E74C3C'; // Rubber grip
-            ctx.fillRect(2.5 * scale * depthScale, -24 * scale * depthScale, 3 * scale * depthScale, 6 * scale * depthScale);
-            ctx.restore();
 
-            ctx.restore();
+            // Cane Handle
+            ctx.fillStyle = '#C49E6C';
+            ctx.fillRect(2.5 * s, -26 * s, 3.5 * s, 9 * s);
+
+            // Red spiral rubber grip
+            ctx.fillStyle = '#E23A28';
+            ctx.fillRect(2.5 * s, -25 * s, 3.5 * s, 7 * s);
+            ctx.fillStyle = '#BA2313';
+            ctx.fillRect(2.5 * s, -22 * s, 3.5 * s, 2 * s);
+
+            // English Willow Bat Blade
+            const batW = 5.2 * s;
+            const batH = 22 * s;
+            const batX = 1.6 * s;
+            const batY = -17 * s;
+
+            // Blade main face
+            ctx.fillStyle = '#E3C89B';
+            ctx.beginPath();
+            ctx.roundRect(batX, batY, batW, batH, [1 * s, 1 * s, 3 * s, 3 * s]);
+            ctx.fill();
+
+            // Wood edge shading
+            ctx.fillStyle = '#C9A675';
+            ctx.fillRect(batX + batW - 1.2 * s, batY, 1.2 * s, batH);
+
+            // Dainik Bhaskar Crimson & Gold Brand Sticker on the bat spine
+            ctx.fillStyle = '#E23A28';
+            ctx.fillRect(batX + 0.8 * s, batY + 4 * s, batW - 1.6 * s, 6 * s);
+            ctx.fillStyle = '#F1C40F';
+            ctx.fillRect(batX + 0.8 * s, batY + 7 * s, batW - 1.6 * s, 1.5 * s);
+
+            // 7. Batting Gloves (White with team blue wristband)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(4 * s, -17 * s, 3.2 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#1E3799';
+            ctx.lineWidth = 1 * s;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(4 * s, -21 * s, 3 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.restore(); // restore bat
+
+            ctx.restore(); // restore figure
         }
 
         function drawBowlerFigure(x, y, depthScale, rig) {
