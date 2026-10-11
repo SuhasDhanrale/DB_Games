@@ -1,626 +1,2196 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="hi">
 <head>
-    <script>
-        if (window.self === window.top) {
-            window.location.href = '/';
-        }
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wordle Clone</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./src/styles/design-system.css" />
-    <link rel="stylesheet" href="./src/styles/components.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --color-correct: var(--color-success);
-            --color-present: var(--color-warning);
-            --color-absent: var(--color-secondary-light);
-            --color-empty: var(--bg-app);
-            --color-border: var(--border-medium);
-            --color-text: var(--text-primary);
-            --color-key: var(--bg-glass-light);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>आज का शब्द · दैनिक भास्कर खेल | Aaj Ka Shabd</title>
+  <meta name="description" content="आज का शब्द — दैनिक 5 अक्षरों की हिंदी शब्द पहेली। आज की सुर्खियों में छिपा शब्द खोजें और मुख्य खबर से जुड़ें।">
+  <meta name="theme-color" content="#F9F9F7">
 
-        body {
-            background-color: var(--color-empty);
-            color: var(--color-text);
-            font-family: 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            touch-action: manipulation;
-            /* Prevent double-tap zoom */
-        }
+  <style>
+    /* ============================================================
+       DAINIK BHASKAR GAMES — आज का शब्द (AAJ KA SHABD / WORDAL)
+       Hindi-first, Mobile-first, Self-contained Editorial Daily Game
+       ============================================================ */
+    :root {
+      --color-primary: #E23A28;         /* Dainik Bhaskar Signature Red */
+      --color-primary-hover: #C52C1C;
+      --color-primary-light: #FDECE9;
+      --color-primary-subtle: #FFF5F4;
+      --color-accent-gold: #FF9900;     /* Signature Sun Yellow / Gold */
+      --color-accent-amber: #D97706;
+      --color-correct: #1E824C;         /* Forest Editorial Green */
+      --color-correct-light: #E8F8F0;
+      --color-present: #D97706;         /* Editorial Amber/Yellow */
+      --color-present-light: #FEF3C7;
+      --color-absent: #4B5563;          /* Slate Dark Grey */
+      --color-absent-light: #E5E7EB;
+      --color-empty: #FFFFFF;
+      --color-bg: #F9F9F7;              /* Warm Newsprint Paper */
+      --color-surface: #FFFFFF;
+      --color-surface-soft: #F4F1EA;
+      --color-surface-warm: #FAF8F5;
+      --text-main: #1C1C1C;             /* Deep Editorial Ink */
+      --text-muted: #555555;
+      --text-subtle: #7A7A7A;
+      --text-white: #FFFFFF;
+      --border-subtle: rgba(28, 28, 28, 0.12);
+      --border-medium: rgba(28, 28, 28, 0.22);
+      --border-active: #E23A28;
+      --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.07);
+      --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.11);
+      --shadow-focus: 0 0 0 3px rgba(226, 58, 40, 0.25);
+      --font-stack: "Noto Sans Devanagari", "Nirmala UI", "Mangal", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 18px;
+      --radius-full: 9999px;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
+    body {
+      background-color: var(--color-bg);
+      color: var(--text-main);
+      font-family: var(--font-stack);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      overflow-x: hidden;
+      font-size: 16px;
+      touch-action: manipulation;
+    }
 
-        #game-board {
-            display: grid;
-            grid-template-rows: repeat(6, 1fr);
-            grid-gap: 5px;
-            padding: 10px;
-            box-sizing: border-box;
-            width: 100%;
-            max-width: 350px;
-            flex-grow: 1;
-            /* Allow board to take available space */
-            justify-content: center;
-            align-content: center;
-        }
+    /* Screen Reader Only Utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
-        .row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-gap: 5px;
-        }
+    /* Top Red-Gold Accent Bar */
+    .top-accent-bar {
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #E23A28 0%, #FF9900 100%);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .tile {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            border: 2px solid var(--color-border);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            user-select: none;
-            transition: transform 0.1s;
-        }
+    /* App Shell Container (Mobile-first 360-480px, max 500px) */
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      min-height: calc(100vh - 4px);
+      display: flex;
+      flex-direction: column;
+      background-color: var(--color-bg);
+      padding: 10px 14px 32px;
+      position: relative;
+    }
 
-        /* Animation for typing */
-        .tile[data-state="tbd"] {
-            border-color: #878a8c;
-            animation: pop 0.1s;
-        }
+    /* Header & Masthead */
+    .header-masthead {
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 10px;
+    }
 
-        @keyframes pop {
-            0% {
-                transform: scale(1);
-            }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
 
-            50% {
-                transform: scale(1.1);
-            }
+    .brand-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-decoration: none;
+      padding: 4px 8px;
+      background: var(--color-primary-light);
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(226, 58, 40, 0.15);
+      transition: all 0.15s ease;
+    }
 
-            100% {
-                transform: scale(1);
-            }
-        }
+    .brand-back-btn:hover {
+      background: #FBD5CF;
+    }
 
-        /* Flip animation states */
-        .tile.correct {
-            background-color: var(--color-correct);
-            border-color: var(--color-correct);
-            color: white;
-        }
+    .brand-identity {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--color-surface-soft);
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+    }
 
-        .tile.present {
-            background-color: var(--color-present);
-            border-color: var(--color-present);
-            color: white;
-        }
+    .brand-sun-icon {
+      width: 12px;
+      height: 12px;
+      fill: var(--color-primary);
+      flex-shrink: 0;
+    }
 
-        .tile.absent {
-            background-color: var(--color-absent);
-            border-color: var(--color-absent);
-            color: white;
-        }
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
 
-        #keyboard {
-            width: 100%;
-            max-width: 500px;
-            padding: 0 8px;
-            margin-bottom: 20px;
-            user-select: none;
-        }
+    .game-main-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.2;
+    }
 
-        .keyboard-row {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 8px;
-            touch-action: manipulation;
-        }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-        .key {
-            font-family: inherit;
-            font-weight: bold;
-            border: 0;
-            padding: 0;
-            margin: 0 3px;
-            height: 58px;
-            border-radius: 4px;
-            cursor: pointer;
-            user-select: none;
-            background-color: var(--color-key);
-            color: var(--color-text);
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-transform: uppercase;
-            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        }
+    .btn-icon-action {
+      background: var(--color-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
 
-        .key:active {
-            opacity: 0.8;
-        }
+    .btn-icon-action:hover {
+      background: var(--color-surface-soft);
+      color: var(--text-main);
+      border-color: var(--border-medium);
+    }
 
-        .key.large {
-            flex: 1.5;
-            font-size: 12px;
-        }
+    /* Edition Switcher Tabs */
+    .edition-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
 
-        .key.correct {
-            background-color: var(--color-correct);
-            color: white;
-        }
+    .edition-tab-btn {
+      min-height: 44px;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--color-surface);
+      color: var(--text-muted);
+      font-family: inherit;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
 
-        .key.present {
-            background-color: var(--color-present);
-            color: white;
-        }
+    .edition-tab-btn .tab-main {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
 
-        .key.absent {
-            background-color: var(--color-absent);
-            color: white;
-        }
+    .edition-tab-btn .tab-sub {
+      font-size: 10px;
+      font-weight: 600;
+      opacity: 0.85;
+      margin-top: 1px;
+    }
 
-        .check-btn-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
+    .edition-tab-btn:hover {
+      background: var(--color-surface-warm);
+      border-color: var(--border-medium);
+      color: var(--text-main);
+    }
 
-        .check-btn {
-            background-color: var(--color-correct);
-            color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            padding: 15px;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-transform: uppercase;
-            transition: all 0.1s ease;
-        }
+    .edition-tab-btn.is-active {
+      border-color: var(--color-primary);
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      box-shadow: 0 2px 6px rgba(226, 58, 40, 0.12);
+    }
 
-        .check-btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    .edition-tab-btn .tab-status-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--color-correct);
+      margin-top: 2px;
+    }
 
-        /* Message Box */
-        #message-container {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            pointer-events: none;
-        }
+    /* VIEW MANAGEMENT */
+    .view-screen {
+      display: none;
+      flex-direction: column;
+      flex-grow: 1;
+      width: 100%;
+    }
 
-        .message {
-            background-color: #fff;
-            color: #000;
-            padding: 16px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            opacity: 1;
-            transition: opacity 0.5s ease-out;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    .view-screen.is-active {
+      display: flex;
+      animation: fadeIn 0.25s ease-out forwards;
+    }
 
-        .message.fade-out {
-            opacity: 0;
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        /* Modal for Game Over */
-        #modal {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
+    /* PROMINENT HEADING BANNER (Requested by User) */
+    .headline-clue-banner {
+      background: linear-gradient(135deg, #FFFFFF 0%, #FAF8F5 100%);
+      border: 1.5px solid var(--border-subtle);
+      border-left: 4px solid var(--color-primary);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
 
-        .modal-content {
-            background: #ffffff;
-            border: 1px solid #d3d6da;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 80%;
-        }
+    .headline-banner-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 3px;
+    }
 
-        .modal-content h2 {
-            margin-top: 0;
-        }
+    .headline-banner-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
 
-        .btn-restart {
-            background-color: var(--color-correct);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-    </style>
+    .headline-banner-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .headline-banner-desc strong {
+      color: var(--text-main);
+    }
+
+    /* STEP INDICATOR */
+    .step-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+
+    .step-pill {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--color-surface-soft);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .step-hint {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-accent-amber);
+    }
+
+    /* GAME BOARD (5x6 Grid) */
+    .board-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    #game-board {
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      grid-gap: 6px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .board-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-gap: 6px;
+    }
+
+    .tile {
+      aspect-ratio: 1 / 1;
+      border: 2px solid var(--border-medium);
+      border-radius: 8px;
+      background-color: var(--color-empty);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      user-select: none;
+      transition: border-color 0.15s ease, background-color 0.2s ease, transform 0.1s ease;
+      position: relative;
+    }
+
+    /* Tile typing pop animation */
+    .tile[data-state="tbd"] {
+      border-color: var(--border-active);
+      transform: scale(1.04);
+      background-color: var(--color-surface-warm);
+    }
+
+    /* Evaluation Colors */
+    .tile.correct {
+      background-color: var(--color-correct) !important;
+      border-color: var(--color-correct) !important;
+      color: #FFFFFF !important;
+    }
+
+    .tile.present {
+      background-color: var(--color-present) !important;
+      border-color: var(--color-present) !important;
+      color: #FFFFFF !important;
+    }
+
+    .tile.absent {
+      background-color: var(--color-absent) !important;
+      border-color: var(--color-absent) !important;
+      color: #FFFFFF !important;
+    }
+
+    /* Flip animation when checking guess */
+    .tile.flip {
+      animation: flipTile 0.5s ease-in-out forwards;
+    }
+
+    @keyframes flipTile {
+      0% {
+        transform: rotateX(0deg);
+      }
+      50% {
+        transform: rotateX(90deg);
+      }
+      100% {
+        transform: rotateX(0deg);
+      }
+    }
+
+    /* Row shake animation on invalid/incomplete input */
+    .board-row.shake {
+      animation: shakeRow 0.4s ease-in-out;
+    }
+
+    @keyframes shakeRow {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* KEYBOARD (24 Keys in 3 Rows of 8) */
+    .keyboard-wrapper {
+      width: 100%;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 5px;
+      gap: 4px;
+      touch-action: manipulation;
+    }
+
+    .key-btn {
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      background-color: var(--color-surface);
+      color: var(--text-main);
+      height: 48px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.12s ease;
+      touch-action: manipulation;
+    }
+
+    .key-btn:active {
+      transform: scale(0.95);
+      background-color: var(--color-surface-soft);
+    }
+
+    .key-btn.correct {
+      background-color: var(--color-correct) !important;
+      border-color: var(--color-correct) !important;
+      color: #FFFFFF !important;
+    }
+
+    .key-btn.present {
+      background-color: var(--color-present) !important;
+      border-color: var(--color-present) !important;
+      color: #FFFFFF !important;
+    }
+
+    .key-btn.absent {
+      background-color: var(--color-absent) !important;
+      border-color: var(--color-absent) !important;
+      color: #FFFFFF !important;
+      opacity: 0.85;
+    }
+
+    /* Action Keys Container (Check, Backspace, Give up) */
+    .action-keys-row {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr 1fr;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .btn-action-key {
+      min-height: 48px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      border: none;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-action-backspace {
+      background-color: var(--color-surface-soft);
+      color: var(--text-main);
+      border: 1px solid var(--border-medium);
+    }
+
+    .btn-action-backspace:active {
+      background-color: var(--color-absent-light);
+    }
+
+    .btn-action-submit {
+      background-color: var(--color-primary);
+      color: #FFFFFF;
+      box-shadow: 0 3px 8px rgba(226, 58, 40, 0.25);
+    }
+
+    .btn-action-submit:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-action-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-action-reveal {
+      background-color: var(--color-surface);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      font-size: 12px;
+    }
+
+    .btn-action-reveal:hover {
+      color: var(--color-primary);
+      border-color: var(--color-primary-light);
+    }
+
+    /* ============================================================
+       SCREEN 2: INTERCONNECTION & NEWS REDIRECTION SCREEN
+       ============================================================ */
+    .result-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-top: 4px;
+    }
+
+    .result-hero-card {
+      background: linear-gradient(135deg, #FFFFFF 0%, #FFFBF5 100%);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--color-correct) 0%, var(--color-accent-gold) 100%);
+    }
+
+    .result-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 8px;
+    }
+
+    .result-status-pill.win {
+      background-color: var(--color-correct-light);
+      color: var(--color-correct);
+      border: 1px solid rgba(30, 130, 76, 0.2);
+    }
+
+    .result-status-pill.revealed {
+      background-color: var(--color-present-light);
+      color: var(--color-present);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .result-word-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--text-main);
+      letter-spacing: 0.5px;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+
+    .result-units-breakdown {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 10px;
+    }
+
+    .result-meaning-box {
+      background: var(--color-surface-soft);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      text-align: left;
+      border-left: 3px solid var(--color-accent-gold);
+    }
+
+    .result-meaning-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 2px;
+    }
+
+    .result-meaning-text {
+      font-size: 14px;
+      color: var(--text-main);
+      line-height: 1.45;
+    }
+
+    /* NEWS CONNECTION SECTION (The Core Interconnection Feature) */
+    .news-connection-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    .news-connection-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .news-connection-badge {
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .news-connection-topic {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .news-connection-headline {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .news-connection-why {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.5;
+      background: var(--color-surface-warm);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      border-left: 3px solid var(--color-primary);
+    }
+
+    .news-connection-why strong {
+      color: var(--color-primary);
+    }
+
+    .news-snippet-box {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      background: #FAFAFA;
+      border: 1px dashed var(--border-medium);
+    }
+
+    .word-highlight-tag {
+      background: #FEF3C7;
+      color: #B45309;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid #FCD34D;
+      display: inline-block;
+    }
+
+    /* REDIRECTION & ACTION BUTTONS */
+    .redirection-actions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn-redirection-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, #C52C1C 100%);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 800;
+      padding: 14px 18px;
+      border-radius: var(--radius-lg);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(226, 58, 40, 0.28);
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+      text-align: center;
+    }
+
+    .btn-redirection-primary:hover {
+      box-shadow: 0 6px 16px rgba(226, 58, 40, 0.38);
+      transform: translateY(-1px);
+    }
+
+    .btn-redirection-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-redirection-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--color-surface);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border-medium);
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+      text-align: center;
+    }
+
+    .btn-redirection-secondary:hover {
+      background: var(--color-surface-soft);
+      border-color: var(--border-active);
+    }
+
+    .btn-redirection-secondary:active {
+      transform: scale(0.98);
+    }
+
+    /* Secondary Controls Row (Share, Replay, View Board) */
+    .result-tools-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .btn-tool {
+      background: var(--color-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 9px 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-tool:hover {
+      background: var(--color-surface-warm);
+      color: var(--text-main);
+      border-color: var(--border-medium);
+    }
+
+    /* ============================================================
+       SCREEN 3: IN-FILE ARTICLE READER VIEW (READ CONNECTED STORY)
+       ============================================================ */
+    .article-reader-container {
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .article-nav-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 10px;
+    }
+
+    .btn-back-to-result {
+      background: var(--color-surface-soft);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+    }
+
+    .article-meta-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .article-headline-main {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .article-source-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .article-body-text {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text-main);
+    }
+
+    .article-sources-box {
+      background: var(--color-surface-soft);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-left: 3px solid var(--color-accent-gold);
+    }
+
+    .article-sources-box a {
+      color: var(--color-primary);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .article-reader-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* ============================================================
+       TOAST MESSAGES & MODALS
+       ============================================================ */
+    #toast-container {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2000;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      width: 90%;
+      max-width: 360px;
+    }
+
+    .toast-msg {
+      background: #1C1C1C;
+      color: #FFFFFF;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+      opacity: 1;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      text-align: center;
+    }
+
+    .toast-msg.toast-success {
+      background: var(--color-correct);
+    }
+
+    .toast-msg.toast-alert {
+      background: var(--color-primary);
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-subtle);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px;
+      line-height: 1;
+    }
+
+    .modal-body {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rule-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .rule-color-box {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .modal-footer {
+      margin-top: 16px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn-modal-action {
+      padding: 9px 16px;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Small Screen Adjustments (360px) */
+    @media (max-width: 380px) {
+      .app-container {
+        padding: 8px 10px 24px;
+      }
+      .game-main-title {
+        font-size: 21px;
+      }
+      .tile {
+        font-size: 19px;
+      }
+      .key-btn {
+        height: 44px;
+        font-size: 14px;
+      }
+      .headline-banner-title {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
+  <!-- Top Accent Rule -->
+  <div class="top-accent-bar"></div>
 
+  <!-- Toast Notification Container -->
+  <div id="toast-container" aria-live="polite"></div>
 
-    <div id="message-container"></div>
+  <!-- Main Responsive Container -->
+  <main class="app-container">
 
-    <div id="game-board">
-        <!-- Rows will be generated by JS -->
-    </div>
-
-    <div id="keyboard">
-        <div class="keyboard-row">
-            <button class="key" data-key="आ">आ</button>
-            <button class="key" data-key="का">का</button>
-            <button class="key" data-key="श">श</button>
-            <button class="key" data-key="वा">वा</button>
-            <button class="key" data-key="णी">णी</button>
-            <button class="key" data-key="रा">रा</button>
-            <button class="key" data-key="ज">ज</button>
-            <button class="key" data-key="नी">नी</button>
+    <!-- Top Masthead Header -->
+    <header class="header-masthead">
+      <div class="brand-row">
+        <a href="./index.html" class="brand-back-btn" id="btnHubBack" title="भास्कर खेल हब पर लौटें">
+          ← भास्कर खेल
+        </a>
+        <div class="brand-identity">
+          <svg class="brand-sun-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v3M12 20v3M1 12h3M20 12h3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+          </svg>
+          दैनिक भास्कर खेल लैब
         </div>
-        <div class="keyboard-row">
-            <button class="key" data-key="ति">ति</button>
-            <button class="key" data-key="क">क</button>
-            <button class="key" data-key="म">म</button>
-            <button class="key" data-key="हा">हा</button>
-            <button class="key" data-key="भा">भा</button>
-            <button class="key" data-key="र">र</button>
-            <button class="key" data-key="त">त</button>
-            <button class="key" data-key="अ">अ</button>
+      </div>
+
+      <div class="title-row">
+        <h1 class="game-main-title">
+          <span>आज का शब्द</span>
+        </h1>
+        <div class="header-actions">
+          <button type="button" class="btn-icon-action" id="btnHelp" title="खेल के नियम देखें">
+            ℹ️ नियम
+          </button>
+          <button type="button" class="btn-icon-action" id="btnResetRound" title="इस संस्करण को दोबारा खेलें">
+            🔄 रीसेट
+          </button>
         </div>
-        <div class="keyboard-row">
-            <button class="key" data-key="नु">नु</button>
-            <button class="key" data-key="सं">सं</button>
-            <button class="key" data-key="धा">धा</button>
-            <button class="key" data-key="न">न</button>
-            <button class="key" data-key="प्र">प्र</button>
-            <button class="key" data-key="यो">यो</button>
-            <button class="key" data-key="गि">गि</button>
-            <button class="key" data-key="ता">ता</button>
-            <button class="key large" data-key="backspace">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                    <path fill="currentColor"
-                        d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z">
-                    </path>
-                </svg>
+      </div>
+    </header>
+
+    <!-- Edition Switcher Tabs (दिन 1, दिन 2, दिन 3) -->
+    <nav class="edition-nav-grid" aria-label="संस्करण चयन">
+      <button type="button" class="edition-tab-btn is-active" id="tab-d1" data-day="d1">
+        <span class="tab-main">दिन 1</span>
+        <span class="tab-sub">अंतरिक्ष विशेष</span>
+      </button>
+      <button type="button" class="edition-tab-btn" id="tab-d2" data-day="d2">
+        <span class="tab-main">दिन 2</span>
+        <span class="tab-sub">पेरिस 2024</span>
+      </button>
+      <button type="button" class="edition-tab-btn" id="tab-d3" data-day="d3">
+        <span class="tab-main">दिन 3</span>
+        <span class="tab-sub">भारत की विरासत</span>
+      </button>
+    </nav>
+
+    <!-- ============================================================
+         VIEW SCREEN 1: WORD PUZZLE PLAY SCREEN (चरण 1: शब्द पहेली)
+         ============================================================ -->
+    <section class="view-screen is-active" id="viewGame" aria-label="खेल पटल">
+      
+      <!-- PROMINENT HEADING BANNER (Requested by User) -->
+      <div class="headline-clue-banner" id="headlineClueBanner">
+        <div class="headline-banner-tag">
+          <span>📰 दैनिक शब्द खोज</span>
+        </div>
+        <h2 class="headline-banner-title" id="headlineBannerTitle">
+          आज की सुर्खियों में छिपा शब्द
+        </h2>
+        <p class="headline-banner-desc" id="headlineBannerDesc">
+          यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।
+        </p>
+      </div>
+
+      <!-- Step Row -->
+      <div class="step-badge-row">
+        <span class="step-pill" id="stepPillLabel">चरण 1/2: शब्द पहेली (प्रयास 1/6)</span>
+        <span class="step-hint" id="topicHintBadge">विषय: खोज और अध्ययन</span>
+      </div>
+
+      <!-- 5x6 Board -->
+      <div class="board-container">
+        <div id="game-board" role="grid" aria-label="शब्द ग्रिड">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- 24-key Hindi Keyboard -->
+      <div class="keyboard-wrapper" id="keyboardWrapper">
+        <div class="keyboard-row" id="kbRow1"></div>
+        <div class="keyboard-row" id="kbRow2"></div>
+        <div class="keyboard-row" id="kbRow3"></div>
+
+        <div class="action-keys-row">
+          <button type="button" class="btn-action-key btn-action-backspace" id="btnBackspace" aria-label="हटाएँ">
+            ⌫ हटाएँ
+          </button>
+          <button type="button" class="btn-action-key btn-action-submit" id="btnSubmitGuess" aria-label="जाँचें">
+            ✓ जाँचें
+          </button>
+          <button type="button" class="btn-action-key btn-action-reveal" id="btnGiveUp" aria-label="उत्तर देखें">
+            उत्तर देखें
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW SCREEN 2: INTERCONNECTION & NEWS SCREEN (चरण 2: खबरों से जुड़ाव)
+         ============================================================ -->
+    <section class="view-screen" id="viewResult" aria-label="शब्द परिणाम और खबरों से जुड़ाव">
+      <div class="result-container">
+
+        <!-- Step Indicator -->
+        <div class="step-badge-row">
+          <span class="step-pill" style="color: var(--color-primary); background: var(--color-primary-light);">
+            चरण 2/2: शब्द पूरा हुआ · खबरों से जुड़ाव
+          </span>
+          <button type="button" class="btn-icon-action" id="btnViewGridAgain">
+            ← ग्रिड देखें
+          </button>
+        </div>
+
+        <!-- Hero Card with Revealed Word & Meaning -->
+        <div class="result-hero-card">
+          <div class="result-status-pill win" id="resultStatusPill">
+            ✓ शानदार! शब्द खोज पूरी हुई
+          </div>
+          <h2 class="result-word-title" id="resultWordDisplay">अनुसंधान</h2>
+          <div class="result-units-breakdown" id="resultUnitsDisplay">अ · नु · सं · धा · न</div>
+          
+          <div class="result-meaning-box">
+            <div class="result-meaning-label">शब्द का अर्थ (शब्दकोश संदर्भ):</div>
+            <div class="result-meaning-text" id="resultMeaningText">
+              किसी विषय को व्यवस्थित ढंग से खोजने और समझने का काम।
+            </div>
+          </div>
+        </div>
+
+        <!-- The News Connection Card (Why this word connects to today's news) -->
+        <article class="news-connection-card">
+          <div class="news-connection-header">
+            <span class="news-connection-badge">📰 आज की मुख्य सुर्खियां</span>
+            <span class="news-connection-topic" id="newsConnectionTopic">विज्ञान विशेष</span>
+          </div>
+
+          <h3 class="news-connection-headline" id="newsConnectionHeadline">
+            भारत के चार अंतरिक्ष मिशन क्या खोजते हैं
+          </h3>
+
+          <div class="news-connection-why" id="newsConnectionWhy">
+            <strong>खबरों से जुड़ाव:</strong> चंद्रयान-3, आदित्य-एल1 और मंगलयान जैसे भारत के अंतरिक्ष मिशन लगातार नई खोज और अनुसंधान में जुटे हैं। आज की मुख्य खबर में जानिए कि ये मिशन क्या खोज रहे हैं।
+          </div>
+
+          <div class="news-snippet-box" id="newsSnippetBox">
+            "...चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के लिए भारत का वैज्ञानिक <span class="word-highlight-tag" id="highlightTagWord">अनुसंधान</span> लगातार नए आयाम स्थापित कर रहा है..."
+          </div>
+
+          <!-- Redirection & Actions -->
+          <div class="redirection-actions-grid">
+            <button type="button" class="btn-redirection-primary" id="btnReadArticleHere">
+              📖 जुड़ी खबर यहीं पढ़ें →
             </button>
+            <a href="./news.html" class="btn-redirection-secondary" id="btnGoToNewsFeed">
+              📰 मुख्य समाचार फ़ीड पर जाएँ →
+            </a>
+          </div>
+        </article>
+
+        <!-- Secondary Utility Actions Row -->
+        <div class="result-tools-row">
+          <button type="button" class="btn-tool" id="btnShareResult">
+            <span>📤</span>
+            <span>साझा करें</span>
+          </button>
+          <button type="button" class="btn-tool" id="btnReplayPractice">
+            <span>🔄</span>
+            <span>फिर खेलें</span>
+          </button>
+          <button type="button" class="btn-tool" id="btnNextEdition">
+            <span>⏭️</span>
+            <span>अगला दिन</span>
+          </button>
         </div>
-        <div class="check-btn-container">
-            <button class="check-btn" data-key="enter">CHECK</button>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW SCREEN 3: IN-FILE ARTICLE READER VIEW (जुड़ी खबर का पूरा लेख)
+         ============================================================ -->
+    <section class="view-screen" id="viewArticle" aria-label="संबंधित आलेख">
+      <article class="article-reader-container">
+        
+        <div class="article-nav-top">
+          <button type="button" class="btn-back-to-result" id="btnArticleBackToResult">
+            ← खेल परिणाम पर लौटें
+          </button>
+          <span class="article-meta-badge" id="artReaderCategory">विज्ञान</span>
         </div>
+
+        <h2 class="article-headline-main" id="artReaderHeadline">
+          भारत के चार अंतरिक्ष मिशन क्या खोजते हैं
+        </h2>
+
+        <div class="article-source-meta" id="artReaderMeta">
+          <span id="artReaderPeriod">अंतरिक्ष मिशनों पर संदर्भ लेख</span> · 
+          <span>दैनिक भास्कर खेल लैब (डेमो संदर्भ)</span>
+        </div>
+
+        <div class="article-body-text" id="artReaderBody">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <div class="article-sources-box" id="artReaderSources">
+          <strong>सत्यापित संदर्भ स्रोत:</strong>
+          <div id="artReaderSourcesList" style="margin-top: 4px;"></div>
+        </div>
+
+        <div class="article-reader-footer">
+          <button type="button" class="btn-redirection-primary" id="btnArticleBackBottom">
+            ← वापस खेल पर लौटें
+          </button>
+          <a href="./news.html" class="btn-redirection-secondary" id="btnArticleToFeedLink">
+            📰 मुख्य समाचार फ़ीड पर यह खबर देखें
+          </a>
+        </div>
+
+      </article>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       MODALS: HELP RULES & GIVE UP CONFIRMATION
+       ============================================================ -->
+  <!-- Help Modal -->
+  <div class="modal-backdrop" id="modalHelp" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="helpModalTitle">आज का शब्द कैसे खेलें?</h3>
+        <button type="button" class="modal-close-btn" id="btnCloseHelp" aria-label="बंद करें">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>• <strong>लक्ष्य:</strong> आज की मुख्य खबर में छिपे <strong>5 अक्षरों</strong> के शब्द को 6 प्रयासों में पहचानें।</p>
+        <p>• 24 अक्षरों वाले कीबोर्ड से 5 अक्षर चुनकर <strong>✓ जाँचें</strong> दबाएँ।</p>
+        <p>• हर प्रयास के बाद रंग से संकेत मिलेंगे:</p>
+        
+        <div class="rule-item">
+          <div class="rule-color-box" style="background-color: var(--color-correct);">अ</div>
+          <div><strong>हरा रंग (सही जगह):</strong> यह अक्षर शब्द में बिल्कुल सही स्थान पर है।</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-color-box" style="background-color: var(--color-present);">नु</div>
+          <div><strong>पीला रंग (दूसरी जगह):</strong> यह अक्षर शब्द में मौजूद है, लेकिन दूसरे स्थान पर।</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-color-box" style="background-color: var(--color-absent);">श</div>
+          <div><strong>स्लेटी रंग (शब्द में नहीं):</strong> यह अक्षर आज के शब्द में कहीं नहीं है।</div>
+        </div>
+
+        <p style="margin-top: 6px; font-size: 13px; color: var(--text-muted); background: var(--color-surface-soft); padding: 8px; border-radius: 6px;">
+          💡 <strong>खबर से जुड़ाव:</strong> शब्द पूरा होते ही आपको अगले चरण में शब्द का अर्थ और आज की मुख्य खबर से इसका संबंध दिखेगा!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-action btn-action-submit" id="btnOkHelp">समझ गया / खेलें</button>
+      </div>
     </div>
+  </div>
 
-    <!-- Modal for game over -->
-    <div id="modal">
-        <div class="modal-content">
-            <h2 id="modal-title">Game Over</h2>
-            <p id="modal-message"></p>
-            <button class="btn-restart" onclick="initGame()">Play Again</button>
-        </div>
+  <!-- Give Up / Reveal Modal -->
+  <div class="modal-backdrop" id="modalGiveUp" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">क्या आप उत्तर देखना चाहते हैं?</h3>
+        <button type="button" class="modal-close-btn" id="btnCloseGiveUp" aria-label="रद्द करें">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>उत्तर देखने पर यह खेल समाप्त हो जाएगा और आपको शब्द का अर्थ व आज की खबर से इसका जुड़ाव दिखाया जाएगा।</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-action btn-action-backspace" id="btnCancelGiveUp">खेलते रहें</button>
+        <button type="button" class="btn-modal-action btn-action-submit" id="btnConfirmGiveUp">उत्तर दिखाएँ</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // List of possible target words as arrays of syllables
-        const targetWords = [
-            ["आ", "का", "श", "वा", "णी"],
-            ["रा", "ज", "नी", "ति", "क"],
-            ["म", "हा", "भा", "र", "त"],
-            ["अ", "नु", "सं", "धा", "न"],
-            ["प्र", "ति", "यो", "गि", "ता"]
-        ];
+  <!-- ============================================================
+       PLAIN JAVASCRIPT CLOSURE (NO EXTERNAL DEPENDENCIES)
+       ============================================================ -->
+  <script>
+    (function () {
+      'use strict';
 
-        // List of all valid guesses
-        const dictionary = [...targetWords];
+      /* ============================================================
+         EDITIONS & NEWS ARTICLES DATA (Self-contained, 3 Days)
+         Matches Dainik Bhaskar Detailed Design & three-day-content.json
+         ============================================================ */
+      const EDITIONS_DATA = {
+        'd1': {
+          id: 'd1',
+          label: 'दिन 1',
+          theme: 'जिज्ञासा और खोज',
+          periodLabel: 'अंतरिक्ष विशेष',
+          clue: 'खोज और अध्ययन',
+          headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
+          subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
+          answer: 'अनुसंधान',
+          answerTokens: ['अ', 'नु', 'सं', 'धा', 'न'],
+          meaning: 'किसी विषय को व्यवस्थित ढंग से खोजने और समझने का काम।',
+          relatedArticleId: 'd1-feature',
+          newsHeadline: 'भारत के चार अंतरिक्ष मिशन क्या खोजते हैं',
+          newsCategory: 'विज्ञान · अंतरिक्ष विशेष',
+          newsExcerpt: 'चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के लिए वैज्ञानिक अनुसंधान लगातार नए आयाम स्थापित कर रहा है। चंद्रयान, आदित्य और मंगलयान के उद्देश्यों को समझें।',
+          newsConnectionWhy: 'चंद्रयान-3, आदित्य-एल1 और मंगलयान जैसे भारत के अंतरिक्ष मिशन लगातार नई खोज और अनुसंधान में जुटे हैं। आज की मुख्य खबर में जानिए कि ये मिशन क्या खोज रहे हैं।',
+          article: {
+            id: 'd1-feature',
+            category: 'विज्ञान',
+            title: 'भारत के चार अंतरिक्ष मिशन क्या खोजते हैं',
+            summary: 'चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के अलग-अलग तरीके।',
+            period: 'अंतरिक्ष मिशनों पर संदर्भ लेख',
+            kind: 'researched-demo',
+            sources: [
+              { id: 'S01', title: 'ISRO Chandrayaan 3 objectives', url: 'https://www.isro.gov.in/ISRO_EN/Chandrayaan3_New.html' },
+              { id: 'S02', title: 'ISRO Aditya L1 mission details', url: 'https://www.isro.gov.in/Aditya_L1-MissionDetails.html' },
+              { id: 'S03', title: 'ISRO Mars Orbiter objectives', url: 'https://www.isro.gov.in/mission_objective_C25.html' },
+              { id: 'S04', title: 'ISRO AstroSat', url: 'https://www.isro.gov.in/AstroSat.html' }
+            ],
+            paragraphs: [
+              'भारत के अंतरिक्ष मिशनों के काम एक जैसे नहीं हैं। चंद्रयान-3 के उद्देश्यों में चाँद पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था। आदित्य-एल1 सूर्य के अध्ययन के लिए बनाया गया है।',
+              'मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल को समझना शामिल था। एस्ट्रोसैट खगोलीय पिंडों को एक्स-रे, दृश्य और पराबैंगनी प्रकाश में एक साथ देख सकता है।',
+              'इस डेमो संस्करण में वैज्ञानिक अन्वेषण और खोज के कई पहलू प्रस्तुत किए गए हैं। आज का शब्द भी इसी विषय से जुड़ा है। यह संदर्भ सामग्री है, किसी नई घटना की खबर नहीं।'
+            ]
+          }
+        },
+        'd2': {
+          id: 'd2',
+          label: 'दिन 2',
+          theme: 'अभ्यास और प्रयास',
+          periodLabel: 'पेरिस 2024 की यादें',
+          clue: 'खेल और मुकाबला',
+          headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
+          subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
+          answer: 'प्रतियोगिता',
+          answerTokens: ['प्र', 'ति', 'यो', 'गि', 'ता'],
+          meaning: 'ऐसा आयोजन जिसमें भाग लेने वाले तय नियमों के अनुसार मुकाबला करते हैं।',
+          relatedArticleId: 'd2-feature',
+          newsHeadline: 'पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते',
+          newsCategory: 'खेल · पेरिस ओलंपिक 2024',
+          newsExcerpt: 'विश्वस्तरीय मंच पर हर मुकाबला अनुशासन, अभ्यास और कड़ी प्रतियोगिता की कसौटी होता है। जानिए भारत के चार पदकवीरों की ऐतिहासिक उपलब्धियाँ।',
+          newsConnectionWhy: 'ओलंपिक जैसे वैश्विक मंच पर हर पदक निरंतर अभ्यास और कड़ी प्रतियोगिता का परिणाम होता है। आज की मुख्य खबर में जानिए पेरिस 2024 के ऐतिहासिक पदक विजेताओं की कहानी।',
+          article: {
+            id: 'd2-feature',
+            category: 'खेल',
+            title: 'पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते',
+            summary: 'चार नाम, चार अलग स्पर्धाएँ। पदक के साथ स्पर्धा पहचानिए।',
+            period: 'ऐतिहासिक संदर्भ · पेरिस ओलंपिक 2024',
+            kind: 'researched-demo',
+            sources: [
+              { id: 'S05', title: 'PIB Manu Bhaker bronze 28 July 2024', url: 'https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2038138&lang=2&reg=48' },
+              { id: 'S06', title: 'PIB Neeraj Chopra silver 9 August 2024', url: 'https://www.pib.gov.in/FeaturesDeatils.aspx?ModuleId=2&NoteId=153309&lang=2&reg=48' },
+              { id: 'S07', title: 'PIB Swapnil Kusale bronze 1 August 2024', url: 'https://www.pib.gov.in/Pressreleaseshare.aspx?PRID=2040211&lang=2&reg=48' },
+              { id: 'S08', title: 'PIB Aman Sehrawat bronze 9 August 2024', url: 'https://www.pib.gov.in/PressReleasePage.aspx?PRID=2043947&lang=2&reg=48' }
+            ],
+            paragraphs: [
+              'पेरिस ओलंपिक 2024 में मनु भाकर ने महिला 10 मीटर एयर पिस्टल में कांस्य पदक जीता। नीरज चोपड़ा ने पुरुष भाला फेंक में रजत पदक हासिल किया।',
+              'स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल 3 पोज़िशन में कांस्य जीता। अमन सहरावत ने पुरुष 57 किग्रा फ्रीस्टाइल कुश्ती में कांस्य पदक जीता।',
+              'इन चार उपलब्धियों को सही स्पर्धा के साथ पहचानना खेल की सच्ची पहचान है। वैश्विक मंच पर सफलता केवल निरंतर अभ्यास और प्रतियोगिता के सम्मान से संभव होती है।'
+            ]
+          }
+        },
+        'd3': {
+          id: 'd3',
+          label: 'दिन 3',
+          theme: 'विरासत और देखभाल',
+          periodLabel: 'भारत की विरासत',
+          clue: 'इतिहास और धरोहर',
+          headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
+          subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
+          answer: 'ऐतिहासिक',
+          answerTokens: ['ऐ', 'ति', 'हा', 'सि', 'क'],
+          meaning: 'इतिहास से जुड़ा हुआ।',
+          relatedArticleId: 'd3-feature',
+          newsHeadline: 'भारत की चार धरोहरें और उनके राज्य',
+          newsCategory: 'संस्कृति · विश्व धरोहर',
+          newsExcerpt: 'धोलावीरा, हम्पी, साँची और कोणार्क जैसे ऐतिहासिक स्थल हमारी समृद्ध सांस्कृतिक पहचान और कालजयी वास्तुकला के अनमोल धरोहर हैं।',
+          newsConnectionWhy: 'धोलावीरा, हम्पी, साँची और कोणार्क जैसे ऐतिहासिक स्थल भारतीय सभ्यता, गौरवशाली इतिहास और समृद्ध वास्तुकला के जीवंत प्रमाण हैं।',
+          article: {
+            id: 'd3-feature',
+            category: 'संस्कृति',
+            title: 'भारत की चार धरोहरें और उनके राज्य',
+            summary: 'गुजरात से ओडिशा तक, चार जगहों की पहचान और इतिहास।',
+            period: 'विश्व धरोहर स्थलों पर संदर्भ लेख',
+            kind: 'researched-demo',
+            sources: [
+              { id: 'S09', title: 'UNESCO Dholavira', url: 'https://whc.unesco.org/en/list/1645/' },
+              { id: 'S10', title: 'UNESCO Hampi', url: 'https://whc.unesco.org/en/list/241/' },
+              { id: 'S11', title: 'UNESCO Sanchi', url: 'https://whc.unesco.org/en/list/524/' },
+              { id: 'S12', title: 'UNESCO Konark', url: 'https://whc.unesco.org/en/list/246/' }
+            ],
+            paragraphs: [
+              'धोलावीरा गुजरात में हड़प्पा सभ्यता का एक स्थल है। वहाँ की जल व्यवस्था उस समय की नगर योजना को समझने में मदद करती है। कर्नाटक के हम्पी में विजयनगर के अवशेष हैं।',
+              'मध्य प्रदेश में साँची के बौद्ध स्मारक हैं। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना से जुड़ी अपनी बनावट के लिए जाना जाता है। ये चारों स्थल यूनेस्को की विश्व धरोहर सूची में दर्ज हैं।',
+              'विरासत अगली पीढ़ी तक तभी पहुँचती है जब हम उसके ऐतिहासिक महत्व को समझें और उसकी देखभाल करें।'
+            ]
+          }
+        }
+      };
 
-        const ROW_COUNT = 6;
-        const COL_COUNT = 5;
+      // Exactly 24 reusable Hindi keyboard keys in 3 rows of 8
+      const KEYBOARD_ROWS = [
+        ['अ', 'नु', 'सं', 'धा', 'न', 'प्र', 'ति', 'यो'],
+        ['गि', 'ता', 'ऐ', 'हा', 'सि', 'क', 'आ', 'का'],
+        ['श', 'वा', 'णी', 'रा', 'ज', 'नी', 'म', 'भा']
+      ];
 
-        let targetWord = [];
-        let currentAttempt = 0;
-        let currentLetterPosition = 0;
-        let grid = [];
-        let gameOver = false;
+      const TOTAL_ROWS = 6;
+      const TOTAL_COLS = 5;
 
-        const boardElement = document.getElementById("game-board");
-        const keyboardElement = document.getElementById("keyboard");
-        const messageContainer = document.getElementById("message-container");
-        const modal = document.getElementById("modal");
+      /* ============================================================
+         STATE MANAGEMENT
+         ============================================================ */
+      let currentDay = 'd1';
+      let currentAttempt = 0;
+      let currentCol = 0;
+      let boardGuesses = []; // Array of { tokens: string[], evaluations: string[] }
+      let currentRowTokens = [];
+      let isGameOver = false;
+      let isGameWon = false;
+      let isRevealed = false;
+      let keyStateMap = {}; // key -> 'correct' | 'present' | 'absent'
+      let isInputLocked = false;
 
-        function initGame() {
-            // Reset state
-            currentAttempt = 0;
-            currentLetterPosition = 0;
-            grid = Array(ROW_COUNT).fill(null).map(() => Array(COL_COUNT).fill(""));
-            gameOver = false;
+      // DOM Elements
+      const viewGame = document.getElementById('viewGame');
+      const viewResult = document.getElementById('viewResult');
+      const viewArticle = document.getElementById('viewArticle');
+      const gameBoard = document.getElementById('game-board');
+      const toastContainer = document.getElementById('toast-container');
 
-            // Pick a new word
-            targetWord = targetWords[Math.floor(Math.random() * targetWords.length)];
-            console.log("Target word (for debugging):", targetWord);
+      // Headline banner elements
+      const headlineBannerTitle = document.getElementById('headlineBannerTitle');
+      const headlineBannerDesc = document.getElementById('headlineBannerDesc');
+      const stepPillLabel = document.getElementById('stepPillLabel');
+      const topicHintBadge = document.getElementById('topicHintBadge');
 
-            // Hide modal if visible
-            modal.style.display = 'none';
+      // Keyboard elements
+      const kbRow1 = document.getElementById('kbRow1');
+      const kbRow2 = document.getElementById('kbRow2');
+      const kbRow3 = document.getElementById('kbRow3');
+      const btnBackspace = document.getElementById('btnBackspace');
+      const btnSubmitGuess = document.getElementById('btnSubmitGuess');
+      const btnGiveUp = document.getElementById('btnGiveUp');
 
-            // Clear board UI
-            boardElement.innerHTML = '';
-            for (let r = 0; r < ROW_COUNT; r++) {
-                const row = document.createElement("div");
-                row.className = "row";
-                row.id = `row-${r}`;
+      // Navigation / Modals
+      const tabD1 = document.getElementById('tab-d1');
+      const tabD2 = document.getElementById('tab-d2');
+      const tabD3 = document.getElementById('tab-d3');
+      const btnHelp = document.getElementById('btnHelp');
+      const modalHelp = document.getElementById('modalHelp');
+      const btnCloseHelp = document.getElementById('btnCloseHelp');
+      const btnOkHelp = document.getElementById('btnOkHelp');
+      const modalGiveUp = document.getElementById('modalGiveUp');
+      const btnCloseGiveUp = document.getElementById('btnCloseGiveUp');
+      const btnCancelGiveUp = document.getElementById('btnCancelGiveUp');
+      const btnConfirmGiveUp = document.getElementById('btnConfirmGiveUp');
+      const btnResetRound = document.getElementById('btnResetRound');
 
-                for (let c = 0; c < COL_COUNT; c++) {
-                    const tile = document.createElement("div");
-                    tile.className = "tile";
-                    tile.id = `tile-${r}-${c}`;
-                    row.appendChild(tile);
-                }
-                boardElement.appendChild(row);
-            }
+      // Result Screen elements
+      const resultStatusPill = document.getElementById('resultStatusPill');
+      const resultWordDisplay = document.getElementById('resultWordDisplay');
+      const resultUnitsDisplay = document.getElementById('resultUnitsDisplay');
+      const resultMeaningText = document.getElementById('resultMeaningText');
+      const newsConnectionTopic = document.getElementById('newsConnectionTopic');
+      const newsConnectionHeadline = document.getElementById('newsConnectionHeadline');
+      const newsConnectionWhy = document.getElementById('newsConnectionWhy');
+      const newsSnippetBox = document.getElementById('newsSnippetBox');
+      const highlightTagWord = document.getElementById('highlightTagWord');
+      const btnReadArticleHere = document.getElementById('btnReadArticleHere');
+      const btnGoToNewsFeed = document.getElementById('btnGoToNewsFeed');
+      const btnViewGridAgain = document.getElementById('btnViewGridAgain');
+      const btnShareResult = document.getElementById('btnShareResult');
+      const btnReplayPractice = document.getElementById('btnReplayPractice');
+      const btnNextEdition = document.getElementById('btnNextEdition');
 
-            // Reset keyboard colors
-            const keys = document.querySelectorAll('.key');
-            keys.forEach(key => {
-                key.classList.remove('correct', 'present', 'absent');
-            });
+      // Article Reader elements
+      const artReaderCategory = document.getElementById('artReaderCategory');
+      const artReaderHeadline = document.getElementById('artReaderHeadline');
+      const artReaderPeriod = document.getElementById('artReaderPeriod');
+      const artReaderBody = document.getElementById('artReaderBody');
+      const artReaderSourcesList = document.getElementById('artReaderSourcesList');
+      const btnArticleBackToResult = document.getElementById('btnArticleBackToResult');
+      const btnArticleBackBottom = document.getElementById('btnArticleBackBottom');
+      const btnArticleToFeedLink = document.getElementById('btnArticleToFeedLink');
+
+      /* ============================================================
+         HELPERS: TOAST & AUDIO/HAPTIC
+         ============================================================ */
+      function showToast(message, type = 'normal', duration = 2200) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-msg' + (type === 'success' ? ' toast-success' : type === 'alert' ? ' toast-alert' : '');
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-10px)';
+          setTimeout(() => {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 300);
+        }, duration);
+      }
+
+      /* ============================================================
+         URL PARAMETERS & DAY SELECTION
+         ============================================================ */
+      function getDayFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const day = params.get('day');
+        if (day && EDITIONS_DATA[day.toLowerCase()]) {
+          return day.toLowerCase();
+        }
+        return 'd1';
+      }
+
+      function updateUrlDay(day) {
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set('day', day);
+          window.history.replaceState({ day: day }, '', url.toString());
+        } catch (e) {
+          // Fallback for isolated file:// execution
+        }
+      }
+
+      /* ============================================================
+         LOCAL STORAGE PERSISTENCE (Key: db-jam:v2:wordal:<dayId>)
+         ============================================================ */
+      function getStorageKey(dayId) {
+        return `db-jam:v2:wordal:${dayId}`;
+      }
+
+      function saveGameState() {
+        try {
+          const data = {
+            currentAttempt,
+            boardGuesses,
+            isGameOver,
+            isGameWon,
+            isRevealed,
+            keyStateMap
+          };
+          localStorage.setItem(getStorageKey(currentDay), JSON.stringify(data));
+        } catch (e) {
+          // localStorage disabled or private mode
+        }
+      }
+
+      function loadGameState() {
+        try {
+          const raw = localStorage.getItem(getStorageKey(currentDay));
+          if (raw) {
+            return JSON.parse(raw);
+          }
+        } catch (e) {}
+        return null;
+      }
+
+      function clearCurrentDayState() {
+        try {
+          localStorage.removeItem(getStorageKey(currentDay));
+        } catch (e) {}
+      }
+
+      /* ============================================================
+         VIEW SWITCHING
+         ============================================================ */
+      function showView(viewId) {
+        viewGame.classList.remove('is-active');
+        viewResult.classList.remove('is-active');
+        viewArticle.classList.remove('is-active');
+
+        if (viewId === 'game') {
+          viewGame.classList.add('is-active');
+        } else if (viewId === 'result') {
+          populateResultScreen();
+          viewResult.classList.add('is-active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (viewId === 'article') {
+          populateArticleReader();
+          viewArticle.classList.add('is-active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      /* ============================================================
+         KEYBOARD RENDERING
+         ============================================================ */
+      function renderKeyboard() {
+        kbRow1.innerHTML = '';
+        kbRow2.innerHTML = '';
+        kbRow3.innerHTML = '';
+
+        KEYBOARD_ROWS[0].forEach(key => kbRow1.appendChild(createKeyButton(key)));
+        KEYBOARD_ROWS[1].forEach(key => kbRow2.appendChild(createKeyButton(key)));
+        KEYBOARD_ROWS[2].forEach(key => kbRow3.appendChild(createKeyButton(key)));
+      }
+
+      function createKeyButton(key) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'key-btn';
+        btn.dataset.key = key;
+        btn.textContent = key;
+
+        // Apply saved status if any
+        if (keyStateMap[key]) {
+          btn.classList.add(keyStateMap[key]);
         }
 
-        function handleKeyClick(key) {
-            if (gameOver) return;
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          handleKeyPress(key);
+        });
 
-            if (key === 'enter') {
-                submitGuess();
-            } else if (key === 'backspace' || key === 'delete') {
-                deleteLetter();
-            } else {
-                addLetter(key);
+        return btn;
+      }
+
+      function updateKeyboardColors() {
+        document.querySelectorAll('.key-btn').forEach(btn => {
+          const k = btn.dataset.key;
+          btn.classList.remove('correct', 'present', 'absent');
+          if (keyStateMap[k]) {
+            btn.classList.add(keyStateMap[k]);
+          }
+        });
+      }
+
+      /* ============================================================
+         BOARD RENDERING & TILE LOGIC
+         ============================================================ */
+      function renderBoard() {
+        gameBoard.innerHTML = '';
+
+        for (let r = 0; r < TOTAL_ROWS; r++) {
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'board-row';
+          rowDiv.id = `board-row-${r}`;
+          rowDiv.setAttribute('role', 'row');
+
+          for (let c = 0; c < TOTAL_COLS; c++) {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            tile.id = `tile-${r}-${c}`;
+            tile.setAttribute('role', 'gridcell');
+
+            // Populate if already guessed in saved state
+            if (boardGuesses[r]) {
+              const guessedLetter = boardGuesses[r].tokens[c] || '';
+              const evalState = boardGuesses[r].evaluations[c] || '';
+              tile.textContent = guessedLetter;
+              if (evalState) {
+                tile.classList.add(evalState);
+              }
+            } else if (r === currentAttempt && currentRowTokens[c]) {
+              tile.textContent = currentRowTokens[c];
+              tile.dataset.state = 'tbd';
             }
+
+            rowDiv.appendChild(tile);
+          }
+
+          gameBoard.appendChild(rowDiv);
+        }
+      }
+
+      function updateActiveRowDisplay() {
+        for (let c = 0; c < TOTAL_COLS; c++) {
+          const tile = document.getElementById(`tile-${currentAttempt}-${c}`);
+          if (!tile) continue;
+
+          if (currentRowTokens[c]) {
+            tile.textContent = currentRowTokens[c];
+            tile.dataset.state = 'tbd';
+          } else {
+            tile.textContent = '';
+            tile.removeAttribute('data-state');
+          }
         }
 
-        function addLetter(letter) {
-            if (currentLetterPosition < COL_COUNT) {
-                grid[currentAttempt][currentLetterPosition] = letter;
-                updateTileUI(currentAttempt, currentLetterPosition, letter, 'tbd');
-                currentLetterPosition++;
-            }
+        stepPillLabel.textContent = `चरण 1/2: शब्द पहेली (प्रयास ${Math.min(currentAttempt + 1, 6)}/6)`;
+      }
+
+      function shakeCurrentRow() {
+        const row = document.getElementById(`board-row-${currentAttempt}`);
+        if (row) {
+          row.classList.add('shake');
+          setTimeout(() => row.classList.remove('shake'), 400);
+        }
+      }
+
+      /* ============================================================
+         INPUT HANDLING
+         ============================================================ */
+      function handleKeyPress(key) {
+        if (isGameOver || isInputLocked) return;
+
+        if (currentCol < TOTAL_COLS) {
+          currentRowTokens[currentCol] = key;
+          currentCol++;
+          updateActiveRowDisplay();
+        } else {
+          showToast('5 अक्षर पूरे हैं, "जाँचें" दबाएँ', 'alert', 1400);
+        }
+      }
+
+      function handleBackspace() {
+        if (isGameOver || isInputLocked) return;
+
+        if (currentCol > 0) {
+          currentCol--;
+          currentRowTokens.pop();
+          updateActiveRowDisplay();
+        }
+      }
+
+      /* ============================================================
+         TWO-PASS FEEDBACK ALGORITHM
+         (Exact logic specified in Section 7 of Detailed Design)
+         ============================================================ */
+      function evaluateGuess(guessTokens, answerTokens) {
+        const evaluations = Array(TOTAL_COLS).fill('absent');
+        const remainingAnswerCounts = {};
+
+        // Pass 1: Mark exact positions as 'correct'
+        for (let i = 0; i < TOTAL_COLS; i++) {
+          if (guessTokens[i] === answerTokens[i]) {
+            evaluations[i] = 'correct';
+          } else {
+            const ansChar = answerTokens[i];
+            remainingAnswerCounts[ansChar] = (remainingAnswerCounts[ansChar] || 0) + 1;
+          }
         }
 
-        function deleteLetter() {
-            if (currentLetterPosition > 0) {
-                currentLetterPosition--;
-                grid[currentAttempt][currentLetterPosition] = "";
-                updateTileUI(currentAttempt, currentLetterPosition, "");
+        // Pass 2: Mark remaining matching tokens as 'present' if available in answer
+        for (let i = 0; i < TOTAL_COLS; i++) {
+          if (evaluations[i] !== 'correct') {
+            const guessedChar = guessTokens[i];
+            if (remainingAnswerCounts[guessedChar] && remainingAnswerCounts[guessedChar] > 0) {
+              evaluations[i] = 'present';
+              remainingAnswerCounts[guessedChar]--;
             }
+          }
         }
 
-        function updateTileUI(row, col, letter, state = "") {
-            const tile = document.getElementById(`tile-${row}-${col}`);
-            tile.textContent = letter;
+        return evaluations;
+      }
 
-            if (state === 'tbd') {
-                tile.setAttribute('data-state', 'tbd');
-            } else {
-                tile.removeAttribute('data-state');
-            }
+      function upgradeKeyStatus(key, status) {
+        const current = keyStateMap[key];
+        if (current === 'correct') return; // Cannot downgrade
+        if (current === 'present' && status === 'absent') return; // Cannot downgrade present to absent
+        keyStateMap[key] = status;
+      }
+
+      /* ============================================================
+         SUBMIT GUESS
+         ============================================================ */
+      function submitGuess() {
+        if (isGameOver || isInputLocked) return;
+
+        if (currentRowTokens.length < TOTAL_COLS) {
+          showToast('5 अक्षर पूरे करें', 'alert', 1600);
+          shakeCurrentRow();
+          return;
         }
 
-        function submitGuess() {
-            if (currentLetterPosition !== COL_COUNT) {
-                showMessage("Not enough letters");
-                shakeRow();
-                return;
+        isInputLocked = true;
+        const edition = EDITIONS_DATA[currentDay];
+        const guessTokens = [...currentRowTokens];
+        const evaluations = evaluateGuess(guessTokens, edition.answerTokens);
+
+        // Check if all correct
+        const allCorrect = evaluations.every(e => e === 'correct');
+
+        // Animate tiles flip sequentially
+        const rowIdx = currentAttempt;
+        for (let c = 0; c < TOTAL_COLS; c++) {
+          const tile = document.getElementById(`tile-${rowIdx}-${c}`);
+          setTimeout(() => {
+            if (tile) {
+              tile.removeAttribute('data-state');
+              tile.classList.add('flip');
+              tile.classList.add(evaluations[c]);
             }
-
-            const guess = [...grid[currentAttempt]];
-
-            checkGuess(guess);
+            // Update keyboard key state
+            upgradeKeyStatus(guessTokens[c], evaluations[c]);
+            updateKeyboardColors();
+          }, c * 140);
         }
 
-        function checkGuess(guess) {
-            const rowElements = document.getElementById(`row-${currentAttempt}`).children;
-            let targetWordArr = [...targetWord];
-            let guessArr = [...guess];
-            let tileClasses = Array(COL_COUNT).fill("absent"); // Default to absent
+        // After animation completes
+        setTimeout(() => {
+          boardGuesses.push({
+            tokens: guessTokens,
+            evaluations: evaluations
+          });
 
-            // First pass: Find exact matches (Green)
-            for (let i = 0; i < COL_COUNT; i++) {
-                if (guessArr[i] === targetWordArr[i]) {
-                    tileClasses[i] = "correct";
-                    targetWordArr[i] = null; // Mark as used
-                    guessArr[i] = null; // Mark as handled
-                }
-            }
+          if (allCorrect) {
+            isGameOver = true;
+            isGameWon = true;
+            isRevealed = false;
+            saveGameState();
+            showToast('शानदार! सही शब्द पहचान लिया!', 'success', 2200);
 
-            // Second pass: Find present letters (Yellow)
-            for (let i = 0; i < COL_COUNT; i++) {
-                if (guessArr[i] !== null && targetWordArr.includes(guessArr[i])) {
-                    tileClasses[i] = "present";
-                    // Mark first occurrence as used to handle duplicates correctly
-                    targetWordArr[targetWordArr.indexOf(guessArr[i])] = null;
-                }
-            }
-
-            // Apply classes to UI with a slight delay for animation effect
-            for (let i = 0; i < COL_COUNT; i++) {
-                setTimeout(() => {
-                    const tile = rowElements[i];
-                    const state = tileClasses[i];
-                    tile.classList.add(state);
-                    tile.removeAttribute('data-state'); // Remove typing border
-
-                    // Update keyboard color
-                    updateKeyboardColor(guess[i], state);
-                }, i * 200); // Staggered animation
-            }
-
-            // Check win/loss condition after animation finishes
-            setTimeout(() => {
-                if (guess.join("") === targetWord.join("")) {
-                    showMessage(getPraise(currentAttempt));
-                    gameOver = true;
-                    setTimeout(showStats, 2000);
-                } else {
-                    currentAttempt++;
-                    currentLetterPosition = 0;
-
-                    if (currentAttempt >= ROW_COUNT) {
-                        showMessage(targetWord.join(""), false);
-                        gameOver = true;
-                        setTimeout(showStats, 2000);
-                    }
-                }
-            }, COL_COUNT * 200);
-        }
-
-        function updateKeyboardColor(letter, state) {
-            const keyElement = document.querySelector(`.key[data-key="${letter}"]`);
-            if (!keyElement) return;
-
-            // Only upgrade state (e.g., absent -> present -> correct), don't downgrade
-            if (state === 'correct') {
-                keyElement.classList.remove('present', 'absent');
-                keyElement.classList.add('correct');
-            } else if (state === 'present' && !keyElement.classList.contains('correct')) {
-                keyElement.classList.remove('absent');
-                keyElement.classList.add('present');
-            } else if (state === 'absent' && !keyElement.classList.contains('correct') && !keyElement.classList.contains('present')) {
-                keyElement.classList.add('absent');
-            }
-        }
-
-        function showMessage(msg, fade = true) {
-            const el = document.createElement('div');
-            el.className = 'message';
-            el.textContent = msg;
-            messageContainer.appendChild(el);
-
-            if (fade) {
-                setTimeout(() => {
-                    el.classList.add('fade-out');
-                    setTimeout(() => {
-                        messageContainer.removeChild(el);
-                    }, 500); // matches css transition
-                }, 1500);
-            }
-        }
-
-        function getPraise(attempt) {
-            const praises = ["Genius", "Magnificent", "Impressive", "Splendid", "Great", "Phew"];
-            return praises[attempt] || "Good";
-        }
-
-        function shakeRow() {
-            const row = document.getElementById(`row-${currentAttempt}`);
-            row.style.animation = "shake 0.5s";
-            setTimeout(() => {
-                row.style.animation = "";
-            }, 500);
-        }
-
-        // Add shake animation style dynamically
-        const style = document.createElement('style');
-        style.innerHTML = `
-            @keyframes shake {
-                10%, 90% { transform: translateX(-1px); }
-                20%, 80% { transform: translateX(2px); }
-                30%, 50%, 70% { transform: translateX(-4px); }
-                40%, 60% { transform: translateX(4px); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        function showStats() {
-            const titleElement = document.getElementById('modal-title');
-            const messageElement = document.getElementById('modal-message');
-
-            const won = grid[currentAttempt - 1 > 0 ? currentAttempt - 1 : 0].join("") === targetWord.join("") || (currentAttempt < ROW_COUNT && gameOver);
-            if (won) {
-                titleElement.textContent = "You Won!";
-                messageElement.textContent = `You guessed the word in ${currentAttempt + (currentAttempt === ROW_COUNT ? 0 : 1)} attempts.`;
-            } else {
-                titleElement.textContent = "Game Over";
-                messageElement.textContent = `The word was ${targetWord.join("")}.`;
-            }
-
+            // Optional DBGameLab Parent integration call
             try {
-                const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
-                const score = won ? Math.max(100, (ROW_COUNT - currentAttempt) * 100) : 30;
-                if (lab) {
-                    if (typeof lab.addScore === 'function') lab.addScore(score);
-                    if (typeof lab.endGame === 'function') lab.endGame(score);
-                }
-                if (window.parent && window.parent !== window) {
-                    window.parent.postMessage({
-                        type: 'GAME_COMPLETE',
-                        game: 'wordal',
-                        score: score,
-                        status: won ? 'WIN' : 'OVER'
-                    }, '*');
-                }
-            } catch(e) {}
+              if (window.parent && window.parent.DBGameLab && typeof window.parent.DBGameLab.addScore === 'function') {
+                window.parent.DBGameLab.addScore(100 - (rowIdx * 10));
+              }
+            } catch (e) {}
 
-            modal.style.display = 'flex';
+            // Transition to Screen 2: News Interconnection Screen
+            setTimeout(() => {
+              showView('result');
+            }, 1200);
+
+          } else if (currentAttempt + 1 >= TOTAL_ROWS) {
+            // Out of attempts
+            isGameOver = true;
+            isGameWon = false;
+            isRevealed = true;
+            saveGameState();
+            showToast(`प्रयास समाप्त! सही शब्द है: ${edition.answer}`, 'alert', 2400);
+
+            setTimeout(() => {
+              showView('result');
+            }, 1400);
+
+          } else {
+            // Next row
+            currentAttempt++;
+            currentCol = 0;
+            currentRowTokens = [];
+            isInputLocked = false;
+            saveGameState();
+            updateActiveRowDisplay();
+          }
+        }, TOTAL_COLS * 140 + 200);
+      }
+
+      /* ============================================================
+         GIVE UP / REVEAL ANSWER
+         ============================================================ */
+      function confirmGiveUp() {
+        modalGiveUp.classList.remove('is-open');
+        isGameOver = true;
+        isGameWon = false;
+        isRevealed = true;
+        saveGameState();
+        showToast('शब्द का खुलासा किया गया', 'alert', 1800);
+        setTimeout(() => {
+          showView('result');
+        }, 600);
+      }
+
+      /* ============================================================
+         POPULATE SCREEN 2: INTERCONNECTION & NEWS SCREEN
+         ============================================================ */
+      function populateResultScreen() {
+        const edition = EDITIONS_DATA[currentDay];
+        
+        // Result Pill
+        if (isGameWon) {
+          resultStatusPill.className = 'result-status-pill win';
+          resultStatusPill.textContent = `🎉 बधाई! ${boardGuesses.length}/6 प्रयासों में शब्द हल किया`;
+        } else {
+          resultStatusPill.className = 'result-status-pill revealed';
+          resultStatusPill.textContent = '📖 शब्द का खुलासा';
         }
 
-        // On-screen keyboard event listeners
-        document.querySelectorAll('.key, .check-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                // Ensure we get the button element even if the SVG inside was clicked
-                const keyEl = e.target.closest('.key') || e.target.closest('.check-btn');
-                if (keyEl) {
-                    const key = keyEl.getAttribute('data-key');
-                    handleKeyClick(key);
-                }
-            });
+        // Hero Word & Tokens
+        resultWordDisplay.textContent = edition.answer;
+        resultUnitsDisplay.textContent = edition.answerTokens.join(' · ');
+        resultMeaningText.textContent = edition.meaning;
+
+        // News Interconnection Details
+        newsConnectionTopic.textContent = edition.periodLabel;
+        newsConnectionHeadline.textContent = edition.newsHeadline;
+        newsConnectionWhy.innerHTML = `<strong>खबरों से जुड़ाव:</strong> ${edition.newsConnectionWhy}`;
+        highlightTagWord.textContent = edition.answer;
+
+        // Update Links
+        const targetNewsUrl = `./news.html?day=${encodeURIComponent(currentDay)}&article=${encodeURIComponent(edition.relatedArticleId)}`;
+        btnGoToNewsFeed.href = targetNewsUrl;
+        btnArticleToFeedLink.href = targetNewsUrl;
+      }
+
+      /* ============================================================
+         POPULATE SCREEN 3: IN-FILE ARTICLE READER
+         ============================================================ */
+      function populateArticleReader() {
+        const edition = EDITIONS_DATA[currentDay];
+        const art = edition.article;
+
+        artReaderCategory.textContent = art.category;
+        artReaderHeadline.textContent = art.title;
+        artReaderPeriod.textContent = art.period;
+
+        artReaderBody.innerHTML = '';
+        art.paragraphs.forEach(p => {
+          const para = document.createElement('p');
+          para.textContent = p;
+          artReaderBody.appendChild(para);
         });
 
-        // Physical keyboard event listeners
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey || e.altKey) return;
+        artReaderSourcesList.innerHTML = '';
+        art.sources.forEach(s => {
+          const srcItem = document.createElement('div');
+          srcItem.style.marginBottom = '4px';
+          srcItem.innerHTML = `• <a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.title}</a>`;
+          artReaderSourcesList.appendChild(srcItem);
+        });
+      }
 
-            const key = e.key.toLowerCase();
-            if (key === 'enter' || key === 'backspace') {
-                handleKeyClick(key);
-            }
+      /* ============================================================
+         EDITION SWITCHING & INITIALIZATION
+         ============================================================ */
+      function switchEdition(dayId) {
+        if (!EDITIONS_DATA[dayId]) return;
+
+        currentDay = dayId;
+        updateUrlDay(dayId);
+
+        // Update tabs active state
+        [tabD1, tabD2, tabD3].forEach(tab => {
+          const isTabActive = tab.dataset.day === dayId;
+          tab.classList.toggle('is-active', isTabActive);
+          tab.setAttribute('aria-selected', isTabActive ? 'true' : 'false');
         });
 
-        // Initialize game on load
-        window.onload = initGame;
-    </script>
+        // Update Banner Details
+        const edition = EDITIONS_DATA[dayId];
+        headlineBannerTitle.textContent = edition.headingPrompt;
+        headlineBannerDesc.textContent = edition.subPrompt;
+        topicHintBadge.textContent = `विषय: ${edition.clue}`;
+
+        // Reset memory variables
+        currentAttempt = 0;
+        currentCol = 0;
+        currentRowTokens = [];
+        boardGuesses = [];
+        keyStateMap = {};
+        isGameOver = false;
+        isGameWon = false;
+        isRevealed = false;
+        isInputLocked = false;
+
+        // Restore saved state if exists
+        const saved = loadGameState();
+        if (saved) {
+          currentAttempt = saved.currentAttempt || 0;
+          boardGuesses = saved.boardGuesses || [];
+          isGameOver = !!saved.isGameOver;
+          isGameWon = !!saved.isGameWon;
+          isRevealed = !!saved.isRevealed;
+          keyStateMap = saved.keyStateMap || {};
+        }
+
+        renderKeyboard();
+        renderBoard();
+        updateActiveRowDisplay();
+
+        // If this edition was already finished, show result directly
+        if (isGameOver) {
+          showView('result');
+        } else {
+          showView('game');
+        }
+      }
+
+      /* ============================================================
+         SHARE RESULTS
+         ============================================================ */
+      function shareResult() {
+        const edition = EDITIONS_DATA[currentDay];
+        let emojiGrid = '';
+        
+        boardGuesses.forEach(g => {
+          g.evaluations.forEach(ev => {
+            if (ev === 'correct') emojiGrid += '🟩';
+            else if (ev === 'present') emojiGrid += '🟨';
+            else emojiGrid += '⬜';
+          });
+          emojiGrid += '\n';
+        });
+
+        const shareText = `दैनिक भास्कर · आज का शब्द\n${edition.label} (${edition.periodLabel})\nशब्द: ${edition.answer}\nप्रयास: ${isGameWon ? boardGuesses.length + '/6' : 'खुलासा'}\n\n${emojiGrid}\nदैनिक भास्कर खेल लैब पर खेलें।`;
+
+        if (navigator.share) {
+          navigator.share({
+            title: 'आज का शब्द · दैनिक भास्कर',
+            text: shareText
+          }).catch(() => {});
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(shareText).then(() => {
+            showToast('परिणाम कॉपी किया गया! व्हाट्सएप पर साझा करें', 'success', 2200);
+          }).catch(() => {
+            showToast('शेयर कॉपी उपलब्ध नहीं है', 'alert');
+          });
+        } else {
+          showToast('परिणाम क्लिपबोर्ड में कॉपी नहीं हो सका', 'alert');
+        }
+      }
+
+      /* ============================================================
+         EVENT LISTENERS
+         ============================================================ */
+      // Keyboard Action Keys
+      btnBackspace.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleBackspace();
+      });
+
+      btnSubmitGuess.addEventListener('click', (e) => {
+        e.preventDefault();
+        submitGuess();
+      });
+
+      btnGiveUp.addEventListener('click', (e) => {
+        e.preventDefault();
+        modalGiveUp.classList.add('is-open');
+      });
+
+      // Give Up Modal actions
+      btnCloseGiveUp.addEventListener('click', () => modalGiveUp.classList.remove('is-open'));
+      btnCancelGiveUp.addEventListener('click', () => modalGiveUp.classList.remove('is-open'));
+      btnConfirmGiveUp.addEventListener('click', confirmGiveUp);
+
+      // Help Modal actions
+      btnHelp.addEventListener('click', () => modalHelp.classList.add('is-open'));
+      btnCloseHelp.addEventListener('click', () => modalHelp.classList.remove('is-open'));
+      btnOkHelp.addEventListener('click', () => modalHelp.classList.remove('is-open'));
+
+      // Tab switcher clicks
+      [tabD1, tabD2, tabD3].forEach(tab => {
+        tab.addEventListener('click', () => {
+          switchEdition(tab.dataset.day);
+        });
+      });
+
+      // Reset Button
+      btnResetRound.addEventListener('click', () => {
+        if (confirm('क्या आप इस संस्करण को दोबारा शुरू करना चाहते हैं?')) {
+          clearCurrentDayState();
+          switchEdition(currentDay);
+          showToast('नया राउंड शुरू हुआ', 'normal', 1400);
+        }
+      });
+
+      // Screen 2 Actions
+      btnViewGridAgain.addEventListener('click', () => {
+        showView('game');
+      });
+
+      btnReadArticleHere.addEventListener('click', () => {
+        showView('article');
+      });
+
+      btnShareResult.addEventListener('click', shareResult);
+
+      btnReplayPractice.addEventListener('click', () => {
+        clearCurrentDayState();
+        switchEdition(currentDay);
+        showToast('अभ्यास राउंड शुरू!', 'normal', 1400);
+      });
+
+      btnNextEdition.addEventListener('click', () => {
+        const nextMap = { 'd1': 'd2', 'd2': 'd3', 'd3': 'd1' };
+        switchEdition(nextMap[currentDay]);
+      });
+
+      // Screen 3 Actions (Article Reader Back)
+      btnArticleBackToResult.addEventListener('click', () => {
+        showView('result');
+      });
+
+      btnArticleBackBottom.addEventListener('click', () => {
+        showView('result');
+      });
+
+      // Physical Keyboard typing support (Backspace and Enter)
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace') {
+          handleBackspace();
+        } else if (e.key === 'Enter') {
+          submitGuess();
+        }
+      });
+
+      // Initialize with day from URL
+      const initialDay = getDayFromUrl();
+      switchEdition(initialDay);
+
+    })();
+  </script>
 </body>
-
 </html>
