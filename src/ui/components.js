@@ -6,6 +6,8 @@
 import { bus, Events } from '../core/events.js';
 import { t } from '../i18n/index.js';
 import { playSfx } from '../core/audio.js';
+import { openNews } from './news-reader.js';
+import { showTorchCelebration } from './torch.js';
 
 // ---- Toast System ----
 
@@ -200,7 +202,7 @@ export function attachBottomNavListeners(container, navigateFn) {
     btn.addEventListener('click', () => {
       playSfx('click');
       if (btn.dataset.navId === 'news') {
-        window.location.assign(`./news.html?day=${window.DBJamDemo?.day || 'd1'}`);
+        openNews();
       } else {
         navigateFn(btn.dataset.navRoute);
       }
@@ -218,6 +220,7 @@ export function renderGameOver({
   rank,
   gameTitle,
   theme,
+  torchCelebration,
   onPlayAgain,
   onHome,
   onShare,
@@ -233,7 +236,7 @@ export function renderGameOver({
     </h2>
     <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">${t('gameover.great')}</p>
 
-    <div class="stats-row" style="margin-bottom: var(--space-6);">
+    <div class="stats-row" data-result-summary style="margin-bottom: var(--space-6);">
       <div class="stat-item">
         <div class="stat-item__value text-gradient-warm">${score}</div>
         <div class="stat-item__label">${t('gameover.score')}</div>
@@ -266,6 +269,7 @@ export function renderGameOver({
   `;
 
   openModal({ title: '', content, theme });
+  modalCloseCallback = showTorchCelebration(content.querySelector('[data-result-summary]'), torchCelebration);
 
   // Attach listeners
   content.querySelector('#go-play-again')?.addEventListener('click', () => {

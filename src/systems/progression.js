@@ -127,7 +127,7 @@ function yesterdayStr() {
 
 /**
  * Update streak based on current play.
- * Should be called when a game session begins.
+ * Called when a game session is completed.
  */
 export function updateStreak() {
   const data = getProgression();
@@ -232,8 +232,10 @@ export function isDateCompleted(dateStr) {
  * @param {boolean} [isDaily=true]
  */
 export function recordGamePlay(gameId, score, isDaily = true) {
-  const data = getProgression();
   const today = todayStr();
+  const firstCompletion = getProgression().lastPlayDate !== today;
+  updateStreak();
+  const data = getProgression();
 
   data.gamesPlayed += 1;
   data.totalScore += score;
@@ -261,6 +263,7 @@ export function recordGamePlay(gameId, score, isDaily = true) {
     awardXP(XP_REWARDS.DAILY_COMPLETED, 'daily_completed');
     bus.emit(Events.DAILY_COMPLETED, { gameId });
   }
+  return { firstCompletion, streak: data.streak };
 }
 
 /**

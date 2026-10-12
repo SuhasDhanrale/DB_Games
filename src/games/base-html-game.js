@@ -2,6 +2,8 @@ import { BaseGame } from './base-game.js';
 import { gameUrl } from './game-assets.js';
 import { needsIntro, renderGameIntro } from '../ui/game-intro.js';
 import { getLang } from '../i18n/index.js';
+import { openNews } from '../ui/news-reader.js';
+import { showTorchCelebration } from '../ui/torch.js';
 
 export class HtmlIframeGame extends BaseGame {
   constructor(container, config) {
@@ -43,6 +45,15 @@ export class HtmlIframeGame extends BaseGame {
       try {
         if (iframe.contentWindow) {
           iframe.contentWindow.DBGameLab = bridge;
+          iframe.contentDocument.addEventListener('click', event => {
+            const link = event.target.closest('a[href]');
+            if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            const url = new URL(link.href);
+            if (url.origin === window.location.origin && url.pathname.endsWith('/news.html')) {
+              event.preventDefault();
+              openNews(url.href);
+            }
+          });
         }
       } catch (e) {
         console.warn("Could not inject DBGameLab object into iframe:", e);
@@ -51,7 +62,7 @@ export class HtmlIframeGame extends BaseGame {
 
     // Also listen for postMessage events from child games
     const onMessage = (event) => {
-      if (!event.data) return;
+      if (event.source !== iframe.contentWindow || event.origin !== window.location.origin || !event.data) return;
       if (event.data.type === 'GAME_COMPLETE' || event.data.type === 'GAME_OVER') {
         const score = typeof event.data.score === 'number' ? event.data.score : 100;
         this.end(score);
@@ -67,6 +78,20 @@ export class HtmlIframeGame extends BaseGame {
         delete window.DBGameLab;
       }
     });
+  }
+
+  showTorchCelebration(celebration) {
+    if (!celebration) return;
+    const anchors = {
+      wordal: '.result-hero-card',
+      niti: '#meaning-reveal-box',
+      cricket: '.news-scorecard',
+      carrom: '#modal-desc',
+      jodo: '.result-header-minimal',
+    };
+    const doc = this.getGameArea().querySelector('iframe')?.contentDocument;
+    const anchor = doc?.querySelector(anchors[this.theme]);
+    this._cleanupFns.push(showTorchCelebration(anchor, celebration));
   }
 
   onRulesClick() {

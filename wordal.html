@@ -1077,7 +1077,7 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn-modal-action btn-action-submit family-primary" id="btnOkHelp">समझ गया / खेलें</button>
+        <button type="button" class="btn-modal-action btn-action-submit family-primary" id="btnOkHelp">खेले</button>
       </div>
     </div>
   </div>
@@ -1390,6 +1390,12 @@
           populateResultScreen();
           viewResult.classList.add('is-active');
           window.scrollTo({ top: 0, behavior: 'smooth' });
+          // Solving or using all six attempts completes the game; revealing early does not.
+          if (isGameWon || boardGuesses.length >= TOTAL_ROWS) {
+            try {
+              window.parent?.DBGameLab?.endGame?.(isGameWon ? 100 - ((boardGuesses.length - 1) * 10) : 0);
+            } catch (e) {}
+          }
         } else if (viewId === 'article') {
           populateArticleReader();
           viewArticle.classList.add('is-active');

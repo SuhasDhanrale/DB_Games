@@ -9,7 +9,7 @@
         prepareStandaloneIntro('cricket').then(window.finishGameIntro);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>सुपर ओवर | दैनिक भास्कर</title>
+    <title>आज का ओवर | दैनिक भास्कर</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
@@ -746,17 +746,9 @@
         button { font-family: inherit; cursor: pointer; }
         button:focus-visible { outline: 3px solid #E23A28; outline-offset: 4px; }
         .intro-screen { max-width:480px; margin:auto; height:100%; overflow-y:auto; touch-action:pan-y; padding:24px; display:flex; flex-direction:column; justify-content:center; gap:24px; }
-        .intro-screen { justify-content: safe center; }
         .intro-heading { text-align:center; }
         .intro-heading h1 { font-size:32px; font-weight:900; line-height:1.5; margin-bottom:6px; }
         .intro-heading p { font-size:11px; color:var(--text-secondary); line-height:1.7; }
-        .intro-matchup { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; text-align:center; }
-        .intro-team { display:flex; flex-direction:column; align-items:center; gap:10px; font-size:21px; }
-        .team-mark { display:block; width:84px; height:56px; border-radius:6px; overflow:hidden; box-shadow:0 4px 12px #00000014; border:1px solid #00000012; }
-        .team-mark svg { display:block; width:100%; height:100%; }
-        .intro-versus { display:flex; flex-direction:column; align-items:center; gap:6px; }
-        .intro-versus strong { font-family:'Inter',sans-serif; font-size:36px; line-height:1; font-weight:900; font-style:italic; color:var(--color-primary); }
-        .cricket-accent { width:48px; height:40px; }
         .intro-choices { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; }
         .choice-card { width:100%; display:flex; flex-direction:column; align-items:center; gap:8px; padding:20px 8px 18px; border:2px solid transparent; outline:1px solid var(--border-subtle); background:white; border-radius:18px; text-align:center; box-shadow:var(--shadow-sm); color:var(--text-primary); position:relative; }
         .choice-card:hover { border-color:var(--color-primary); background:#fffaf7; }
@@ -767,17 +759,11 @@
         .choice-runs { display:flex; align-items:baseline; gap:5px; color:var(--color-primary); font-size:13px; margin:2px 0; }
         .choice-runs b { font-family:'Inter',sans-serif; font-size:48px; line-height:1.2; font-weight:900; }
         .choice-card--bowling .choice-runs { color:#258347; }
-        .intro-footnote { text-align:center; font-size:11px; color:var(--text-tertiary); }
-        .intro-start { display:grid; gap:10px; }
-        .match-picker { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-        .match-picker button { min-height:56px; border:1px solid #dedbd5; background:#fff; border-radius:12px; font:inherit; font-size:14px; font-weight:800; padding:9px; }
-        .match-picker button[aria-pressed="true"] { border-color:#e23a28; background:#fff1ec; color:#ba2313; }
-        .match-picker small { display:block; font-size:12px; font-weight:500; margin-top:3px; }
         .match-context { border:1px solid #e7e0d4; border-radius:12px; background:#fff9ef; padding:12px; font-size:14px; line-height:1.7; }
         .match-context p { margin:3px 0 7px; }
         .match-context a { color:#ba2313; text-decoration:underline; display:block; min-height:32px; }
         .result-history { margin-top:12px; }
-        .match-picker button:focus-visible,.match-context a:focus-visible { outline:3px solid #1c1c1c; outline-offset:3px; }
+        .match-context a:focus-visible { outline:3px solid #1c1c1c; outline-offset:3px; }
         #confirmStartBtn { width:100%; min-height:48px; border:0; border-radius:14px; background:var(--color-primary); color:white; font-size:17px; font-weight:800; box-shadow:var(--shadow-sm); }
         #confirmStartBtn:disabled { background:#e5e5e2; color:#888883; box-shadow:none; cursor:default; }
         #confirmStartBtn:not(:disabled):hover { background:var(--color-primary-dark); }
@@ -805,7 +791,7 @@
         .prompt-pill { font-size:18px; padding:8px 18px; }
         .modal-overlay { padding:16px; touch-action:pan-y; }
         .modal-card { max-height:90dvh; overflow-y:auto; }
-        @media(max-height:650px) { .intro-screen { gap:16px; } .team-mark { width:66px; height:44px; } .choice-card { padding:14px 8px; } .game-layout { gap:5px; } .hud-strip { padding:8px 0 4px; } .hud-val { font-size:24px; } }
+        @media(max-height:650px) { .intro-screen { gap:16px; } .choice-card { padding:14px 8px; } .game-layout { gap:5px; } .hud-strip { padding:8px 0 4px; } .hud-val { font-size:24px; } }
     </style>
   <link rel="stylesheet" href="./src/styles/game-family.css">
 </head>
@@ -815,22 +801,31 @@
     <canvas id="confettiCanvas"></canvas>
 
     <section class="intro-screen" id="introScreen" aria-labelledby="introTitle">
-        <div class="intro-heading"><h1 id="introTitle">आज का मुकाबला</h1><p>एशियाई खेल 2026 · छह गेंदों की अभ्यास चुनौती</p></div>
-        <div class="match-picker" role="group" aria-label="मुकाबला चुनें">
-            <button type="button" data-match="asian-final" aria-pressed="true">भारत–पाकिस्तान <small>फाइनल · 3 अक्टूबर</small></button>
-            <button type="button" data-match="asian-semi" aria-pressed="false">भारत–श्रीलंका <small>सेमीफाइनल · 1 अक्टूबर</small></button>
+        <div class="intro-heading">
+            <p class="intro-kicker">आज का मुकाबला</p>
+            <p class="intro-match-meta" id="matchMeta"></p>
+            <h1 id="introTitle">भारत ने पाकिस्तान को 19 रन से हराया</h1>
+            <a id="matchStory" href="./news.html?article=asian-final&game=superover">मुकाबले की खबर पढ़ें →</a>
         </div>
-        <div class="match-context"><strong id="matchActual"></strong><p id="matchScores"></p><a id="matchStory" href="./news.html?article=asian-final&game=superover">मुकाबले की खबर पढ़ें →</a></div>
-        <div class="intro-matchup" aria-label="भारत बनाम पाकिस्तान">
-            <div class="intro-team"><span class="team-mark" aria-hidden="true"><svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><path fill="#ff9933" d="M0 0h60v14H0z"/><path fill="#fff" d="M0 13.333h60v13.334H0z"/><path fill="#138808" d="M0 26.667h60V40H0z"/><g stroke="#000080" fill="none" stroke-width=".55"><circle cx="30" cy="20" r="5"/><path id="chakraSpoke" d="M30 15v10"/><use href="#chakraSpoke" transform="rotate(15 30 20)"/><use href="#chakraSpoke" transform="rotate(30 30 20)"/><use href="#chakraSpoke" transform="rotate(45 30 20)"/><use href="#chakraSpoke" transform="rotate(60 30 20)"/><use href="#chakraSpoke" transform="rotate(75 30 20)"/><use href="#chakraSpoke" transform="rotate(90 30 20)"/><use href="#chakraSpoke" transform="rotate(105 30 20)"/><use href="#chakraSpoke" transform="rotate(120 30 20)"/><use href="#chakraSpoke" transform="rotate(135 30 20)"/><use href="#chakraSpoke" transform="rotate(150 30 20)"/><use href="#chakraSpoke" transform="rotate(165 30 20)"/></g><circle cx="30" cy="20" r=".8" fill="#000080"/></svg></span><strong>भारत</strong></div>
-            <span class="intro-versus" aria-label="बनाम"><strong aria-hidden="true">VS</strong><svg class="cricket-accent" viewBox="0 0 48 40" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(32 19 20)"><rect x="16" y="2" width="6" height="17" rx="2" fill="#7253a3"/><rect x="12" y="16" width="14" height="23" rx="3" fill="#e1b579"/><path d="M15 19v15" stroke="#f3d3a6" stroke-width="2"/></g><circle cx="36" cy="27" r="7" fill="#e23a28"/><path d="M33 21q6 6 0 12" fill="none" stroke="#ffe1d9" stroke-width="1.2"/></svg></span>
-            <div class="intro-team intro-team--pakistan"><span class="team-mark" aria-hidden="true"><svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><path fill="#01411c" d="M0 0h60v40H0z"/><path fill="#fff" d="M0 0h15v40H0z"/><circle cx="37" cy="21" r="10" fill="#fff"/><circle cx="41" cy="18" r="9" fill="#01411c"/><path fill="#fff" d="m43 9 1.4 3.7 4 .2-3.1 2.5 1 3.8-3.3-2.2-3.3 2.2 1-3.8-3.1-2.5 4-.2z"/></svg></span><strong>पाकिस्तान</strong></div>
+        <div class="intro-play">
+            <div class="intro-challenge">
+                <div class="intro-matchup" id="introMatchup" role="group" aria-label="भारत बनाम पाकिस्तान">
+                    <img class="team-flag" src="./flags/india.svg" alt="भारत का झंडा" width="84" height="56">
+                    <span class="intro-versus" aria-hidden="true">VS</span>
+                    <img class="team-flag" id="opponentFlag" src="./flags/pakistan.svg" alt="पाकिस्तान का झंडा" width="84" height="56">
+                </div>
+                <h2>भारत की ओर से खेलें</h2>
+                <p id="practiceNote">छह गेंदों की अभ्यास चुनौती</p>
+            </div>
+            <div class="intro-role-picker" role="group" aria-labelledby="roleChoiceLabel" aria-describedby="practiceNote">
+                <h3 id="roleChoiceLabel">खेलने का तरीका चुनें</h3>
+                <div class="intro-choices">
+                    <button type="button" class="choice-card" data-role="BATTING" aria-pressed="false" aria-label="बल्लेबाजी: 18 रन बनाएँ"><strong>बल्लेबाजी</strong><span class="choice-runs"><b>18</b> रन</span><small>बनाएँ</small></button>
+                    <button type="button" class="choice-card choice-card--bowling" data-role="BOWLING" aria-pressed="false" aria-label="गेंदबाजी: विपक्षी टीम को 15 रन से कम पर रोकें"><strong>गेंदबाजी</strong><span class="choice-runs"><b>15</b> रन</span><small>विपक्षी टीम को इससे कम पर रोकें</small></button>
+                </div>
+            </div>
+            <button id="confirmStartBtn" class="family-primary" type="button" disabled>शुरू करें →</button>
         </div>
-        <div class="intro-choices">
-            <button class="choice-card" data-role="BATTING" aria-pressed="false"><strong>बल्लेबाजी</strong><span class="choice-runs"><b>18</b> रन</span><small>लक्ष्य पाएँ</small></button>
-            <button class="choice-card choice-card--bowling" data-role="BOWLING" aria-pressed="false"><strong>गेंदबाजी</strong><span class="choice-runs"><b>15</b> रन</span><small>लक्ष्य बचाएँ</small></button>
-        </div>
-        <div class="intro-start"><button id="confirmStartBtn" class="family-primary" type="button" disabled>शुरू करें →</button><p class="intro-footnote">भारत की ओर से खेलें · 18/15 रन अभ्यास के लक्ष्य हैं, असली मैच के आखिरी ओवर का समीकरण नहीं।</p></div>
     </section>
     <div class="game-layout" id="matchScreen" hidden>
         <div class="hud-strip">
@@ -874,6 +869,7 @@
             <div class="modal-body">
                 <div class="rule-card"><div class="rule-icon">🏏</div><div><div class="rule-title">लक्ष्य हासिल करें</div><div class="rule-desc">गेंद पास आए तो मैदान पर उंगली सरकाएँ। जिस दिशा में उंगली सरकाएँगे, उसी दिशा में शॉट जाएगा। हरे निशान पर गेंद आने का इंतज़ार करें।</div></div></div>
                 <div class="rule-card"><div class="rule-icon">🎯</div><div><div class="rule-title">लक्ष्य बचाएँ</div><div class="rule-desc">पिच पर उंगली रखकर गेंद की जगह चुनें। उंगली छोड़ते ही गेंद फेंकी जाएगी। हर गेंद के बाद अगली गेंद की जगह चुनें।</div></div></div>
+                <div class="rule-card"><div class="rule-icon">ⓘ</div><div><div class="rule-title">अभ्यास के लक्ष्य</div><div class="rule-desc">बल्लेबाजी में 18 रन बनाएँ। गेंदबाजी में विपक्षी टीम को 15 रन से कम पर रोकें। ये अभ्यास के लक्ष्य हैं, असली मैच के आखिरी ओवर का समीकरण नहीं।</div></div></div>
                 <div class="rule-card"><div class="rule-icon">⑥</div><div><div class="rule-title">बस एक ओवर</div><div class="rule-desc">छह गेंदें मिलेंगी। दो विकेट गिरने पर पारी खत्म हो जाएगी। ऊपर रन और नीचे बची हुई गेंदें देखें।</div></div></div>
             </div>
             <div class="modal-footer">
@@ -889,7 +885,7 @@
                 <div class="modal-header-brand">
                     <span style="font-size: 1.4rem;" id="resEmoji">🏆</span>
                     <div>
-                        <div class="modal-title" id="resTitle">सुपर ओवर समाप्त!</div>
+                        <div class="modal-title" id="resTitle">आज का ओवर समाप्त!</div>
                         <div class="modal-subtitle">दैनिक भास्कर खेल विशेष</div>
                     </div>
                 </div>
@@ -905,7 +901,7 @@
                 </div>
 
                 <div class="news-headline" id="resHeadline">
-                    सांस रोक देने वाले सुपर ओवर में अंतिम गेंद पर रोमांचक जीत!
+                    आज के ओवर में अंतिम गेंद पर रोमांचक जीत!
                 </div>
 
                 <div class="news-scorecard">
@@ -938,7 +934,7 @@
     <!-- Game Logic Scripts -->
     <script>
         /* ============================================================
-           SUPER OVER CRICKET — Dainik Bhaskar Game Lab
+           AAJ KA OVER CRICKET — Dainik Bhaskar Game Lab
            Two POV Perspectives, 8-Directional Swipe Batting,
            Hovering Pitch Area Clue, Swipe Swing Bowling
            ============================================================ */
@@ -1097,7 +1093,7 @@
         // --- I18N Strings ---
         const I18N = {
             hi: {
-                title: 'सुपर ओवर',
+                title: 'आज का ओवर',
                 roleBatting: 'बल्लेबाजी · रन',
                 roleBowling: 'गेंदबाजी · बचाव',
                 target: 'लक्ष्य',
@@ -1108,16 +1104,16 @@
                 switchToBat: 'बल्लेबाजी मोड',
                 camBatter: 'बल्लेबाज',
                 camBowler: 'गेंदबाज',
-                winHeadline: 'बाज़ी आपकी! सुपर ओवर में जीत',
+                winHeadline: 'बाज़ी आपकी! आज के ओवर में जीत',
                 winTitle: 'शानदार जीत!',
                 lossTitle: 'इस बार हार हुई',
-                winMessage: 'सुपर ओवर के चैंपियन आप हैं!',
+                winMessage: 'आज के ओवर के चैंपियन आप हैं!',
                 lossMessage: 'अगला ओवर आपका हो सकता है। फिर कोशिश करें!',
                 lossHeadline: 'इस बार जीत हाथ से निकल गई',
-                tieHeadline: 'रोमांच की पराकाष्ठा! सुपर ओवर भी टाई समाप्त हुआ!'
+                tieHeadline: 'रोमांच की पराकाष्ठा! आज का ओवर बराबरी पर समाप्त हुआ!'
             },
             en: {
-                title: 'Super Over',
+                title: 'Aaj Ka Over',
                 roleBatting: 'Batting · Runs',
                 roleBowling: 'Bowling · Defend',
                 target: 'Target',
@@ -1128,13 +1124,13 @@
                 switchToBat: 'Switch to Bat',
                 camBatter: 'Batter POV',
                 camBowler: 'Bowler POV',
-                winHeadline: 'Historic victory in last-ball Super Over thriller!',
+                winHeadline: 'A last-ball victory in Aaj Ka Over!',
                 winTitle: 'You won!',
                 lossTitle: 'You lost this round',
-                winMessage: 'You are the Super Over champion!',
+                winMessage: 'You are the Aaj Ka Over champion!',
                 lossMessage: 'Your next over could be the one. Try again!',
-                lossHeadline: 'Heartbreak in Super Over! Opponent seals victory.',
-                tieHeadline: 'Incredible tie in the Super Over cliffhanger!'
+                lossHeadline: 'Heartbreak in Aaj Ka Over! Opponent seals victory.',
+                tieHeadline: 'Aaj Ka Over finishes in a thrilling tie!'
             }
         };
 
@@ -1163,12 +1159,12 @@
         };
 
         const ASIAN_MATCHES = {
-            'asian-final': { id:'asian-final', opponent:'पाकिस्तान', code:'PAK', date:'3 अक्टूबर 2026', stage:'फाइनल', scores:'भारत 211/6 · पाकिस्तान 192/6', outcome:'भारत 19 रन से जीता।', source:'https://www.bcci.tv/matches/1d466763-a1a9-4120-a576-73135df57d9a/More/news' },
-            'asian-semi': { id:'asian-semi', opponent:'श्रीलंका', code:'SL', date:'1 अक्टूबर 2026', stage:'सेमीफाइनल', scores:'भारत 169/7 · श्रीलंका 45 ऑल आउट', outcome:'भारत 124 रन से जीता।', source:'https://www.bcci.tv/matches/244555/More/news' }
+            'asian-final': { id:'asian-final', opponent:'पाकिस्तान', code:'PAK', date:'3 अक्टूबर 2026', stage:'फाइनल', scores:'भारत 211/6 · पाकिस्तान 192/6', outcome:'भारत 19 रन से जीता।', headline:'भारत ने पाकिस्तान को 19 रन से हराया', source:'https://www.bcci.tv/matches/1d466763-a1a9-4120-a576-73135df57d9a/More/news' },
+            'asian-semi': { id:'asian-semi', opponent:'श्रीलंका', code:'SL', date:'1 अक्टूबर 2026', stage:'सेमीफाइनल', scores:'भारत 169/7 · श्रीलंका 45 ऑल आउट', outcome:'भारत 124 रन से जीता।', headline:'भारत ने श्रीलंका को 124 रन से हराया', source:'https://www.bcci.tv/matches/244555/More/news' }
         };
         const initialMatch = new URLSearchParams(location.search).get('match');
         const initialDay = new URLSearchParams(location.search).get('day');
-        let selectedMatchId = ASIAN_MATCHES[initialMatch] ? initialMatch : ((initialDay === 'd2' || window.DBJamDemo?.index === 1) ? 'asian-semi' : 'asian-final');
+        const selectedMatchId = ASIAN_MATCHES[initialMatch] ? initialMatch : ((initialDay === 'd2' || window.DBJamDemo?.index === 1) ? 'asian-semi' : 'asian-final');
         let currentRole = ROLES.BATTING;
         let currentCameraView = CAMERA_VIEWS.BATTER;
         let gameState = STATES.IDLE;
@@ -1552,7 +1548,7 @@
                 setCommentary('पिच पर उंगली रखकर जगह चुनें। छोड़ते ही गेंद फेंकी जाएगी।');
             } else {
                 hoverArea.visible = false;
-                setCommentary('सुपर ओवर शुरू! पहली गेंद (1/6) के लिए तैयार रहें...');
+                setCommentary('आज का ओवर शुरू! पहली गेंद (1/6) के लिए तैयार रहें...');
                 autoNextBallTimer = setTimeout(() => {
                     if (matchStarted && !helpOpen && gameState === STATES.IDLE && ballsBowled === 0 && currentRole === ROLES.BATTING) {
                         startDelivery();
@@ -2266,7 +2262,7 @@
                     headline = t('winHeadline');
                     narrative = currentLang === 'hi' ?
                         `आपने ${ballsBowled} गेंदों में ${totalRuns} रन बनाकर लक्ष्य हासिल कर लिया!` :
-                        `Target of ${targetRuns} chased down in style with brilliant swipe execution! Super Over Champion!`;
+                        `Target of ${targetRuns} chased down in style with brilliant swipe execution! Aaj Ka Over Champion!`;
                 } else {
                     isWin = false;
                     headline = t('lossHeadline');
@@ -3531,28 +3527,21 @@
         });
 
         let selectedRole = null;
-        const opponentTeam = document.querySelector('.intro-team--pakistan');
-        const pakistanMark = opponentTeam.querySelector('.team-mark').innerHTML;
         function matchStoryUrl(id) {
             const day = window.DBJamDemo?.day || new URLSearchParams(location.search).get('day') || 'd1';
             return `./news.html?article=${id}&game=superover&day=${day}&match=${id}`;
         }
         function updateMatchContext() {
             const match = ASIAN_MATCHES[selectedMatchId];
-            document.querySelectorAll('[data-match]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.match === selectedMatchId)));
-            opponentTeam.querySelector('strong').textContent = match.opponent;
-            opponentTeam.querySelector('.team-mark').innerHTML = match.code === 'PAK' ? pakistanMark : '<svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="40" rx="3" fill="#8c1836"/><rect x="2" y="2" width="56" height="36" rx="2" fill="none" stroke="#edbb54" stroke-width="3"/><text x="30" y="27" text-anchor="middle" font-size="20" fill="#fff0be" font-family="sans-serif" font-weight="700">SL</text></svg>';
-            document.querySelector('.intro-matchup').setAttribute('aria-label', `भारत बनाम ${match.opponent}`);
-            document.getElementById('matchActual').textContent = `${match.stage} · ${match.date} · ${match.outcome}`;
-            document.getElementById('matchScores').textContent = match.scores;
+            document.getElementById('matchMeta').textContent = `एशियाई खेल · ${match.stage} · ${match.date}`;
+            document.getElementById('introTitle').textContent = match.headline;
+            const opponentFlag = document.getElementById('opponentFlag');
+            opponentFlag.src = match.code === 'SL' ? './flags/sri-lanka.svg' : './flags/pakistan.svg';
+            opponentFlag.alt = `${match.opponent} का झंडा`;
+            document.getElementById('introMatchup').setAttribute('aria-label', `भारत बनाम ${match.opponent}`);
             document.getElementById('matchStory').href = matchStoryUrl(match.id);
             try { const url = new URL(location.href); url.searchParams.set('match', match.id); history.replaceState(history.state, '', url); } catch {}
         }
-        document.querySelectorAll('[data-match]').forEach(button => button.addEventListener('click', () => {
-            selectedMatchId = button.dataset.match;
-            resetRoleSelection();
-            updateMatchContext();
-        }));
         updateMatchContext();
         const confirmStartBtn = document.getElementById('confirmStartBtn');
         function resetRoleSelection() {

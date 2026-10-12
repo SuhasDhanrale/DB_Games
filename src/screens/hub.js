@@ -9,6 +9,7 @@ import nitiFace from '../assets/intro/niti.svg?raw';
 import { navigate } from '../core/router.js';
 import { playSfx } from '../core/audio.js';
 import { getProgression, isDailyCompleted } from '../systems/progression.js';
+import { consumeTorchPulse, torchIcon } from '../ui/torch.js';
 import { renderBottomNav, attachBottomNavListeners } from '../ui/components.js';
 import { playOpening } from '../ui/opening.js';
 import { getGame } from '../games/registry.js';
@@ -18,6 +19,7 @@ export function renderHub(container) {
   container.classList.add('screen--no-scroll', 'hub-screen');
   const prog = getProgression();
   const currentLang = getLang();
+  const pulseTorch = consumeTorchPulse();
 
 
   // Flat, game-specific corner illustrations. Decorative SVGs stay out of the accessibility tree.
@@ -28,7 +30,7 @@ export function renderHub(container) {
   const g4Icon = svg('<g transform="rotate(-12 75 80)"><rect x="15" y="15" width="132" height="132" rx="8" fill="#ae7f59" stroke="#795c43" stroke-width="3"/><rect x="25" y="25" width="112" height="112" rx="3" fill="#f4e4c2"/><circle cx="35" cy="35" r="10" fill="#473c32"/><circle cx="127" cy="35" r="10" fill="#473c32"/><circle cx="35" cy="127" r="10" fill="#473c32"/><path d="M48 42 L114 42 M42 48 L42 114" stroke="#9c604b" stroke-width="2"/><circle cx="81" cy="81" r="20" stroke="#9c604b" stroke-width="2"/><circle cx="81" cy="81" r="8" fill="#b95c4c"/><circle cx="55" cy="104" r="12" fill="#fff9e9" stroke="#a8906d" stroke-width="2"/><circle cx="110" cy="91" r="8" fill="#473c32"/><circle cx="104" cy="112" r="8" fill="#b95c4c"/></g>');
   const g5Icon = svg('<g transform="rotate(-8 70 70)"><path d="M44 49 C91 49 49 105 96 105" stroke="#597762" stroke-width="5"/><path d="M44 105 C91 105 49 49 96 49" stroke="#647e9e" stroke-width="5"/><g fill="#faf8f1" stroke="#8394aa" stroke-width="2"><rect x="7" y="30" width="37" height="38" rx="8"/><rect x="96" y="30" width="37" height="38" rx="8"/><rect x="7" y="86" width="37" height="38" rx="8"/><rect x="96" y="86" width="37" height="38" rx="8"/></g><path d="m25 40 9 9-9 9-9-9Z" fill="#597762"/><path d="m114 96 9 9-9 9-9-9Z" fill="#597762"/><circle cx="25" cy="105" r="9" fill="#647e9e"/><circle cx="114" cy="49" r="9" fill="#647e9e"/></g>');
 
-  // 5 Games Configuration (Final 5 Games: Aaj Ka Shabd, Aaj Ki Niti, Super Over, Carrom, Jodo)
+  // 5 Games Configuration (Final 5 Games: Aaj Ka Shabd, Aaj Ki Niti, Aaj Ka Over, Aaj Ka Nishana, Aaj Ki Jodi)
   const games = [
     {
       num: 1,
@@ -128,10 +130,14 @@ export function renderHub(container) {
 
   function renderSpaciousCard(game) {
     const isDone = isDailyCompleted(game.id);
+    const title = t(game.titleKey);
+    const titleWords = title.split(' ');
+    const gameName = titleWords.pop();
+    const dailyPrefix = titleWords.join(' ');
     return `
-      <button type="button" class="game-bento-card ${game.cardClass}" data-game-id="${game.id}" aria-label="${t(game.titleKey)}${isDone ? ' — ' + t('hub.done') : ''}">
+      <button type="button" class="game-bento-card ${game.cardClass}" data-game-id="${game.id}" aria-label="${title}${isDone ? ' — ' + t('hub.done') : ''}">
         <span class="card-bottom-info">
-          <span class="card-game-title">${t(game.titleKey)}</span>
+          <span class="card-game-title"><span class="card-title-prefix">${dailyPrefix}</span> <strong class="card-title-name">${gameName}</strong></span>
           <span class="card-description">${descriptions[game.num - 1]}</span>
         </span>
         <span class="card-art-float">${game.artIcon}</span>
@@ -152,8 +158,8 @@ export function renderHub(container) {
     <div class="bento-container">
       <div class="bento-header">
         <h1 class="hub-tagline">${t('hub.daily_tagline')}</h1>
-        <div class="hub-header-pill" title="${t('hub.torch_hint')}" aria-label="${currentLang === 'hi' ? prog.streak + ' दिन की स्ट्रीक। ' : prog.streak + ' day streak. '}${t('hub.torch_hint')}">
-          <svg viewBox="0 0 24 36" fill="none" aria-hidden="true"><path d="M13 1 C18 8 10 9 18 12 C23 17 19 23 12 23 C4 23 1 16 6 11 C6 17 12 12 13 1Z" fill="#bc6238"/><path d="M12 12 C14 16 17 16 15 20 C13 23 8 21 9 18Z" fill="#f1c773"/><path d="M6 23 H18 L15 27 H9Z" fill="#8a7150"/><path d="M9 27 H15 L14 35 H10Z" fill="#62533f"/></svg>
+        <div class="hub-header-pill${pulseTorch ? ' hub-header-pill--celebrate' : ''}" title="${t('hub.torch_hint')}" aria-label="${t('torch.count', { count: prog.streak })}. ${t('hub.torch_hint')}">
+          ${torchIcon}
           ${prog.streak}
         </div>
         <button type="button" class="hub-replay" id="hub-replay" aria-label="${t('opening.replay')}" title="${t('opening.replay')}">↻</button>

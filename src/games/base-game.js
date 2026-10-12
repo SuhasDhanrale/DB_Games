@@ -7,10 +7,11 @@ import { bus, Events } from '../core/events.js';
 import { playSfx } from '../core/audio.js';
 import { navigate } from '../core/router.js';
 import { submitScore, getPlayerBest } from '../systems/leaderboard.js';
-import { updateStreak, recordGamePlay, markGamePlayedToday } from '../systems/progression.js';
+import { recordGamePlay } from '../systems/progression.js';
 import { checkAchievements, shareResult } from '../systems/engagement.js';
 import { getProgression } from '../systems/progression.js';
 import { renderGameOver } from '../ui/components.js';
+import { prepareTorchCelebration } from '../ui/torch.js';
 import { t, getLang } from '../i18n/index.js';
 import '../styles/game-family.css';
 
@@ -139,8 +140,6 @@ export class BaseGame {
     this.startTime = Date.now();
     this._updateScoreDisplay();
 
-    updateStreak();
-    markGamePlayedToday(this.id);
     bus.emit(Events.GAME_STARTED, { gameId: this.id });
     playSfx('success');
   }
@@ -177,7 +176,9 @@ export class BaseGame {
     const bestScore = getPlayerBest(this.id);
     const { rank, isNewBest } = submitScore(this.id, 'Player', score);
 
-    recordGamePlay(this.id, score, true);
+    const completion = recordGamePlay(this.id, score, true);
+    const torchCelebration = completion.firstCompletion
+      ? prepareTorchCelebration(completion.streak) : null;
 
     // Check achievements
     const stats = getProgression();
@@ -187,7 +188,10 @@ export class BaseGame {
     bus.emit(Events.GAME_ENDED, { gameId: this.id, score, rank, isNewBest });
 
     // Embedded games with their own results still submit scores and award XP.
-    if (this.config.ownsResultScreen) return;
+    if (this.config.ownsResultScreen) {
+      this.showTorchCelebration?.(torchCelebration);
+      return;
+    }
 
     // Show game-over modal
     renderGameOver({
@@ -197,6 +201,7 @@ export class BaseGame {
       rank,
       gameTitle: t(this.titleKey),
       theme: this.theme,
+      torchCelebration,
       onPlayAgain: () => {
         this._gameArea.innerHTML = '';
         this.start();

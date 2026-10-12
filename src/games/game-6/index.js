@@ -6,7 +6,7 @@ class SuperOverGame extends HtmlIframeGame {
     await super.init();
     // Cricket runs already appear in the match; a second points counter is distracting.
     this.container.querySelector('#game-score-display')?.remove();
-    this.container.querySelector('.screen-header__title').textContent = '🏏 सुपर ओवर';
+    this.container.querySelector('.screen-header__title').textContent = '🏏 आज का ओवर';
     const help = this.container.querySelector('#game-rules-btn');
     help.textContent = 'ℹ️ नियम';
     help.title = 'नियम';

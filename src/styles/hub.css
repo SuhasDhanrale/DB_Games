@@ -6,6 +6,10 @@
 .hub-tagline { flex: 1; min-width: 0; color: #252522; font-size: clamp(16px, 4.5cqw, 20px); font-weight: 750; line-height: 1.5; text-wrap: balance; }
 .hub-header-pill { display: flex; align-items: center; gap: 5px; color: #61584d; font-size: 13px; font-weight: 600; white-space: nowrap; }
 .hub-header-pill svg { width: 22px; height: 33px; flex-shrink: 0; }
+.hub-header-pill--celebrate svg { animation: hub-torch-pulse 700ms ease-in-out 2; transform-origin: center bottom; }
+@keyframes hub-torch-pulse {
+  50% { transform: scale(1.16); filter: drop-shadow(0 0 5px #f1c773); }
+}
 .hub-icon-circle-btn { min-width: 44px; height: 44px; border: 1px solid #d9d7d0; border-radius: 50%; font-size: 12px; font-weight: 700; }
 .hub-screen .hub-replay { width: 44px; height: 44px; background: transparent; border: none; color: #77736b; box-shadow: none; }
 .weekly-tracker-wrap { flex-shrink: 0; padding: 13px 0 17px; }
@@ -30,7 +34,9 @@
 .card-game-4 { background: var(--family-carrom-tint); --card-ink: var(--family-carrom-ink); }
 .card-game-5 { background: var(--family-jodo-tint); --card-ink: var(--family-jodo-ink); }
 .card-bottom-info { position: relative; z-index: 2; width: 100%; }
-.card-game-title { display: block; color: var(--card-ink); font-size: clamp(15px, 4.4cqw, 19px); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
+.card-game-title { display: block; color: var(--card-ink); line-height: 1.3; }
+.card-title-prefix { display: block; font-size: clamp(12px, 3.3cqw, 14px); font-weight: 500; }
+.card-title-name { display: block; margin-top: 2px; font-size: clamp(22px, 6.3cqw, 27px); font-weight: 800; overflow-wrap: anywhere; }
 .card-description { display: block; margin-top: 3px; color: var(--card-ink); font-size: 11px; line-height: 1.5; }
 .card-art-float { position: absolute; right: -12px; bottom: -12px; width: 70%; max-width: 145px; aspect-ratio: 1; max-height: calc(100% - 60px); pointer-events: none; z-index: -1; }
 .card-art-float svg { width: 100%; height: 100%; max-width: none; }
@@ -39,4 +45,7 @@
 .card-game-5 .card-art-float { width: 94%; max-width: 175px; right: -9px; bottom: -10px; }
 .game-status-dot { position: absolute; right: 10px; bottom: 10px; z-index: 3; width: 23px; height: 23px; border-radius: 50%; background: #526f5c; border: 2px solid #faf9f6; display: grid; place-items: center; }
 .hub-screen > .bottom-nav { flex-shrink: 0; background: #faf9f6; }
-@media (prefers-reduced-motion: reduce) { .game-bento-card { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .game-bento-card { transition: none; }
+  .hub-header-pill--celebrate svg { animation: none; }
+}

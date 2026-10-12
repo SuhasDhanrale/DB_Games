@@ -23,9 +23,9 @@
        आज की नीति (AAJ KI NITI) — DAINIK BHASKAR GAMES
        Refined 2-Step Architecture:
        Step 1: Answer & Meaning (No scroll, 2x2 grid A B C D)
-       Step 2: Masterpiece 1080x1350 Greeting Card Studio
+       Step 2: Focused 1080x1350 Greeting Card Studio
                (Responsive Scaling, Theme Tabs Above Card,
-               Non-redundant Name Signature, Unified Heading)
+               Thought, Single Motif, Compact Signature)
        ============================================================ */
 
     :root {
@@ -573,9 +573,12 @@
       animation: themeBarGlowIntro 0.5s ease-out;
     }
 
+    body:has(#step-card.is-active) .app-container { padding-top: 48px; }
+
     /* Card Showcase Stage (Adapts to ANY phone aspect ratio without overflow) */
     .card-stage {
       flex: 1;
+      container-type: size;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -588,6 +591,8 @@
 
     .card-preview-frame {
       position: relative;
+      width: min(100%, 80cqh);
+      aspect-ratio: 4 / 5;
       max-height: 100%;
       max-width: 100%;
       display: inline-flex;
@@ -622,8 +627,8 @@
       display: block;
       max-height: 100%;
       max-width: 100%;
-      width: auto;
-      height: auto;
+      width: 100%;
+      height: 100%;
       aspect-ratio: 4 / 5;
       object-fit: contain;
       border-radius: 12px;
@@ -631,38 +636,6 @@
       border: 1px solid rgba(0, 0, 0, 0.08);
       background: #FFFFFF;
       transition: transform 0.2s ease;
-    }
-
-    /* Quick Share Floating Button at Top-Right Corner of Card */
-    .card-quick-share-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 10;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(8px);
-      border: 1.5px solid rgba(0, 0, 0, 0.12);
-      color: var(--color-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-      transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .card-quick-share-btn:hover {
-      transform: scale(1.1);
-      background: #FFFFFF;
-      color: var(--color-primary-hover);
-      box-shadow: 0 6px 18px rgba(226, 58, 40, 0.28);
-    }
-
-    .card-quick-share-btn:active {
-      transform: scale(0.95);
     }
 
     /* Streamlined Studio Dock (Compact: Name + Share + Nav) */
@@ -698,6 +671,7 @@
 
     .name-input-field {
       flex: 1;
+      min-width: 0;
       border: none;
       background: transparent;
       font-family: inherit;
@@ -1083,16 +1057,6 @@
           <div class="card-preview-frame">
             <img id="card-preview-img" class="card-preview-img" src="" alt="विचार कार्ड पूर्वावलोकन">
 
-            <!-- Top-Right Corner Floating Share Button -->
-            <button type="button" class="card-quick-share-btn" id="btn-corner-share" title="कार्ड साझा करें" aria-label="कार्ड साझा करें">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="18" cy="5" r="3"></circle>
-                <circle cx="6" cy="12" r="3"></circle>
-                <circle cx="18" cy="19" r="3"></circle>
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-              </svg>
-            </button>
           </div>
         </div>
 
@@ -1102,7 +1066,7 @@
           <!-- Name Personalization Input -->
           <div class="name-input-bar">
             <span style="font-size: 14px; opacity: 0.8;" aria-hidden="true">✍️</span>
-            <input type="text" id="card-user-name" class="name-input-field" placeholder="कार्ड पर नाम (उदा. सुहास और परिवार)" maxlength="32" autocomplete="name">
+            <input type="text" id="card-user-name" class="name-input-field" aria-label="कार्ड पर नाम" placeholder="कार्ड पर नाम (उदा. रमेश और परिवार)" maxlength="32" autocomplete="name">
             <button type="button" id="btn-clear-name" class="name-clear-btn" title="नाम हटाएं" style="display: none;">✕</button>
           </div>
 
@@ -1280,6 +1244,7 @@
          STATE MANAGEMENT
          ============================================================ */
       const STORAGE_PREFIX = 'db-jam:v2:niti:';
+      const DEFAULT_CARD_NAME = 'रमेश और परिवार';
       const USER_NAME_KEY = 'db_niti_user_name';
       const THEME_KEY = 'db_niti_active_theme';
 
@@ -1332,7 +1297,6 @@
         btnStep1Action: document.getElementById('btn-step1-action'),
         btnStep1Label: document.getElementById('btn-step1-label'),
         cardPreviewImg: document.getElementById('card-preview-img'),
-        btnCornerShare: document.getElementById('btn-corner-share'),
         themeButtons: document.querySelectorAll('.theme-tab-btn'),
         cardUserNameInput: document.getElementById('card-user-name'),
         btnClearName: document.getElementById('btn-clear-name'),
@@ -1837,661 +1801,146 @@
         ctx.restore();
       }
 
-      // 5. Draw Hanging Marigold & Mango Leaf Toran (Bandhanwar)
-      function drawHangingToran(ctx, width, startY) {
-        ctx.save();
-        const segments = 9;
-        const segWidth = (width - 120) / segments;
-        const startX = 60;
-
-        ctx.strokeStyle = '#D35400';
-        ctx.lineWidth = 2.5;
-
-        for (let i = 0; i < segments; i++) {
-          const x1 = startX + i * segWidth;
-          const x2 = x1 + segWidth;
-          const midX = (x1 + x2) / 2;
-          const dropY = startY + 22;
-
-          // Hanging rope loop
-          ctx.beginPath();
-          ctx.moveTo(x1, startY);
-          ctx.quadraticCurveTo(midX, dropY, x2, startY);
-          ctx.stroke();
-
-          // Green mango leaf (आम्रपल्लव)
-          ctx.fillStyle = '#27AE60';
-          ctx.beginPath();
-          ctx.ellipse(midX, dropY + 12, 6, 16, 0, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Orange Marigold floret (गेंदा फूल)
-          ctx.fillStyle = '#F39C12';
-          ctx.beginPath();
-          ctx.arc(midX, dropY + 2, 7, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#C0392B';
-          ctx.beginPath();
-          ctx.arc(midX, dropY + 2, 3.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        ctx.restore();
-      }
-
-      // 6. Draw Hanging Festive Kandil / Lantern for Diwali Corners
-      function drawHangingLantern(ctx, x, y, scale = 1) {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.scale(scale, scale);
-
-        // Hanging string
-        ctx.strokeStyle = '#F1C40F';
-        ctx.lineWidth = 1.8;
-        ctx.beginPath();
-        ctx.moveTo(0, -40);
-        ctx.lineTo(0, 0);
-        ctx.stroke();
-
-        // Lantern Diamond Frame
-        ctx.fillStyle = '#F39C12';
-        ctx.beginPath();
-        ctx.moveTo(0, -18);
-        ctx.lineTo(18, 0);
-        ctx.lineTo(0, 18);
-        ctx.lineTo(-18, 0);
-        ctx.closePath();
-        ctx.fill();
-        ctx.strokeStyle = '#F1C40F';
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
-
-        // Inner glowing core
-        ctx.fillStyle = '#FFFFFF';
-        ctx.beginPath();
-        ctx.arc(0, 0, 6, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Tassels hanging below
-        ctx.strokeStyle = '#E74C3C';
-        ctx.lineWidth = 2;
-        [-10, 0, 10].forEach(tX => {
-          ctx.beginPath();
-          ctx.moveTo(tX * 0.6, 18);
-          ctx.lineTo(tX * 0.9, 36);
-          ctx.stroke();
-        });
-
-        ctx.restore();
-      }
-
-      // 7. Draw Background Mandala Watermark
-      function drawMandalaWatermark(ctx, cx, cy, radius, color) {
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1.5;
-
-        ctx.beginPath();
-        ctx.arc(0, 0, radius * 0.35, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(0, 0, radius * 0.7, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(0, 0, radius, 0, Math.PI * 2);
-        ctx.stroke();
-
-        for (let i = 0; i < 12; i++) {
-          ctx.save();
-          ctx.rotate((i * Math.PI) / 6);
-          ctx.beginPath();
-          ctx.moveTo(0, radius * 0.35);
-          ctx.quadraticCurveTo(radius * 0.25, radius * 0.65, 0, radius);
-          ctx.quadraticCurveTo(-radius * 0.25, radius * 0.65, 0, radius * 0.35);
-          ctx.stroke();
-          ctx.restore();
-        }
-        ctx.restore();
-      }
-
       /* ============================================================
-         CANVAS SHARE CARD GENERATION (1080 x 1350 High-Res)
-         No duplicate name, Unified "विचार का आलोक (अर्थ)", Grand Signature!
+         SHARE CARD: fixed safe regions keep text, artwork and footer apart.
+         The thought leads; its meaning uses smaller type in a separate region.
          ============================================================ */
+      let cardRenderVersion = 0;
+
+      function fitCardText(ctx, text, maxWidth, maxHeight, initialSize, weight = 600) {
+        let fontSize = initialSize;
+        let lines;
+        let lineHeight;
+        do {
+          ctx.font = weight + ' ' + fontSize + 'px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+          lines = wrapTextLines(ctx, text, maxWidth);
+          lineHeight = fontSize * 1.55;
+          if (lines.length * lineHeight <= maxHeight &&
+              lines.every(line => ctx.measureText(line).width <= maxWidth)) break;
+          fontSize -= 1;
+        } while (fontSize > 12);
+        return { lines, lineHeight };
+      }
+
       async function generateShareCard() {
         const canvas = els.shareCanvas;
         if (!canvas) return;
+        const renderVersion = ++cardRenderVersion;
+
+        // Explicitly load the font used by the canvas, including on an early visit.
+        if (document.fonts) {
+          try {
+            await document.fonts.load('600 72px "Noto Sans Devanagari"');
+            await document.fonts.load('500 36px "Noto Sans Devanagari"');
+            await document.fonts.load('700 56px "Noto Sans Devanagari"');
+            await document.fonts.ready;
+          } catch (e) {}
+        }
+        if (renderVersion !== cardRenderVersion) return;
+
         const ctx = canvas.getContext('2d');
         const data = CONTENT[currentDayId];
-
-        if (document.fonts && document.fonts.ready) {
-          try { await document.fonts.ready; } catch (e) {}
-        }
-
+        const familyName = userName.trim() || DEFAULT_CARD_NAME;
         const width = 1080;
         const height = 1350;
-        const marginX = 75;
-        const contentWidth = width - (marginX * 2); // 930px
-
-        // Sanitize & Format User Name
-        const rawName = userName.trim();
-        const familyName = rawName || 'सुहास और परिवार';
-
-        // -------------------------------------------------------------
-        // THEME 1: DIWALI (दिवाली विशेष)
-        // -------------------------------------------------------------
-        if (activeTheme === 'diwali') {
-          // Rich royal festive background gradient
-          const bgGrad = ctx.createRadialGradient(width / 2, height * 0.45, 80, width / 2, height * 0.5, 920);
-          bgGrad.addColorStop(0, '#2D0B3B');
-          bgGrad.addColorStop(0.5, '#1B0625');
-          bgGrad.addColorStop(1, '#0D0214');
-          ctx.fillStyle = bgGrad;
-          ctx.fillRect(0, 0, width, height);
-
-          // Golden Mandala Watermark in center
-          drawMandalaWatermark(ctx, width / 2, height * 0.48, 420, 'rgba(241, 196, 15, 0.08)');
-
-          // Double Gold Frame with Corner Stars
-          ctx.strokeStyle = '#F1C40F';
-          ctx.lineWidth = 3.5;
-          ctx.strokeRect(36, 36, width - 72, height - 72);
-
-          ctx.strokeStyle = 'rgba(241, 196, 15, 0.4)';
-          ctx.lineWidth = 1.5;
-          ctx.strokeRect(48, 48, width - 96, height - 96);
-
-          // Corner Stars
-          [42, width - 42].forEach(cx => {
-            [42, height - 42].forEach(cy => {
-              ctx.fillStyle = '#F39C12';
-              ctx.beginPath();
-              ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
-              ctx.fill();
-            });
-          });
-
-          // Hanging festive lanterns on top left and right corners
-          drawHangingLantern(ctx, 110, 85, 0.9);
-          drawHangingLantern(ctx, width - 110, 85, 0.9);
-
-          // Top Header Diya
-          drawDiya(ctx, width / 2, 98, 1.05);
-
-          // Top Festive Heading (Grand & Prominent)
-          ctx.textAlign = 'center';
-          ctx.fillStyle = '#F7DC6F';
-          ctx.font = 'bold 44px "Noto Sans Devanagari", "Martel", serif';
-          ctx.fillText(`🪔 शुभ दीपावली 🪔`, width / 2, 175);
-
-          // Thematic Subtitle Pill (Clean editorial tagline, no duplicate name!)
-          const subText = `✨ दीप पर्व · अमृत विचार ✨`;
-          ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
-          const badgeW = ctx.measureText(subText).width + 56;
-          ctx.fillStyle = 'rgba(241, 196, 15, 0.22)';
-          ctx.beginPath();
-          ctx.roundRect((width - badgeW) / 2, 206, badgeW, 40, 20);
-          ctx.fill();
-          ctx.strokeStyle = 'rgba(241, 196, 15, 0.6)';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.fillStyle = '#FFF8E1';
-          ctx.fillText(subText, width / 2, 234);
-
-          // Stylized Opening Quote
-          ctx.fillStyle = 'rgba(241, 196, 15, 0.32)';
-          ctx.font = 'bold 120px "Georgia", serif';
-          ctx.fillText('“', width / 2, 325);
-
-          // HERO: Central Thought Text (High Weight, 70px Bold Serif)
-          ctx.fillStyle = '#FFFDF5';
-          ctx.font = 'bold 70px "Noto Sans Devanagari", "Rozha One", serif';
-          const thoughtLines = wrapTextLines(ctx, `“${data.fullThought}”`, contentWidth);
-          const tLineHeight = 98;
-          let tY = 385;
-          thoughtLines.forEach(line => {
-            ctx.fillText(line, width / 2, tY);
-            tY += tLineHeight;
-          });
-
-          // Golden Sparkle Divider
-          const divY = tY + 14;
-          ctx.strokeStyle = 'rgba(241, 196, 15, 0.45)';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(width / 2 - 180, divY);
-          ctx.lineTo(width / 2 - 35, divY);
-          ctx.moveTo(width / 2 + 35, divY);
-          ctx.lineTo(width / 2 + 180, divY);
-          ctx.stroke();
-          ctx.font = '28px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('✨', width / 2, divY + 9);
-
-          // Meaning Box: Substantial Illuminated Plaque (Unified Title)
-          const boxY = divY + 44;
-          ctx.font = 'bold 40px "Noto Sans Devanagari", sans-serif';
-          const meaningLines = wrapTextLines(ctx, data.meaning, contentWidth - 80);
-          const mLineHeight = 62;
-          const boxHeight = 74 + (meaningLines.length * mLineHeight) + 26;
-
-          // Box Background
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
-          ctx.beginPath();
-          ctx.roundRect((width - contentWidth) / 2, boxY, contentWidth, boxHeight, 20);
-          ctx.fill();
-          ctx.strokeStyle = 'rgba(241, 196, 15, 0.55)';
-          ctx.lineWidth = 1.6;
-          ctx.stroke();
-
-          // Left Gold Bar
-          ctx.fillStyle = '#F39C12';
-          ctx.beginPath();
-          ctx.roundRect((width - contentWidth) / 2, boxY, 7, boxHeight, [20, 0, 0, 20]);
-          ctx.fill();
-
-          // Unified Meaning Header: विचार का आलोक (अर्थ)
-          ctx.fillStyle = '#F39C12';
-          ctx.font = 'bold 30px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('🪔 विचार का आलोक (अर्थ)', width / 2, boxY + 46);
-
-          // Meaning Text
-          let mTextY = boxY + 108;
-          ctx.fillStyle = '#EAEFF5';
-          ctx.font = '600 38px "Noto Sans Devanagari", sans-serif';
-          meaningLines.forEach(line => {
-            ctx.fillText(line, width / 2, mTextY);
-            mTextY += mLineHeight;
-          });
-
-          // Row of 5 Glowing Diyas on an illuminated Rangoli base
-          const diyaRowY = boxY + boxHeight + 94;
-
-          // Glowing Rangoli platform curve
-          ctx.strokeStyle = 'rgba(241, 196, 15, 0.38)';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.moveTo(110, diyaRowY + 18);
-          ctx.quadraticCurveTo(width / 2, diyaRowY + 40, width - 110, diyaRowY + 18);
-          ctx.stroke();
-
-          const diyaPositions = [180, 360, 540, 720, 900];
-          diyaPositions.forEach((dX, idx) => {
-            const dScale = idx === 2 ? 1.45 : 1.15;
-            drawDiya(ctx, dX, diyaRowY, dScale);
-          });
-
-          // Grand Bottom Sender Signature (2-Line, No Overlaps, Big Name)
-          const wishY = diyaRowY + 104;
-          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
-          const nameW = ctx.measureText(familyName).width;
-          const sigBoxW = Math.max(nameW + 100, 560);
-          const sigBoxH = 88;
-
-          ctx.fillStyle = 'rgba(241, 196, 15, 0.22)';
-          ctx.beginPath();
-          ctx.roundRect((width - sigBoxW) / 2, wishY - 34, sigBoxW, sigBoxH, 22);
-          ctx.fill();
-          ctx.strokeStyle = '#F1C40F';
-          ctx.lineWidth = 1.8;
-          ctx.stroke();
-
-          // Line 1: सप्रेम प्रेषक · दीपावली शुभकामनाएं
-          ctx.fillStyle = '#F7DC6F';
-          ctx.font = 'bold 21px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('🪔 सप्रेम प्रेषक · दीपावली शुभकामनाएं 🪔', width / 2, wishY - 8);
-
-          // Line 2: Big Bold Family Name
-          ctx.fillStyle = '#FFF8E1';
-          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
-          ctx.fillText(familyName, width / 2, wishY + 36);
-
-          // Footer Baseline
-          ctx.fillStyle = '#A592B8';
-          ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('॥ तमसो मा ज्योतिर्गमय ॥ · दैनिक भास्कर खेल', width / 2, 1260);
-
-        // -------------------------------------------------------------
-        // THEME 2: NAVRATRI (नवरात्रि विशेष)
-        // -------------------------------------------------------------
-        } else if (activeTheme === 'navratri') {
-          // Radiant festive saffron gradient
-          const bgGrad = ctx.createRadialGradient(width / 2, height * 0.42, 80, width / 2, height / 2, 900);
-          bgGrad.addColorStop(0, '#FFFDF8');
-          bgGrad.addColorStop(0.55, '#FEEFDA');
-          bgGrad.addColorStop(1, '#FCDCB8');
-          ctx.fillStyle = bgGrad;
-          ctx.fillRect(0, 0, width, height);
-
-          // Center Mandala Watermark
-          drawMandalaWatermark(ctx, width / 2, height * 0.48, 420, 'rgba(211, 84, 0, 0.08)');
-
-          // Traditional Gujarati Checkered Bandhani Border
-          drawCheckeredBorder(ctx, width, height, 28, 16);
-
-          // Inner Sindoori & Gold Border
-          ctx.strokeStyle = '#C0392B';
-          ctx.lineWidth = 3;
-          ctx.strokeRect(48, 48, width - 96, height - 96);
-
-          ctx.strokeStyle = 'rgba(212, 175, 55, 0.55)';
-          ctx.lineWidth = 1.5;
-          ctx.strokeRect(58, 58, width - 116, height - 116);
-
-          // Hanging Marigold & Mango Leaf Toran across top
-          drawHangingToran(ctx, width, 58);
-
-          // Top Sindoori Lotus Emblem
-          ctx.save();
-          ctx.translate(width / 2, 116);
-          ctx.fillStyle = '#C0392B';
-          ctx.beginPath();
-          ctx.arc(0, 0, 18, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#D4AF37';
-          ctx.lineWidth = 3.5;
-          ctx.stroke();
-          ctx.fillStyle = '#D4AF37';
-          ctx.beginPath();
-          ctx.arc(0, -6, 6, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-
-          // Top Festive Heading (Grand & Prominent)
-          ctx.textAlign = 'center';
-          ctx.fillStyle = '#922B21';
-          ctx.font = 'bold 44px "Noto Sans Devanagari", "Martel", serif';
-          ctx.fillText(`🌸 शुभ नवरात्रि 🌸`, width / 2, 178);
-
-          // Thematic Subtitle Pill (Clean tagline, no duplicate name!)
-          const subText = `🌺 पावन पर्व · अमृत विचार 🌺`;
-          ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
-          const badgeW = ctx.measureText(subText).width + 56;
-          ctx.fillStyle = '#FBEAE4';
-          ctx.beginPath();
-          ctx.roundRect((width - badgeW) / 2, 208, badgeW, 40, 20);
-          ctx.fill();
-          ctx.strokeStyle = 'rgba(192, 57, 43, 0.5)';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.fillStyle = '#922B21';
-          ctx.fillText(subText, width / 2, 235);
-
-          // Large Quote Mark
-          ctx.fillStyle = 'rgba(230, 126, 34, 0.32)';
-          ctx.font = 'bold 120px "Georgia", serif';
-          ctx.fillText('“', width / 2, 325);
-
-          // HERO: Central Thought Text (High Weight, 70px Bold Serif)
-          ctx.fillStyle = '#2E1106';
-          ctx.font = 'bold 70px "Noto Sans Devanagari", "Rozha One", serif';
-          const thoughtLines = wrapTextLines(ctx, `“${data.fullThought}”`, contentWidth);
-          const tLineHeight = 98;
-          let tY = 385;
-          thoughtLines.forEach(line => {
-            ctx.fillText(line, width / 2, tY);
-            tY += tLineHeight;
-          });
-
-          // Lotus Divider Line
-          const divY = tY + 14;
-          ctx.strokeStyle = 'rgba(212, 175, 55, 0.6)';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(width / 2 - 180, divY);
-          ctx.lineTo(width / 2 - 35, divY);
-          ctx.moveTo(width / 2 + 35, divY);
-          ctx.lineTo(width / 2 + 180, divY);
-          ctx.stroke();
-          ctx.font = '28px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('🌺', width / 2, divY + 9);
-
-          // Meaning Box: Solid, Warm Parchment Plaque (Unified Title)
-          const boxY = divY + 44;
-          ctx.font = 'bold 40px "Noto Sans Devanagari", sans-serif';
-          const meaningLines = wrapTextLines(ctx, data.meaning, contentWidth - 80);
-          const mLineHeight = 62;
-          const boxHeight = 74 + (meaningLines.length * mLineHeight) + 26;
-
-          // Box Background
-          ctx.fillStyle = '#FFFFFF';
-          ctx.beginPath();
-          ctx.roundRect((width - contentWidth) / 2, boxY, contentWidth, boxHeight, 20);
-          ctx.fill();
-          ctx.strokeStyle = 'rgba(212, 175, 55, 0.65)';
-          ctx.lineWidth = 1.6;
-          ctx.stroke();
-
-          // Left Saffron Bar
-          ctx.fillStyle = '#E67E22';
-          ctx.beginPath();
-          ctx.roundRect((width - contentWidth) / 2, boxY, 7, boxHeight, [20, 0, 0, 20]);
-          ctx.fill();
-
-          // Unified Meaning Header: विचार का आलोक (अर्थ)
-          ctx.fillStyle = '#B03A2E';
-          ctx.font = 'bold 30px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('🌸 विचार का आलोक (अर्थ)', width / 2, boxY + 46);
-
-          // Meaning Text
-          let mTextY = boxY + 108;
-          ctx.fillStyle = '#3E1C12';
-          ctx.font = '600 38px "Noto Sans Devanagari", sans-serif';
-          meaningLines.forEach(line => {
-            ctx.fillText(line, width / 2, mTextY);
-            mTextY += mLineHeight;
-          });
-
-          // Grand Crossed Dandiya Centerpiece
-          const dandiyaY = boxY + boxHeight + 98;
-          drawCrossedDandiyas(ctx, width / 2, dandiyaY, 1.85);
-
-          // Grand Bottom Sender Signature (2-Line, No Overlaps, Big Name)
-          const wishY = dandiyaY + 110;
-          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
-          const nameW = ctx.measureText(familyName).width;
-          const sigBoxW = Math.max(nameW + 100, 560);
-          const sigBoxH = 88;
-
-          ctx.fillStyle = '#FBEAE4';
-          ctx.beginPath();
-          ctx.roundRect((width - sigBoxW) / 2, wishY - 34, sigBoxW, sigBoxH, 22);
-          ctx.fill();
-          ctx.strokeStyle = '#C0392B';
-          ctx.lineWidth = 1.8;
-          ctx.stroke();
-
-          // Line 1: सप्रेम प्रेषक · पावन शुभकामनाएं
-          ctx.fillStyle = '#C0392B';
-          ctx.font = 'bold 21px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('🌸 सप्रेम प्रेषक · पावन नवरात्रि शुभकामनाएं 🌸', width / 2, wishY - 8);
-
-          // Line 2: Big Bold Family Name
-          ctx.fillStyle = '#922B21';
-          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
-          ctx.fillText(familyName, width / 2, wishY + 36);
-
-          // Footer Baseline
-          ctx.fillStyle = '#8D6E63';
-          ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('॥ ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे ॥ · दैनिक भास्कर खेल', width / 2, 1260);
-
-        // -------------------------------------------------------------
-        // THEME 3: CLASSIC / NORMAL (सामान्य) — Fully Balanced & Glorious
-        // -------------------------------------------------------------
-        } else {
-          // Warm editorial handmade parchment gradient
-          const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
-          bgGrad.addColorStop(0, '#FAF7EE');
-          bgGrad.addColorStop(1, '#F2EAE0');
-          ctx.fillStyle = bgGrad;
-          ctx.fillRect(0, 0, width, height);
-
-          // Warm subtle Mandala Watermark in center
-          drawMandalaWatermark(ctx, width / 2, height * 0.48, 420, 'rgba(226, 58, 40, 0.06)');
-
-          // Outer Dainik Bhaskar Red Frame
-          ctx.strokeStyle = '#E23A28';
-          ctx.lineWidth = 3.5;
-          ctx.strokeRect(36, 36, width - 72, height - 72);
-
-          // Inner Golden Bronze Frame
-          ctx.strokeStyle = 'rgba(211, 84, 0, 0.35)';
-          ctx.lineWidth = 1.5;
-          ctx.strokeRect(48, 48, width - 96, height - 96);
-
-          // Ornate Corner Filigree / Brackets
-          [48, width - 48].forEach(cx => {
-            [48, height - 48].forEach(cy => {
-              ctx.strokeStyle = '#E23A28';
-              ctx.lineWidth = 2.5;
-              ctx.beginPath();
-              ctx.arc(cx, cy, 14, 0, Math.PI * 2);
-              ctx.stroke();
-              ctx.fillStyle = '#D35400';
-              ctx.beginPath();
-              ctx.arc(cx, cy, 5.5, 0, Math.PI * 2);
-              ctx.fill();
-            });
-          });
-
-          // Top Golden Sun (Surya) Emblem
-          ctx.save();
-          ctx.translate(width / 2, 98);
-          ctx.fillStyle = '#E23A28';
-          ctx.beginPath();
-          ctx.arc(0, 0, 18, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#D35400';
-          ctx.lineWidth = 3.5;
-          for (let i = 0; i < 8; i++) {
-            const angle = (i * Math.PI) / 4;
-            ctx.beginPath();
-            ctx.moveTo(Math.cos(angle) * 23, Math.sin(angle) * 23);
-            ctx.lineTo(Math.cos(angle) * 31, Math.sin(angle) * 31);
-            ctx.stroke();
-          }
-          ctx.restore();
-
-          // Masthead: Dainik Bhaskar · Aaj Ki Niti
-          ctx.textAlign = 'center';
-          ctx.fillStyle = '#E23A28';
-          ctx.font = 'bold 44px "Noto Sans Devanagari", "Martel", serif';
-          ctx.fillText(`दैनिक भास्कर · आज की नीति`, width / 2, 175);
-
-          // Thematic Subtitle Pill (Clean editorial tagline, no duplicate name!)
-          const subText = `✨ अमृत विचार · जीवन दर्शन ✨`;
-          ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
-          const badgeW = ctx.measureText(subText).width + 56;
-          ctx.fillStyle = '#FDECE9';
-          ctx.beginPath();
-          ctx.roundRect((width - badgeW) / 2, 206, badgeW, 40, 20);
-          ctx.fill();
-          ctx.strokeStyle = 'rgba(226, 58, 40, 0.45)';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.fillStyle = '#C52C1C';
-          ctx.fillText(subText, width / 2, 234);
-
-          // Large Quote Mark
-          ctx.fillStyle = 'rgba(226, 58, 40, 0.28)';
-          ctx.font = 'bold 120px "Georgia", serif';
-          ctx.fillText('“', width / 2, 325);
-
-          // HERO: Central Thought Text (High Weight, 70px Bold Serif)
-          ctx.fillStyle = '#1A1A1A';
-          ctx.font = 'bold 70px "Noto Sans Devanagari", "Rozha One", serif';
-          const thoughtLines = wrapTextLines(ctx, `“${data.fullThought}”`, contentWidth);
-          const tLineHeight = 98;
-          let tY = 385;
-          thoughtLines.forEach(line => {
-            ctx.fillText(line, width / 2, tY);
-            tY += tLineHeight;
-          });
-
-          // Sunburst Center Divider
-          const divY = tY + 14;
-          ctx.strokeStyle = 'rgba(211, 84, 0, 0.45)';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(width / 2 - 180, divY);
-          ctx.lineTo(width / 2 - 35, divY);
-          ctx.moveTo(width / 2 + 35, divY);
-          ctx.lineTo(width / 2 + 180, divY);
-          ctx.stroke();
-          ctx.font = '28px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('☀️', width / 2, divY + 9);
-
-          // Meaning Box: Solid, Warm Textured Plaque (Unified Title)
-          const boxY = divY + 44;
-          ctx.font = 'bold 40px "Noto Sans Devanagari", sans-serif';
-          const meaningLines = wrapTextLines(ctx, data.meaning, contentWidth - 80);
-          const mLineHeight = 62;
-          const boxHeight = 74 + (meaningLines.length * mLineHeight) + 26;
-
-          // Box Background
-          ctx.fillStyle = '#FFFFFF';
-          ctx.beginPath();
-          ctx.roundRect((width - contentWidth) / 2, boxY, contentWidth, boxHeight, 20);
-          ctx.fill();
-          ctx.strokeStyle = 'rgba(211, 84, 0, 0.38)';
-          ctx.lineWidth = 1.6;
-          ctx.stroke();
-
-          // Left Terracotta Bar
-          ctx.fillStyle = '#D35400';
-          ctx.beginPath();
-          ctx.roundRect((width - contentWidth) / 2, boxY, 7, boxHeight, [20, 0, 0, 20]);
-          ctx.fill();
-
-          // Unified Meaning Header: विचार का आलोक (अर्थ)
-          ctx.fillStyle = '#D35400';
-          ctx.font = 'bold 30px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('📖 विचार का आलोक (अर्थ)', width / 2, boxY + 46);
-
-          // Meaning Text
-          let mTextY = boxY + 108;
-          ctx.fillStyle = '#2B2B2B';
-          ctx.font = '600 38px "Noto Sans Devanagari", sans-serif';
-          meaningLines.forEach(line => {
-            ctx.fillText(line, width / 2, mTextY);
-            mTextY += mLineHeight;
-          });
-
-          // Grand Surya-Kamal (Sun & Lotus) Mandala Artwork (Large Centerpiece)
-          const mandalaY = boxY + boxHeight + 96;
-          drawSuryaKamalMedallion(ctx, width / 2, mandalaY, 115);
-
-          // Grand Bottom Sender Signature (2-Line, No Overlaps, Big Name)
-          const wishY = mandalaY + 112;
-          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
-          const nameW = ctx.measureText(familyName).width;
-          const sigBoxW = Math.max(nameW + 100, 560);
-          const sigBoxH = 88;
-
-          ctx.fillStyle = '#FDECE9';
-          ctx.beginPath();
-          ctx.roundRect((width - sigBoxW) / 2, wishY - 34, sigBoxW, sigBoxH, 22);
-          ctx.fill();
-          ctx.strokeStyle = '#E23A28';
-          ctx.lineWidth = 1.8;
-          ctx.stroke();
-
-          // Line 1: सप्रेम प्रेषक
-          ctx.fillStyle = '#C52C1C';
-          ctx.font = 'bold 21px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('🌸 सप्रेम प्रेषक 🌸', width / 2, wishY - 8);
-
-          // Line 2: Big Bold Family Name
-          ctx.fillStyle = '#1A1A1A';
-          ctx.font = 'bold 40px "Rozha One", "Martel", serif';
-          ctx.fillText(familyName, width / 2, wishY + 36);
-
-          // Footer Baseline
-          ctx.fillStyle = '#666666';
-          ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
-          ctx.fillText('सत्यमेव जयते · अमृत विचार · दैनिक भास्कर खेल', width / 2, 1260);
+        const centerX = width / 2;
+        const contentWidth = 820;
+        const palettes = {
+          classic: { background: ['#FCF8F0', '#F2E8DA'], ink: '#382A20', accent: '#B95435', muted: '#806B58', border: '#D8B893', heading: 'आज की नीति' },
+          navratri: { background: ['#FFF9F0', '#FBE5CB'], ink: '#522C25', accent: '#AB3E32', muted: '#946F55', border: '#D6A065', heading: 'शुभ नवरात्रि' },
+          diwali: { background: ['#2B1738', '#140C21'], ink: '#FFF5DE', accent: '#EAC376', muted: '#C1ABC9', border: '#997348', heading: 'शुभ दीपावली' }
+        };
+        const palette = palettes[activeTheme] || palettes.classic;
+
+        ctx.clearRect(0, 0, width, height);
+        const background = ctx.createLinearGradient(0, 0, width, height);
+        palette.background.forEach((color, index) => background.addColorStop(index, color));
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, width, height);
+
+        // Quiet outer detail; decoration never runs behind the text.
+        ctx.strokeStyle = palette.border;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(48, 48, width - 96, height - 96);
+        if (activeTheme === 'navratri') {
+          drawCheckeredBorder(ctx, width, height, 28, 10);
         }
+        if (activeTheme === 'diwali') {
+          ctx.fillStyle = palette.accent;
+          [[100, 130, 3], [980, 130, 3], [145, 235, 2], [935, 235, 2]].forEach(([x, y, radius]) => {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = palette.accent;
+        ctx.font = '700 56px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        ctx.fillText(palette.heading, centerX, 190);
+        ctx.strokeStyle = palette.border;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 45, 240);
+        ctx.lineTo(centerX + 45, 240);
+        ctx.stroke();
+
+        // Fit the complete thought into its own region, without truncating it.
+        const thought = fitCardText(ctx, data.fullThought, contentWidth, 310, 64);
+        ctx.fillStyle = palette.ink;
+        ctx.textBaseline = 'middle';
+        const firstLineY = 415 - ((thought.lines.length - 1) * thought.lineHeight) / 2;
+        thought.lines.forEach((line, index) => {
+          ctx.fillText(line, centerX, firstLineY + index * thought.lineHeight);
+        });
+
+        // Keep the complete meaning, with quieter typography and no heavy plaque.
+        ctx.strokeStyle = palette.border;
+        ctx.beginPath();
+        ctx.moveTo(centerX - 130, 585);
+        ctx.lineTo(centerX + 130, 585);
+        ctx.stroke();
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = palette.accent;
+        ctx.font = '600 27px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        ctx.fillText('अर्थ', centerX, 640);
+        const meaning = fitCardText(ctx, data.meaning, contentWidth - 40, 180, 36, 500);
+        ctx.fillStyle = palette.ink;
+        ctx.textBaseline = 'middle';
+        const firstMeaningY = 740 - ((meaning.lines.length - 1) * meaning.lineHeight) / 2;
+        meaning.lines.forEach((line, index) => {
+          ctx.fillText(line, centerX, firstMeaningY + index * meaning.lineHeight);
+        });
+
+        // A single motif per theme, with generous space above the signature.
+        if (activeTheme === 'diwali') {
+          drawDiya(ctx, centerX, 950, 1.15);
+        } else if (activeTheme === 'navratri') {
+          drawCrossedDandiyas(ctx, centerX, 945, 0.72);
+        } else {
+          drawSuryaKamalMedallion(ctx, centerX, 945, 46);
+        }
+
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = palette.muted;
+        ctx.font = '500 27px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        ctx.fillText('सप्रेम', centerX, 1050);
+        const signature = fitCardText(ctx, familyName, contentWidth, 95, 42, 700);
+        ctx.fillStyle = palette.ink;
+        ctx.textBaseline = 'middle';
+        const signatureY = 1110 - ((signature.lines.length - 1) * signature.lineHeight) / 2;
+        signature.lines.forEach((line, index) => {
+          ctx.fillText(line, centerX, signatureY + index * signature.lineHeight);
+        });
+
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = palette.muted;
+        ctx.font = '500 22px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        ctx.fillText('मौलिक विचार · डेमो के लिए लिखा गया', centerX, 1200);
+        ctx.fillStyle = palette.accent;
+        ctx.font = '600 25px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
+        ctx.fillText('दैनिक भास्कर खेल', centerX, 1250);
 
         // Update in-page preview image
         try {
@@ -2547,7 +1996,7 @@
       }
 
       function getFormattedShareText(data) {
-        const familyName = userName.trim() || 'सुहास और परिवार';
+        const familyName = userName.trim() || DEFAULT_CARD_NAME;
         let festGreeting = '';
         if (activeTheme === 'diwali') {
           festGreeting = `🪔 शुभ दीपावली — ${familyName} 🪔\n\n`;
@@ -2556,7 +2005,7 @@
         } else {
           festGreeting = `🌸 आज की नीति — सप्रेम प्रेषक: ${familyName} 🌸\n\n`;
         }
-        return `${festGreeting}"${data.fullThought}"\n\nविचार का आलोक (अर्थ): ${data.meaning}\n\nदैनिक भास्कर खेल`;
+        return `${festGreeting}${data.fullThought}\n\nअर्थ: ${data.meaning}\n\nमौलिक विचार · डेमो के लिए लिखा गया\nदैनिक भास्कर खेल`;
       }
 
       async function handleShareAction() {
@@ -2685,11 +2134,6 @@
             try { window.DBJamDemo.removeItem(USER_NAME_KEY); } catch (e) {}
             generateShareCard();
           });
-        }
-
-        // Corner Share Button: opens share modal sheet
-        if (els.btnCornerShare) {
-          els.btnCornerShare.addEventListener('click', openShareSheet);
         }
 
         // Primary Hero Share CTA: opens share modal sheet

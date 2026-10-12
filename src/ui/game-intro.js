@@ -9,7 +9,7 @@ const preferenceKey = id => `db-game-intro:v1:${canonicalId(id)}`;
 
 const copy = {
   hi: {
-    heading: 'कैसे खेलें?', example: 'एक छोटा उदाहरण', play: 'समझ गया, खेलें',
+    heading: 'कैसे खेलें?', example: 'एक छोटा उदाहरण', play: 'खेले',
     note: 'मदद चाहिए? ऊपर ⓘ / ? वाला बटन दबाएँ।',
     wordal: { title: 'आज का शब्द', caption: 'हर रंग एक संकेत है', labels: ['सही जगह', 'दूसरी जगह', 'शब्द में नहीं'], rules: [
       ['शब्द पहचानें', 'आज की खबर से जुड़ा 5 अक्षरों का शब्द खोजें। आपके पास 6 प्रयास हैं।'],
@@ -21,17 +21,17 @@ const copy = {
       ['सही जवाब चुनें', 'चार विकल्पों में से विचार पूरा करने वाला जवाब चुनें और जाँचें।'],
       ['सीख साथ ले जाएँ', 'पूरा विचार और उसका अर्थ पढ़ें। चाहें तो उसका कार्ड साझा करें।'],
     ] },
-    cricket: { title: 'सुपर ओवर', caption: 'बल्लेबाज़ी में सरकाएँ · गेंदबाज़ी में जगह चुनें', labels: ['शॉट की दिशा', 'गेंद की जगह'], rules: [
+    cricket: { title: 'आज का ओवर', caption: 'बल्लेबाज़ी में सरकाएँ · गेंदबाज़ी में जगह चुनें', labels: ['शॉट की दिशा', 'गेंद की जगह'], rules: [
       ['अपनी भूमिका चुनें', 'बल्लेबाज़ बनकर लक्ष्य हासिल करें या गेंदबाज़ बनकर लक्ष्य बचाएँ।'],
       ['उंगली से खेलें', 'बल्लेबाज़ी: गेंद हरे निशान पर आए तो शॉट की दिशा में उंगली सरकाएँ। गेंदबाज़ी: पिच पर जगह चुनें और उंगली छोड़ें।'],
       ['6 गेंदें, 2 विकेट', 'एक ओवर में खेल पूरा करें। दो विकेट गिरने पर पारी खत्म हो जाती है।'],
     ] },
-    carrom: { title: 'कैरम पहेली', caption: 'पीछे खींचें → निशाना साधें → छोड़ें', labels: ['स्ट्राइकर', 'लक्ष्य'], rules: [
+    carrom: { title: 'आज का निशाना', caption: 'पीछे खींचें → निशाना साधें → छोड़ें', labels: ['स्ट्राइकर', 'लक्ष्य'], rules: [
       ['आज का लक्ष्य देखें', 'ऊपर लिखा लक्ष्य पढ़ें। पहेली पूरी करने के लिए एक शॉट मिलता है।'],
       ['स्ट्राइकर लगाएँ', 'स्ट्राइकर को नीचे की रेखा पर बाएँ या दाएँ खिसकाएँ।'],
       ['खींचें और छोड़ें', 'स्ट्राइकर से पीछे खींचकर निशाना साधें, फिर छोड़ें। चूकें तो “पुनः प्रयास” करें।'],
     ] },
-    jodo: { title: 'जोड़ो', caption: 'दो संबंधित कार्ड → एक जोड़ी', labels: ['आम', 'फल', 'दूध', 'पेय'], rules: [
+    jodo: { title: 'आज की जोड़ी', caption: 'दो संबंधित कार्ड → एक जोड़ी', labels: ['आम', 'फल', 'दूध', 'पेय'], rules: [
       ['संबंध खोजें', 'दोनों सूचियों के कार्ड पढ़ें। कौन से दो तथ्य आपस में जुड़े हैं?'],
       ['दो कार्ड जोड़ें', 'पहली सूची के कार्ड पर टैप करें, फिर उसके साथी पर। या एक से दूसरे तक रेखा खींचें।'],
       ['चार जोड़ियाँ बनाएँ', 'सभी 4 जोड़ियाँ मिलाएँ, फिर उनका संबंध और आज की खबर पढ़ें।'],
@@ -50,17 +50,17 @@ const copy = {
       ['Choose an answer', 'Pick the option that completes the thought, then check your answer.'],
       ['Take away a lesson', 'Read the full thought and its meaning. Share its card if you like.'],
     ] },
-    cricket: { title: 'Super Over', caption: 'Batting: swipe · Bowling: pick a spot', labels: ['Shot direction', 'Ball placement'], rules: [
+    cricket: { title: 'Aaj Ka Over', caption: 'Batting: swipe · Bowling: pick a spot', labels: ['Shot direction', 'Ball placement'], rules: [
       ['Choose your role', 'Bat to reach the target or bowl to defend it.'],
       ['Play with your finger', 'Batting: swipe in the shot’s direction as the ball reaches the green mark. Bowling: choose a spot on the pitch and release.'],
       ['6 balls, 2 wickets', 'Play one over. The innings ends when two wickets fall.'],
     ] },
-    carrom: { title: 'Carrom Puzzle', caption: 'Pull back → aim → release', labels: ['Striker', 'Target'], rules: [
+    carrom: { title: 'Aaj Ka Nishana', caption: 'Pull back → aim → release', labels: ['Striker', 'Target'], rules: [
       ['Read today’s target', 'Check the goal above the board. You have one shot to solve the puzzle.'],
       ['Place the striker', 'Slide the striker left or right along the bottom line.'],
       ['Pull and release', 'Pull back from the striker to aim, then release. Use “पुनः प्रयास” (Retry) if you miss.'],
     ] },
-    jodo: { title: 'Connect', caption: 'Two related cards → one pair', labels: ['Mango', 'Fruit', 'Milk', 'Drink'], rules: [
+    jodo: { title: 'Aaj Ki Jodi', caption: 'Two related cards → one pair', labels: ['Mango', 'Fruit', 'Milk', 'Drink'], rules: [
       ['Find the connection', 'Read the cards in both lists. Which two facts belong together?'],
       ['Connect two cards', 'Tap a card in the first list, then its partner. Or drag a line between them.'],
       ['Make four pairs', 'Match all 4 pairs, then read their connections and today’s news.'],
