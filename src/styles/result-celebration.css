@@ -1,0 +1,92 @@
+.result-celebration {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 14px;
+  background: var(--game-tint, #f1efe8);
+  border: 1px solid transparent;
+  border-radius: var(--family-control-radius, 12px);
+  color: var(--game-ink, #252522);
+  text-align: left;
+  font-family: var(--family-font, inherit);
+}
+.result-celebration[data-outcome="attempt"] { background: var(--family-subtle, #f1efe8); }
+.result-celebration__stamp {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: var(--family-surface, #fffefa);
+  transform: rotate(-7deg);
+}
+.result-celebration__stamp svg { width: 32px; height: 32px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.result-celebration__check {
+  position: absolute;
+  right: -3px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--game-tint, #f1efe8);
+  border-radius: 50%;
+  background: var(--game-ink, #252522);
+  color: var(--family-surface, #fffefa);
+  font: 700 11px/1 system-ui, sans-serif;
+}
+.result-celebration .result-celebration__title { margin: 0; padding-right: 38px; color: inherit; font-size: 17px; font-weight: 800; line-height: 1.55; }
+.result-celebration .result-celebration__body { margin: 3px 0 0; color: inherit; font-size: 13px; font-weight: 400; line-height: 1.7; }
+.result-celebration__skip {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: 600 11px/1.4 var(--family-font, system-ui);
+  cursor: pointer;
+}
+.result-celebration__skip[hidden] { display: none; }
+.result-celebration__skip:hover { background: #fffefa80; }
+.result-celebration__rays { position: absolute; inset: -7px; border: 1px solid currentColor; border-radius: 50%; opacity: 0; pointer-events: none; }
+.result-celebration.is-celebrating .result-celebration__stamp { animation: result-stamp-settle 650ms cubic-bezier(.2, .8, .2, 1) both; }
+.result-celebration.is-celebrating[data-outcome="success"] .result-celebration__rays { animation: result-stamp-ring 1100ms 180ms ease-out both; }
+@keyframes result-stamp-settle {
+  0% { transform: translateY(-5px) rotate(-16deg) scale(.85); }
+  55% { transform: rotate(-4deg) scale(1.07); }
+  100% { transform: rotate(-7deg) scale(1); }
+}
+@keyframes result-stamp-ring {
+  0% { opacity: .45; transform: scale(.8); }
+  100% { opacity: 0; transform: scale(1.25); }
+}
+[data-game-theme="wordal"] .result-celebration { margin-bottom: 16px; }
+[data-game-theme="jodo"] .result-title-wrap { flex: 1; min-width: 0; }
+[data-game-theme="jodo"] .result-title-wrap > [data-result-celebration] { width: 100%; }
+[data-game-theme="jodo"] .result-header-minimal { align-items: flex-start; }
+[data-game-theme="jodo"] .result-score-chip { flex-shrink: 0; margin-top: 16px; }
+[data-game-theme="jodo"] .result-celebration { grid-template-columns: 36px minmax(0, 1fr); gap: 9px; padding: 10px; margin: 0; }
+[data-game-theme="jodo"] .result-celebration__stamp { width: 36px; height: 36px; }
+[data-game-theme="jodo"] .result-celebration__stamp svg { width: 27px; height: 27px; }
+[data-game-theme="carrom"] .modal-card.is-result :is(#modal-icon, #modal-title) { display: none; }
+[data-game-theme="carrom"] .modal-card.is-result { padding: 20px; }
+[data-game-theme="carrom"] .carrom-result-actions > button { padding: 10px 12px; font-size: 13px; white-space: nowrap; }
+[data-game-theme="cricket"] #resultModal .modal-header { background: var(--game-tint); }
+@media (prefers-reduced-motion: reduce) {
+  .result-celebration.is-celebrating .result-celebration__stamp,
+  .result-celebration.is-celebrating .result-celebration__rays { animation: none; }
+}
+.result-celebration:empty,
+[data-result-celebration]:empty { display: none; }

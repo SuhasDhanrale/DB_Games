@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="hi" data-game-theme="wordal">
 <head>
+  <script src="./game-navigation.js"></script>
   <script src="./demo-session.js"></script>
   <meta charset="UTF-8">
   <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
   <script type="module">
     import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+    import './src/ui/result-celebration.js';
+    import { installGameMusic } from './src/ui/game-music.js';
+    installGameMusic('wordal');
     prepareStandaloneIntro('wordal').then(window.finishGameIntro);
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -956,6 +960,7 @@
 
         <!-- Hero Card with Revealed Word & Meaning -->
         <div class="result-hero-card family-panel">
+          <div data-result-celebration></div>
           <div class="result-status-pill win" id="resultStatusPill">
             🎉 बधाई! शब्द हल किया
           </div>
@@ -973,7 +978,7 @@
         <!-- The News Connection Card -->
         <article class="news-connection-card family-panel">
           <div class="news-connection-header">
-            <span class="news-connection-badge">📰 आज की मुख्य सुर्खियां</span>
+            <span class="news-connection-badge">इस शब्द से जुड़ी खबर</span>
             <span class="news-connection-topic" id="newsConnectionTopic">विज्ञान विशेष</span>
           </div>
 
@@ -1244,6 +1249,9 @@
       let isRevealed = false;
       let keyStateMap = {}; // key -> 'correct' | 'present' | 'absent'
       let isInputLocked = false;
+      let isPractice = false;
+      let restoredResult = false;
+      let resultCelebrated = false;
 
       // DOM Elements
       const viewGame = document.getElementById('viewGame');
@@ -1348,6 +1356,7 @@
         try {
           const data = {
             currentAttempt,
+            currentRowTokens,
             boardGuesses,
             isGameOver,
             isGameWon,
@@ -1389,12 +1398,18 @@
         } else if (viewId === 'result') {
           populateResultScreen();
           viewResult.classList.add('is-active');
+          window.DBResultCelebration.show(viewResult.querySelector('[data-result-celebration]'), {
+            game: 'wordal', details: { solved: isGameWon, attempts: boardGuesses.length },
+            animate: !resultCelebrated,
+          });
+          resultCelebrated = true;
           window.scrollTo({ top: 0, behavior: 'smooth' });
           // Solving or using all six attempts completes the game; revealing early does not.
-          if (isGameWon || boardGuesses.length >= TOTAL_ROWS) {
+          if (!restoredResult && (isGameWon || boardGuesses.length >= TOTAL_ROWS)) {
             try {
-              window.parent?.DBGameLab?.endGame?.(isGameWon ? 100 - ((boardGuesses.length - 1) * 10) : 0);
+              window.parent?.DBGameLab?.endGame?.(isGameWon ? 100 - ((boardGuesses.length - 1) * 10) : 0, { solved: isGameWon, attempts: boardGuesses.length, edition: currentDay, mode: isPractice ? 'practice' : 'daily' });
             } catch (e) {}
+            restoredResult = true;
           }
         } else if (viewId === 'article') {
           populateArticleReader();
@@ -1521,6 +1536,7 @@
           currentRowTokens[currentCol] = key;
           currentCol++;
           updateActiveRowDisplay();
+          saveGameState();
         } else {
           showToast('5 अक्षर पूरे हैं, "जाँचें" दबाएँ', 'alert', 1400);
         }
@@ -1533,6 +1549,7 @@
           currentCol--;
           currentRowTokens.pop();
           updateActiveRowDisplay();
+          saveGameState();
         }
       }
 
@@ -1623,7 +1640,6 @@
             isGameWon = true;
             isRevealed = false;
             saveGameState();
-            showToast('शानदार! सही शब्द पहचान लिया!', 'success', 2200);
 
             // Optional DBGameLab Parent integration call
             try {
@@ -1633,9 +1649,7 @@
             } catch (e) {}
 
             // Transition to Screen 2: News Interconnection Screen
-            setTimeout(() => {
-              showView('result');
-            }, 1200);
+            showView('result');
 
           } else if (currentAttempt + 1 >= TOTAL_ROWS) {
             // Out of attempts
@@ -1643,11 +1657,7 @@
             isGameWon = false;
             isRevealed = true;
             saveGameState();
-            showToast(`प्रयास समाप्त! सही शब्द है: ${edition.answer}`, 'alert', 2400);
-
-            setTimeout(() => {
-              showView('result');
-            }, 1400);
+            showView('result');
 
           } else {
             // Next row
@@ -1670,10 +1680,7 @@
         isGameWon = false;
         isRevealed = true;
         saveGameState();
-        showToast('शब्द का खुलासा किया गया', 'alert', 1800);
-        setTimeout(() => {
-          showView('result');
-        }, 600);
+        showView('result');
       }
 
       /* ============================================================
@@ -1686,11 +1693,12 @@
         if (resultStatusPill) {
           if (isGameWon) {
             resultStatusPill.className = 'result-status-pill win';
-            resultStatusPill.textContent = `🎉 बधाई! ${boardGuesses.length}/6 प्रयासों में हल किया`;
+            resultStatusPill.textContent = `${boardGuesses.length}/6 कोशिशों में हल किया`;
           } else {
             resultStatusPill.className = 'result-status-pill revealed';
             resultStatusPill.textContent = '📖 शब्द का खुलासा';
           }
+          if (isPractice) resultStatusPill.textContent = 'अभ्यास · ' + resultStatusPill.textContent;
         }
 
         // Hero Word & Meaning
@@ -1762,8 +1770,9 @@
 
         // Update Banner Details
         const edition = EDITIONS_DATA[dayId];
-        if (headlineBannerTitle) headlineBannerTitle.textContent = edition.headingPrompt || 'आज की सुर्खियों में छिपा 5 अक्षरों का शब्द';
-        if (headlineBannerDesc) headlineBannerDesc.textContent = edition.subPrompt;
+        isPractice = new URLSearchParams(location.search).get('practice') === '1' || window.DBJamDemo.getItem('wordal:spoiled:' + currentDay) === 'true';
+        if (headlineBannerTitle) headlineBannerTitle.textContent = isPractice ? 'अभ्यास · कहानी पढ़ने के बाद शब्द आज़माएँ' : 'आज का पाँच अक्षरों का शब्द पहचानें';
+        if (headlineBannerDesc) headlineBannerDesc.textContent = isPractice ? 'कहानी पढ़ने से उत्तर खुल चुका है। यह अभ्यास आपके पहले दैनिक परिणाम से अलग रहेगा।' : 'इस डेमो संस्करण का पाँच अक्षरों का शब्द पहचानें। आपके पास छह प्रयास हैं।';
         if (topicHintBadge) topicHintBadge.textContent = `विषय: ${edition.clue}`;
         if (stepPillLabel) stepPillLabel.textContent = `प्रयास 1/6`;
 
@@ -1788,16 +1797,23 @@
         isGameWon = false;
         isRevealed = false;
         isInputLocked = false;
+        restoredResult = false;
+        resultCelebrated = false;
+        window.DBResultCelebration.clear(viewResult.querySelector('[data-result-celebration]'));
 
         // Restore saved state if exists
         const saved = loadGameState();
         if (saved) {
           currentAttempt = saved.currentAttempt || 0;
+          currentRowTokens = saved.currentRowTokens || [];
+          currentCol = currentRowTokens.length;
           boardGuesses = saved.boardGuesses || [];
           isGameOver = !!saved.isGameOver;
           isGameWon = !!saved.isGameWon;
           isRevealed = !!saved.isRevealed;
           keyStateMap = saved.keyStateMap || {};
+          restoredResult = isGameOver;
+          resultCelebrated = isGameOver;
         }
 
         renderKeyboard();
@@ -1886,20 +1902,16 @@
       // Screen 2 Actions: 2 Buttons Side by Side
       if (btnReadArticleHere) {
         btnReadArticleHere.addEventListener('click', () => {
-          showView('article');
+          const bridge = window.parent?.DBGameLab;
+          if (bridge?.openArticle) bridge.openArticle(`./news.html?day=${encodeURIComponent(currentDay)}&article=${encodeURIComponent(EDITIONS_DATA[currentDay].relatedArticleId)}`);
+          else showView('article');
         });
       }
 
       if (btnMoreGames) {
         btnMoreGames.addEventListener('click', (e) => {
           e.preventDefault();
-          try {
-            if (window.parent && window.parent !== window) {
-              window.parent.location.hash = '#/';
-              return;
-            }
-          } catch (err) {}
-          window.location.href = './index.html';
+          window.DBGameNavigation.goHome();
         });
       }
 
@@ -1920,13 +1932,7 @@
       if (btnArticleMoreGames) {
         btnArticleMoreGames.addEventListener('click', (e) => {
           e.preventDefault();
-          try {
-            if (window.parent && window.parent !== window) {
-              window.parent.location.hash = '#/';
-              return;
-            }
-          } catch (err) {}
-          window.location.href = './index.html';
+          window.DBGameNavigation.goHome();
         });
       }
 

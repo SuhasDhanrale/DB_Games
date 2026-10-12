@@ -4,7 +4,7 @@
 .bento-container { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; padding: calc(var(--safe-area-top) + 18px) 16px 16px; }
 .bento-header { display: flex; flex-shrink: 0; align-items: center; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #d9d7d0; }
 .hub-tagline { flex: 1; min-width: 0; color: #252522; font-size: clamp(16px, 4.5cqw, 20px); font-weight: 750; line-height: 1.5; text-wrap: balance; }
-.hub-header-pill { display: flex; align-items: center; gap: 5px; color: #61584d; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.hub-header-pill { display: flex; align-items: center; justify-content: center; gap: 5px; color: #61584d; font-size: 13px; font-weight: 600; white-space: nowrap; min-width: 48px; min-height: 44px; border-radius: 10px; }
 .hub-header-pill svg { width: 22px; height: 33px; flex-shrink: 0; }
 .hub-header-pill--celebrate svg { animation: hub-torch-pulse 700ms ease-in-out 2; transform-origin: center bottom; }
 @keyframes hub-torch-pulse {
@@ -13,7 +13,7 @@
 .hub-icon-circle-btn { min-width: 44px; height: 44px; border: 1px solid #d9d7d0; border-radius: 50%; font-size: 12px; font-weight: 700; }
 .hub-screen .hub-replay { width: 44px; height: 44px; background: transparent; border: none; color: #77736b; box-shadow: none; }
 .weekly-tracker-wrap { flex-shrink: 0; padding: 13px 0 17px; }
-.weekly-tracker-card { display: flex; justify-content: space-between; padding: 0 8px; }
+.weekly-tracker-card { display: flex; width: 100%; justify-content: space-between; padding: 4px 8px; min-height: 48px; border-radius: 10px; }
 .weekly-day-col { display: flex; flex-direction: column; align-items: center; gap: 5px; }
 .weekly-day-label { font-size: 10px; color: #77736b; }
 .weekly-day-dot { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1px solid #d8d6cf; }
@@ -45,6 +45,12 @@
 .card-game-5 .card-art-float { width: 94%; max-width: 175px; right: -9px; bottom: -10px; }
 .game-status-dot { position: absolute; right: 10px; bottom: 10px; z-index: 3; width: 23px; height: 23px; border-radius: 50%; background: #526f5c; border: 2px solid #faf9f6; display: grid; place-items: center; }
 .hub-screen > .bottom-nav { flex-shrink: 0; background: #faf9f6; }
+.hub-settings { display: grid; place-items: center; width: 44px; height: 44px; color: #66645f; border-radius: 50%; }
+.hub-settings svg { width: 21px; height: 21px; }
+.hub-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px; color: #77736b; font-size: 11px; flex-shrink: 0; }
+.hub-footer button { min-height: 44px; color: #526f5c; font-size: 12px; font-weight: 600; padding: 8px 0 8px 12px; }
+.card-resume { display: block; margin-top: 8px; font-size: 11px; color: var(--card-ink); font-weight: 700; }
+.hub-screen :is(.hub-header-pill, .hub-settings, .weekly-tracker-card, .hub-footer button):focus-visible { outline: 3px solid #526f5c; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .game-bento-card { transition: none; }
   .hub-header-pill--celebrate svg { animation: none; }

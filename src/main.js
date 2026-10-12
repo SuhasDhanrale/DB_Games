@@ -7,7 +7,6 @@
 import '../public/demo-session.js';
 import { initI18n, translateDOM } from './i18n/index.js';
 import { initAudio } from './core/audio.js';
-import { checkDailyReset } from './systems/leaderboard.js';
 import { resetDailyChallenges } from './systems/progression.js';
 import { initToastSystem, initModalSystem } from './ui/components.js';
 import { playOpening } from './ui/opening.js';
@@ -15,8 +14,8 @@ import { playOpening } from './ui/opening.js';
 // Router & Screens
 import { initRouter, addRoute } from './core/router.js';
 import renderHub from './screens/hub.js';
-import renderLeaderboard from './screens/leaderboard.js';
 import renderProfile from './screens/profile.js';
+import { renderSettings } from './screens/settings.js';
 import renderGamePlayer from './screens/game-player.js';
 
 // Game Registry Bootstrapping (Imports self-registering modules: 5 Daily Games)
@@ -32,7 +31,6 @@ async function bootstrap() {
   initAudio();
   
   // 2. Run daily resets
-  checkDailyReset();
   resetDailyChallenges();
 
   // 3. Setup global UI
@@ -41,9 +39,10 @@ async function bootstrap() {
 
   // 4. Register Routes
   addRoute('/', renderHub);
-  addRoute('/leaderboard', renderLeaderboard);
+  addRoute('/leaderboard', renderHub);
   addRoute('/profile', renderProfile);
-  addRoute('/settings', renderProfile);
+  addRoute('/progress', renderProfile);
+  addRoute('/settings', renderSettings);
   addRoute('/game/:id', renderGamePlayer);
 
   // 5. Hide Loading Screen

@@ -1,145 +1,58 @@
-/* ============================================================
-   Settings Screen — Audio, Lang, Reset
-   ============================================================ */
-
-import { t, toggleLang, getLang } from '../i18n/index.js';
-import { isSfxEnabled, setSfxEnabled, isMusicEnabled, setMusicEnabled, playSfx } from '../core/audio.js';
-import { renderHeader, attachHeaderListeners, renderBottomNav, attachBottomNavListeners, openModal, closeModal, showToast } from '../ui/components.js';
+import { getLang, setLang, t } from '../i18n/index.js';
+import { isSfxEnabled, setSfxEnabled, isMusicEnabled, setMusicEnabled } from '../core/audio.js';
+import { openModal, closeModal } from '../ui/components.js';
 import { resetProgression } from '../systems/progression.js';
-import { resetEngagement } from '../systems/engagement.js';
 import { navigate } from '../core/router.js';
+import { playOpening } from '../ui/opening.js';
+import '../styles/support.css';
 
 export function renderSettings(container, { embedded = false, onChange } = {}) {
-  const lang = getLang();
-  
-  container.innerHTML = `
-    ${embedded ? '' : renderHeader({ title: t('settings.title') })}
-    
-    <div class="screen-body" style="padding-top: var(--space-4);">
-      
-      <!-- Language -->
-      <div class="card" style="margin-bottom: var(--space-4);">
-        <div class="card__body" style="display: flex; align-items: center; justify-content: space-between;">
-          <div>
-            <div style="font-size: var(--text-base); font-weight: var(--weight-semibold);">${t('settings.language')}</div>
-          </div>
-          <div class="lang-switch">
-            <button class="lang-switch__option ${lang === 'en' ? 'active' : ''}" data-lang="en">English</button>
-            <button class="lang-switch__option ${lang === 'hi' ? 'active' : ''}" data-lang="hi">हिंदी</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Audio -->
-      <div class="card" style="margin-bottom: var(--space-4);">
-        <div class="card__body" style="display: flex; flex-direction: column; gap: var(--space-4);">
-          
-          <div class="toggle" id="toggle-sfx">
-            <div style="flex: 1;">
-              <div class="toggle__label">${t('settings.sound')}</div>
-            </div>
-            <div class="toggle__track ${isSfxEnabled() ? 'active' : ''}">
-              <div class="toggle__thumb"></div>
-            </div>
-          </div>
-          
-          <div class="divider" style="margin: 0;"></div>
-          
-          <div class="toggle" id="toggle-music">
-            <div style="flex: 1;">
-              <div class="toggle__label">${t('settings.music')}</div>
-            </div>
-            <div class="toggle__track ${isMusicEnabled() ? 'active' : ''}">
-              <div class="toggle__thumb"></div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-
-      <!-- Danger Zone -->
-      <div class="card" style="margin-bottom: var(--space-6); border-color: rgba(255,107,107,0.3);">
-        <div class="card__body">
-          <button class="btn btn--danger btn--full" id="btn-reset">
-            ⚠️ ${t('settings.reset')}
-          </button>
-        </div>
-      </div>
-
-      <!-- About -->
-      <div style="text-align: center; color: var(--text-tertiary); font-size: var(--text-xs);">
-        <p>${t('hub.title')} - ${t('settings.about')}</p>
-        <p>${t('settings.version')} 1.0.0</p>
-      </div>
-
-    </div>
-
-    ${embedded ? '' : renderBottomNav('profile')}
-  `;
-
-  attachHeaderListeners(container, {});
-  attachBottomNavListeners(container, navigate);
-
-  // Handlers
-  container.querySelectorAll('.lang-switch__option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.lang;
-      if (target !== getLang()) {
-        toggleLang();
-        playSfx('tap');
-        if (onChange) onChange();
-        else renderSettings(container, { embedded });
-      }
+  const hi = getLang() === 'hi';
+  const copy = (h, e) => hi ? h : e;
+  container.classList.add(embedded ? 'support-view' : 'support-screen');
+  container.innerHTML = `${embedded ? '' : `<header class="support-heading"><button class="support-action" id="settings-back" type="button" aria-label="${t('common.back')}">←</button><h1>${t('settings.title')}</h1></header>`}<div class="${embedded ? '' : 'support-content'} support-view">
+    <div class="support-settings-row"><label for="settings-language">${t('settings.language')}</label><select id="settings-language"><option value="hi" ${hi ? 'selected' : ''}>हिंदी</option><option value="en" ${hi ? '' : 'selected'}>English</option></select></div>
+    ${[['sfx', t('settings.sound'), isSfxEnabled()], ['music', t('settings.music'), isMusicEnabled()]].map(([id, label, enabled]) => `<div class="support-settings-row"><span id="${id}-label">${label}</span><button class="support-toggle" id="settings-${id}" type="button" aria-labelledby="${id}-label" aria-pressed="${enabled}">${enabled ? copy('चालू', 'On') : copy('बंद', 'Off')}</button></div>`).join('')}
+    <h3>${copy('खेलने का तरीका', 'Playing at your pace')}</h3><p class="support-muted">${copy('मनपसंद खेल चुनें। हर खेल में “कैसे खेलें” से मदद मिलेगी। एक खेल पूरा करने पर आज का दिन दर्ज होगा। सभी पाँच खेल पूरे करना ज़रूरी नहीं है।', 'Choose a game you enjoy. Each game has a How to play guide. Completing one records your day; you do not need to finish all five.')}</p>
+    <div class="support-actions"><button class="support-action" type="button" id="settings-opening">${copy('शुरुआती झलक फिर देखें', 'Replay the opening')}</button></div>
+    <details><summary>${copy('डेमो और सहेजा हुआ डेटा', 'Demo and saved data')}</summary>
+      <p class="support-muted">${copy('तीन तैयार नमूना संस्करण हैं। संस्करण बदलने से कोई नया दिन या लगातार खेलने का रिकॉर्ड नहीं बनता।', 'Three authored sample editions. Switching editions does not count as another day played.')}</p>
+      <div class="support-settings-row"><label for="settings-edition">${copy('डेमो संस्करण', 'Demo edition')}</label><select id="settings-edition">${[1,2,3].map(i => `<option value="d${i}" ${window.DBJamDemo.day === 'd' + i ? 'selected' : ''}>${copy('संस्करण', 'Edition')} ${i}</option>`).join('')}</select></div>
+      <p class="support-muted" style="margin:16px 0">${copy('रीसेट से इस ब्राउज़र के खेल और परिणाम हटेंगे। भाषा और ध्वनि की पसंद बनी रहेगी।', 'Reset removes game rounds and results in this browser. Language and sound preferences are kept.')}</p>
+      <button class="support-action support-danger" type="button" id="settings-reset">${copy('खेल की प्रगति रीसेट करें', 'Reset play progress')}</button>
+    </details>
+  </div>`;
+  container.querySelector('#settings-back')?.addEventListener('click', () => navigate('/'));
+  container.querySelector('#settings-language').addEventListener('change', event => {
+    setLang(event.target.value);
+    if (embedded) openSettings(onChange); else renderSettings(container);
+    onChange?.();
+  });
+  [['sfx', isSfxEnabled, setSfxEnabled], ['music', isMusicEnabled, setMusicEnabled]].forEach(([id, get, set]) => {
+    container.querySelector('#settings-' + id).addEventListener('click', event => {
+      const enabled = !get(); set(enabled);
+      event.currentTarget.setAttribute('aria-pressed', String(enabled));
+      event.currentTarget.textContent = enabled ? copy('चालू', 'On') : copy('बंद', 'Off');
     });
   });
-
-  const toggleSfx = container.querySelector('#toggle-sfx');
-  toggleSfx.addEventListener('click', () => {
-    const track = toggleSfx.querySelector('.toggle__track');
-    const newState = !track.classList.contains('active');
-    setSfxEnabled(newState);
-    if (newState) track.classList.add('active'); else track.classList.remove('active');
-    if (newState) playSfx('tap');
+  container.querySelector('#settings-edition').addEventListener('change', event => {
+    const url = new URL(location.href); url.searchParams.set('day', event.target.value); url.hash = ''; location.assign(url);
   });
-
-  const toggleMusic = container.querySelector('#toggle-music');
-  toggleMusic.addEventListener('click', () => {
-    const track = toggleMusic.querySelector('.toggle__track');
-    const newState = !track.classList.contains('active');
-    setMusicEnabled(newState);
-    if (newState) track.classList.add('active'); else track.classList.remove('active');
-    playSfx('tap');
+  container.querySelector('#settings-opening').addEventListener('click', () => {
+    closeModal();
+    const overlay = document.createElement('div'); overlay.className = 'loading-screen'; document.getElementById('app-root').appendChild(overlay);
+    playOpening(overlay, () => container.querySelector('#settings-opening')?.focus());
   });
-
-  const btnReset = container.querySelector('#btn-reset');
-  btnReset.addEventListener('click', () => {
-    playSfx('click');
-    openModal({
-      title: 'Warning',
-      content: `
-        <div style="text-align: center;">
-          <p style="margin-bottom: var(--space-6);">${t('settings.reset_confirm')}</p>
-          <div style="display: flex; gap: var(--space-3);">
-            <button class="btn btn--secondary" style="flex:1;" id="reset-cancel">${t('common.cancel')}</button>
-            <button class="btn btn--danger" style="flex:1;" id="reset-confirm">${t('settings.reset')}</button>
-          </div>
-        </div>
-      `
-    });
-
-    setTimeout(() => {
-      document.getElementById('reset-cancel')?.addEventListener('click', () => {
-        closeModal();
-      });
-      document.getElementById('reset-confirm')?.addEventListener('click', () => {
-        resetProgression();
-        resetEngagement();
-        closeModal();
-        showToast({ message: 'Progress reset', icon: '🗑️' });
-        setTimeout(() => navigate('/'), 1000);
-      });
-    }, 100);
+  container.querySelector('#settings-reset').addEventListener('click', () => {
+    const content = document.createElement('div'); content.className = 'support-view';
+    content.innerHTML = `<p>${copy('इस ब्राउज़र के सभी खेल, परिणाम और मशाल का रिकॉर्ड हट जाएगा।', 'All game rounds, results and torch history in this browser will be removed.')}</p><div class="support-actions"><button class="support-action" id="reset-cancel" type="button">${t('common.cancel')}</button><button class="support-action support-danger" id="reset-confirm" type="button">${copy('प्रगति हटाएँ', 'Remove progress')}</button></div>`;
+    openModal({ title: copy('प्रगति रीसेट करें?', 'Reset progress?'), content });
+    content.querySelector('#reset-cancel').addEventListener('click', () => embedded ? openSettings(onChange) : closeModal());
+    content.querySelector('#reset-confirm').addEventListener('click', () => { resetProgression(); closeModal(); location.reload(); });
   });
 }
-
-export default renderSettings;
+export function openSettings(onChange) {
+  const content = document.createElement('div');
+  renderSettings(content, { embedded: true, onChange });
+  openModal({ title: t('settings.title'), content });
+}

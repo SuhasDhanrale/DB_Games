@@ -1,0 +1,149 @@
+PAGE 1
+Dainik Bhaskar Game Lab 2026 - Game Design Brief
+1
+Dainik Bhaskar Games
+GBL 2026 - Game Design Brief
+Core idea:
+We are not making five different games.
+We are making five reasons to play every day.
+1. Product Idea
+A lightweight daily-games hub inside a news ecosystem, built for Indian non-gamers and casual players.
+Each game gives the user a different reason to open the app and play for 1-3 minutes.
+The brief asks for mass appeal, daily engagement, simple mechanics, long-term evolution and Indian audience relevance.
+The audience is mobile-first, habit-driven and largely not active gamers. (Brief, pp. 9-11)
+2. Five Reasons to Play
+GAME
+PLAYER NEED
+ROLE
+Gully Cricket
+Fun / excitement
+Fast skill and instant feedback
+Lagori
+Nostalgia / familiarity
+Traditional Indian play memory
+News Word
+Curiosity / freshness
+Daily word connected to current news
+Odd One Out
+Discovery
+Find the odd item and learn why
+Dots & Boxes
+Thinking / competition
+Short strategy challenge
+3. The Product Loop
+Open Bhaskar -> Daily Games -> Pick a mood -> Play 1-3
+minutes -> See today's result -> Come back tomorrow.
+The key is choice. The same person may want excitement today, nostalgia tomorrow, a brain challenge
+later, or a fresh daily discovery. The collection is the product.
+
+
+PAGE 2
+Dainik Bhaskar Game Lab 2026 - Game Design Brief
+2
+4. Game Mechanics
+Only the two unfinished games need to be designed further.
+News Word
+Core loop: Today's relevant news -> choose a 5-letter word -> player gets 5 attempts -> feedback
+shows correct position / wrong position / absent letter -> reveal the connected story.
+Mechanics: 5 letters, 5 guesses, green = correct position, yellow = correct letter/wrong position, grey =
+absent. After the result, show the headline or a short explanation connected to the word.
+Product difference: Do not position it as an Indian Wordle clone. Position it as Play today's news. The
+news provides a fresh content source every day.
+Odd One Out
+Core loop: Show 4 familiar things -> player taps the one that does not belong -> reveal the relationship
+-> explain the answer in one short line.
+Content: food, places, festivals, sports, objects, language, culture, people and current events.
+Design rule: There must always be one clearly defensible answer. The explanation is the reward: the
+player should leave with a small piece of knowledge, not just a score.
+Example
+Vada Pav | Misal Pav | Poha | Litti Chokha
+Player taps one -> Correct. Litti Chokha is associated with Bihar; the others are strongly associated with
+Maharashtra.
+5. Indian Relevance
+Localise the content, not only the interface. Use regionally recognisable food, places, festivals, sports,
+language and everyday objects. Then use the game to let players discover other parts of India.
+Possible regional content pools: Maharashtra, Rajasthan, Uttar Pradesh, Bihar and other states. Avoid
+turning this into stereotypes; the goal is recognition + curiosity.
+
+
+PAGE 3
+Dainik Bhaskar Game Lab 2026 - Game Design Brief
+3
+6. Engagement + Progression
+Keep the system light. The audience is not asking for a complicated live-service game.
+Daily engagement
+Every day: 5 games -> 5 daily challenges. The player can play one or all five. The content changes even
+when the mechanics remain familiar.
+Freshness sources: current news, regional content, festivals, cricket/events, seasons and other timely
+topics.
+Do not depend on coins, gems or reward spam. The brief explicitly says to avoid monetization loops and
+reward-only gameplay. (Brief, p. 18)
+Progression
+Use mastery rather than a heavy meta-game.
+GAME
+SIMPLE PROGRESS SIGNAL
+Gully Cricket
+Personal best / accuracy / streak
+Lagori
+Accuracy / best score
+News Word
+Daily streak / solve rate
+Odd One Out
+Discovery score / streak
+Dots & Boxes
+Wins / best time / streak
+Progression principle: The player gets better and discovers more. The system should reward mastery
+and curiosity, not grinding.
+7. Why Five Games?
+A single game assumes one dominant player need. A daily collection allows the user to choose a mood:
+fun, nostalgia, curiosity, discovery or thinking.
+This is especially relevant for a mixed audience where gaming experience ranges from occasional to
+none. The personas in the brief already describe familiarity with Ludo, Snakes and Ladders, carrom,
+cards, matching and simple quizzes. (Brief, pp. 13-17)
+Therefore the design target is not “hardcore gamer.” It is “I already understand how this feels, even if I
+have never played this app.”
+
+
+PAGE 4
+Dainik Bhaskar Game Lab 2026 - Game Design Brief
+4
+8. How We Sell the Idea
+Five games. Five moods. One daily habit.
+Core pitch
+Dainik Bhaskar already gives India reasons to check in every day. We add reasons to play.
+A daily collection of Indian games where every day gives you something new to play, discover and
+master.
+Why this fits the brief
+BRIEF NEED
+OUR RESPONSE
+Mass appeal
+Familiar games + low learning curve
+Daily engagement
+Daily challenges + changing content
+Simple mechanics
+One clear interaction per game
+Long-term evolution
+Mastery, streaks and rotating content
+Indian relevance
+Regional games + regional discovery content
+9. Reference: Daily Games as a Product Pattern
+The New York Times operates a single Games destination containing multiple recurring games such as
+Wordle, Connections, Spelling Bee, Sudoku, Strands and crosswords. The useful design lesson for this
+brief is not that “more games is always better”; it is that one destination can serve different play
+preferences while maintaining a daily habit.
+A separate study of casual game players found meaningful differences in the gratifications associated
+with different genres, supporting the idea that players seek different experiences from games. Another
+small study with adults 65+ found casual puzzle games were generally well accepted for enjoyment and
+ease of play. These sources provide context, not proof that five games will outperform one.
+10. Design Principle to Keep
+Do not build five games and put them in one menu.
+Build one daily product in which each game answers a
+different human need.
+This is the central argument for the jam presentation.
+Source notes
+Dainik Bhaskar Game Lab 2026 brief: pages 9-18, especially Brief, Rules, Audience, Personas and What to Avoid. File
+supplied for this project.
+External product reference: New York Times Games -
+https://apps.apple.com/in/app/nyt-games-wordle-crossword/id307569751
+Research context: Frontiers / Computers in Human Behavior literature on casual game motivations and older-adult
+casual-game acceptance, as discussed in the design discussion.

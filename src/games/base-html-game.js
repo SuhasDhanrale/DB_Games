@@ -4,6 +4,7 @@ import { needsIntro, renderGameIntro } from '../ui/game-intro.js';
 import { getLang } from '../i18n/index.js';
 import { openNews } from '../ui/news-reader.js';
 import { showTorchCelebration } from '../ui/torch.js';
+import audio from '../core/audio.js';
 
 export class HtmlIframeGame extends BaseGame {
   constructor(container, config) {
@@ -34,9 +35,11 @@ export class HtmlIframeGame extends BaseGame {
 
     // Expose DBGameLab globally on host window so window.parent.DBGameLab works
     const bridge = {
+      audio,
       startGame: () => { if (!this.isRunning) this.start(); },
       addScore: (points) => this.addScore(points),
-      endGame: (score) => this.end(score)
+      openArticle: (href) => openNews(href),
+      endGame: (score, details) => this.end(score, details)
     };
     window.DBGameLab = bridge;
 
@@ -65,7 +68,7 @@ export class HtmlIframeGame extends BaseGame {
       if (event.source !== iframe.contentWindow || event.origin !== window.location.origin || !event.data) return;
       if (event.data.type === 'GAME_COMPLETE' || event.data.type === 'GAME_OVER') {
         const score = typeof event.data.score === 'number' ? event.data.score : 100;
-        this.end(score);
+        this.end(score, { ...event.data.details, edition: event.data.edition || event.data.dayId });
       } else if (event.data.type === 'ADD_SCORE') {
         this.addScore(event.data.points || 10);
       }

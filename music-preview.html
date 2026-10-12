@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Listen to the game tunes</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #faf9f4; color: #34372f; font: 16px/1.6 system-ui, sans-serif; }
+    main { max-width: 640px; margin: 40px auto; padding: 24px; }
+    h1 { font-size: 28px; line-height: 1.3; }
+    p { color: #66695f; }
+    .tunes { display: grid; gap: 12px; margin: 24px 0; }
+    .tune { display: flex; align-items: center; gap: 12px; padding: 18px; border: 1px solid #d7dccf; border-radius: 14px; background: white; }
+    .tune > div { flex: 1; }
+    .tune small { display: block; color: #66695f; }
+    button { min-height: 44px; padding: 10px 16px; border: 1px solid #b7c2af; border-radius: 9px; background: #edf1e8; color: #344a2a; font: 600 14px system-ui; cursor: pointer; }
+    button[aria-pressed="true"] { background: #496142; color: white; }
+    button:focus-visible { outline: 3px solid #a36d35; outline-offset: 3px; }
+    #status { min-height: 32px; }
+    a { color: #496142; }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="./index.html">← Games</a>
+    <h1>Listen to the game tunes</h1>
+    <p>Each tune follows A → B → A → C, then takes a short breath. Listen for about a minute to hear the whole arrangement. Start with your speaker or headphone volume low.</p>
+    <div class="tunes">
+      <div class="tune"><div><strong>Wordal · आज का शब्द</strong><small>Gentle bells · 66 BPM</small></div><button data-game="wordal" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Neeti · नीति</strong><small>Warm and slow · 60 BPM</small></div><button data-game="niti" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Jodo · जोड़ो</strong><small>Light and playful · 76 BPM</small></div><button data-game="jodo" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Carrom · कैरम</strong><small>Relaxed, lower notes · 68 BPM</small></div><button data-game="carrom" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Super Over · सुपर ओवर</strong><small>A little more movement · 84 BPM</small></div><button data-game="cricket" aria-pressed="false">Listen</button></div>
+    </div>
+    <button id="stop" type="button">Stop music</button>
+    <p id="status" role="status">Choose a tune to listen.</p>
+  </main>
+  <script type="module">
+    import audio from './src/core/audio.js';
+    audio.initAudio();
+    const buttons = [...document.querySelectorAll('[data-game]')];
+    const status = document.getElementById('status');
+    buttons.forEach(button => button.addEventListener('click', () => {
+      if (!(window.AudioContext || window.webkitAudioContext)) { status.textContent = 'This browser cannot play these tunes.'; return; }
+      audio.unlockAudio();
+      audio.setMusicEnabled(true);
+      audio.startMusic(button.dataset.game);
+      buttons.forEach(other => { other.setAttribute('aria-pressed', String(other === button)); other.textContent = other === button ? 'Playing' : 'Listen'; });
+      status.textContent = 'Playing ' + button.parentElement.querySelector('strong').textContent + '.';
+    }));
+    document.getElementById('stop').addEventListener('click', () => {
+      audio.stopMusic();
+      buttons.forEach(button => { button.setAttribute('aria-pressed', 'false'); button.textContent = 'Listen'; });
+      status.textContent = 'Music stopped.';
+    });
+  </script>
+</body>
+</html>

@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="hi" data-game-theme="niti">
 <head>
+  <script src="./game-navigation.js"></script>
   <script src="./demo-session.js"></script>
   <meta charset="UTF-8">
   <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
   <script type="module">
     import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+    import './src/ui/result-celebration.js';
+    import { installGameMusic } from './src/ui/game-music.js';
+    installGameMusic('niti');
     prepareStandaloneIntro('niti').then(window.finishGameIntro);
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -726,10 +730,10 @@
       box-shadow: 0 6px 18px rgba(226, 58, 40, 0.35);
     }
 
-    /* Navigation Row: Home & Next Edition */
+    /* Navigation Row: Home */
     .dock-actions-row {
       display: grid;
-      grid-template-columns: 1fr 1.35fr;
+      grid-template-columns: 1fr;
       gap: 6px;
     }
 
@@ -755,17 +759,6 @@
       background: #FFFFFF;
       color: var(--text-main);
       border-color: var(--border-medium);
-    }
-
-    .btn-dock-action.is-next-pill {
-      background: var(--color-primary-light);
-      border-color: rgba(226, 58, 40, 0.3);
-      color: var(--color-primary);
-    }
-
-    .btn-dock-action.is-next-pill:hover {
-      background: var(--color-primary);
-      color: #FFFFFF;
     }
 
     /* ============================================================
@@ -999,6 +992,7 @@
         </article>
 
         <!-- Meaning Box: Revealed after answering -->
+        <div data-result-celebration></div>
         <div class="meaning-reveal-box" id="meaning-reveal-box" aria-live="polite">
           <div class="meaning-label">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1082,13 +1076,10 @@
             <span>कार्ड साझा करें</span>
           </button>
 
-          <!-- Navigation Row: Home & Next Edition -->
+          <!-- Navigation Row: Home -->
           <div class="dock-actions-row">
             <button type="button" class="btn-dock-action family-secondary" id="btn-go-home">
               <span>🏠 मुख्य पृष्ठ</span>
-            </button>
-            <button type="button" class="btn-dock-action is-next-pill family-secondary" id="btn-go-next-edition">
-              <span id="next-edition-label">अगला विचार (2) →</span>
             </button>
           </div>
 
@@ -1302,8 +1293,6 @@
         btnClearName: document.getElementById('btn-clear-name'),
         btnSharePrimary: document.getElementById('btn-share-primary'),
         btnGoHome: document.getElementById('btn-go-home'),
-        btnGoNextEdition: document.getElementById('btn-go-next-edition'),
-        nextEditionLabel: document.getElementById('next-edition-label'),
         shareCanvas: document.getElementById('shareCanvas'),
         toastPill: document.getElementById('toast-pill'),
         toastMsg: document.getElementById('toast-msg'),
@@ -1346,6 +1335,8 @@
          STEP SWITCHING
          ============================================================ */
       function showStep(stepNum) {
+        const stored = loadStoredEdition(currentDayId);
+        if (stored?.confirmed) saveStoredEdition(currentDayId, { ...stored, view: stepNum === 2 ? 'card' : 'answer' });
         if (stepNum === 1) {
           els.stepAnswer.classList.add('is-active');
           els.stepCard.classList.remove('is-active');
@@ -1355,22 +1346,14 @@
           if (els.cardStage) {
             els.cardStage.setAttribute('data-active-theme', activeTheme);
           }
-          updateNextButtonLabel();
           generateShareCard();
-        }
-      }
-
-      function updateNextButtonLabel() {
-        const data = CONTENT[currentDayId];
-        if (els.nextEditionLabel && data) {
-          els.nextEditionLabel.textContent = data.nextLabel;
         }
       }
 
       /* ============================================================
          RENDER STEP 1 (Answer View)
          ============================================================ */
-      function renderStep1() {
+      function renderStep1(celebrate = false) {
         const data = CONTENT[currentDayId];
         const saved = loadStoredEdition(currentDayId);
         const isConfirmed = !!(saved && saved.confirmed);
@@ -1405,8 +1388,12 @@
         if (isConfirmed) {
           els.meaningText.textContent = data.meaning;
           els.meaningRevealBox.classList.add('is-visible');
+          window.DBResultCelebration.show(document.querySelector('[data-result-celebration]'), {
+            game: 'niti', details: { correct: saved.isCorrect }, animate: celebrate,
+          });
         } else {
           els.meaningRevealBox.classList.remove('is-visible');
+          window.DBResultCelebration.clear(document.querySelector('[data-result-celebration]'));
         }
 
         // 2x2 Options Grid (A, B on top, C, D on bottom)
@@ -1459,6 +1446,7 @@
 
             btn.addEventListener('click', () => {
               selectedOptionId = opt.id;
+              saveStoredEdition(currentDayId, { confirmed: false, selectedOption: selectedOptionId });
               renderStep1();
             });
           }
@@ -1511,13 +1499,13 @@
               type: 'GAME_COMPLETE',
               gameId: 'niti',
               score: isCorrect ? 10 : 5,
-              edition: currentDayId
+              edition: currentDayId,
+              details: { confirmed: true }
             }, '*');
           }
         } catch (e) {}
 
-        renderStep1();
-        showToast(isCorrect ? 'उत्कृष्ट! विचार का अर्थ समझें' : 'विचार का सही अर्थ नीचे देखें');
+        renderStep1(true);
       }
 
       /* ============================================================
@@ -2053,36 +2041,9 @@
         window.prompt('विचार टेक्स्ट कॉपी करें (Ctrl+C):', shareText);
       }
 
-      /* Navigation Actions: Home & Next Edition */
+      /* Navigation Actions: Home */
       function navigateHome() {
-        try {
-          if (window.parent && window.parent !== window) {
-            window.parent.location.hash = '#/';
-          } else {
-            window.location.hash = '#/';
-            window.location.href = '/#/';
-          }
-        } catch (e) {
-          window.location.href = '/';
-        }
-      }
-
-      function navigateNextEdition() {
-        const currentData = CONTENT[currentDayId];
-        const nextId = currentData.nextDayId || 'd1';
-
-        currentDayId = nextId;
-        selectedOptionId = null;
-
-        try {
-          const url = new URL(window.location);
-          url.searchParams.set('day', nextId);
-          window.history.replaceState({}, '', url);
-        } catch (e) {}
-
-        renderStep1();
-        showStep(1);
-        showToast(`संस्करण ${CONTENT[nextId].dayNum} शुरू`);
+        window.DBGameNavigation.goHome();
       }
 
       /* ============================================================
@@ -2175,9 +2136,8 @@
           });
         }
 
-        // Navigation (Home & Next Edition)
+        // Navigation (Home)
         els.btnGoHome.addEventListener('click', navigateHome);
-        els.btnGoNextEdition.addEventListener('click', navigateNextEdition);
       }
 
       /* ============================================================
@@ -2186,6 +2146,7 @@
       async function init() {
         await window.gameIntroReady;
         currentDayId = getInitialDayFromUrl();
+        selectedOptionId = loadStoredEdition(currentDayId)?.selectedOption || null;
         initEventListeners();
 
         // Restore active theme tab
@@ -2201,7 +2162,7 @@
 
         const saved = loadStoredEdition(currentDayId);
         if (saved && saved.confirmed) {
-          showStep(1);
+          showStep(saved.view === 'card' ? 2 : 1);
         } else {
           showStep(1);
         }

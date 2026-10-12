@@ -2,10 +2,15 @@
 <html lang="hi" data-game-theme="cricket">
 
 <head>
+    <script src="./game-navigation.js"></script>
+    <script src="./demo-session.js"></script>
     <meta charset="UTF-8">
     <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
     <script type="module">
         import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+        import './src/ui/result-celebration.js';
+    import { installGameMusic } from './src/ui/game-music.js';
+    installGameMusic('cricket');
         prepareStandaloneIntro('cricket').then(window.finishGameIntro);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -805,19 +810,23 @@
             <p class="intro-kicker">आज का मुकाबला</p>
             <p class="intro-match-meta" id="matchMeta"></p>
             <h1 id="introTitle">भारत ने पाकिस्तान को 19 रन से हराया</h1>
-            <a id="matchStory" href="./news.html?article=asian-final&game=superover">मुकाबले की खबर पढ़ें →</a>
         </div>
         <div class="intro-play">
             <div class="intro-challenge">
-                <div class="intro-matchup" id="introMatchup" role="group" aria-label="भारत बनाम पाकिस्तान">
-                    <img class="team-flag" src="./flags/india.svg" alt="भारत का झंडा" width="84" height="56">
+                <h2 id="teamChoiceLabel">अपनी टीम चुनें</h2>
+                <div class="intro-matchup" id="introMatchup" role="group" aria-labelledby="teamChoiceLabel">
+                    <button type="button" class="team-choice" data-team="INDIA" aria-pressed="true" aria-label="भारत की ओर से खेलें">
+                        <img class="team-flag" src="./flags/india.svg" alt="" width="84" height="56">
+                        <strong>भारत</strong>
+                    </button>
                     <span class="intro-versus" aria-hidden="true">VS</span>
-                    <img class="team-flag" id="opponentFlag" src="./flags/pakistan.svg" alt="पाकिस्तान का झंडा" width="84" height="56">
+                    <button type="button" class="team-choice" data-team="OPPONENT" aria-pressed="false" aria-label="पाकिस्तान की ओर से खेलें">
+                        <img class="team-flag" id="opponentFlag" src="./flags/pakistan.svg" alt="" width="84" height="56">
+                        <strong id="opponentTeamName">पाकिस्तान</strong>
+                    </button>
                 </div>
-                <h2>भारत की ओर से खेलें</h2>
-                <p id="practiceNote">छह गेंदों की अभ्यास चुनौती</p>
             </div>
-            <div class="intro-role-picker" role="group" aria-labelledby="roleChoiceLabel" aria-describedby="practiceNote">
+            <div class="intro-role-picker" role="group" aria-labelledby="roleChoiceLabel">
                 <h3 id="roleChoiceLabel">खेलने का तरीका चुनें</h3>
                 <div class="intro-choices">
                     <button type="button" class="choice-card" data-role="BATTING" aria-pressed="false" aria-label="बल्लेबाजी: 18 रन बनाएँ"><strong>बल्लेबाजी</strong><span class="choice-runs"><b>18</b> रन</span><small>बनाएँ</small></button>
@@ -891,10 +900,7 @@
                 </div>
             </div>
             <div class="modal-body">
-                <div class="result-hero">
-                    <div class="result-hero__medal" id="resMedal" aria-hidden="true">🏆</div>
-                    <div class="result-hero__message" id="resMessage"></div>
-                </div>
+                <div data-result-celebration></div>
                 <div class="news-header">
                     <span style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 800;">दैनिक भास्कर · खेल विशेष</span>
                     <span style="font-size: 0.72rem; color: #FDCB6E;" id="resDateBadge">आपका खेल</span>
@@ -925,7 +931,7 @@
                 <div class="match-context result-history"><strong>असली मैच</strong><p id="resActualMatch"></p><a id="resMatchStory" href="./news.html?article=asian-final&game=superover">मुकाबले की खबर पढ़ें →</a><a id="resMatchSource" target="_blank" rel="noopener noreferrer">आधिकारिक स्कोर देखें ↗</a></div>
             </div>
             <div class="modal-footer">
-                <button class="btn-modal-secondary family-secondary" id="resChangeModeBtn">फिर से चुनें</button>
+                <button class="btn-modal-secondary family-secondary" id="resMoreGamesBtn">🎮 और खेल</button>
                 <button class="btn-modal-primary family-primary" id="resPlayAgainBtn">फिर से खेलें 🏏</button>
             </div>
         </div>
@@ -957,7 +963,7 @@
             }
 
             playBatHit(isSix = false) {
-                if (!this.enabled || !this.ctx) return;
+                if (!this.enabled || window.DBGameAudio?.isSfxEnabled() === false || !this.ctx) return;
                 try {
                     const now = this.ctx.currentTime;
                     const bufferSize = this.ctx.sampleRate * 0.05;
@@ -1000,7 +1006,7 @@
             }
 
             playBallBounce() {
-                if (!this.enabled || !this.ctx) return;
+                if (!this.enabled || window.DBGameAudio?.isSfxEnabled() === false || !this.ctx) return;
                 try {
                     const now = this.ctx.currentTime;
                     const osc = this.ctx.createOscillator();
@@ -1018,15 +1024,15 @@
             }
 
             playWicketSmash() {
-                if (!this.enabled || !this.ctx) return;
+                if (!this.enabled || window.DBGameAudio?.isSfxEnabled() === false || !this.ctx) return;
                 try {
                     const now = this.ctx.currentTime;
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(1400, now);
-                    osc.frequency.exponentialRampToValueAtTime(260, now + 0.28);
-                    gain.gain.setValueAtTime(0.38, now);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(420, now);
+                    osc.frequency.exponentialRampToValueAtTime(160, now + 0.28);
+                    gain.gain.setValueAtTime(0.14, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
@@ -1037,7 +1043,7 @@
             }
 
             playCrowdCheer(duration = 1.2) {
-                if (!this.enabled || !this.ctx) return;
+                if (!this.enabled || window.DBGameAudio?.isSfxEnabled() === false || !this.ctx) return;
                 try {
                     const now = this.ctx.currentTime;
                     const bufferSize = this.ctx.sampleRate * duration;
@@ -1068,7 +1074,7 @@
             }
 
             playFanfare() {
-                if (!this.enabled || !this.ctx) return;
+                if (!this.enabled || window.DBGameAudio?.isSfxEnabled() === false || !this.ctx) return;
                 try {
                     const notes = [523.25, 659.25, 783.99, 1046.5];
                     const now = this.ctx.currentTime;
@@ -1124,7 +1130,7 @@
                 switchToBat: 'Switch to Bat',
                 camBatter: 'Batter POV',
                 camBowler: 'Bowler POV',
-                winHeadline: 'A last-ball victory in Aaj Ka Over!',
+                winHeadline: 'A win in Aaj Ka Over!',
                 winTitle: 'You won!',
                 lossTitle: 'You lost this round',
                 winMessage: 'You are the Aaj Ka Over champion!',
@@ -1144,6 +1150,7 @@
             BATTER: 'BATTER',   // Camera behind batsman looking down towards bowler
             BOWLER: 'BOWLER'    // Camera behind bowler looking down towards batsman
         };
+        const BOWLER_BATTER_PY = 0.10;
 
         const ROLES = {
             BATTING: 'BATTING',
@@ -1155,6 +1162,7 @@
             RUNUP: 'RUNUP',
             IN_FLIGHT: 'IN_FLIGHT',
             HIT: 'HIT',
+            RESULT_PENDING: 'RESULT_PENDING',
             COMPLETED: 'COMPLETED'
         };
 
@@ -1165,6 +1173,20 @@
         const initialMatch = new URLSearchParams(location.search).get('match');
         const initialDay = new URLSearchParams(location.search).get('day');
         const selectedMatchId = ASIAN_MATCHES[initialMatch] ? initialMatch : ((initialDay === 'd2' || window.DBJamDemo?.index === 1) ? 'asian-semi' : 'asian-final');
+        let selectedTeam = 'INDIA';
+        const TEAM_KITS = {
+            INDIA: { jersey: '#1E3799', helmet: '#0C2461', accent: '#FF9933' },
+            PAK: { jersey: '#176B34', helmet: '#0B4020', accent: '#FFFFFF' },
+            SL: { jersey: '#163C85', helmet: '#102655', accent: '#F1C40F' }
+        };
+        function getTeam(side) {
+            const match = ASIAN_MATCHES[selectedMatchId];
+            return side === 'INDIA' ? { name: 'भारत', kit: TEAM_KITS.INDIA } : { name: match.opponent, kit: TEAM_KITS[match.code] };
+        }
+        function getPlayerTeam() { return getTeam(selectedTeam); }
+        function getOtherTeam() { return getTeam(selectedTeam === 'INDIA' ? 'OPPONENT' : 'INDIA'); }
+        function getBattingTeam() { return currentRole === ROLES.BATTING ? getPlayerTeam() : getOtherTeam(); }
+        function getBowlingTeam() { return currentRole === ROLES.BOWLING ? getPlayerTeam() : getOtherTeam(); }
         let currentRole = ROLES.BATTING;
         let currentCameraView = CAMERA_VIEWS.BATTER;
         let gameState = STATES.IDLE;
@@ -1176,6 +1198,11 @@
         let targetRuns = 18;
         let ballOutcomes = [];
         let boundariesCount = 0;
+        let restoringResult = false;
+        const cricketStorageKey = 'db-jam:v2:cricket:' + window.DBJamDemo.day;
+        function saveCricketState(completed = false) {
+            window.DBJamDemo.setItem(cricketStorageKey, JSON.stringify({ started: true, matchId: selectedMatchId, team: selectedTeam, role: currentRole, balls: ballsBowled, runs: totalRuns, wickets, outcomes: ballOutcomes, boundaries: boundariesCount, completed }));
+        }
 
         // Canvas & Geometry
         const canvas = document.getElementById('cricketCanvas');
@@ -1334,7 +1361,7 @@
         const resBoundaries = document.getElementById('resBoundaries');
         const resNarrative = document.getElementById('resNarrative');
         const resPlayAgainBtn = document.getElementById('resPlayAgainBtn');
-        const resChangeModeBtn = document.getElementById('resChangeModeBtn');
+        const resMoreGamesBtn = document.getElementById('resMoreGamesBtn');
 
         // Automatic delivery sequencing & pitch drag state
         let autoNextBallTimer = null;
@@ -1507,12 +1534,13 @@
         }
 
         // --- Match Setup & Reset ---
-        function initMatch(newRole = ROLES.BATTING) {
+        function initMatch(newRole = ROLES.BATTING, saved = null) {
             window.DBGameLab?.startGame?.();
             confettiActive = false;
             confettiParticles = [];
             confCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
             actionPrompt.classList.remove('show');
+            window.DBResultCelebration.clear(resultModal.querySelector('[data-result-celebration]'));
             resetShotTiming();
             if (autoNextBallTimer) {
                 clearTimeout(autoNextBallTimer);
@@ -1520,6 +1548,8 @@
             }
             isDraggingPitchTarget = false;
             currentRole = newRole;
+            if (saved) selectedTeam = saved.team === 'OPPONENT' ? 'OPPONENT' : 'INDIA';
+            updateTeamSelection();
             currentCameraView = (currentRole === ROLES.BATTING) ? CAMERA_VIEWS.BATTER : CAMERA_VIEWS.BOWLER;
             ballsBowled = 0;
             totalRuns = 0;
@@ -1537,10 +1567,23 @@
             lastShot = null;
 
             targetRuns = (currentRole === ROLES.BATTING) ? 18 : 15;
+            restoringResult = Boolean(saved?.completed);
+            if (saved) {
+                ballsBowled = saved.balls;
+                totalRuns = saved.runs;
+                wickets = saved.wickets;
+                ballOutcomes = saved.outcomes;
+                boundariesCount = saved.boundaries;
+            }
 
             updateHUD();
             renderBallStrip();
             updateControlsUI();
+            if (!saved) saveCricketState();
+            if (saved && (saved.completed || ballsBowled >= 6 || wickets >= 2 || (currentRole === ROLES.BATTING && totalRuns >= targetRuns))) {
+                endMatch(totalRuns >= targetRuns);
+                return;
+            }
 
             if (currentRole === ROLES.BOWLING) {
                 setBowlingLength(selectedBowlingLength);
@@ -1550,7 +1593,7 @@
                 hoverArea.visible = false;
                 setCommentary('आज का ओवर शुरू! पहली गेंद (1/6) के लिए तैयार रहें...');
                 autoNextBallTimer = setTimeout(() => {
-                    if (matchStarted && !helpOpen && gameState === STATES.IDLE && ballsBowled === 0 && currentRole === ROLES.BATTING) {
+                    if (matchStarted && !helpOpen && gameState === STATES.IDLE && currentRole === ROLES.BATTING) {
                         startDelivery();
                     }
                 }, 2000);
@@ -1644,11 +1687,11 @@
         function updateControlsUI() {
             document.getElementById('timingFeedbackCard').hidden = currentRole !== ROLES.BATTING;
             if (currentRole === ROLES.BATTING) {
-                hudRoleLabel.textContent = 'भारत के रन';
+                hudRoleLabel.textContent = `${getBattingTeam().name} के रन`;
                 if (hintIcon) hintIcon.textContent = '🏏';
                 if (hintText) hintText.textContent = 'गेंद पास आए तो उंगली सरकाकर शॉट खेलें';
             } else {
-                hudRoleLabel.textContent = `${ASIAN_MATCHES[selectedMatchId].opponent} के रन`;
+                hudRoleLabel.textContent = `${getBattingTeam().name} के रन`;
                 if (hintIcon) hintIcon.textContent = '🎯';
                 if (hintText) hintText.textContent = 'रंगीन हिस्से में जगह चुनें, छोड़कर गेंद फेंकें';
                 setBowlingLength(selectedBowlingLength);
@@ -2177,6 +2220,7 @@
         }
 
         function finishBall(runs, isOut, outType) {
+            if (gameState !== STATES.IN_FLIGHT && gameState !== STATES.HIT) return;
             ballsBowled++;
 
             if (isOut) {
@@ -2216,8 +2260,13 @@
             const chaseComplete = (currentRole === ROLES.BATTING && totalRuns >= targetRuns);
             const allOut = (wickets >= 2);
             const overFinished = (ballsBowled >= 6);
+            saveCricketState();
 
             if (chaseComplete || allOut || overFinished) {
+                // Stop the delivery while the result opens; physics must not count it again.
+                gameState = STATES.RESULT_PENDING;
+                ball.active = false;
+                hoverArea.visible = false;
                 if (autoNextBallTimer) { clearTimeout(autoNextBallTimer); autoNextBallTimer = null; }
                 setTimeout(() => endMatch(chaseComplete), 1000);
             } else {
@@ -2251,21 +2300,23 @@
         function endMatch(chaseComplete) {
             if (gameState === STATES.COMPLETED) return;
             gameState = STATES.COMPLETED;
+            matchStarted = false;
+            ball.active = false;
+            confettiActive = false;
+            confettiParticles = [];
+            confCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
             let isWin = false;
-            let headline = '';
             let narrative = '';
 
             if (currentRole === ROLES.BATTING) {
                 if (totalRuns >= targetRuns) {
                     isWin = true;
-                    headline = t('winHeadline');
                     narrative = currentLang === 'hi' ?
                         `आपने ${ballsBowled} गेंदों में ${totalRuns} रन बनाकर लक्ष्य हासिल कर लिया!` :
-                        `Target of ${targetRuns} chased down in style with brilliant swipe execution! Aaj Ka Over Champion!`;
+                        `You reached the target with ${totalRuns} runs in ${ballsBowled} balls.`;
                 } else {
                     isWin = false;
-                    headline = t('lossHeadline');
                     narrative = currentLang === 'hi' ?
                         `आपने ${ballsBowled} गेंदों में ${totalRuns} रन बनाए। जीत के लिए ${targetRuns - totalRuns} रन और चाहिए थे।` :
                         `Fell short by ${targetRuns - totalRuns} runs. Thrilling battle!`;
@@ -2273,13 +2324,11 @@
             } else {
                 if (totalRuns < targetRuns) {
                     isWin = true;
-                    headline = t('winHeadline');
                     narrative = currentLang === 'hi' ?
                         `आपने सामने वाली टीम को ${totalRuns} रन पर रोककर लक्ष्य बचा लिया!` :
-                        `Masterful death bowling defended the target under intense pressure!`;
+                        `You defended the target, keeping the other team to ${totalRuns} runs.`;
                 } else {
                     isWin = false;
-                    headline = t('lossHeadline');
                     narrative = currentLang === 'hi' ?
                         `सामने वाली टीम ने ${totalRuns} रन बनाकर लक्ष्य हासिल कर लिया। फिर कोशिश करें!` :
                         `Opponent chased the total in the final deliveries. Great contest!`;
@@ -2287,35 +2336,34 @@
             }
 
             resultModal.dataset.outcome = isWin ? 'win' : 'loss';
-            document.getElementById('resTitle').textContent = t(isWin ? 'winTitle' : 'lossTitle');
-            document.getElementById('resEmoji').textContent = isWin ? '🏆' : '🏏';
-            document.getElementById('resMedal').textContent = isWin ? '🏆' : '🏏';
-            document.getElementById('resMessage').textContent = t(isWin ? 'winMessage' : 'lossMessage');
-            if (isWin) {
-                audio.playFanfare();
-                if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) triggerConfetti();
-            }
-            resHeadline.textContent = headline;
+            document.getElementById('resTitle').textContent = t('title');
+            document.getElementById('resEmoji').textContent = '🏏';
+            resHeadline.textContent = currentLang === 'hi' ? 'आपका स्कोरकार्ड' : 'Your scorecard';
             resRuns.textContent = totalRuns;
             resWickets.textContent = wickets;
             resBoundaries.textContent = boundariesCount;
             resNarrative.textContent = narrative;
             const historicalMatch = ASIAN_MATCHES[selectedMatchId];
-            document.getElementById('resDateBadge').textContent = 'आपका खेल · अभ्यास';
+            document.getElementById('resDateBadge').textContent = `आपका खेल · ${getPlayerTeam().name}`;
             document.getElementById('resActualMatch').textContent = `${historicalMatch.stage} · ${historicalMatch.date}। ${historicalMatch.scores}। ${historicalMatch.outcome}`;
             document.getElementById('resMatchSource').href = historicalMatch.source;
             document.getElementById('resMatchStory').href = matchStoryUrl(historicalMatch.id);
 
             resultModal.classList.remove('hidden');
+            window.DBResultCelebration.show(resultModal.querySelector('[data-result-celebration]'), {
+                game: 'cricket', details: { won: isWin }, lang: currentLang, animate: !restoringResult,
+            });
             resPlayAgainBtn.focus();
+            saveCricketState(true);
 
             try {
                 const finalScore = totalRuns * 10 + (isWin ? 50 : 10);
                 if (window.DBGameLab) {
                     if (typeof window.DBGameLab.addScore === 'function') window.DBGameLab.addScore(finalScore);
-                    if (typeof window.DBGameLab.endGame === 'function') window.DBGameLab.endGame(finalScore);
+                    if (!restoringResult && typeof window.DBGameLab.endGame === 'function') window.DBGameLab.endGame(finalScore, { role: currentRole, team: selectedTeam, runs: totalRuns, wickets, balls: ballsBowled, won: isWin, matchId: selectedMatchId });
                 }
             } catch (e) { }
+            restoringResult = false;
         }
 
         // --- Confetti Engine ---
@@ -2414,7 +2462,7 @@
                     if (ball.trail.length > 8) ball.trail.shift();
 
                     // AI Batsman plays against bowling delivery
-                    if (currentRole === ROLES.BOWLING && gameState === STATES.IN_FLIGHT && !batsmanRig.isSwinging && ball.progress >= 0.76) {
+                    if (currentRole === ROLES.BOWLING && gameState === STATES.IN_FLIGHT && !batsmanRig.isSwinging && ball.progress >= 1 - BOWLER_BATTER_PY) {
                         aiPlayShotAgainstDelivery();
                     }
 
@@ -2764,9 +2812,9 @@
                 drawBatterFigure(batterPos.x, batterPos.y, 1.3, batsmanRig);
             } else {
                 // Bowler in foreground (Bowling POV)
-                const bowlerBaseY = nearStumpPos.y + 36 * scale;
+                const bowlerBaseY = nearStumpPos.y + 22 * scale;
                 if (gameState === STATES.RUNUP) {
-                    const runY = bowlerBaseY - (bowlerRig.runup * 44 * scale);
+                    const runY = bowlerBaseY - (bowlerRig.runup * 30 * scale);
                     const runBob = Math.abs(Math.sin(bowlerRig.runup * Math.PI * 10)) * 4 * scale;
                     drawBowlerFigure(nearStumpPos.x, runY - runBob, 1.35, bowlerRig);
                 } else if (gameState === STATES.IDLE) {
@@ -2776,7 +2824,7 @@
                 }
 
                 // Batter waiting at far end
-                const batterPos = projectPitch(-0.13, 0.24, currentCameraView);
+                const batterPos = projectPitch(-0.13, BOWLER_BATTER_PY, currentCameraView);
                 drawBatterFigure(batterPos.x, batterPos.y, 0.75, batsmanRig);
             }
 
@@ -3302,35 +3350,35 @@
             ctx.fillRect(-7.5 * s + bodyLeanX * 0.3, 10 * s + footStepY, 4 * s, 1.5 * s);
             ctx.fillRect(3.5 * s + bodyLeanX * 0.2, 11 * s, 4 * s, 1.5 * s);
 
-            // 4. Batsman Torso (Team India Royal Blue Jersey)
+            // 4. Batsman Torso
             ctx.save();
             ctx.translate(bodyLeanX, 0);
 
             ctx.beginPath();
             ctx.ellipse(0, 0, 10 * s, 11 * s, bodyLeanX * 0.03, 0, Math.PI * 2);
-            ctx.fillStyle = '#1E3799';
+            ctx.fillStyle = getBattingTeam().kit.jersey;
             ctx.fill();
             ctx.strokeStyle = '#FFFFFF';
             ctx.lineWidth = 1.5 * s;
             ctx.stroke();
 
-            // Saffron/Orange collar accent
+            // Team collar accent
             ctx.beginPath();
             ctx.arc(0, -6 * s, 4.5 * s, 0, Math.PI);
-            ctx.strokeStyle = '#FF9933';
+            ctx.strokeStyle = getBattingTeam().kit.accent;
             ctx.lineWidth = 2 * s;
             ctx.stroke();
 
             // 5. Helmet & Grill
             ctx.beginPath();
             ctx.arc(0, -8 * s, 7 * s, 0, Math.PI * 2);
-            ctx.fillStyle = '#0C2461';
+            ctx.fillStyle = getBattingTeam().kit.helmet;
             ctx.fill();
 
             // Visor / Peak
             ctx.beginPath();
             ctx.ellipse(0, -11 * s, 6 * s, 2.5 * s, 0, 0, Math.PI);
-            ctx.fillStyle = '#1E3799';
+            ctx.fillStyle = getBattingTeam().kit.jersey;
             ctx.fill();
 
             // Metallic protective face grille
@@ -3382,12 +3430,12 @@
             ctx.fillStyle = '#F1C40F';
             ctx.fillRect(batX + 0.8 * s, batY + 7 * s, batW - 1.6 * s, 1.5 * s);
 
-            // 7. Batting Gloves (White with team blue wristband)
+            // 7. Batting Gloves
             ctx.fillStyle = '#FFFFFF';
             ctx.beginPath();
             ctx.arc(4 * s, -17 * s, 3.2 * s, 0, Math.PI * 2);
             ctx.fill();
-            ctx.strokeStyle = '#1E3799';
+            ctx.strokeStyle = getBattingTeam().kit.jersey;
             ctx.lineWidth = 1 * s;
             ctx.stroke();
 
@@ -3405,10 +3453,10 @@
             ctx.save();
             ctx.translate(x, y);
 
-            // Red Dainik Bhaskar Jersey
+            // Bowling team's jersey
             ctx.beginPath();
             ctx.arc(0, 0, 8 * scale * depthScale, 0, Math.PI * 2);
-            ctx.fillStyle = '#E23A28';
+            ctx.fillStyle = getBowlingTeam().kit.jersey;
             ctx.fill();
             ctx.strokeStyle = '#FFFFFF';
             ctx.lineWidth = 1.5 * scale * depthScale;
@@ -3417,7 +3465,7 @@
             // Cap
             ctx.beginPath();
             ctx.arc(0, -4 * scale * depthScale, 4.5 * scale * depthScale, 0, Math.PI * 2);
-            ctx.fillStyle = '#2A2A2A';
+            ctx.fillStyle = getBowlingTeam().kit.helmet;
             ctx.fill();
 
             // Windmill Bowling Arm
@@ -3531,15 +3579,25 @@
             const day = window.DBJamDemo?.day || new URLSearchParams(location.search).get('day') || 'd1';
             return `./news.html?article=${id}&game=superover&day=${day}&match=${id}`;
         }
+        function updateTeamSelection() {
+            document.querySelectorAll('[data-team]').forEach(button => {
+                button.setAttribute('aria-pressed', String(button.dataset.team === selectedTeam));
+            });
+            const battingChoice = document.querySelector('[data-role="BATTING"]');
+            const bowlingChoice = document.querySelector('[data-role="BOWLING"]');
+            battingChoice.setAttribute('aria-label', `${getPlayerTeam().name} के लिए बल्लेबाजी: 18 रन बनाएँ`);
+            bowlingChoice.setAttribute('aria-label', `${getPlayerTeam().name} के लिए गेंदबाजी: ${getOtherTeam().name} को 15 रन से कम पर रोकें`);
+            bowlingChoice.querySelector('small').textContent = `${getOtherTeam().name} को इससे कम पर रोकें`;
+        }
         function updateMatchContext() {
             const match = ASIAN_MATCHES[selectedMatchId];
             document.getElementById('matchMeta').textContent = `एशियाई खेल · ${match.stage} · ${match.date}`;
             document.getElementById('introTitle').textContent = match.headline;
             const opponentFlag = document.getElementById('opponentFlag');
             opponentFlag.src = match.code === 'SL' ? './flags/sri-lanka.svg' : './flags/pakistan.svg';
-            opponentFlag.alt = `${match.opponent} का झंडा`;
-            document.getElementById('introMatchup').setAttribute('aria-label', `भारत बनाम ${match.opponent}`);
-            document.getElementById('matchStory').href = matchStoryUrl(match.id);
+            document.getElementById('opponentTeamName').textContent = match.opponent;
+            document.querySelector('[data-team="OPPONENT"]').setAttribute('aria-label', `${match.opponent} की ओर से खेलें`);
+            updateTeamSelection();
             try { const url = new URL(location.href); url.searchParams.set('match', match.id); history.replaceState(history.state, '', url); } catch {}
         }
         updateMatchContext();
@@ -3559,8 +3617,13 @@
             matchScreen.hidden = true;
             introScreen.hidden = false;
             resetRoleSelection();
+            updateTeamSelection();
             document.querySelector('[data-role="BATTING"]').focus();
         }
+        document.querySelectorAll('[data-team]').forEach(button => button.addEventListener('click', () => {
+            selectedTeam = button.dataset.team;
+            updateTeamSelection();
+        }));
         document.querySelectorAll('[data-role]').forEach(button => button.addEventListener('click', () => {
             selectedRole = button.dataset.role;
             document.querySelectorAll('[data-role]').forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
@@ -3602,21 +3665,21 @@
 
         resPlayAgainBtn.addEventListener('click', () => {
             resultModal.classList.add('hidden');
-            initMatch(currentRole);
-            canvas.focus();
-        });
-
-        resChangeModeBtn.addEventListener('click', () => {
-            resultModal.classList.add('hidden');
+            window.DBResultCelebration.clear(resultModal.querySelector('[data-result-celebration]'));
             showIntroduction();
         });
+
+        resMoreGamesBtn.addEventListener('click', () => window.DBGameNavigation.goHome());
 
         // Keyboard Support
         window.addEventListener('keydown', (e) => {
             if (!resultModal.classList.contains('hidden')) {
                 if (e.code === 'Tab') {
-                    e.preventDefault();
-                    (document.activeElement === resPlayAgainBtn ? resChangeModeBtn : resPlayAgainBtn).focus();
+                    const controls = [...resultModal.querySelectorAll('a[href], button:not(:disabled)')].filter(control => control.checkVisibility());
+                    const first = controls[0];
+                    const last = controls[controls.length - 1];
+                    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
                 }
                 return;
             }
@@ -3650,6 +3713,16 @@
             await window.gameIntroReady;
             resizeCanvas();
             initFieldRadar();
+            try {
+                const saved = JSON.parse(window.DBJamDemo.getItem(cricketStorageKey) || 'null');
+                if (saved?.started && saved.matchId === selectedMatchId && ['BATTING', 'BOWLING'].includes(saved.role) && Number.isInteger(saved.balls) && saved.balls >= 0 && saved.balls <= 6 && Array.isArray(saved.outcomes)) {
+                    introScreen.hidden = true;
+                    matchScreen.hidden = false;
+                    matchStarted = true;
+                    resizeCanvas();
+                    initMatch(saved.role, saved);
+                }
+            } catch {}
             requestAnimationFrame(gameLoop);
         });
     </script>

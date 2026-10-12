@@ -55,6 +55,7 @@ try {
     const date = new Date(window.DBJamDemo.date);
     date.setDate(date.getDate() + 1);
     window.DBJamDemo.date = date.toISOString();
+    window.DBJamDemo.calendarDate = date.toISOString().slice(0, 10);
     (await import('/src/systems/progression.js')).resetDailyChallenges();
   });
   await page.locator('.hub-screen.active #hub-lang-toggle').click();
@@ -70,7 +71,7 @@ try {
   // Replay uses the real game reset; the old celebration must not return.
   await frame.locator('#resPlayAgainBtn').click();
   await frame.locator('.torch-card').waitFor({ state: 'detached' });
-  await frame.evaluate(() => { totalRuns = 0; ballsBowled = 6; endMatch(false); });
+  await frame.evaluate(() => { initMatch(); totalRuns = 0; ballsBowled = 6; endMatch(false); });
   await page.waitForTimeout(1300);
   assert.equal(await frame.locator('.torch-card').count(), 0);
   assert.equal((await progression()).streak, initial.streak + 2);

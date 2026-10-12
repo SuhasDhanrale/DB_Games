@@ -4,12 +4,12 @@
    ============================================================ */
 
 import { bus, Events } from '../core/events.js';
-import { playSfx } from '../core/audio.js';
+import audio, { playSfx, startMusic, stopMusic, pauseMusic, resumeMusic } from '../core/audio.js';
+import { mountMusicButton } from '../ui/game-music.js';
 import { navigate } from '../core/router.js';
-import { submitScore, getPlayerBest } from '../systems/leaderboard.js';
 import { recordGamePlay } from '../systems/progression.js';
-import { checkAchievements, shareResult } from '../systems/engagement.js';
-import { getProgression } from '../systems/progression.js';
+import { shareResult } from '../systems/engagement.js';
+import { recordResult } from '../systems/play-history.js';
 import { renderGameOver } from '../ui/components.js';
 import { prepareTorchCelebration } from '../ui/torch.js';
 import { t, getLang } from '../i18n/index.js';
@@ -90,6 +90,7 @@ export class BaseGame {
     `;
 
     this.container.appendChild(this._gameArea);
+    this._cleanupFns.push(mountMusicButton(this.container.querySelector('.family-header'), audio, getLang()));
 
     // Back button handler
     const backBtn = this.container.querySelector('#game-back-btn');
@@ -139,6 +140,7 @@ export class BaseGame {
     this.isPaused = false;
     this.startTime = Date.now();
     this._updateScoreDisplay();
+    startMusic(this.id);
 
     bus.emit(Events.GAME_STARTED, { gameId: this.id });
     playSfx('success');
@@ -150,6 +152,7 @@ export class BaseGame {
   pause() {
     if (!this.isRunning || this.isPaused) return;
     this.isPaused = true;
+    pauseMusic();
     bus.emit(Events.GAME_PAUSED, { gameId: this.id });
   }
 
@@ -159,6 +162,7 @@ export class BaseGame {
   resume() {
     if (!this.isRunning || !this.isPaused) return;
     this.isPaused = false;
+    resumeMusic();
     bus.emit(Events.GAME_RESUMED, { gameId: this.id });
   }
 
@@ -166,28 +170,21 @@ export class BaseGame {
    * End the game and trigger scoring flow.
    * @param {number} [finalScore] - Override score (otherwise uses this.score)
    */
-  end(finalScore) {
+  end(finalScore, details = {}) {
     if (!this.isRunning) return;
 
     const score = finalScore ?? this.score;
     this.isRunning = false;
     this.isPaused = false;
 
-    const bestScore = getPlayerBest(this.id);
-    const { rank, isNewBest } = submitScore(this.id, 'Player', score);
-
-    const completion = recordGamePlay(this.id, score, true);
-    const torchCelebration = completion.firstCompletion
+    const result = recordResult(this.id, score, details);
+    const completion = result.firstResult ? recordGamePlay(this.id) : null;
+    const torchCelebration = completion?.firstCompletion
       ? prepareTorchCelebration(completion.streak) : null;
+    if (!this.config.ownsResultScreen) playSfx('gameover');
+    bus.emit(Events.GAME_ENDED, { gameId: this.id, score, mode: result.mode });
 
-    // Check achievements
-    const stats = getProgression();
-    checkAchievements(stats);
-
-    if (!this.config.ownsResultScreen) playSfx(isNewBest ? 'levelup' : 'gameover');
-    bus.emit(Events.GAME_ENDED, { gameId: this.id, score, rank, isNewBest });
-
-    // Embedded games with their own results still submit scores and award XP.
+    // Embedded games own their results. The shell records actual play.
     if (this.config.ownsResultScreen) {
       this.showTorchCelebration?.(torchCelebration);
       return;
@@ -196,9 +193,6 @@ export class BaseGame {
     // Show game-over modal
     renderGameOver({
       score,
-      bestScore: isNewBest ? score : bestScore,
-      isNewBest,
-      rank,
       gameTitle: t(this.titleKey),
       theme: this.theme,
       torchCelebration,
@@ -251,6 +245,7 @@ export class BaseGame {
   destroy() {
     this.isRunning = false;
     this.isPaused = false;
+    stopMusic();
 
     for (const fn of this._cleanupFns) {
       try { fn(); } catch {}

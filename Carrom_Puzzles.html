@@ -2,10 +2,15 @@
 <html lang="hi" data-game-theme="carrom">
 
 <head>
+    <script src="./game-navigation.js"></script>
+    <script src="./demo-session.js"></script>
     <meta charset="UTF-8">
     <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
     <script type="module">
         import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+        import './src/ui/result-celebration.js';
+    import { installGameMusic } from './src/ui/game-music.js';
+    installGameMusic('carrom');
         prepareStandaloneIntro('carrom').then(window.finishGameIntro);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -216,6 +221,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
             padding-bottom: 6px;
             z-index: 10;
         }
@@ -382,13 +388,14 @@
         </main>
 
         <!-- ============================================================
-             3. BOTTOM SECTION: Lower Centered Retry Button (Near Thumb)
+             3. BOTTOM SECTION: Retry and return to the hub
              ============================================================ -->
         <footer class="bottom-section">
-            <button id="retry-btn" class="btn-retry family-primary" type="button" title="स्तर पुनः प्रारंभ करें">
+            <button id="retry-btn" class="btn-retry family-primary" type="button" title="पहेली पुनः प्रारंभ करें">
                 <span class="btn-retry-icon">🔄</span>
                 <span class="btn-retry-text">पुनः प्रयास</span>
             </button>
+            <button id="more-games-btn" class="family-secondary" type="button">🎮 और खेल</button>
         </footer>
     </div>
 
@@ -397,10 +404,14 @@
          ============================================================ -->
     <div id="modal-backdrop" class="modal-backdrop hidden">
         <div class="modal-card">
+            <div data-result-celebration></div>
             <div class="modal-icon-badge" id="modal-icon">🎉</div>
             <h2 id="modal-title" class="modal-title">शानदार शॉट!</h2>
             <div id="modal-desc" class="modal-desc">आपने लक्ष्य सफलतापूर्वक पूरा कर लिया!</div>
-            <button id="modal-btn" class="modal-btn family-primary" type="button">अगला स्तर ➡️</button>
+            <div class="carrom-result-actions">
+                <button id="modal-more-games-btn" class="family-secondary" type="button" hidden>🎮 और खेल</button>
+                <button id="modal-btn" class="modal-btn family-primary" type="button">पुनः प्रयास</button>
+            </div>
         </div>
     </div>
 
@@ -419,6 +430,12 @@
         let currentLevel = null;
         let potted = { white: 0, black: 0, red: 0, striker: 0 };
         let restTicks = 0;
+        let shotsTaken = 0;
+        let practiceRound = false;
+        const carromStorageKey = 'db-jam:v2:carrom:' + window.DBJamDemo.day;
+        function saveCarromState(completed = false) {
+            window.DBJamDemo.setItem(carromStorageKey, JSON.stringify({ started: true, level: currentLevelIndex, shots: shotsTaken, strikerX: strikerBody?.position.x || 300, completed, practice: practiceRound }));
+        }
 
         // Interaction state
         let dragMode = null;
@@ -509,7 +526,7 @@
         }
 
         function playClack(volume = 1) {
-            if (!audioCtx || audioCtx.state !== 'running') return;
+            if (window.DBGameAudio?.isSfxEnabled() === false || !audioCtx || audioCtx.state !== 'running') return;
             const now = Date.now();
             if (now - lastClackTime < 40) return;
             lastClackTime = now;
@@ -520,7 +537,7 @@
             osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
 
-            gain.gain.setValueAtTime(volume * 0.4, audioCtx.currentTime);
+            gain.gain.setValueAtTime(Math.min(1, volume) * 0.14, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.03);
 
             osc.connect(gain);
@@ -530,14 +547,14 @@
         }
 
         function playPocketSound() {
-            if (!audioCtx || audioCtx.state !== 'running') return;
+            if (window.DBGameAudio?.isSfxEnabled() === false || !audioCtx || audioCtx.state !== 'running') return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(320, audioCtx.currentTime);
             osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.15);
 
-            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
             gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
 
             osc.connect(gain);
@@ -547,7 +564,7 @@
         }
 
         function playTapSound() {
-            if (!audioCtx || audioCtx.state !== 'running') return;
+            if (window.DBGameAudio?.isSfxEnabled() === false || !audioCtx || audioCtx.state !== 'running') return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'sine';
@@ -579,6 +596,7 @@
             modalTitle: document.getElementById('modal-title'),
             modalDesc: document.getElementById('modal-desc'),
             modalBtn: document.getElementById('modal-btn'),
+            modalMoreGamesBtn: document.getElementById('modal-more-games-btn'),
             objectiveDisplay: document.getElementById('objective-display'),
             sliderWrap: document.getElementById('slider-wrap'),
             positionSlider: document.getElementById('position-slider'),
@@ -603,6 +621,7 @@
             if (ui.positionSlider && parseFloat(ui.positionSlider.value) !== clampedX) {
                 ui.positionSlider.value = clampedX;
             }
+            if (gameState === 'IDLE') saveCarromState();
         }
 
         // Slider Input Event
@@ -612,8 +631,10 @@
             }
         });
 
-        // Retry Button Event
-        ui.retryBtn.addEventListener('click', () => {
+        function retryPuzzle() {
+            let lastSaved;
+            try { lastSaved = JSON.parse(window.DBJamDemo.getItem(carromStorageKey) || 'null'); } catch {}
+            if (lastSaved?.completed) { practiceRound = true; shotsTaken = 0; }
             if (autoResetTimeout) {
                 clearTimeout(autoResetTimeout);
                 autoResetTimeout = null;
@@ -621,15 +642,33 @@
             initAudio();
             playTapSound();
             hideModal();
+            try {
+                const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
+                lab?.startGame?.();
+            } catch(e) {}
             loadLevel(currentLevelIndex);
-        });
+            saveCarromState();
+        }
 
-        function showModal(title, desc, btnText, callback, icon = '🎉') {
+        ui.retryBtn.addEventListener('click', retryPuzzle);
+        document.getElementById('more-games-btn').addEventListener('click', () => window.DBGameNavigation.goHome());
+        ui.modalMoreGamesBtn.addEventListener('click', () => window.DBGameNavigation.goHome());
+
+        function showModal(title, desc, btnText, callback, icon = '🎉', isResult = false, animateResult = true) {
+            ui.modalMoreGamesBtn.hidden = !isResult;
             ui.modalBackdrop.classList.remove('hidden');
             ui.modalTitle.innerText = title;
             ui.modalDesc.innerText = desc;
             ui.modalBtn.innerText = btnText;
             ui.modalIcon.innerText = icon;
+            ui.modalBackdrop.querySelector('.modal-card').classList.toggle('is-result', isResult);
+            const celebration = ui.modalBackdrop.querySelector('[data-result-celebration]');
+            if (isResult) {
+                ui.modalDesc.innerText = `पहेली पूरी · ${shotsTaken} शॉट`;
+                window.DBResultCelebration.show(celebration, {
+                    game: 'carrom', details: { shots: shotsTaken }, animate: animateResult,
+                });
+            } else window.DBResultCelebration.clear(celebration);
             ui.modalBtn.onclick = () => {
                 initAudio();
                 playTapSound();
@@ -639,6 +678,7 @@
 
         function hideModal() {
             ui.modalBackdrop.classList.add('hidden');
+            window.DBResultCelebration.clear(ui.modalBackdrop.querySelector('[data-result-celebration]'));
         }
 
         function showRulesModal() {
@@ -734,52 +774,24 @@
 
             const result = currentLevel.check(potted);
             if (result === 'win') {
+                saveCarromState(true);
+                // One solved puzzle completes this round; retry keeps the same target.
+                showModal(
+                    "शानदार शॉट! 🎉",
+                    "आपने लक्ष्य सफलतापूर्वक पूरा कर लिया!",
+                    "पुनः प्रयास",
+                    retryPuzzle,
+                    "🎉",
+                    true
+                );
                 try {
                     const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
-                    if (lab && typeof lab.addScore === 'function') {
-                        lab.addScore(100);
+                    const details = { puzzles: 1, shots: shotsTaken, mode: practiceRound ? 'practice' : 'daily' };
+                    if (typeof lab?.endGame === 'function') lab.endGame(100, details);
+                    else if (window.parent !== window) {
+                        window.parent.postMessage({ type: 'GAME_COMPLETE', score: 100, details }, '*');
                     }
                 } catch(e) {}
-                try {
-                    window.parent.postMessage({ type: 'ADD_SCORE', points: 100 }, '*');
-                } catch(e) {}
-
-                if (currentLevelIndex < LEVELS.length - 1) {
-                    showModal(
-                        "शानदार शॉट! 🎉",
-                        "आपने लक्ष्य सफलतापूर्वक पूरा कर लिया!",
-                        "अगला स्तर ➡️",
-                        () => {
-                            hideModal();
-                            currentLevelIndex++;
-                            loadLevel(currentLevelIndex);
-                        },
-                        "🎉"
-                    );
-                } else {
-                    const finalScore = LEVELS.length * 100;
-                    try {
-                        const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
-                        if (lab && typeof lab.endGame === 'function') {
-                            lab.endGame(finalScore);
-                        }
-                    } catch(e) {}
-                    try {
-                        window.parent.postMessage({ type: 'GAME_COMPLETE', score: finalScore }, '*');
-                    } catch(e) {}
-
-                    showModal(
-                        "अद्भुत विजय! 🏆",
-                        "बधाई हो! आपने सभी कैरम पहेलियाँ पार कर लीं।\nसटीक निशानेबाजी कौशल!",
-                        "फिर से खेलें",
-                        () => {
-                            hideModal();
-                            currentLevelIndex = 0;
-                            loadLevel(currentLevelIndex);
-                        },
-                        "🏆"
-                    );
-                }
             } else {
                 autoResetTimeout = setTimeout(() => {
                     loadLevel(currentLevelIndex);
@@ -1232,7 +1244,8 @@
                         x: Math.cos(angle) * speed,
                         y: Math.sin(angle) * speed
                     });
-
+                    shotsTaken++;
+                    saveCarromState();
                     setGameState('MOVING');
                 } else {
                     setGameState('IDLE');
@@ -1313,7 +1326,17 @@
         // 14. INITIALIZE
         // ============================================================
         window.gameIntroReady.then(() => {
-            loadLevel(0);
+            let saved;
+            try { saved = JSON.parse(window.DBJamDemo.getItem(carromStorageKey) || 'null'); } catch {}
+            const level = Number.isInteger(saved?.level) && saved.level >= 0 && saved.level < LEVELS.length ? saved.level : 0;
+            loadLevel(level);
+            shotsTaken = saved?.shots || 0;
+            practiceRound = Boolean(saved?.practice);
+            if (saved?.strikerX) updateStrikerX(saved.strikerX);
+            if (saved?.completed) {
+                saveCarromState(true);
+                showModal('शानदार शॉट! 🎉', `पहेली पूरी · ${shotsTaken} शॉट`, 'पुनः प्रयास', retryPuzzle, '🎉', true, false);
+            }
             requestAnimationFrame(loop);
         });
     </script>

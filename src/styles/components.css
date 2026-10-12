@@ -364,6 +364,7 @@
   opacity: 1;
   pointer-events: auto;
 }
+.modal-overlay[hidden] { display: none; }
 
 .modal {
   width: 100%;

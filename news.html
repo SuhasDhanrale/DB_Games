@@ -2,593 +2,33 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script src="./demo-session.js"></script>
   <title>भास्कर खेल · समाचार | Dainik Bhaskar Games News</title>
   <meta name="description" content="दैनिक भास्कर खेल लैब — खेल से जुड़े समाचार और आलेख">
   <meta name="theme-color" content="#F9F9F7">
 
-  <style>
-    /* ============================================================
-       DAINIK BHASKAR GAMES — NEWS READER (SELF-CONTAINED)
-       Mobile-first, Hindi-first, editorial design
-       ============================================================ */
-    :root {
-      --bg-app: #F8F5EA; /* Warm light newsprint background */
-      --bg-surface: #FFFFFF;
-      --bg-surface-subtle: #F3F0E6;
-      --text-primary: #1C1C1C;
-      --text-secondary: #555555;
-      --text-tertiary: #7E7E7E;
-      --accent-yellow: #FF9900; /* Signature Bhaskar Sun Yellow/Saffron */
-      --accent-yellow-light: #FFF8E1;
-      --accent-yellow-soft: #FFE082;
-      --accent-red: #E23A28;
-      --accent-red-hover: #C52C1C;
-      --accent-red-subtle: #FDECE9;
-      --accent-gold: #FF9900;
-      --border-subtle: rgba(28, 28, 28, 0.08);
-      --border-medium: rgba(28, 28, 28, 0.16);
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.07);
-      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Devanagari", "Nirmala UI", sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-app);
-      color: var(--text-primary);
-      font-family: var(--font-stack);
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0;
-      overflow-x: hidden;
-    }
-
-    /* Top Accent Rule - Light & Yellow Bar */
-    .top-accent-bar {
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(90deg, #FF9900 0%, #FFB300 50%, #FFCA28 100%);
-      box-shadow: 0 1px 4px rgba(255, 153, 0, 0.35);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    /* Main Container (Centered, Mobile-First 360-430px up to 680px desktop) */
-    .app-container {
-      width: 100%;
-      max-width: 680px;
-      min-height: calc(100vh - 4px);
-      display: flex;
-      flex-direction: column;
-      background-color: var(--bg-app);
-      padding: 0 16px 40px;
-    }
-
-    /* Masthead Header */
-    .masthead {
-      padding: 16px 0 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .masthead-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .brand-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .brand-logo-icon {
-      width: 34px;
-      height: 34px;
-      background-color: var(--accent-red);
-      color: #FFFFFF;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 19px;
-      line-height: 1;
-      box-shadow: 0 2px 6px rgba(226, 58, 40, 0.3);
-      flex-shrink: 0;
-    }
-
-    .brand-names {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand-main-label {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      letter-spacing: -0.01em;
-      line-height: 1.25;
-    }
-
-    .brand-sub-label {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    /* Visible Label Pill */
-    .badge-prototype {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background-color: var(--accent-red-subtle);
-      color: var(--accent-red);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(226, 58, 40, 0.2);
-      white-space: nowrap;
-    }
-
-    .badge-prototype::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: var(--accent-red);
-    }
-
-    /* Prominent Return Button */
-    .btn-return-game {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background-color: var(--accent-red);
-      color: #FFFFFF;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 700;
-      padding: 12px 20px;
-      border-radius: 12px;
-      min-height: 48px;
-      min-width: 140px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(226, 58, 40, 0.25);
-      transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .btn-return-game:hover {
-      background-color: var(--accent-red-hover);
-      box-shadow: 0 4px 14px rgba(226, 58, 40, 0.35);
-    }
-
-    .btn-return-game:active {
-      transform: scale(0.98);
-    }
-
-    .btn-return-game-secondary {
-      background-color: #FFFFFF;
-      color: var(--text-primary);
-      border: 1.5px solid var(--border-medium);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .btn-return-game-secondary:hover {
-      background-color: var(--bg-surface-subtle);
-      box-shadow: var(--shadow-md);
-    }
-
-    /* Navigation toolbar between views */
-    .nav-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-
-    #topReturnBtn {
-      margin-left: auto;
-    }
-
-    .btn-back-feed {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 0.88rem;
-      font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: color 0.15s ease, background-color 0.15s ease;
-    }
-
-    .btn-back-feed:hover {
-      color: var(--accent-red);
-      background-color: rgba(0, 0, 0, 0.04);
-    }
-
-    /* Views Layout */
-    .view-section {
-      display: none;
-      width: 100%;
-      flex-direction: column;
-      animation: fadeIn 0.2s ease-out;
-    }
-
-    .view-section.active {
-      display: flex;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ------------------------------------------------------------
-       ARTICLE VIEW STYLES
-       ------------------------------------------------------------ */
-    .article-container {
-      background-color: var(--bg-surface);
-      border-radius: 18px;
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--shadow-sm);
-      padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    @media (min-width: 480px) {
-      .article-container {
-        padding: 32px 28px;
-      }
-    }
-
-    .article-header {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 16px;
-    }
-
-    .article-meta-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .category-badge {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--accent-red);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      background-color: var(--accent-red-subtle);
-      padding: 3px 10px;
-      border-radius: 6px;
-      display: inline-block;
-    }
-
-    .article-headline {
-      font-size: 1.45rem;
-      line-height: 1.35;
-      font-weight: 800;
-      color: var(--text-primary);
-      letter-spacing: -0.015em;
-    }
-
-    @media (min-width: 480px) {
-      .article-headline {
-        font-size: 1.8rem;
-      }
-    }
-
-    /* Source & Metadata Box */
-    .article-source-box {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      background-color: var(--bg-surface-subtle);
-      border-left: 3px solid var(--accent-red);
-      padding: 8px 12px;
-      border-radius: 0 8px 8px 0;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-    }
-
-    .article-source-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Article Body */
-    .article-body {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: #262626;
-      margin-top: 4px;
-    }
-
-    .article-body p {
-      text-align: justify;
-      text-justify: inter-word;
-    }
-
-    .sample-notice-banner {
-      margin-top: 10px;
-      padding: 12px 14px;
-      background-color: #FFF9ED;
-      border: 1px dashed var(--accent-gold);
-      border-radius: 10px;
-      font-size: 0.82rem;
-      color: #7A5500;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      line-height: 1.5;
-    }
-
-    .sample-notice-icon {
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-
-    /* Return Action Box at Bottom of Article */
-    .article-return-card {
-      margin-top: 12px;
-      padding: 20px 16px;
-      background: linear-gradient(180deg, #FFFFFF 0%, #F9F9F7 100%);
-      border: 1px solid var(--border-medium);
-      border-radius: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 12px;
-    }
-
-    .return-card-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .return-card-desc {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      max-width: 440px;
-    }
-
-    /* ------------------------------------------------------------
-       MOCK FEED VIEW STYLES
-       ------------------------------------------------------------ */
-    .feed-header-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .feed-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--text-primary);
-    }
-
-    .feed-desc {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    .feed-action-bar {
-      display: flex;
-      justify-content: flex-start;
-      margin-top: 4px;
-    }
-
-    .stories-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .story-card {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-      position: relative;
-    }
-
-    .story-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
-      border-color: rgba(226, 58, 40, 0.3);
-    }
-
-    .story-card:active {
-      transform: scale(0.99);
-    }
-
-    .story-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .story-card-title {
-      font-size: 1.12rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1.35;
-    }
-
-    .story-card-excerpt {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      line-height: 1.55;
-    }
-
-    .story-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 4px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-subtle);
-      font-size: 0.82rem;
-      color: var(--text-tertiary);
-    }
-
-    .story-read-link {
-      font-weight: 700;
-      color: var(--accent-red);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* ------------------------------------------------------------
-       MISSING STORY VIEW STYLES
-       ------------------------------------------------------------ */
-    .missing-story-card {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 18px;
-      box-shadow: var(--shadow-sm);
-      padding: 36px 20px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .missing-icon {
-      font-size: 2.8rem;
-      line-height: 1;
-    }
-
-    .missing-title {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--text-primary);
-    }
-
-    .missing-desc {
-      font-size: 0.92rem;
-      color: var(--text-secondary);
-      max-width: 440px;
-      line-height: 1.6;
-    }
-
-    .missing-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-      max-width: 320px;
-      margin-top: 8px;
-    }
-
-    /* Simple Footer */
-    .page-footer {
-      margin-top: auto;
-      padding-top: 24px;
-      border-top: 1px solid var(--border-subtle);
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--text-tertiary);
-    }
-  </style>
+  <link rel="stylesheet" href="./src/styles/news.css">
 </head>
 <body>
 
   <!-- Top Red Accent Bar -->
-  <div class="top-accent-bar"></div>
 
   <!-- Main Responsive Container -->
   <div class="app-container">
 
     <!-- Top Masthead Header -->
-    <header class="masthead">
-      <div class="masthead-top">
-        <a href="javascript:void(0)" id="logoHomeLink" class="brand-title-wrap" title="दैनिक भास्कर खेल">
-          <div class="brand-logo-icon">भा</div>
-          <div class="brand-names">
-            <span class="brand-main-label">भास्कर खेल</span>
-            <span class="brand-sub-label">दैनिक खेल पत्रिका</span>
-          </div>
-        </a>
-
-        <!-- Visible Label as required -->
-        <div class="badge-prototype">
-          भास्कर खेल · डेमो समाचार पृष्ठ
-        </div>
-      </div>
+    <header class="news-header">
+      <a href="./index.html" class="news-header__back" id="topReturnBtn" aria-label="वापस लौटें">←</a>
+      <a href="./news.html" id="logoHomeLink" class="news-header__identity"><span>भास्कर खेल</span><strong id="readerTitle">खेल और कहानियाँ</strong></a>
+      <span class="news-demo">डेमो</span>
     </header>
 
     <!-- Navigation Bar (Dynamic back button + game return) -->
     <div class="nav-toolbar" id="navToolbar">
       <button type="button" class="btn-back-feed" id="btnBackToFeed" style="display: none;">
-        ← सभी कहानियाँ देखें
+        और कहानियाँ देखें →
       </button>
-      <a href="./index.html" class="btn-return-game" id="topReturnBtn">
-        खेल पर लौटें
-      </a>
     </div>
 
     <!-- VIEW 1: ARTICLE VIEW -->
@@ -624,7 +64,7 @@
 
         <!-- Prominent Return Card at Bottom -->
         <div class="article-return-card">
-          <div class="return-card-title">क्या आप तैयार हैं?</div>
+          <div class="return-card-title">कहानी से खेल तक</div>
           <p class="return-card-desc" id="returnCardDesc">
             कहानी की पृष्ठभूमि जानने के बाद वापस खेल में लौटें और अपनी चुनौती जारी रखें।
           </p>
@@ -639,9 +79,7 @@
     <section class="view-section" id="feedView">
       <div class="feed-header-card">
           <h2 class="feed-title">खबर से खेल तक</h2>
-        <p class="feed-desc">
-          कहानी पढ़ें, उससे जुड़ा खेल आज़माएँ। या खेल के बाद उसकी पृष्ठभूमि जानें—अपना रास्ता चुनें।
-        </p>
+        <p class="feed-desc">शब्द का अर्थ, एक मैच की पृष्ठभूमि या कोई नई कड़ी। खेल से जुड़ी कहानियाँ, जब पढ़ने का मन हो।</p>
         <div class="feed-action-bar">
           <span class="badge-prototype">नमूना सामग्री · डेमो फ़ीड</span>
         </div>
@@ -696,15 +134,16 @@
           day: 'd1',
           category: 'विज्ञान · अंतरिक्ष विशेष',
           gameId: 'wordal',
-          gameName: 'आज का शब्द (अनुसंधान)',
+          gameName: 'आज का शब्द',
           headline: 'भारत के चार अंतरिक्ष मिशन क्या खोजते हैं',
-          excerpt: 'चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के लिए वैज्ञानिक अनुसंधान लगातार नए आयाम स्थापित कर रहा है। चंद्रयान, आदित्य और मंगलयान के उद्देश्यों को समझें।',
+          excerpt: 'चाँद, सूर्य और मंगल को देखने वाले मिशनों के अलग-अलग उद्देश्य जानें।',
           body: [
             'भारत के अंतरिक्ष मिशनों के काम एक जैसे नहीं हैं। चंद्रयान-3 के उद्देश्यों में चाँद पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था। आदित्य-एल1 सूर्य के अध्ययन के लिए बनाया गया है।',
             'मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल को समझना शामिल था। एस्ट्रोसैट खगोलीय पिंडों को एक्स-रे, दृश्य और पराबैंगनी प्रकाश में एक साथ देख सकता है।',
             'इस डेमो संस्करण में वैज्ञानिक अन्वेषण और खोज के कई पहलू प्रस्तुत किए गए हैं। आज का शब्द (अनुसंधान) भी इसी विषय से जुड़ा है। यह संदर्भ सामग्री है, किसी नई घटना की खबर नहीं।'
           ],
           source: 'स्रोत: ISRO Chandrayaan-3, Aditya-L1, Mars Orbiter, AstroSat प्रलेखन',
+          sourceUrl: 'https://www.isro.gov.in/ISRO_EN/Chandrayaan3_New.html',
           date: 'अद्यतन: अंतरिक्ष संदर्भ'
         },
         'd1-cricket': {
@@ -727,15 +166,16 @@
           day: 'd2',
           category: 'खेल · पेरिस 2024',
           gameId: 'wordal',
-          gameName: 'आज का शब्द (प्रतियोगिता)',
+          gameName: 'आज का शब्द',
           headline: 'पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते',
-          excerpt: 'चार नाम, चार अलग स्पर्धाएँ। पदक के साथ स्पर्धा पहचानिए। विश्वस्तरीय मंच पर हर मुकाबला अनुशासन, अभ्यास और कड़ी प्रतियोगिता की कसौटी होता है।',
+          excerpt: 'चार खिलाड़ी, चार स्पर्धाएँ। पेरिस 2024 की चुनी हुई उपलब्धियों को जानें।',
           body: [
             'पेरिस ओलंपिक 2024 में मनु भाकर ने महिला 10 मीटर एयर पिस्टल में कांस्य पदक जीता। नीरज चोपड़ा ने पुरुष भाला फेंक में रजत पदक हासिल किया।',
             'स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल 3 पोज़िशन में कांस्य जीता। अमन सहरावत ने पुरुष 57 किग्रा फ्रीस्टाइल कुश्ती में कांस्य पदक जीता।',
             'इन चार उपलब्धियों को सही स्पर्धा के साथ पहचानना आज के खेल की चुनौती है। यह चयन पूरी भारतीय पदक सूची नहीं है। आज का शब्द (प्रतियोगिता) इसी खेल भावना से जुड़ा है।'
           ],
           source: 'स्रोत: PIB प्रेस विज्ञप्तियां (पेरिस 2024)',
+          sourceUrl: 'https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2038138&lang=2&reg=48',
           date: 'अद्यतन: पेरिस ओलंपिक संदर्भ'
         },
         'd2-cricket': {
@@ -758,9 +198,9 @@
           day: 'd3',
           category: 'संस्कृति · विश्व धरोहर',
           gameId: 'wordal',
-          gameName: 'आज का शब्द (ऐतिहासिक)',
+          gameName: 'आज का शब्द',
           headline: 'भारत की चार धरोहरें और उनके राज्य',
-          excerpt: 'गुजरात से ओडिशा तक, चार जगहों की पहचान और इतिहास। धोलावीरा, हम्पी, साँची और कोणार्क जैसे ऐतिहासिक स्थल हमारी समृद्ध सांस्कृतिक पहचान हैं।',
+          excerpt: 'गुजरात से ओडिशा तक, चार जगहों की पहचान, बनावट और विरासत को समझें।',
           body: [
             'धोलावीरा गुजरात में हड़प्पा सभ्यता का एक स्थल है। वहाँ की जल व्यवस्था उस समय की नगर योजना को समझने में मदद करती है। कर्नाटक के हम्पी में विजयनगर के अवशेष हैं।',
             'मध्य प्रदेश में साँची के बौद्ध स्मारक हैं। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना से जुड़ी अपनी बनावट के लिए जाना जाता है। ये चारों स्थल यूनेस्को की विश्व धरोहर सूची में दर्ज हैं।',
@@ -897,7 +337,7 @@
       function computeReturnUrl(game, day) {
         if (game && ALLOWED_GAMES[game]) {
           const matchParam = game === 'superover' && selectedArticleMatch ? `&match=${encodeURIComponent(selectedArticleMatch)}` : '';
-          return `${ALLOWED_GAMES[game]}?day=${encodeURIComponent(day)}${matchParam}`;
+          return `${ALLOWED_GAMES[game]}?day=${encodeURIComponent(day)}${matchParam}${game === 'wordal' && wordalSpoiled ? '&practice=1' : ''}`;
         }
         // Fallback destination if no recognized game is provided
         return `./index.html`;
@@ -915,6 +355,10 @@
       const btnBrowseFeedFromMissing = document.getElementById('btnBrowseFeedFromMissing');
       const logoHomeLink = document.getElementById('logoHomeLink');
       const storiesList = document.getElementById('storiesList');
+      let wordalSpoiled = false;
+      const completedWordal = day => {
+        try { return JSON.parse(window.DBJamDemo.getItem('db-jam:v2:wordal:' + day) || 'null')?.isGameOver; } catch { return false; }
+      };
 
       // Update all return buttons with sanitized destination
       function updateReturnButtons(game, day) {
@@ -925,7 +369,7 @@
 
         // Friendly label indicating destination if game is known
         const returnText = 'खेल पर लौटें';
-        topReturnBtn.textContent = returnText;
+        topReturnBtn.textContent = '←';
         bottomReturnBtn.textContent = returnText;
         missingReturnBtn.textContent = returnText;
       }
@@ -949,6 +393,10 @@
 
         const effectiveGame = game || article.gameId;
         selectedArticleMatch = article.matchId || null;
+        const storyEdition = article.day || day;
+        wordalSpoiled = articleId === storyEdition + '-feature' && !completedWordal(storyEdition);
+        if (wordalSpoiled) window.DBJamDemo.setItem('wordal:spoiled:' + storyEdition, 'true');
+        document.getElementById('readerTitle').textContent = 'इस खेल से जुड़ी खबर';
 
         // Populate article details
         document.getElementById('artCategory').textContent = article.category || 'समाचार';
@@ -994,7 +442,7 @@
         // Return card note
         const returnCardDesc = document.getElementById('returnCardDesc');
         if (effectiveGame && ALLOWED_GAMES[effectiveGame]) {
-          returnCardDesc.textContent = 'आप इस समय ' + (article.gameName || 'दैनिक भास्कर खेल') + ' से जुड़े हैं। खेल में लौटकर आज की चुनौती पूरी करें या परिणाम देखें।';
+          returnCardDesc.textContent = wordalSpoiled && effectiveGame === 'wordal' ? 'इस कहानी में शब्द का उत्तर खुल चुका है। अब इसे अभ्यास के रूप में खेलें; यह आपका पहला दैनिक परिणाम नहीं बनेगा।' : 'खेल का अर्थ और पृष्ठभूमि साथ-साथ। अपनी गति से खेलें या सहेजे हुए परिणाम पर लौटें।';
         } else {
           returnCardDesc.textContent = 'कहानी की पृष्ठभूमि जानने के बाद वापस खेल में लौटें और अपनी चुनौती जारी रखें।';
         }
@@ -1002,9 +450,8 @@
         // Navigation state
         btnBackToFeed.style.display = 'inline-flex';
         updateReturnButtons(effectiveGame, day);
-        bottomReturnBtn.textContent = article.matchId ? 'छह गेंदों की चुनौती खेलें →' : 'जुड़ा खेल खेलें →';
-        topReturnBtn.textContent = 'आज के खेल';
-        topReturnBtn.href = `./index.html?day=${encodeURIComponent(day)}`;
+        bottomReturnBtn.textContent = wordalSpoiled && effectiveGame === 'wordal' ? 'शब्द का अभ्यास करें →' : completedWordal(day) && effectiveGame === 'wordal' ? 'अपने परिणाम पर लौटें →' : article.matchId ? 'छह गेंदों की चुनौती खेलें →' : 'जुड़ा खेल खेलें →';
+        topReturnBtn.href = game ? computeReturnUrl(game, day) : `./index.html?day=${encodeURIComponent(day)}`;
         document.querySelector('.sample-notice-banner').textContent = article.sourceUrl ? 'आधिकारिक स्रोत पर आधारित मौलिक डेमो सारांश। यह भास्कर में प्रकाशित लेख नहीं है।' : 'प्रोटोटाइप के लिए तैयार नमूना संदर्भ सामग्री।';
 
         articleView.classList.add('active');
@@ -1030,9 +477,11 @@
       function showFeed(game, day) {
         hideAllViews();
         selectedArticleMatch = null;
+        wordalSpoiled = false;
+        document.getElementById('readerTitle').textContent = 'खेल और कहानियाँ';
 
         storiesList.innerHTML = '';
-        const articleKeys = Object.keys(ARTICLES_DATA).filter(id => !ARTICLES_DATA[id].hiddenFromFeed);
+        const articleKeys = Object.keys(ARTICLES_DATA).filter(id => !ARTICLES_DATA[id].hiddenFromFeed && (!ARTICLES_DATA[id].day || ARTICLES_DATA[id].day === day));
 
         // Prioritize stories for the active day
         articleKeys.sort(function (a, b) {
@@ -1050,12 +499,12 @@
           card.innerHTML = `
             <div class="story-card-top">
               <span class="category-badge">${escapeHtml(item.category)}</span>
-              <span class="badge-prototype">नमूना सामग्री</span>
+              <span class="badge-prototype">${item.matchId ? 'मुकाबले की पृष्ठभूमि' : item.day === 'd2' ? 'पुराना संदर्भ' : 'संदर्भ सामग्री'}</span>
             </div>
             <h3 class="story-card-title">${escapeHtml(item.headline)}</h3>
             <p class="story-card-excerpt">${escapeHtml(item.excerpt)}</p>
             <div class="story-card-footer">
-              <span>${escapeHtml(item.gameName ? 'संबंधित: ' + item.gameName : 'भास्कर खेल')}</span>
+              <span>${escapeHtml(item.gameId === 'wordal' ? 'आज का शब्द' : item.gameName ? 'संबंधित: ' + item.gameName : 'भास्कर खेल')}</span>
               <span class="story-read-link">पूरा पढ़ें →</span>
             </div>
           `;
@@ -1070,7 +519,7 @@
 
         btnBackToFeed.style.display = 'none';
         updateReturnButtons(game, day);
-        topReturnBtn.textContent = 'आज के खेल';
+        topReturnBtn.textContent = '←';
         topReturnBtn.href = `./index.html?day=${encodeURIComponent(day)}`;
 
         feedView.classList.add('active');
@@ -1144,7 +593,8 @@
         navigateToFeed(params.game, params.day);
       });
 
-      logoHomeLink.addEventListener('click', function () {
+      logoHomeLink.addEventListener('click', function (event) {
+        event.preventDefault();
         const params = parseParams();
         navigateToFeed(params.game, params.day);
       });

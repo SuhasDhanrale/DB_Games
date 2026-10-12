@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="hi" data-game-theme="jodo">
 <head>
+  <script src="./game-navigation.js"></script>
   <script src="./demo-session.js"></script>
   <meta charset="UTF-8">
   <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
   <script type="module">
     import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+    import './src/ui/result-celebration.js';
+    import { installGameMusic } from './src/ui/game-music.js';
+    installGameMusic('jodo');
     prepareStandaloneIntro('jodo').then(window.finishGameIntro);
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -1056,8 +1060,7 @@
     <section class="result-panel family-panel" id="result-panel" style="display: none;" aria-label="खेल परिणाम">
       <div class="result-header-minimal">
         <div class="result-title-wrap">
-          <span class="result-badge-icon" aria-hidden="true">🎉</span>
-          <h2 class="result-minimal-title">चारों जोड़ियाँ मिल गईं!</h2>
+          <div data-result-celebration></div>
         </div>
         <div class="result-score-chip">
           <span id="score-display">100</span> <small>अंक</small>
@@ -1079,8 +1082,8 @@
         <button type="button" class="btn-action btn-action-news family-secondary" id="btn-result-article">
           <span>📖 जुड़ी खबरें</span>
         </button>
-        <button type="button" class="btn-action btn-action-next family-primary" id="btn-next-game">
-          <span>🎮 अगला खेल</span>
+        <button type="button" class="btn-action btn-action-next family-primary" id="btn-more-games">
+          <span>🎮 और खेल</span>
         </button>
       </div>
     </footer>
@@ -1402,7 +1405,7 @@
     }
 
     function saveEditionState() {
-      safeSetStorage(STORAGE_PREFIX + currentDayId, state);
+      safeSetStorage(STORAGE_PREFIX + currentDayId, { ...state, isCompleted: state.isCompleted || state.matchedPairIds.length === 4 });
     }
 
     function getCurrentEdition() {
@@ -1560,7 +1563,7 @@
     /* ============================================================
        RENDER FUNCTIONS
        ============================================================ */
-    function render() {
+    function render(celebrate = false) {
       const edition = getCurrentEdition();
 
       // Progress Counter
@@ -1575,7 +1578,7 @@
       renderBoard(edition);
 
       // Render Results Panel if completed
-      renderResultPanel();
+      renderResultPanel(celebrate);
 
       // Hint button disabled state
       const btnShowPair = document.getElementById("btn-show-pair");
@@ -1894,15 +1897,15 @@
               completedAt: new Date().toISOString()
             };
             notifyGamePlatform("WIN", finalScore);
-          }
-
+          } else if (state.isPractice) notifyGamePlatform("WIN", finalScore);
+          saveEditionState();
           render();
 
           // Smooth transition to Step 2 after viewing the completed cables
           setTimeout(() => {
             state.isCompleted = true;
             saveEditionState();
-            render();
+            render(true);
           }, 650);
 
         } else {
@@ -1980,12 +1983,13 @@
             completedAt: new Date().toISOString()
           };
           notifyGamePlatform("WIN", finalScore);
-        }
+        } else if (state.isPractice) notifyGamePlatform("WIN", finalScore);
+        saveEditionState();
         render();
         setTimeout(() => {
           state.isCompleted = true;
           saveEditionState();
-          render();
+          render(true);
         }, 650);
       } else {
         render();
@@ -1995,7 +1999,7 @@
     /* ============================================================
        STEP 2: RESULT SCREEN RENDER
        ============================================================ */
-    function renderResultPanel() {
+    function renderResultPanel(celebrate = false) {
       const resultPanel = document.getElementById("result-panel");
       const boardContainer = document.getElementById("board-container");
       const infoBar = document.getElementById("info-bar");
@@ -2004,6 +2008,7 @@
 
       if (!state.isCompleted) {
         resultPanel.style.display = "none";
+        window.DBResultCelebration.clear(resultPanel.querySelector('[data-result-celebration]'));
         if (boardContainer) boardContainer.style.display = "block";
         if (infoBar) infoBar.style.display = "flex";
         return;
@@ -2036,10 +2041,15 @@
       }
 
       resultPanel.style.display = "block";
+      window.DBResultCelebration.show(resultPanel.querySelector('[data-result-celebration]'), {
+        game: 'jodo', details: { wrongMatches: state.wrongMatches, assistedPairs: state.assistedPairs },
+        animate: celebrate,
+      });
       resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function handlePlayAgainPractice() {
+      window.parent?.DBGameLab?.startGame?.();
       const preservedFirst = state.firstResult;
       state = {
         matchedPairIds: [],
@@ -2060,12 +2070,8 @@
       render();
     }
 
-    function handleNextGame() {
-      if (window.parent && window.parent.location) {
-        window.parent.location.hash = "#/game/superover";
-      } else {
-        handlePlayAgainPractice();
-      }
+    function handleMoreGames() {
+      window.DBGameNavigation.goHome();
     }
 
     function switchEdition(newDayId) {
@@ -2134,7 +2140,8 @@
             game: "jodo",
             dayId: currentDayId,
             score: score,
-            status: status
+            status: status,
+            details: { wrongMatches: state.wrongMatches, assistedPairs: state.assistedPairs, mode: state.isPractice ? 'practice' : 'daily' }
           }, "*");
         }
       } catch (e) {}
@@ -2179,8 +2186,8 @@
       const btnPlayAgain = document.getElementById("btn-play-again");
       if (btnPlayAgain) btnPlayAgain.addEventListener("click", handlePlayAgainPractice);
 
-      const btnNextGame = document.getElementById("btn-next-game");
-      if (btnNextGame) btnNextGame.addEventListener("click", handleNextGame);
+      const btnMoreGames = document.getElementById("btn-more-games");
+      if (btnMoreGames) btnMoreGames.addEventListener("click", handleMoreGames);
 
       // Article Reader
       const btnResultArticle = document.getElementById("btn-result-article");

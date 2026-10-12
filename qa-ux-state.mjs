@@ -1,0 +1,71 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const saved = new Map([['unrelated-app', 'keep']]);
+const local = { getItem: key => saved.get(key) ?? null, setItem: (key, value) => saved.set(key, String(value)), removeItem: key => saved.delete(key), key: i => [...saved.keys()][i], get length() { return saved.size; } };
+function demo(url, localStorage = local) {
+  const win = { location: { href: url } }; win.parent = win;
+  vm.runInNewContext(fs.readFileSync('public/demo-session.js', 'utf8'), { window: win, localStorage, URL, Intl, Date, Map, history: { replaceState() {} } });
+  return win;
+}
+const firstLoad = demo('http://example.test/?day=d2');
+firstLoad.DBJamDemo.setItem('db-jam:v2:wordal:d2', 'saved round');
+const reload = demo('http://example.test/?day=d2');
+assert.equal(reload.DBJamDemo.day, 'd2');
+assert.equal(reload.DBJamDemo.priorStreak, 0);
+assert.equal(reload.DBJamDemo.getItem('db-jam:v2:wordal:d2'), 'saved round');
+assert.equal(reload.DBJamDemo.calendarDate, firstLoad.DBJamDemo.calendarDate);
+assert.equal(reload.DBJamDemo.persistent, true);
+globalThis.localStorage = local;
+globalThis.window = reload;
+const storage = (await import('./src/core/storage.js')).default;
+const prog = await import('./src/systems/progression.js');
+const history = await import('./src/systems/play-history.js');
+prog.resetProgression();
+prog.resetDailyChallenges();
+assert.equal(prog.getProgression().streak, 0);
+const first = history.recordResult('superover', 80, { runs: 8, role: 'BATTING' });
+if (first.firstResult) prog.recordGamePlay('superover');
+assert.equal(prog.isDailyCompleted('cricket'), true);
+assert.equal(prog.getProgression().streak, 1);
+assert.equal(prog.getProgression().gamesPlayed, 1);
+const replay = history.recordResult('cricket', 200, { runs: 20, role: 'BATTING' });
+assert.equal(replay.mode, 'practice');
+assert.equal(history.getPlayHistory().find(e => e.mode === 'daily').details.runs, 8);
+const restoration = history.recordResult('cricket', 80, { restored: true });
+assert.equal(restoration.firstResult, false);
+assert.equal(history.getPlayHistory().length, 2);
+history.recordResult('cricket', 120, { runs: 12, role: 'BATTING' });
+assert.equal(history.getPlayHistory().find(e => e.mode === 'practice').bestDetails.runs, 20);
+history.recordResult('carrom', 100, { puzzles: 1, shots: 4 });
+history.recordResult('carrom', 100, { puzzles: 1, shots: 2 });
+history.recordResult('carrom', 100, { puzzles: 1, shots: 5 });
+assert.equal(history.getPlayHistory().find(e => e.gameId === 'carrom' && e.mode === 'practice').bestDetails.shots, 2);
+const spoiled = history.recordResult('wordal', 100, { mode: 'practice', solved: true, attempts: 1 });
+assert.equal(spoiled.firstResult, false);
+assert.equal(prog.isDailyCompleted('wordal'), false);
+window.DBJamDemo.day = 'd3'; prog.resetDailyChallenges();
+assert.equal(prog.isDailyCompleted('cricket'), false);
+window.DBJamDemo.day = 'd2'; prog.resetDailyChallenges();
+assert.equal(prog.isDailyCompleted('cricket'), true);
+assert.equal(prog.getProgression().streak, 1);
+storage.set('lang', 'en');
+prog.resetProgression();
+assert.equal(history.getPlayHistory().length, 0);
+assert.equal(window.DBJamDemo.getItem('db-jam:v2:wordal:d2'), null);
+assert.equal(storage.get('lang'), 'en');
+assert.equal(local.getItem('unrelated-app'), 'keep');
+const blocked = { getItem() { throw Error('blocked'); }, setItem() { throw Error('blocked'); }, removeItem() { throw Error('blocked'); } };
+const fallback = demo('http://example.test/?day=d1', blocked);
+assert.equal(fallback.DBJamDemo.persistent, false);
+fallback.DBJamDemo.setItem('round', 'memory'); assert.equal(fallback.DBJamDemo.getItem('round'), 'memory');
+globalThis.localStorage = blocked;
+const fallbackStorage = (await import('./src/core/storage.js?blocked')).default;
+fallbackStorage.set('round', { attempts: 2 }); assert.deepEqual(fallbackStorage.get('round'), { attempts: 2 });
+for (const file of ['wordal.html','niti.html','jodo.html','Superover.html','Carrom_Puzzles.html','news.html']) {
+  const html = fs.readFileSync(file, 'utf8');
+  for (const [, attributes, body] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)) {
+    if (!/type=["']module["']/.test(attributes) && body.trim()) new vm.Script(body, { filename: file });
+  }
+}
+console.log('UX state checks passed: persistence, refresh edition, real streaks, aliases, immutable daily results, practice, edition recovery, scoped reset, storage fallback and inline script syntax.');

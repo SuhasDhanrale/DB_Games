@@ -1,99 +1,76 @@
-/* ============================================================
-   Profile Screen — Player stats and achievements
-   ============================================================ */
-
-import { t } from '../i18n/index.js';
-import { getProgression, getLevelProgress } from '../systems/progression.js';
-import { getAchievementDefs, getUnlockedAchievements, getAchievementTranslations } from '../systems/engagement.js';
-import { renderHeader, attachHeaderListeners, renderBottomNav, attachBottomNavListeners } from '../ui/components.js';
+import { getLang, t } from '../i18n/index.js';
+import { getProgression, todayStr } from '../systems/progression.js';
+import { getPlayHistory, readRound } from '../systems/play-history.js';
 import { navigate } from '../core/router.js';
-import { renderSettings } from './settings.js';
+import { openModal, closeModal } from '../ui/components.js';
+import '../styles/support.css';
 
-export function renderProfile(container) {
-  const prog = getProgression();
-  const levelProg = getLevelProgress();
-  const achDefs = getAchievementDefs();
-  const unlocked = getUnlockedAchievements();
-  const achTrans = getAchievementTranslations(); // We use t() normally, this is just to ensure they exist
-
-  container.innerHTML = `
-    ${renderHeader({ title: t('profile.title') })}
-    
-    <div class="screen-body" style="padding-top: var(--space-4); display: flex; flex-direction: column;">
-      
-      <!-- User Profile Header -->
-      <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-3); margin-bottom: var(--space-8);">
-        <div class="avatar avatar--xl" style="box-shadow: var(--shadow-glow);">P</div>
-        <div style="text-align: center;">
-          <h2 style="font-size: var(--text-2xl); font-weight: var(--weight-bold);">Player</h2>
-          <div class="badge badge--primary" style="margin-top: var(--space-1);">${t('profile.level')} ${prog.level}</div>
-        </div>
-      </div>
-
-      <!-- Stats Grid -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-8);">
-        <div class="card card--glass">
-          <div class="card__body" style="text-align: center; padding: var(--space-4) var(--space-2);">
-            <div style="font-size: var(--text-2xl); font-weight: var(--weight-extrabold); color: var(--color-accent-warm);">${prog.longestStreak}</div>
-            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: 2px;">Max Streak (${t('profile.days')})</div>
-          </div>
-        </div>
-        <div class="card card--glass">
-          <div class="card__body" style="text-align: center; padding: var(--space-4) var(--space-2);">
-            <div style="font-size: var(--text-2xl); font-weight: var(--weight-extrabold); color: var(--color-primary-light);">${prog.gamesPlayed}</div>
-            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: 2px;">${t('profile.games_played')}</div>
-          </div>
-        </div>
-        <div class="card card--glass">
-          <div class="card__body" style="text-align: center; padding: var(--space-4) var(--space-2);">
-            <div style="font-size: var(--text-2xl); font-weight: var(--weight-extrabold); color: var(--color-success);">${prog.xp}</div>
-            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: 2px;">Total ${t('profile.xp')}</div>
-          </div>
-        </div>
-        <div class="card card--glass">
-          <div class="card__body" style="text-align: center; padding: var(--space-4) var(--space-2);">
-            <div style="font-size: var(--text-2xl); font-weight: var(--weight-extrabold); color: var(--color-info);">${prog.totalScore}</div>
-            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: 2px;">${t('profile.total_score')}</div>
-          </div>
-        </div>
-      </div>
-
-      <section aria-labelledby="profile-settings-title" style="margin-bottom:var(--space-6)">
-        <h3 id="profile-settings-title" class="section-header__title">${t('profile.preferences')}</h3>
-        <div id="profile-settings"></div>
-      </section>
-
-      <!-- Achievements -->
-      <div class="section-header">
-        <h3 class="section-header__title">${t('profile.achievements')} <span style="font-size: var(--text-base); color: var(--text-secondary); font-weight: normal;">(${unlocked.size}/${achDefs.length})</span></h3>
-      </div>
-      
-      <div style="display: flex; flex-direction: column; gap: var(--space-3);">
-        ${achDefs.map(ach => {
-          const isUnlocked = unlocked.has(ach.id);
-          return `
-            <div style="display: flex; align-items: center; gap: var(--space-4); padding: var(--space-3) var(--space-4); background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); opacity: ${isUnlocked ? '1' : '0.4'}; filter: ${isUnlocked ? 'none' : 'grayscale(1)'};">
-              <div style="font-size: 2rem; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: var(--bg-surface-raised); border-radius: var(--radius-full); flex-shrink: 0;">
-                ${ach.icon}
-              </div>
-              <div>
-                <div style="font-size: var(--text-base); font-weight: var(--weight-bold);">${t(ach.titleKey)}</div>
-                <div style="font-size: var(--text-xs); color: var(--text-secondary);">${t(ach.descKey)}</div>
-              </div>
-            </div>
-          `;
-        }).join('')}
-      </div>
-
-      <div style="height: var(--space-8);"></div>
-    </div>
-
-    ${renderBottomNav('profile')}
-  `;
-
-  attachHeaderListeners(container, {});
-  attachBottomNavListeners(container, navigate);
-  renderSettings(container.querySelector('#profile-settings'), { embedded: true, onChange: () => renderProfile(container) });
+const GAMES = ['wordal', 'niti', 'cricket', 'carrom', 'jodo'];
+const title = id => t('game' + (GAMES.indexOf(id) + 1) + '.title');
+const number = value => Number.isFinite(value) ? value : null;
+function skill(history, id, reference, hi) {
+  if (id === 'wordal') {
+    const daily = history.filter(entry => entry.gameId === id && entry.mode === 'daily' && typeof entry.details.solved === 'boolean');
+    return daily.length ? (hi ? `${daily.filter(entry => entry.details.solved).length}/${daily.length} शब्द हल किए` : `${daily.filter(entry => entry.details.solved).length}/${daily.length} words solved`) : '';
+  }
+  const candidates = history.filter(entry => entry.gameId === id).flatMap(entry => [entry.details, entry.bestDetails].filter(Boolean));
+  if (id === 'carrom') {
+    const shots = candidates.map(d => d.shots).filter(Number.isFinite);
+    return shots.length ? (hi ? `निजी सर्वश्रेष्ठ · ${Math.min(...shots)} शॉट` : `Personal best · ${Math.min(...shots)} shots`) : '';
+  }
+  if (id === 'cricket' && reference?.details.role) {
+    const role = reference.details.role;
+    const runs = candidates.filter(d => d.role === role && d.matchId === reference.details.matchId).map(d => d.runs).filter(Number.isFinite);
+    if (!runs.length) return '';
+    const best = role === 'BOWLING' ? Math.min(...runs) : Math.max(...runs);
+    return hi ? `इसी मुकाबले में ${role === 'BOWLING' ? 'सबसे कम दिए' : 'सबसे ज़्यादा बनाए'} · ${best} रन` : `Same match · ${role === 'BOWLING' ? 'fewest conceded' : 'most scored'}: ${best} runs`;
+  }
+  return '';
 }
-
+function summary(entry, hi) {
+  const d = entry.details || {};
+  if (entry.gameId === 'wordal' && number(d.attempts) !== null) return d.solved ? (hi ? `${d.attempts}/6 प्रयासों में हल किया` : `Solved in ${d.attempts}/6 attempts`) : (hi ? 'छह प्रयास पूरे · शब्द का अर्थ देखें' : 'Six attempts used · discover the meaning');
+  if (entry.gameId === 'niti') return hi ? 'विचार पूरा · अर्थ और साझा कार्ड देखें' : 'Thought completed · meaning and share card';
+  if (entry.gameId === 'jodo' && number(d.wrongMatches) !== null) return hi ? `चार जोड़ियाँ · ${d.wrongMatches} गलत मिलान${d.assistedPairs ? ' · मदद ली' : ''}` : `Four pairs · ${d.wrongMatches} mismatches${d.assistedPairs ? ' · assisted' : ''}`;
+  if (entry.gameId === 'cricket' && number(d.runs) !== null) return hi ? `${d.role === 'BOWLING' ? 'गेंदबाजी' : 'बल्लेबाजी'} · ${d.runs}/${d.wickets} · ${d.balls} गेंद` : `${d.role === 'BOWLING' ? 'Bowling' : 'Batting'} · ${d.runs}/${d.wickets} · ${d.balls} balls`;
+  if (entry.gameId === 'carrom' && number(d.shots) !== null) return hi ? `${d.puzzles} पहेलियाँ · ${d.shots} शॉट` : `${d.puzzles} puzzles · ${d.shots} shots`;
+  return hi ? 'खेल पूरा · परिणाम देखें' : 'Completed · view result';
+}
+function progressContent(container) {
+  const hi = getLang() === 'hi';
+  const history = getPlayHistory();
+  const prog = getProgression();
+  const today = todayStr();
+  const weekStart = new Date(today + 'T12:00:00Z');
+  weekStart.setUTCDate(weekStart.getUTCDate() - 6);
+  const playedDays = Object.keys(prog.dailyHistory).filter(date => date >= weekStart.toISOString().slice(0, 10) && date <= today).length;
+  container.classList.add('support-view');
+  container.innerHTML = `
+    <p class="support-muted">${hi ? 'अपनी रफ़्तार से खेलें। कोई एक खेल भी काफ़ी है।' : 'Play at your pace. One game is enough.'}</p>
+    <div class="support-summary"><div><strong>${playedDays}</strong><span>${hi ? 'पिछले सात दिनों में खेला' : 'Days played in the last seven'}</span></div><div><strong>${prog.streak}</strong><span>${hi ? 'लगातार खेले गए दिन' : 'Consecutive days played'}</span></div></div>
+    <h3>${hi ? 'आज के खेल' : "Today's games"}</h3>
+    <div class="support-list">${GAMES.map((id, index) => {
+      const first = history.find(item => item.gameId === id && item.date === today && item.edition === window.DBJamDemo.day && item.mode === 'daily');
+      const practice = history.find(item => item.gameId === id && item.date === today && item.edition === window.DBJamDemo.day && item.mode === 'practice');
+      const round = readRound(id);
+      const started = round && (round.currentRowTokens?.length || round.boardGuesses?.length || round.selectedOption || round.confirmed || round.matchedPairIds?.length || round.wrongMatches || round.started || round.shots);
+      const status = first ? summary(first, hi) : practice ? (hi ? 'अभ्यास · ' : 'Practice · ') + summary(practice, hi) : started ? (hi ? 'जहाँ छोड़ा था, वहीं से खेलें' : 'Continue where you left off') : (hi ? 'जब मन हो, खेलें' : 'Play whenever you like');
+      const improvement = skill(history, id, practice || first, hi);
+      return `<button type="button" class="support-game" data-game-theme="${id}" data-progress-game="${id}"><span class="support-game__mark" aria-hidden="true">${first ? '✓' : ['अ', '“', '↗', '◎', '⌘'][index]}</span><span class="support-game__copy"><strong>${title(id)}</strong><span>${status}</span>${improvement ? `<span>${improvement}</span>` : ''}</span><span aria-hidden="true">→</span></button>`;
+    }).join('')}</div>
+    ${history.length ? `<h3>${hi ? 'आपके परिणाम' : 'Your results'}</h3>${history.slice(-15).reverse().map(entry => `<div class="support-history"><strong>${title(entry.gameId)}</strong><p>${summary(entry, hi)}</p><p>${entry.date} · ${hi ? 'डेमो संस्करण' : 'Demo edition'} ${entry.edition.slice(1)} · ${entry.mode === 'practice' ? (hi ? 'अभ्यास' : 'Practice') : (hi ? 'पहला परिणाम' : 'First result')}</p></div>`).join('')}` : `<div class="support-empty">${hi ? 'आपका पहला परिणाम यहीं मिलेगा। आज मनपसंद खेल से शुरुआत करें।' : 'Your first result will appear here. Start with a game you enjoy.'}</div>`}
+    <p class="support-muted" style="margin-top:20px">${window.DBJamDemo.persistent ? (hi ? 'प्रगति इसी डिवाइस के ब्राउज़र में सहेजी जाती है। ब्राउज़र डेटा हटाने पर यह मिट जाएगी।' : 'Progress is saved in this browser on this device. Clearing browser data removes it.') : (hi ? 'इस ब्राउज़र में सहेजने की अनुमति नहीं है। प्रगति केवल इस खुले सत्र तक रहेगी।' : 'This browser blocks saving. Progress lasts only for this open session.')}</p>`;
+  container.querySelectorAll('[data-progress-game]').forEach(button => button.addEventListener('click', () => { closeModal(); navigate('/game/' + button.dataset.progressGame); }));
+}
+export function openProgress() {
+  const content = document.createElement('div');
+  progressContent(content);
+  openModal({ title: getLang() === 'hi' ? 'मेरे खेल' : 'My play', content });
+}
+export function renderProfile(container) {
+  container.classList.add('support-screen');
+  container.innerHTML = `<header class="support-heading"><button class="support-action" type="button" id="progress-home" aria-label="${t('common.back')}">←</button><h1>${getLang() === 'hi' ? 'मेरे खेल' : 'My play'}</h1></header><div class="support-content"></div>`;
+  container.querySelector('#progress-home').addEventListener('click', () => navigate('/'));
+  progressContent(container.querySelector('.support-content'));
+}
 export default renderProfile;

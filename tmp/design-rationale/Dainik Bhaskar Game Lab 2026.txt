@@ -1,0 +1,227 @@
+PAGE 1
+Introduction
+Confidential
+Please do not share beyond
+
+
+PAGE 2
+* Source: ABC ‘Jul-Dec 25 | RNI | CA (24-25)
+# TR | IRS 19 Q4, M+V, U+R
+Dainik Bhaskar Group is India's largest circulated daily newspaper group and the 3rd largest in the 
+world, established in 1958, and now has 5 newspapers with 61 editions in 12 states with a circulation of 
+46 lakh copies* and a readership of 6.63 crores#. These newspapers are published in 3 languages -
+Hindi, Gujarati and Marathi. 
+We also operate the Biggest News Apps in Hindi, Gujarati and across India with the highest Direct 
+Active User Base and Engagement / 
+● We’re the fastest growing Indian News App over the last 5 years while almost all others have plateaued / declined.
+● We’re also the largest digital journalism newsroom in India.
+● With more than 7500+ news articles and 2500+ news videos generated daily.
+● By more than 1000+ digital reporters and 10000+ stringers in the very hyperlocal depths of India.
+The No.1 Print Newspaper & News App of India
+
+
+PAGE 3
+
+
+PAGE 4
+TAM: 500M+* 
+Active App Users
+Hindi, Gujarati, Marathi, English
+*Youtube Network Data
+
+PAGE 5
+Dainik Bhaskar - No 1 News Publisher App in India / *Comscore
+News Apps
+(Monthly Unique Visitors - Millions) Jan-20 Jan-21 Jan-22 Jan-23 Jan-24 Jan-25 Jan-26 Mar-26
+Dainik Bhaskar Apps 2.1 7.8 17.2 14.2 13.5 18.9 19.4 19.7
+Dainik Bhaskar (Mobile App) 1.6 6.2 13.6 11.1 10.7 15.9 16.3 16.8
+Divya Bhaskar (Mobile App) 0.5 1.6 3.7 3.1 2.8 3.0 3.1 2.9
+Dailyhunt (Mobile App) 30.7 49.3 38.2 24.1 24.1 16.9 12.0 14.6
+Inshorts - News In 60 Words (Mobile App) 6.1 8.2 8.4 8.1 4.1 3.0 3.1 3.0
+Aaj Tak (Mobile App) 3.8 5.1 4.0 3.7 3.9 2.9 2.6 2.9
+Jagran Hindi News & EPaper App (Mobile App) 0.3 0.4 0.7 0.5 0.5 0.5 0.1 NA
+ABP Live News (Mobile App) 3.6 1.5 1.0 0.7 0.6 0.5 0.4 0.5
+News18 (Mobile App) 0.3 - 0.0 0.1 0.2 0.9 0.7 0.7
+The Times of India (Mobile App) 4.4 1.1 NA NA
+The Economic Times (Mobile App) 1.0 0.7 1.0 0.9 0.8 0.8 0.4 0.4
+
+PAGE 6
+We highly emphasize and adhere to our editorial working philosophy - ‘Kendra Me Pathak’ - a commitment to offer reader-
+centric high-quality & authentic content enriched with knowledge, idea, value-add, new angles and differentiator. 
+Our unwavering commitment entails ensuring that 40% of the newspaper's content originates from original sources. 
+To achieve this goal, our focus is centered on reporting journalism. This approach involves active participation of our senior 
+leadership, who personally engage in on-ground reporting.
+To effectively achieve this, we have established an extensive reporting network in India & abroad -
+● Investigative Reporting Team (IRT) - In 8 centers: Jaipur, Bhopal, Indore, Raipur, Patna, Ranchi, Gujarat & Maharashtra. 
+This team operates without being confined to a specific beat.
+● State Bureau: The team is located in the state political center and specialized in political and administrative reporting for 
+the state.
+● International Reporters: 22+ reporters in 20 different countries across the globe.
+● Research Desk: Engages in thorough research and analysis to create original and high-quality premium content for 
+readers.
+● Exclusive Partnerships: With acclaimed writers and distinguished brands to deliver high-quality, distinctive news 
+coverage to readers with utmost value and relevance.
+Editorial Philosophy & Strength
+
+PAGE 7
+Why Games?
+We believe games can become a powerful part of the daily digital experience, creating habit, 
+engagement, entertainment, and meaningful interaction at scale.
+But much of the gaming world has been shaped by cultures, behaviours, and design philosophies 
+that evolved elsewhere. India has its own rhythms, references, social dynamics, and ways of 
+playing, and we believe there is still enormous room to design games around them.
+Dainik Bhaskar reaches millions of people across India every day. That gives us a unique 
+opportunity to explore what games can become when they are designed not just for gamers, but 
+for everyday people, everyday habits, and everyday moments of play.
+We are building a team of exceptional game-makers with one ambition: to create a breakout 
+game built in India, for India.
+
+PAGE 8
+
+
+PAGE 9
+Brief
+Mass Appeal
+A game for everyone
+Daily Engagement
+Long term evolution through systems
+Simple Mechanics
+Easy to learn, hard to master
+Indian Audience Relevance
+Make a game for local appeal
+Build a game for a news platform that millions of users would love to play every day.
+
+PAGE 10
+Rules
+Team Size
+1 to 3 participants
+Tools
+Any tools, engine, AI workflows or technology 
+can be used
+Originality
+Submissions should be created specifically for 
+this jam
+Platform
+Designed for mobile. Prototype can be web-
+based.
+
+PAGE 11
+Design for a large Indian audience.
+Indicative audience profile:
+● Age group: 24 to 44
+● Predominantly Male
+● Hindi-speaking mass India
+● Tier 2 and Tier 3 cities
+● Mobile-first, casual, habit-driven users
+● Not active gamers
+● Will be experiencing games after downloading a News App
+Audience
+
+PAGE 12
+User Personas
+
+PAGE 13
+Rajesh Verma
+Age and gender: 36 / M
+Location: Jaipur, Rajasthan
+Occupation: Branch Manager at a nationalised bank
+Bio:
+Rajesh manages day-to-day branch operations - loans, deposits, and customer queries — and holds a postgraduate degree in commerce. He keeps a 
+close eye on markets and personal investments alongside his job, and follows business news, live cricket scores, and local Indore updates he can 
+bring up with colleagues and family. Most of his phone use happens during his commute, over lunch, and for a few minutes before bed; he wants to 
+feel "in the loop" without spending real time on it.
+Hobbies: Gully cricket on weekends, badminton, watching finance videos on YouTube.
+Family and household: Married, one child (age 5), lives in a nuclear household with his wife, who works part-time. His parents live in the same city 
+and visit often.
+Tech savviness: 7/10
+Comfortable with UPI, net-banking apps, WhatsApp, and YouTube; handles basic troubleshooting himself but sticks to familiar apps unless a 
+colleague recommends something new.
+Gaming experience: Occasionally
+Plays Ludo with family during festivals; no regular console or PC gaming - sees it as "kids' stuff," not his own hobby.
+
+
+PAGE 14
+Ram Kishore Verma
+Age and gender: 43 / M
+Location: A village near Gonda, Uttar Pradesh
+Occupation: Attendant at a government Primary Health Centre
+Bio:
+Ram Kishore helps manage patient queues, files, supplies, cleanliness coordination, and routine support work at the local PHC. The job 
+gives him regular contact with villagers, health workers, and local officials, making him an important informal source of information in his 
+community. He reads district news, health advisories, government schemes, weather updates, and employment news for his children.
+Hobbies: Gardening, devotional videos, old Hindi films, village gatherings, card games.
+Family and household: Lives in a joint family with his wife, two teenage children, and his younger brother’s family.
+Tech savviness: 4/10
+Uses WhatsApp, YouTube, Hindi news apps, video calls, and basic UPI with familiar interfaces.
+Gaming experience: Rarely
+Plays Ludo, Snakes and Ladders, carrom, and basic quiz or matching games on family phones.
+
+
+PAGE 15
+Neha Yadav
+Age and gender: 28 / F
+Location: Azamgarh, Uttar Pradesh
+Occupation: Teacher at a low-fee private school
+Bio:
+Neha teaches Hindi, environmental studies, and general knowledge to primary-school students. She has a bachelor’s degree and has
+completed teacher training, but has not secured a permanent government teaching position. She follows local news, education updates, 
+government vacancies, health information, and stories she can discuss in class. Most of her phone use happens early in the morning, during 
+school breaks, and after household work is finished.
+Hobbies: Watching serials, trying recipes, making teaching aids, devotional music, casual mobile games.
+Family and household: Lives with her husband, young son, and mother-in-law. Her husband runs a small photocopy and online-form 
+shop.
+Tech savviness: 6/10
+Comfortable with WhatsApp, UPI, YouTube, shopping apps, school groups, and basic document sharing.
+Gaming experience: Occasionally
+Plays Candy Crush-style games, word puzzles, and simple quiz games.
+
+
+PAGE 16
+Mahendra Meena
+Age and gender: 35 / M
+Location: A village near Dausa, Rajasthan
+Occupation: Local contractor managing Airtel installation and service agents
+Bio:
+Mahendra coordinates fibre connections, SIM-related work, customer visits, and local technicians across several villages and small towns. 
+His phone is central to his work, and he spends much of the day handling calls, locations, photographs, documents, and payment follow-
+ups. He reads district news, politics, weather, telecom developments, and government announcements. He has developed strong practical 
+digital skills, even though he has had limited formal exposure to computers.
+Hobbies: Motorcycle maintenance, regional music, YouTube videos, card games, social gatherings.
+Family and household: Lives with his wife, two school-going children, and widowed mother in a self-owned house.
+Tech savviness: 8/10
+Highly capable with smartphones, maps, digital payments, work apps, scanning, and troubleshooting.
+Gaming experience: Occasionally
+Plays Teen Patti, Free Fire MAX and Call of Duty mobile and short Racing-style games with coworkers and friends. Occasionally plays 
+Ludo with family.
+
+
+PAGE 17
+Om Prakash Maurya
+Age and gender: 53 / M
+Location: A village near Ghazipur, Uttar Pradesh
+Occupation: Small and marginal farmer
+Bio:
+Om Prakash cultivates paddy, wheat, and seasonal vegetables on a mix of family-owned and leased land. His income varies with crop 
+prices, rainfall, input costs, and local demand. He follows weather, mandi rates, agricultural schemes, local politics, crime, and district-level 
+news. He prefers clear headlines, videos, photographs, and audio-supported content over dense text.
+Hobbies: Listening to folk and devotional music, visiting the local market, watching farming videos, playing cards with neighbours.
+Family and household: Lives with his wife, elder son, daughter-in-law, two grandchildren, and unmarried younger son.
+Tech savviness: 3/10
+Uses calls, WhatsApp voice notes, YouTube, weather updates, and links shared by family members.
+Gaming experience: Never
+Does not play mobile games, but is familiar with cards, Ludo, and traditional board games through family.
+
+
+PAGE 18
+What to avoid
+1. Exact clones of any game
+2. Monetization loops
+3. Real money mechanics
+4. Reward-only models with weak gameplay
+5. AAA, Midcore, or overly complex game systems
+6. Explicit, graphic, or insensitive content
+7. Copyright or Trademark material
+
+PAGE 19
+Register now!
+Click here or scan the QR code to sign up

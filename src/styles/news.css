@@ -1,0 +1,48 @@
+@import './game-family-tokens.css';
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--family-ink); background: var(--family-paper); font-family: var(--family-font); line-height: 1.65; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; cursor: pointer; }
+a { color: inherit; }
+:is(a, button):focus-visible { outline: 3px solid #526f5c; outline-offset: 3px; }
+.app-container { max-width: 680px; width: 100%; margin: auto; padding: 0 16px 24px; }
+.news-header { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--family-border); background: var(--family-paper); }
+.news-header__back { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border: 1px solid var(--family-border); border-radius: 12px; text-decoration: none; font-size: 23px; }
+.news-header__identity { flex: 1; min-width: 0; text-decoration: none; }
+.news-header__identity span { font-size: 10px; color: var(--family-muted); }
+.news-header__identity strong { display: block; font-size: 17px; font-weight: 750; line-height: 1.4; }
+.news-demo { font-size: 11px; color: var(--family-muted); }
+.nav-toolbar { padding: 8px 0; }
+.btn-back-feed { min-height: 44px; padding: 8px 0; border: 0; background: transparent; color: #526f5c; font-size: 12px; }
+.view-section { display: none; }
+.view-section.active { display: block; }
+.feed-header-card { padding: 12px 0 20px; }
+.feed-title { font-size: 24px; line-height: 1.45; margin: 0 0 8px; }
+.feed-desc { font-size: 14px; color: var(--family-muted); margin: 0 0 12px; }
+.feed-action-bar { font-size: 11px; }
+.stories-list { display: flex; flex-direction: column; gap: 12px; }
+.story-card { display: block; text-decoration: none; background: var(--family-surface); border: 1px solid var(--family-border); border-radius: 16px; padding: 16px; }
+.story-card-top, .article-meta-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.category-badge { font-size: 11px; font-weight: 600; color: #354960; }
+.badge-prototype { font-size: 10px; color: var(--family-muted); }
+.story-card-title { margin: 10px 0 8px; font-size: 18px; font-weight: 750; line-height: 1.55; }
+.story-card-excerpt { margin: 0; font-size: 14px; color: var(--family-muted); }
+.story-card-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--family-border); font-size: 11px; color: var(--family-muted); }
+.story-read-link { color: #526f5c; font-weight: 650; }
+.article-container { padding: 8px 0 16px; }
+.article-headline { margin: 12px 0 18px; font-size: clamp(24px, 6vw, 30px); line-height: 1.45; font-weight: 800; }
+.article-source-box { padding: 12px 14px; background: var(--family-subtle); border-radius: 12px; font-size: 11px; color: var(--family-muted); line-height: 1.8; }
+.article-source-item a { color: #354960; }
+.article-body { margin: 22px 0; font-size: 17px; line-height: 1.95; }
+.article-body p { margin: 0 0 18px; }
+.sample-notice-banner { padding: 12px 0; font-size: 11px; color: var(--family-muted); border-top: 1px solid var(--family-border); }
+.article-return-card { margin: 18px 0 0; padding: 18px; background: #dce8d8; color: #314e3c; border-radius: 16px; }
+.return-card-title { font-size: 16px; font-weight: 750; }
+.return-card-desc { margin: 8px 0 14px; font-size: 14px; line-height: 1.75; }
+.btn-return-game { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 14px; background: #526f5c; color: #fff; border: 1px solid #526f5c; border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: 650; }
+.btn-return-game-secondary { background: var(--family-surface); color: var(--family-ink); border-color: var(--family-border); }
+.missing-story-card { padding: 28px 0; }
+.missing-title { font-size: 22px; }
+.missing-desc { font-size: 15px; color: var(--family-muted); }
+.missing-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.page-footer { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--family-border); color: var(--family-muted); font-size: 10px; }

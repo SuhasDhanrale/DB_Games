@@ -1,0 +1,1 @@
+import"./audio-CUI2ND28.js";import{i as e,t}from"./game-family-CCSksYlW.js";import"./result-celebration-DHzTIUpd.js";t(`niti`),e(`niti`).then(window.finishGameIntro);

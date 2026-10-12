@@ -1,0 +1,50 @@
+.game-music {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  border: 1px solid var(--family-border, #d3dbcb);
+  border-radius: var(--family-control-radius, 8px);
+  color: var(--game-ink, #496142);
+  background: var(--family-surface, #faf9f4);
+  cursor: pointer;
+}
+.game-music svg { width: 22px; height: 22px; }
+.game-music[aria-pressed="true"] .game-music__slash { display: none; }
+.game-music[aria-pressed="false"] { color: var(--family-muted, #6b6e62); }
+.game-music:focus-visible { outline: 3px solid var(--game-accent, #496142); outline-offset: 2px; }
+.game-music-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: calc(64px + env(safe-area-inset-top, 0px));
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;
+  background: var(--family-paper, #faf9f4);
+  border-bottom: 1px solid var(--family-border, #d3dbcb);
+  color: var(--game-ink, #496142);
+  font: 700 14px var(--family-font, system-ui);
+  z-index: 100;
+}
+.game-music-toolbar > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.game-music-toolbar .gi-help { position: static; min-height: 44px; box-sizing: border-box; }
+html[data-game-theme] body.has-game-music > :is(.app-container, .carrom-layout, .game-layout, .intro-screen) {
+  padding-top: calc(78px + env(safe-area-inset-top, 0px));
+}
+html[data-game-theme="wordal"] body.has-game-music #game-board { max-width: min(280px, calc((100dvh - 329px - env(safe-area-inset-top, 0px)) * .82)); }
+html[data-game-theme="carrom"] body.has-game-music #game-container {
+  max-width: min(88vw, calc(100dvh - 274px - env(safe-area-inset-top, 0px)));
+  max-height: min(88vw, calc(100dvh - 274px - env(safe-area-inset-top, 0px)));
+}
+@media (max-width: 380px) {
+  .family-header { gap: 7px; padding-left: 12px; padding-right: 12px; }
+  .family-header__help { padding: 0 7px; }
+  .family-header__title { font-size: 16px; }
+}

@@ -32,7 +32,8 @@ function closeNews(href) {
     const file = new URL(href, window.location.href).pathname.split('/').pop();
     const currentGame = getGame(getCurrentRoute()?.split('/')[2]);
     const game = getAllGames().find(game => game.htmlFile === file);
-    if (game && currentGame?.htmlFile !== file) returnRoute = `/game/${game.id}`;
+    if (file === 'index.html') returnRoute = '/';
+    else if (game && currentGame?.htmlFile !== file) returnRoute = `/game/${game.id}`;
   }
   if (history.state?.newsReader === readerId) history.back();
   else hideNews();
@@ -41,16 +42,18 @@ function closeNews(href) {
 export function openNews(href = './news.html') {
   newsUrl = new URL(href, window.location.href);
   newsUrl.searchParams.set('day', window.DBJamDemo?.day || 'd1');
+  const currentGame = getGame(getCurrentRoute()?.split('/')[2]);
+  if (currentGame) newsUrl.searchParams.set('game', { cricket: 'superover', neeti: 'niti', carrom_puzzles: 'carrom' }[currentGame.id] || currentGame.id);
   if (!panel) {
     panel = document.createElement('section');
     panel.id = 'news-reader';
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-modal', 'true');
-    panel.setAttribute('aria-label', 'News');
+    panel.setAttribute('aria-label', 'खेल से जुड़ी खबर');
     panel.style.cssText = 'position:absolute;inset:0;z-index:400;background:var(--bg-app);';
     panel.hidden = true;
     frame = document.createElement('iframe');
-    frame.title = 'News';
+    frame.title = 'खेल से जुड़ी खबर';
     frame.style.cssText = 'display:block;width:100%;height:100%;border:0;';
     frame.src = newsUrl.href;
     frame.addEventListener('load', () => frame.contentWindow.DBNewsView?.open(newsUrl.search));

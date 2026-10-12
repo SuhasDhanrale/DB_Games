@@ -49,16 +49,18 @@ export function showToast({ message, icon = 'ℹ️', duration = 3000 }) {
 
 let modalOverlay = null;
 let modalCloseCallback = null;
+let modalPreviousFocus = null;
 
 export function initModalSystem() {
   modalOverlay = document.createElement('div');
   modalOverlay.className = 'modal-overlay';
+  modalOverlay.hidden = true;
   modalOverlay.innerHTML = `
-    <div class="modal" id="global-modal">
+    <div class="modal" id="global-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div class="modal__handle"></div>
       <div class="modal__header">
         <h3 class="modal__title" id="modal-title"></h3>
-        <button class="modal__close" id="modal-close-btn">✕</button>
+        <button class="modal__close" id="modal-close-btn" type="button" aria-label="${t('common.close')}">✕</button>
       </div>
       <div class="modal__body" id="modal-body"></div>
     </div>
@@ -73,6 +75,14 @@ export function initModalSystem() {
 
   // Close button
   modalOverlay.querySelector('#modal-close-btn').addEventListener('click', closeModal);
+  modalOverlay.addEventListener('keydown', event => {
+    if (event.key === 'Escape') { event.preventDefault(); closeModal(); return; }
+    if (event.key !== 'Tab') return;
+    const focusable = [...modalOverlay.querySelectorAll('button, a[href], select, input, summary, [tabindex="0"]')].filter(el => !el.disabled && el.checkVisibility());
+    const first = focusable[0], last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+  });
 
   bus.on(Events.MODAL_OPEN, openModal);
   bus.on(Events.MODAL_CLOSE, closeModal);
@@ -84,6 +94,9 @@ export function initModalSystem() {
  */
 export function openModal({ title, content, onClose, theme }) {
   if (!modalOverlay) return;
+  if (modalOverlay.hidden) modalPreviousFocus = document.activeElement;
+  document.getElementById('app-root').inert = true;
+  modalOverlay.hidden = false;
 
   const modal = modalOverlay.querySelector('#global-modal');
   if (theme) modal.dataset.gameTheme = theme;
@@ -101,6 +114,8 @@ export function openModal({ title, content, onClose, theme }) {
 
   modalCloseCallback = onClose || null;
   modalOverlay.classList.add('open');
+  modalOverlay.querySelector('#modal-close-btn').setAttribute('aria-label', t('common.close'));
+  requestAnimationFrame(() => modalOverlay.querySelector('#modal-close-btn').focus());
   playSfx('tap');
 }
 
@@ -110,10 +125,15 @@ export function openModal({ title, content, onClose, theme }) {
 export function closeModal() {
   if (!modalOverlay) return;
   modalOverlay.classList.remove('open');
+  modalOverlay.hidden = true;
+  document.getElementById('app-root').inert = false;
   if (modalCloseCallback) {
     modalCloseCallback();
     modalCloseCallback = null;
   }
+  if (modalPreviousFocus?.isConnected) modalPreviousFocus.focus();
+  else document.querySelector('.screen.active #hub-settings')?.focus();
+  modalPreviousFocus = null;
 }
 
 
@@ -217,7 +237,6 @@ export function renderGameOver({
   score,
   bestScore,
   isNewBest,
-  rank,
   gameTitle,
   theme,
   torchCelebration,
@@ -245,12 +264,6 @@ export function renderGameOver({
         <div class="stat-item__value text-gradient">${bestScore}</div>
         <div class="stat-item__label">${t('gameover.best_score')}</div>
       </div>
-      ${rank ? `
-      <div class="stat-item">
-        <div class="stat-item__value" style="color: var(--color-accent-warm);">#${rank}</div>
-        <div class="stat-item__label">${t('common.rank')}</div>
-      </div>
-      ` : ''}
     </div>
 
     ${isNewBest ? `

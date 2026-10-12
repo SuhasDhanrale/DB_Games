@@ -10,8 +10,10 @@ import { navigate } from '../core/router.js';
 import { playSfx } from '../core/audio.js';
 import { getProgression, isDailyCompleted } from '../systems/progression.js';
 import { consumeTorchPulse, torchIcon } from '../ui/torch.js';
-import { renderBottomNav, attachBottomNavListeners } from '../ui/components.js';
-import { playOpening } from '../ui/opening.js';
+import { openProgress } from './profile.js';
+import { openSettings } from './settings.js';
+import { openNews } from '../ui/news-reader.js';
+import { readRound } from '../systems/play-history.js';
 import { getGame } from '../games/registry.js';
 import { prefetchGame } from '../games/game-assets.js';
 
@@ -95,7 +97,6 @@ export function renderHub(container) {
     d.setDate(monday.getDate() + i);
     const dateStr = d.toISOString().split('T')[0];
     const isToday = i === currentDayIndex;
-    const isPast = i < currentDayIndex;
 
     // Check if this day is marked done in progression
     let isDone = Boolean(prog.dailyHistory && prog.dailyHistory[dateStr]);
@@ -105,22 +106,17 @@ export function renderHub(container) {
       if (anyGamePlayed || prog.lastPlayDate === dateStr) {
         isDone = true;
       }
-    } else if (isPast && !isDone && prog.streak > 0) {
-      const daysDiff = Math.floor((now - d) / (1000 * 60 * 60 * 24));
-      if (daysDiff <= prog.streak) {
-        isDone = true;
-      }
     }
 
     const label = currentLang === 'hi' ? dayInfo.hi : dayInfo.en;
 
     return `
-      <div class="weekly-day-col ${isToday ? 'is-today' : ''}">
+      <span class="weekly-day-col ${isToday ? 'is-today' : ''}">
         <span class="weekly-day-label">${label}</span>
-        <div class="weekly-day-dot ${isDone ? 'done' : ''} ${isToday ? 'today-dot' : ''}">
+        <span class="weekly-day-dot ${isDone ? 'done' : ''} ${isToday ? 'today-dot' : ''}">
           ${isDone ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>` : ''}
-        </div>
-      </div>
+        </span>
+      </span>
     `;
   }).join('');
 
@@ -130,6 +126,8 @@ export function renderHub(container) {
 
   function renderSpaciousCard(game) {
     const isDone = isDailyCompleted(game.id);
+    const round = readRound(game.id);
+    const inProgress = !isDone && round && !round.isGameOver && !round.confirmed && !round.isCompleted && !round.completed && (round.currentRowTokens?.length || round.boardGuesses?.length || round.selectedOption || round.matchedPairIds?.length || round.started || round.shots);
     const title = t(game.titleKey);
     const titleWords = title.split(' ');
     const gameName = titleWords.pop();
@@ -139,6 +137,7 @@ export function renderHub(container) {
         <span class="card-bottom-info">
           <span class="card-game-title"><span class="card-title-prefix">${dailyPrefix}</span> <strong class="card-title-name">${gameName}</strong></span>
           <span class="card-description">${descriptions[game.num - 1]}</span>
+          ${inProgress ? `<span class="card-resume">${currentLang === 'hi' ? 'जारी रखें →' : 'Continue →'}</span>` : ''}
         </span>
         <span class="card-art-float">${game.artIcon}</span>
         ${isDone ? '<span class="game-status-dot" title="' + t('hub.done') + '"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg></span>' : ''}
@@ -158,19 +157,19 @@ export function renderHub(container) {
     <div class="bento-container">
       <div class="bento-header">
         <h1 class="hub-tagline">${t('hub.daily_tagline')}</h1>
-        <div class="hub-header-pill${pulseTorch ? ' hub-header-pill--celebrate' : ''}" title="${t('hub.torch_hint')}" aria-label="${t('torch.count', { count: prog.streak })}. ${t('hub.torch_hint')}">
+        <button type="button" id="hub-progress" class="hub-header-pill${pulseTorch ? ' hub-header-pill--celebrate' : ''}" title="${currentLang === 'hi' ? 'मेरे खेल' : 'My play'}" aria-label="${currentLang === 'hi' ? 'मेरे खेल' : 'My play'} · ${t('torch.count', { count: prog.streak })}">
           ${torchIcon}
           ${prog.streak}
-        </div>
-        <button type="button" class="hub-replay" id="hub-replay" aria-label="${t('opening.replay')}" title="${t('opening.replay')}">↻</button>
+        </button>
+        <button type="button" class="hub-settings" id="hub-settings" aria-label="${t('settings.title')}" title="${t('settings.title')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="var(--family-paper)"/><circle cx="15" cy="17" r="3" fill="var(--family-paper)"/></svg></button>
         <button type="button" class="hub-icon-circle-btn" id="hub-lang-toggle" aria-label="${currentLang === 'hi' ? 'Switch to English' : 'हिन्दी में बदलें'}">${currentLang === 'hi' ? 'EN' : 'हिं'}</button>
       </div>
 
       <!-- Weekly Day Tracker (MON - SON) -->
       <div class="weekly-tracker-wrap">
-        <div class="weekly-tracker-card">
+        <button type="button" class="weekly-tracker-card" id="hub-week" aria-label="${currentLang === 'hi' ? 'इस हफ़्ते की प्रगति देखें' : 'View this week’s play'}">
           ${daysHtml}
-        </div>
+        </button>
       </div>
 
       <!-- 5 Games Bento Grid Area -->
@@ -190,8 +189,8 @@ export function renderHub(container) {
           ${renderSpaciousCard(g5)}
         </div>
       </div>
+      <div class="hub-footer"><span>${currentLang === 'hi' ? 'डेमो · संस्करण' : 'Demo · edition'} ${window.DBJamDemo.index + 1}</span><button type="button" id="hub-stories">${currentLang === 'hi' ? 'खेल और कहानियाँ' : 'Games and stories'} <span aria-hidden="true">↗</span></button></div>
     </div>
-    ${renderBottomNav('home')}
   `;
 
   // Attach card click handlers
@@ -216,14 +215,10 @@ export function renderHub(container) {
     });
   }
 
-  // Attach Bottom Nav
-  container.querySelector('#hub-replay').addEventListener('click', () => {
-    const overlay = document.createElement('div');
-    overlay.className = 'loading-screen';
-    container.appendChild(overlay);
-    playOpening(overlay, () => container.querySelector('#hub-replay')?.focus());
-  });
-  attachBottomNavListeners(container, navigate);
+  container.querySelector('#hub-progress').addEventListener('click', openProgress);
+  container.querySelector('#hub-week').addEventListener('click', openProgress);
+  container.querySelector('#hub-settings').addEventListener('click', () => openSettings(() => renderHub(container)));
+  container.querySelector('#hub-stories').addEventListener('click', () => openNews());
 }
 
 export default renderHub;
