@@ -213,7 +213,7 @@ export async function shareResult({ gameTitle, score, url = window.location.href
 
   if (navigator.share) {
     try {
-      await navigator.share({ title: 'Dainik Bhaskar Game Lab', text, url });
+      await navigator.share({ title: 'Dainik Bhaskar / दैनिक भास्कर', text, url });
       bus.emit(Events.SHARE_RESULT, { gameTitle, score, method: 'native' });
       return true;
     } catch {

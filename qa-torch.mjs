@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
+import { createServer } from 'vite';
 import { chromium } from 'file:///C:/Users/Suhas/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
 
+const server = process.env.TORCH_QA_URL ? null : await createServer({ server: { host: '127.0.0.1', port: 5189, strictPort: true, hmr: false } });
+await server?.listen();
 const browser = await chromium.launch({ headless: true, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
-const base = process.env.TORCH_QA_URL || 'http://127.0.0.1:5176';
-const hint = 'हर दिन कोई एक खेल पूरा करें और मशाल जलाए रखें।';
+const base = process.env.TORCH_QA_URL || 'http://127.0.0.1:5189';
+const rule = 'हर नया दैनिक खेल एक बार जोड़ता है.';
 const summary = { wordal: '.result-hero-card', niti: '#meaning-reveal-box', jodo: '.result-header-minimal', cricket: '.news-scorecard', carrom: '#modal-desc' };
 async function progression(page) {
   return page.evaluate(async () => (await import('/src/systems/progression.js')).getProgression());
@@ -53,27 +56,31 @@ try {
       });
       await page.goto(base + '/?day=d1');
       await page.locator('.hub-header-pill').waitFor();
+      await page.evaluate(() => { for (const id of ['wordal', 'niti', 'jodo', 'cricket', 'carrom']) window.DBJamDemo.setItem('game-intro:' + id, 'seen'); });
       const initial = await progression(page);
       const frame = await openGame(page, id);
       assert.equal((await progression(page)).streak, initial.streak, 'Opening a game must not earn a day');
-      assert.equal(await frame.locator('.torch-card').count(), 0);
+      assert.equal(await page.locator('.torch-card').count(), 0);
       await complete(frame, id);
       await frame.locator(summary[id]).waitFor({ state: 'visible' });
-      assert.equal(await frame.locator('.torch-card').count(), 0, 'Result should appear before the mashal card');
-      await frame.locator('.torch-card').waitFor();
-      assert.equal(await frame.locator('.torch-card__title').textContent(), 'एक दिन और, मशाल बरकरार!');
-      assert.equal(await frame.locator('.torch-card__hint').textContent(), hint);
-      assert.equal(await frame.locator('.torch-card__count').textContent(), `लगातार ${initial.streak + 1} दिन`);
+      assert.equal(await page.locator('.torch-card').count(), 0, 'Result should appear before the mashal card');
+      await page.locator('.torch-card').waitFor();
+      assert.equal(await page.locator('.torch-card__title').textContent(), 'शानदार!');
+      assert.equal(await page.locator('.torch-card__rule').textContent(), rule);
+      assert.equal(await page.locator('.torch-card__hint').count(), 0);
+      assert.equal(await page.locator('.torch-card__eyebrow').textContent(), `मशाल यात्रा · दिन ${initial.streak + 1}`);
       const after = await progression(page);
       assert.equal(after.streak, initial.streak + 1);
       assert.equal(after.gamesPlayed, 1, 'Duplicate completion signals must not record twice');
       assert.equal(after.dailyCompleted[id], true);
-      await frame.locator('.torch-card').scrollIntoViewIfNeeded();
-      const bounds = await frame.locator('.torch-card').boundingBox();
+      await page.locator('.torch-card').scrollIntoViewIfNeeded();
+      const bounds = await page.locator('.torch-card').boundingBox();
       assert(bounds.width > 0 && bounds.x >= 0 && bounds.x + bounds.width <= viewport.width + 1, 'Card must fit the viewport');
       await page.screenshot({ path: `Doc/review-images/torch-${id}-${viewport.width}.png` });
-      // The card remains present, and completing another game today earns no extra day/card.
-      assert.equal(await frame.locator('.torch-card').count(), 1);
+      // Each new daily game shows a popup and adds a bar; streaks count days.
+      assert.equal(await page.locator('.torch-card').count(), 1);
+      await page.locator('.torch-card__skip').waitFor({ state: 'visible' });
+      await page.locator('.torch-card__skip').click();
       await page.locator('#game-back-btn').click();
       await page.locator('.hub-screen.active').waitFor();
       await page.locator('.hub-header-pill--celebrate').waitFor();
@@ -82,17 +89,21 @@ try {
       const nextFrame = await openGame(page, second);
       await complete(nextFrame, second);
       await nextFrame.locator(summary[second]).waitFor({ state: 'visible' });
-      await page.waitForTimeout(1300);
-      assert.equal(await nextFrame.locator('.torch-card').count(), 0);
+      await page.locator('.torch-popup').waitFor();
+      assert.equal(await page.locator('.torch-popup [role=progressbar]').getAttribute('aria-valuenow'), '2');
+      assert.equal((await progression(page)).completions, 2);
       assert.equal((await progression(page)).streak, after.streak);
+      await page.locator('.torch-card__skip').waitFor({ state: 'visible' });
+      await page.locator('.torch-card__skip').click();
       await page.locator('#game-back-btn').click();
       await page.locator('.hub-screen.active').waitFor();
-      assert.equal(await page.locator('.hub-screen.active .hub-header-pill--celebrate').count(), 0, 'Hub pulse is consumed once');
+      assert.equal(await page.locator('.hub-screen.active .hub-header-pill--celebrate').count(), 1, 'Each completion queues a hub pulse');
       assert.deepEqual(errors, []);
-      console.log(JSON.stringify({ id, viewport: viewport.width, completion: true, dailyOnce: true, mobileFit: true, errors }));
+      console.log(JSON.stringify({ id, viewport: viewport.width, completion: true, eachDailyGameAwardsBar: true, mobileFit: true, errors }));
       await page.close();
     }
   }
 } finally {
   await browser.close();
+  await server?.close();
 }

@@ -187,11 +187,16 @@ html[data-game-theme] :is(.modal-backdrop, .modal-overlay, .rules-modal, .articl
 [data-game-theme="wordal"] .app-container { height: 100dvh; max-height: 100dvh; }
 [data-game-theme="wordal"] .editorial-clue-card { padding: 10px 12px; margin-bottom: 10px; border-left-width: 1px; }
 [data-game-theme="wordal"] :is(.clue-badge, .clue-topic) { color: var(--game-ink); }
-[data-game-theme="wordal"] .clue-title { line-height: 1.5; }
+[data-game-theme="wordal"] .clue-title { font-size: 16px; font-weight: 700; line-height: 1.65; white-space: normal; overflow: visible; }
+[data-game-theme="wordal"] .clue-card-left { gap: 4px; }
+[data-game-theme="wordal"] #viewGame.view-screen.is-active { overflow-y: auto; }
+[data-game-theme="wordal"] .board-container { flex-direction: column; gap: 8px; container-type: size; min-height: 260px; }
+[data-game-theme="wordal"] .board-meta { width: 100%; max-width: min(280px, calc((100cqh - 38px) * 5 / 6)); flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; white-space: nowrap; color: var(--family-muted); }
+[data-game-theme="wordal"] .board-row.is-current .tile:not([data-state="tbd"]) { border-color: var(--game-accent); background: var(--game-tint); }
 [data-game-theme="wordal"] .clue-attempt-pill { background: var(--family-surface); color: var(--game-ink); border: 1px solid var(--game-accent); }
 [data-game-theme="wordal"] .clue-tag-row { flex-wrap: wrap; gap: 2px 8px; }
-[data-game-theme="wordal"] #game-board { max-width: min(280px, calc((100dvh - 265px) * .82)); gap: 5px; }
-[data-game-theme="wordal"] .tile { border-width: 1px; border-radius: 8px; background: var(--family-surface); }
+[data-game-theme="wordal"] #game-board { max-width: min(280px, calc((100cqh - 38px) * 5 / 6)); gap: 5px; flex-shrink: 0; }
+[data-game-theme="wordal"] .tile { max-height: none; border-width: 1px; border-radius: 8px; background: var(--family-surface); }
 [data-game-theme="wordal"] .key-btn { height: 44px; border-radius: 8px; box-shadow: none; }
 [data-game-theme="wordal"] .keyboard-row { gap: 4px; margin-bottom: 4px; }
 [data-game-theme="wordal"] .result-hero-card::before { background: var(--game-accent); height: 3px; }
@@ -283,7 +288,7 @@ html[data-game-theme] :is(.modal-backdrop, .modal-overlay, .rules-modal, .articl
 @media (max-height: 600px) {
   html[data-game-theme] :is(.app-container, .game-layout, .carrom-layout) { padding: 10px 12px; }
   [data-game-theme="wordal"] .editorial-clue-card { padding: 7px 10px; margin-bottom: 6px; }
-  [data-game-theme="wordal"] #game-board { max-width: min(255px, calc((100dvh - 250px) * .82)); }
+  [data-game-theme="wordal"] :is(#game-board, .board-meta) { max-width: min(255px, calc((100cqh - 38px) * 5 / 6)); }
   [data-game-theme="niti"] .step1-content-wrap { overflow-y: auto; justify-content: safe center; padding: 3px 0; }
   [data-game-theme="niti"] .thought-card { padding: 14px; }
   [data-game-theme="jodo"] .play-area { padding: 16px 0 12px; }

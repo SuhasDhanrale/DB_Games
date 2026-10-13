@@ -18,6 +18,10 @@
     button[aria-pressed="true"] { background: #496142; color: white; }
     button:focus-visible { outline: 3px solid #a36d35; outline-offset: 3px; }
     #status { min-height: 32px; }
+    .volume { display: flex; gap: 12px; align-items: center; margin-bottom: 22px; }
+    .volume input { flex: 1; min-width: 80px; accent-color: #496142; }
+    #credits { margin-top: 36px; padding-top: 20px; border-top: 1px solid #d7dccf; font-size: 14px; }
+    #credits li { margin-bottom: 12px; }
     a { color: #496142; }
   </style>
 </head>
@@ -25,32 +29,61 @@
   <main>
     <a href="./index.html">← Games</a>
     <h1>Listen to the game tunes</h1>
-    <p>Each tune follows A → B → A → C, then takes a short breath. Listen for about a minute to hear the whole arrangement. Start with your speaker or headphone volume low.</p>
+    <p>Five finished recordings, chosen for each game's mood. Try a few seconds of each and compare them. Music remains optional in the games.</p>
+    <div class="volume"><label for="volume">Music volume</label><input type="range" id="volume" min="0" max="50" value="18"><output id="volume-value" for="volume">18%</output></div>
     <div class="tunes">
-      <div class="tune"><div><strong>Wordal · आज का शब्द</strong><small>Gentle bells · 66 BPM</small></div><button data-game="wordal" aria-pressed="false">Listen</button></div>
-      <div class="tune"><div><strong>Neeti · नीति</strong><small>Warm and slow · 60 BPM</small></div><button data-game="niti" aria-pressed="false">Listen</button></div>
-      <div class="tune"><div><strong>Jodo · जोड़ो</strong><small>Light and playful · 76 BPM</small></div><button data-game="jodo" aria-pressed="false">Listen</button></div>
-      <div class="tune"><div><strong>Carrom · कैरम</strong><small>Relaxed, lower notes · 68 BPM</small></div><button data-game="carrom" aria-pressed="false">Listen</button></div>
-      <div class="tune"><div><strong>Super Over · सुपर ओवर</strong><small>A little more movement · 84 BPM</small></div><button data-game="cricket" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Wordal · आज का शब्द</strong><small></small></div><button data-game="wordal" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Neeti · नीति</strong><small></small></div><button data-game="niti" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Jodo · जोड़ो</strong><small></small></div><button data-game="jodo" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Carrom · कैरम</strong><small></small></div><button data-game="carrom" aria-pressed="false">Listen</button></div>
+      <div class="tune"><div><strong>Super Over · सुपर ओवर</strong><small></small></div><button data-game="cricket" aria-pressed="false">Listen</button></div>
     </div>
     <button id="stop" type="button">Stop music</button>
     <p id="status" role="status">Choose a tune to listen.</p>
+    <section id="credits"><h2>Music and artists</h2><p>The recordings are included unchanged. We apply playback volume and fades. Each artist's source and license are linked below.</p><ul id="music-credits"></ul></section>
   </main>
   <script type="module">
     import audio from './src/core/audio.js';
+    import { MUSIC_TRACKS } from './src/core/music-tracks.js';
     audio.initAudio();
     const buttons = [...document.querySelectorAll('[data-game]')];
     const status = document.getElementById('status');
+    const volume = document.getElementById('volume');
+    const volumeValue = document.getElementById('volume-value');
+    let selected = null;
+    const update = () => {
+      volume.value = Math.round(audio.getMusicVolume() * 100);
+      volumeValue.value = volume.value + '%';
+      const state = audio.getMusicStatus();
+      buttons.forEach(button => {
+        const active = selected === button.dataset.game && ['loading', 'playing'].includes(state);
+        button.setAttribute('aria-pressed', String(active));
+        button.textContent = active ? (state === 'loading' ? 'Loading…' : 'Playing') : 'Listen';
+      });
+      status.textContent = !selected ? 'Choose a tune to listen.' : state === 'error' ? 'This track could not play. Try Listen again.' : state === 'loading' ? 'Loading ' + MUSIC_TRACKS[selected].title + '…' : state === 'playing' ? 'Playing ' + MUSIC_TRACKS[selected].title + ' by ' + MUSIC_TRACKS[selected].artist + '.' : 'Music stopped.';
+    };
+    audio.onAudioChange(update);
+    volume.addEventListener('input', () => audio.setMusicVolume(Number(volume.value) / 100));
+    update();
+    const credits = document.getElementById('music-credits');
+    Object.values(MUSIC_TRACKS).forEach(track => {
+      const item = document.createElement('li');
+      const source = document.createElement('a'); source.href = track.source; source.textContent = track.title;
+      const license = document.createElement('a'); license.href = track.licenseUrl; license.textContent = track.license;
+      item.append(source, ' — ' + track.artist + ' · ', license); credits.appendChild(item);
+    });
     buttons.forEach(button => button.addEventListener('click', () => {
       if (!(window.AudioContext || window.webkitAudioContext)) { status.textContent = 'This browser cannot play these tunes.'; return; }
       audio.unlockAudio();
       audio.setMusicEnabled(true);
+      selected = button.dataset.game;
       audio.startMusic(button.dataset.game);
-      buttons.forEach(other => { other.setAttribute('aria-pressed', String(other === button)); other.textContent = other === button ? 'Playing' : 'Listen'; });
-      status.textContent = 'Playing ' + button.parentElement.querySelector('strong').textContent + '.';
+      update();
     }));
+    buttons.forEach(button => { const track = MUSIC_TRACKS[button.dataset.game]; button.parentElement.querySelector('small').textContent = track.title + ' · ' + track.mood; });
     document.getElementById('stop').addEventListener('click', () => {
       audio.stopMusic();
+      selected = null;
       buttons.forEach(button => { button.setAttribute('aria-pressed', 'false'); button.textContent = 'Listen'; });
       status.textContent = 'Music stopped.';
     });

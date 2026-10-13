@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:superover": "vite --open /Superover.html",
     "build": "vite build",
+    "build:single": "node scripts/build-single.mjs",
     "preview": "vite preview"
   },
   "keywords": [],

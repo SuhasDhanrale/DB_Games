@@ -27,10 +27,10 @@ export const translations = {
     // ---- Hub ----
     'hub.title':            'Game Lab',
     'hub.daily_tagline':    'A little play, every day.',
-    'hub.torch_hint':       'Complete any one game each day to keep your torch burning.',
-    'torch.title':          'One more day, the torch stays alight!',
-    'torch.count':          '{count}-day streak',
-    'opening.brand':        'Dainik Bhaskar Games',
+    'hub.torch_hint':       'Each new daily game adds once.',
+    'torch.title':          'Well done!',
+    'torch.count':          'Day {count}',
+    'opening.brand':        'Dainik Bhaskar / दैनिक भास्कर',
     'opening.slogan':       'From news to play. From play to understanding.',
     'opening.caption':      'Five games. Five moods. Something new every day.',
     'opening.start':        'Choose a game',
@@ -122,7 +122,7 @@ export const translations = {
 
     // ---- Games ----
     'game1.title':          'Aaj Ka Shabd',
-    'game1.desc':           'Guess the secret daily word',
+    'game1.desc':           'Read the hint, guess today’s word',
     'game2.title':          'Aaj Ki Niti',
     'game2.desc':           'Daily thoughtful reflection and contemplation',
     'game3.title':          'Aaj Ka Over',
@@ -142,7 +142,7 @@ export const translations = {
     'gameover.new_best':    '🏆 New Best!',
     'gameover.play_again':  'Play Again',
     'gameover.home':        'Home',
-    'gameover.share_text':  'I scored {score} in {game} on Dainik Bhaskar Game Lab! 🎮',
+    'gameover.share_text':  'I scored {score} in {game} on Dainik Bhaskar / दैनिक भास्कर! 🎮',
   },
 
   hi: {
@@ -168,10 +168,10 @@ export const translations = {
     // ---- Hub ----
     'hub.title':            'गेम लैब',
     'hub.daily_tagline':    'थोड़ा खेल, हर रोज़।',
-    'hub.torch_hint':       'हर दिन कोई एक खेल पूरा करें और मशाल जलाए रखें।',
-    'torch.title':          'एक दिन और, मशाल बरकरार!',
-    'torch.count':          'लगातार {count} दिन',
-    'opening.brand':        'दैनिक भास्कर गेम्स',
+    'hub.torch_hint':       'हर नया दैनिक खेल एक बार जोड़ता है.',
+    'torch.title':          'शानदार!',
+    'torch.count':          'दिन {count}',
+    'opening.brand':        'Dainik Bhaskar / दैनिक भास्कर',
     'opening.slogan':       'खबर से खेल तक, खेल से समझ तक।',
     'opening.caption':      'पाँच खेल, पाँच मूड, हर दिन नया कुछ.',
     'opening.start':        'खेल चुनें',
@@ -263,7 +263,7 @@ export const translations = {
 
     // ---- Games ----
     'game1.title':          'आज का शब्द',
-    'game1.desc':           'दैनिक गुप्त शब्द का अनुमान लगाएँ',
+    'game1.desc':           'हिंट पढ़ें, आज का शब्द पहचानें',
     'game2.title':          'आज की नीति',
     'game2.desc':           'शांत दैनिक विचार पूर्ति और जीवन दर्शन',
     'game3.title':          'आज का ओवर',
@@ -283,7 +283,7 @@ export const translations = {
     'gameover.new_best':    '🏆 नया रिकॉर्ड!',
     'gameover.play_again':  'फिर से खेलें',
     'gameover.home':        'होम',
-    'gameover.share_text':  'मैंने दैनिक भास्कर गेम लैब पर {game} में {score} स्कोर किए! 🎮',
+    'gameover.share_text':  'मैंने Dainik Bhaskar / दैनिक भास्कर पर {game} में {score} स्कोर किए! 🎮',
   },
 };
 

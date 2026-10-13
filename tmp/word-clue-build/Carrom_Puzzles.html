@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="hi" data-game-theme="carrom">
+
+<head>
+    <script src="./game-navigation.js"></script>
+    <script src="./demo-session.js"></script>
+    <meta charset="UTF-8">
+    <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>आज का निशाना | Aaj Ka Nishana · Dainik Bhaskar / दैनिक भास्कर</title>
+
+    <!-- Google Fonts: Inter & Noto Sans Devanagari -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <!-- Matter.js for 2D Physics -->
+    <script src="./vendor/matter-0.19.0.min.js"></script>
+
+    <style>:root{--color-primary:#e23a28;--color-primary-dark:#ba2313;--color-accent:#f39c12;--bg-app:#f9f9f7;--bg-surface:#fff;--text-primary:#1c1c1c;--text-secondary:#5c5c5c;--border-subtle:#00000014;--font-family:"Noto Sans Devanagari", "Inter", system-ui, -apple-system, sans-serif}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;margin:0;padding:0}html,body{width:100%;height:100%;font-family:var(--font-family);touch-action:none;overflow:hidden}body{background-color:var(--bg-app);background-image:radial-gradient(circle at 50% 25%,#fff 0%,#f6f4ed 65%,#ece7da 100%);justify-content:center;align-items:center;display:flex}.carrom-layout{box-sizing:border-box;flex-direction:column;justify-content:space-between;align-items:center;width:100%;max-width:480px;height:100%;margin:0 auto;padding:10px 14px 14px;display:flex;position:relative}.top-section{z-index:10;flex-direction:column;flex-shrink:0;justify-content:center;align-items:center;gap:4px;width:100%;display:flex}.objective-banner{background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:999px;justify-content:center;align-items:center;gap:8px;width:100%;max-width:420px;padding:8px 18px;display:flex;box-shadow:0 2px 8px #0000000d}.objective-icon{flex-shrink:0;font-size:1.05rem}.objective-main-text{color:var(--text-primary);text-align:center;font-size:.95rem;font-weight:800;line-height:1.3}.shot-counter{border-bottom:1px solid var(--border-subtle);width:100%;color:var(--game-ink,var(--text-primary));text-align:center;font-variant-numeric:tabular-nums;padding:10px 0 12px;font-size:24px;font-weight:800;line-height:1.4}.shot-status{text-align:center;font-size:12px}.board-wrapper{flex-direction:column;flex-shrink:0;justify-content:center;align-items:center;width:100%;margin:auto 0;display:flex;position:relative}#game-container{aspect-ratio:1;background-color:#3e2723;border:3px solid #2d1a11;border-radius:18px;width:100%;max-width:min(88vw,100vh - 210px);max-height:min(88vw,100vh - 210px);position:relative;overflow:hidden;box-shadow:0 16px 36px #2d1a1138,0 4px 12px #0000000f}canvas{touch-action:none;cursor:default;border-radius:15px;width:100%;height:100%;display:block}.small-slider-line-wrap{justify-content:center;align-items:center;width:100%;max-width:300px;margin:10px auto 0;padding:2px 8px;transition:opacity .2s;display:flex}.small-slider-line-wrap.disabled{opacity:.4;pointer-events:none}input[type=range]{-webkit-appearance:none;cursor:pointer;background:0 0;width:100%;margin:0}input[type=range]::-webkit-slider-runnable-track{background:#e2ddd5;border:none;border-radius:999px;width:100%;height:5px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;cursor:grab;background:#fff;border:3.5px solid #2563eb;border-radius:50%;width:20px;height:20px;margin-top:-7.5px;transition:transform .1s;box-shadow:0 2px 6px #0003}input[type=range]:active::-webkit-slider-thumb{cursor:grabbing;transform:scale(1.15)}input[type=range]:focus{outline:none}.bottom-section{z-index:10;justify-content:center;align-items:center;gap:8px;width:100%;padding-bottom:6px;display:flex}.btn-retry{color:#fff;font-family:var(--font-family);cursor:pointer;background:linear-gradient(135deg,#e23a28 0%,#ba2313 100%);border:none;border-radius:999px;justify-content:center;align-items:center;gap:8px;height:42px;padding:10px 32px;font-size:.95rem;font-weight:800;transition:all .15s;display:inline-flex;box-shadow:0 4px 14px #e23a2859}.btn-retry:hover{transform:translateY(-1px);box-shadow:0 6px 18px #e23a2873}.btn-retry:active{background:#ba2313;transform:scale(.96)}.btn-retry-icon{font-size:1.05rem;transition:transform .3s}.btn-retry:active .btn-retry-icon{transform:rotate(-180deg)}.modal-backdrop{-webkit-backdrop-filter:blur(4px);z-index:100;opacity:1;pointer-events:auto;background:#12121280;justify-content:center;align-items:center;padding:16px;transition:opacity .25s;display:flex;position:absolute;inset:0}.modal-backdrop.hidden{opacity:0;pointer-events:none}.modal-card{text-align:center;background:#fff;border-radius:22px;flex-direction:column;align-items:center;width:100%;max-width:320px;padding:24px 20px;transition:transform .25s cubic-bezier(.34,1.56,.64,1);display:flex;transform:scale(1);box-shadow:0 20px 45px #00000040}.modal-backdrop.hidden .modal-card{transform:scale(.9)}.modal-icon-badge{background:linear-gradient(135deg,#e8f8f0 0%,#c8e6c9 100%);border-radius:50%;justify-content:center;align-items:center;width:58px;height:58px;margin-bottom:12px;font-size:28px;display:flex;box-shadow:0 4px 12px #27ae6026}.modal-title{color:#1c1c1c;margin-bottom:6px;font-size:1.25rem;font-weight:900}.modal-desc{color:#5c5c5c;white-space:pre-line;margin-bottom:20px;font-size:.88rem;font-weight:500;line-height:1.45}.modal-btn{color:#fff;font-family:var(--font-family);cursor:pointer;background:linear-gradient(135deg,#e23a28 0%,#ba2313 100%);border:none;border-radius:9999px;width:100%;padding:12px 24px;font-size:.95rem;font-weight:800;transition:all .15s;box-shadow:0 4px 14px #e23a2859}.modal-btn:hover{transform:translateY(-1px)}.modal-btn:active{transform:scale(.96)}</style>
+  <script type="module" crossorigin src="/assets/Carrom_Puzzles-GUa3ZJj_.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/audio-Bg9QUBUX.js">
+  <link rel="modulepreload" crossorigin href="/assets/game-family-DZ2gqSJm.js">
+  <link rel="modulepreload" crossorigin href="/assets/result-celebration-BqMZkvfW.js">
+  <link rel="modulepreload" crossorigin href="/assets/play-history-BOC_Po8A.js">
+  <link rel="stylesheet" crossorigin href="/assets/game-family-BeZO0gSU.css">
+  <link rel="stylesheet" crossorigin href="/assets/result-celebration-BJvK6YRw.css">
+</head>
+
+<body>
+    <div class="carrom-layout">
+        <!-- ============================================================
+             1. TOP SECTION: Centered Objective Banner (No 'Star 1')
+             ============================================================ -->
+        <header class="top-section">
+            <div class="objective-banner family-note" id="objective-banner">
+                <span class="objective-icon">🎯</span>
+                <span class="objective-main-text" id="objective-display">सफेद गोटी पॉकेट में डालें</span>
+            </div>
+            <strong id="shot-counter" class="shot-counter" aria-live="polite" aria-atomic="true">कुल शॉट: 0</strong>
+            <div id="shot-status" class="shot-status" role="status" hidden></div>
+        </header>
+
+        <!-- ============================================================
+             2. CENTER SECTION: Carrom Board Canvas + Higher Slider Bar
+             ============================================================ -->
+        <main class="board-wrapper">
+            <div id="game-container">
+                <canvas id="gameCanvas" width="600" height="600"></canvas>
+            </div>
+            <!-- Small sleek dragging line placed HIGHER directly below board -->
+            <div class="small-slider-line-wrap" id="slider-wrap">
+                <input type="range" id="position-slider" min="150" max="450" value="300" aria-label="स्ट्राइकर स्थिति">
+            </div>
+        </main>
+
+        <!-- ============================================================
+             3. BOTTOM SECTION: Retry and return to the hub
+             ============================================================ -->
+        <footer class="bottom-section">
+            <button id="retry-btn" class="btn-retry family-primary" type="button" title="पहेली पुनः प्रारंभ करें">
+                <span class="btn-retry-icon">🔄</span>
+                <span class="btn-retry-text">पुनः प्रयास</span>
+            </button>
+            <button id="more-games-btn" class="family-secondary" type="button">🎮 और खेल</button>
+        </footer>
+    </div>
+
+    <!-- ============================================================
+         4. MODAL DIALOG OVERLAY (Only for Winning & Rules)
+         ============================================================ -->
+    <div id="modal-backdrop" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div data-result-celebration></div>
+            <div class="modal-icon-badge" id="modal-icon">🎉</div>
+            <h2 id="modal-title" class="modal-title">शानदार शॉट!</h2>
+            <div id="modal-desc" class="modal-desc">आपने लक्ष्य सफलतापूर्वक पूरा कर लिया!</div>
+            <div class="carrom-result-actions">
+                <button id="modal-more-games-btn" class="family-secondary" type="button" hidden>🎮 और खेल</button>
+                <button id="modal-btn" class="modal-btn family-primary" type="button">पुनः प्रयास</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 5. EXACT PHYSICS & GEOMETRY CONSTANTS (Do NOT change math)
+        // ============================================================
+        const CANVAS_SIZE = 600;
+        const POCKET_RADIUS = 28;
+        const STRIKER_RADIUS = 20;
+        const COIN_RADIUS = 15;
+
+        // Game states: 'IDLE', 'AIMING', 'MOVING', 'EVALUATE'
+        let gameState = 'IDLE';
+        let currentLevelIndex = 0;
+        let currentLevel = null;
+        let potted = { white: 0, black: 0, red: 0, striker: 0 };
+        let restTicks = 0;
+        let shotsTaken = 0;
+        let practiceRound = false;
+        const carromStorageKey = 'db-jam:v2:carrom:' + window.DBJamDemo.day;
+        const RULES_VERSION = 'multi-shot-v1';
+        let completed = false, firstCompletionShots = null, bestReplayShots = null, lastSnapshotAt = 0;
+        function saveCarromState() {
+            if (!currentLevel) return;
+            document.getElementById('shot-counter').textContent = `कुल शॉट: ${shotsTaken}`;
+            const pieces = world.bodies.filter(b => b.label.startsWith('coin_') || b.label === 'striker').map(b => ({ type: b.label, x: b.position.x, y: b.position.y, vx: b.velocity.x, vy: b.velocity.y, angle: b.angle, angularVelocity: b.angularVelocity }));
+            window.DBJamDemo.setItem(carromStorageKey, JSON.stringify({ started: true, challengeId: currentLevel.challengeId, rulesVersion: RULES_VERSION, shots: shotsTaken, completed, practice: practiceRound, firstCompletionShots, bestReplayShots, potted, pieces, state: gameState === 'MOVING' ? 'MOVING' : 'IDLE' }));
+        }
+        window.addEventListener('pagehide', saveCarromState);
+        document.addEventListener('visibilitychange', () => { if (document.hidden) saveCarromState(); });
+
+        // Interaction state
+        let dragMode = null;
+        let dragStart = null;
+        let dragCurrent = null;
+        let strikerBody = null;
+        let dragOriginPos = null;
+        let strikerStartX = 300;
+
+        // Audio state
+        let audioCtx = null;
+        let lastClackTime = 0;
+
+
+
+        // ============================================================
+        // 6. SHORT, CRISP, NON-TRUNCATING LEVEL OBJECTIVES
+        // ============================================================
+        const LEVELS = [
+            {
+                levelNum: 1, challengeId: "DB-CARROM-DOUBLE-01",
+                objective: "दोनों सफेद गोटियाँ पॉकेट में डालें",
+                coins: [
+                    { x: 210, y: 160, type: 'white' },
+                    { x: 390, y: 200, type: 'white' }
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => p.white >= 2 ? 'win' : 'lose'
+            },
+            {
+                levelNum: 2, challengeId: "DB-CARROM-BANK-02",
+                objective: "बैंक शॉट: सफेद गोटी डालें, काली से बचें",
+                coins: [
+                    { x: 300, y: 150, type: 'white' },
+                    { x: 300, y: 250, type: 'black' }
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => (p.white > 0 && p.black === 0) ? 'win' : 'lose'
+            },
+            {
+                levelNum: 3, challengeId: "DB-CARROM-QUEEN-03",
+                objective: "कट शॉट: लाल गोटी (रानी) डालें",
+                coins: [
+                    { x: 450, y: 150, type: 'red' },
+                    { x: 400, y: 220, type: 'black' },
+                    { x: 300, y: 300, type: 'black' }
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => (p.red > 0 && p.black === 0) ? 'win' : 'lose'
+            },
+            {
+                levelNum: 4, challengeId: "DB-CARROM-GAP-04",
+                objective: "गोटियों के बीच से सफेद गोटी डालें",
+                coins: [
+                    { x: 300, y: 100, type: 'white' },
+                    { x: 260, y: 220, type: 'black' },
+                    { x: 340, y: 220, type: 'black' }
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => (p.white > 0 && p.black === 0) ? 'win' : 'lose'
+            },
+            {
+                levelNum: 5, challengeId: "DB-CARROM-MAZE-05",
+                objective: "चक्रव्यूह: लाल गोटी पॉकेट करें",
+                coins: [
+                    { x: 120, y: 120, type: 'red' },
+                    { x: 180, y: 120, type: 'black' },
+                    { x: 120, y: 180, type: 'black' },
+                    { x: 250, y: 250, type: 'black' }
+                ],
+                striker: { x: 300, y: 485 },
+                check: (p) => (p.red > 0 && p.black === 0) ? 'win' : 'lose'
+            }
+        ];
+
+        // ============================================================
+        // 7. AUDIO SYSTEM
+        // ============================================================
+        function initAudio() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            } catch (e) {
+                console.warn("Web Audio API not supported", e);
+            }
+        }
+
+        function playClack(volume = 1) {
+            if (window.DBGameAudio?.isSfxEnabled() === false || !audioCtx || audioCtx.state !== 'running') return;
+            const now = Date.now();
+            if (now - lastClackTime < 40) return;
+            lastClackTime = now;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
+
+            gain.gain.setValueAtTime(Math.min(1, volume) * 0.14, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.03);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        function playPocketSound() {
+            if (window.DBGameAudio?.isSfxEnabled() === false || !audioCtx || audioCtx.state !== 'running') return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(320, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.15);
+
+            gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.2);
+        }
+
+        function playTapSound() {
+            if (window.DBGameAudio?.isSfxEnabled() === false || !audioCtx || audioCtx.state !== 'running') return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(550, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.07);
+        }
+
+        // ============================================================
+        // 8. MATTER.JS PHYSICS SETUP (Unchanged Engine Parameters)
+        // ============================================================
+        const engine = Matter.Engine.create({
+            gravity: { x: 0, y: 0, scale: 0 }
+        });
+        const world = engine.world;
+
+        // Canvas setup
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // UI Element References
+        const ui = {
+            modalBackdrop: document.getElementById('modal-backdrop'),
+            modalIcon: document.getElementById('modal-icon'),
+            modalTitle: document.getElementById('modal-title'),
+            modalDesc: document.getElementById('modal-desc'),
+            modalBtn: document.getElementById('modal-btn'),
+            modalMoreGamesBtn: document.getElementById('modal-more-games-btn'),
+            objectiveDisplay: document.getElementById('objective-display'),
+            sliderWrap: document.getElementById('slider-wrap'),
+            positionSlider: document.getElementById('position-slider'),
+            retryBtn: document.getElementById('retry-btn')
+        };
+
+        function setGameState(newState) {
+            gameState = newState;
+            if (gameState === 'IDLE') {
+                ui.sliderWrap.classList.remove('disabled');
+            } else {
+                ui.sliderWrap.classList.add('disabled');
+            }
+        }
+
+        // Direct Striker Positioning
+        function updateStrikerX(newX) {
+            if (!strikerBody) return;
+            const clampedX = Math.max(150, Math.min(450, newX));
+            Matter.Body.setPosition(strikerBody, { x: clampedX, y: currentLevel.striker.y });
+            Matter.Body.setVelocity(strikerBody, { x: 0, y: 0 });
+            if (ui.positionSlider && parseFloat(ui.positionSlider.value) !== clampedX) {
+                ui.positionSlider.value = clampedX;
+            }
+            if (gameState === 'IDLE') saveCarromState();
+        }
+
+        // Slider Input Event
+        ui.positionSlider.addEventListener('input', (e) => {
+            if (gameState === 'IDLE') {
+                updateStrikerX(parseFloat(e.target.value));
+            }
+        });
+
+        function retryPuzzle() {
+            if (completed) { practiceRound = true; shotsTaken = 0; }
+            completed = false;
+            initAudio();
+            playTapSound();
+            hideModal();
+            try {
+                const lab = window.DBGameLab || (window.parent && window.parent.DBGameLab);
+                lab?.startGame?.();
+            } catch(e) {}
+            loadLevel(currentLevelIndex);
+            saveCarromState();
+        }
+
+        ui.retryBtn.addEventListener('click', retryPuzzle);
+        document.getElementById('more-games-btn').addEventListener('click', () => window.DBGameNavigation.goHome());
+        ui.modalMoreGamesBtn.addEventListener('click', () => window.DBGameNavigation.goHome());
+
+        function showModal(title, desc, btnText, callback, icon = '🎉', isResult = false, animateResult = true) {
+            ui.modalMoreGamesBtn.hidden = !isResult;
+            ui.modalBackdrop.classList.remove('hidden');
+            ui.modalTitle.innerText = title;
+            ui.modalDesc.innerText = desc;
+            ui.modalBtn.innerText = btnText;
+            ui.modalIcon.innerText = icon;
+            ui.modalBackdrop.querySelector('.modal-card').classList.toggle('is-result', isResult);
+            const celebration = ui.modalBackdrop.querySelector('[data-result-celebration]');
+            if (isResult) {
+                ui.modalDesc.innerText = `कुल शॉट: ${shotsTaken}\nपहली पूर्णता: ${firstCompletionShots} शॉट${bestReplayShots === null ? "" : ` · सर्वश्रेष्ठ रीप्ले: ${bestReplayShots} शॉट`}`;
+                window.DBResultCelebration.show(celebration, {
+                    game: 'carrom', details: { shots: shotsTaken }, animate: animateResult,
+                });
+            } else window.DBResultCelebration.clear(celebration);
+            ui.modalBtn.onclick = () => {
+                initAudio();
+                playTapSound();
+                callback();
+            };
+        }
+
+        function hideModal() {
+            ui.modalBackdrop.classList.add('hidden');
+            window.DBResultCelebration.clear(ui.modalBackdrop.querySelector('[data-result-celebration]'));
+        }
+
+        function showRulesModal() {
+            const previousState = gameState;
+            initAudio();
+            showModal(
+                "‘आज का निशाना’ के नियम",
+                "१. कर्सर से स्ट्राइकर को बेसलाइन पर बाएँ/दाएँ ड्रैग करें।\n२. स्ट्राइकर पर टच करके पीछे की ओर खींचें और निशाना साधें।\n३. छोड़ते ही स्ट्राइकर शॉट लगाएगा।\n४. लक्ष्य पूरा होने तक शॉट लें। हर छोड़ा गया शॉट गिना जाएगा।\n५. स्ट्राइकर फाउल पर प्रगति बनी रहेगी। मना की गई काली गोटी डालने पर बोर्ड रीसेट होगा; कुल शॉट बने रहेंगे।",
+                "समझ गए",
+                () => {
+                    hideModal();
+                    setGameState(previousState);
+                },
+                "ℹ️"
+            );
+        }
+
+        window.openHelpModal = showRulesModal;
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'OPEN_RULES') {
+                showRulesModal();
+            }
+        });
+
+        // ============================================================
+        // 9. BOARD PHYSICS WALLS & SETUP (Unchanged Dimensions)
+        // ============================================================
+        function setupBoard() {
+            const THICKNESS = 35;
+            const wOpt = { isStatic: true, label: 'wall', restitution: 0.9, friction: 0 };
+
+            Matter.World.add(world, [
+                Matter.Bodies.rectangle(CANVAS_SIZE / 2, THICKNESS / 2, CANVAS_SIZE, THICKNESS, wOpt),
+                Matter.Bodies.rectangle(CANVAS_SIZE / 2, CANVAS_SIZE - THICKNESS / 2, CANVAS_SIZE, THICKNESS, wOpt),
+                Matter.Bodies.rectangle(CANVAS_SIZE - THICKNESS / 2, CANVAS_SIZE / 2, THICKNESS, CANVAS_SIZE, wOpt),
+                Matter.Bodies.rectangle(THICKNESS / 2, CANVAS_SIZE / 2, THICKNESS, CANVAS_SIZE, wOpt)
+            ]);
+        }
+
+        function loadLevel(index) {
+            Matter.World.clear(world);
+            Matter.Engine.clear(engine);
+            setupBoard();
+
+            currentLevelIndex = index;
+            currentLevel = LEVELS[index];
+            bodiesToRemove = []; dragMode = null;
+            potted = { white: 0, black: 0, red: 0, striker: 0 };
+            restTicks = 0;
+
+            const physOptions = {
+                restitution: 0.9,
+                friction: 0,
+                frictionAir: 0.015,
+                density: 0.005
+            };
+
+            // Spawn Coins
+            currentLevel.coins.forEach(c => {
+                let body = Matter.Bodies.circle(c.x, c.y, COIN_RADIUS, {
+                    ...physOptions,
+                    label: 'coin_' + c.type
+                });
+                Matter.World.add(world, body);
+            });
+
+            // Spawn Striker
+            strikerBody = Matter.Bodies.circle(currentLevel.striker.x, currentLevel.striker.y, STRIKER_RADIUS, {
+                restitution: 0.9,
+                friction: 0,
+                frictionAir: 0.012,
+                density: 0.012,
+                label: 'striker'
+            });
+            Matter.World.add(world, strikerBody);
+
+            // Update Top HUD (Centered Objective Only)
+            ui.objectiveDisplay.innerText = currentLevel.objective;
+            document.getElementById("shot-status").textContent = '';
+            document.getElementById("shot-status").hidden = true;
+            ui.positionSlider.value = currentLevel.striker.x;
+
+            setGameState('IDLE');
+        }
+
+        function returnStriker() {
+            if (world.bodies.includes(strikerBody)) Matter.World.remove(world, strikerBody);
+            const coins = world.bodies.filter(b => b.label.startsWith('coin_'));
+            let x = 300;
+            for (const c of Array.from({ length: 301 }, (_, i) => i + 150).sort((a, b) => Math.abs(a - 300) - Math.abs(b - 300))) {
+                if (coins.every(b => Math.hypot(b.position.x - c, b.position.y - 485) > COIN_RADIUS + STRIKER_RADIUS + 1)) { x = c; break; }
+            }
+            strikerBody = Matter.Bodies.circle(x, 485, STRIKER_RADIUS, { restitution: 0.9, friction: 0, frictionAir: 0.012, density: 0.012, label: 'striker' });
+            Matter.World.add(world, strikerBody);
+            ui.positionSlider.value = x; restTicks = 0; setGameState('IDLE');
+        }
+        function reportCompletion(restored = false) {
+            const details = { puzzles: 1, shots: shotsTaken, mode: practiceRound ? 'practice' : 'daily', challengeId: currentLevel.challengeId, rulesVersion: RULES_VERSION, edition: window.DBJamDemo.day, restored };
+            const lab = window.DBGameLab || window.parent?.DBGameLab;
+            if (lab?.endGame) lab.endGame(100, details);
+            else if (window.parent !== window) window.parent.postMessage({ type: 'GAME_COMPLETE', score: 100, details, edition: details.edition }, window.location.origin);
+            else window.recordStandaloneCarrom(details);
+        }
+        function evaluateLevel() {
+            if (completed) return;
+            const strikerFoul = potted.striker > 0;
+            potted.striker = 0;
+            if ((currentLevelIndex !== 0 && potted.black > 0) || (strikerFoul && currentLevel.check(potted) === 'win')) {
+                loadLevel(currentLevelIndex);
+                document.getElementById('shot-status').textContent = 'फाउल: बोर्ड रीसेट हुआ।';
+                document.getElementById('shot-status').hidden = false;
+            } else if (!strikerFoul && currentLevel.check(potted) === 'win') {
+                completed = true; setGameState('COMPLETE');
+                if (practiceRound) bestReplayShots = bestReplayShots === null ? shotsTaken : Math.min(bestReplayShots, shotsTaken);
+                else if (firstCompletionShots === null) firstCompletionShots = shotsTaken;
+                saveCarromState();
+                showModal('लक्ष्य पूरा! 🎉', '', 'फिर खेलें', retryPuzzle, '🎉', true);
+                reportCompletion(); return;
+            } else {
+                returnStriker();
+                document.getElementById('shot-status').textContent = strikerFoul ? 'फाउल: स्ट्राइकर पॉकेट हुआ।' : '';
+                document.getElementById('shot-status').hidden = !strikerFoul;
+            }
+            saveCarromState();
+        }
+
+        // ============================================================
+        // 10. COLLISION & POCKET DETECTION (Unchanged Math)
+        // ============================================================
+        let bodiesToRemove = [];
+        Matter.Events.on(engine, 'collisionStart', (e) => {
+            e.pairs.forEach(pair => {
+                const { bodyA, bodyB } = pair;
+                if (bodyA.speed > 1 || bodyB.speed > 1) {
+                    playClack(Math.min(1, (bodyA.speed + bodyB.speed) / 15));
+                }
+            });
+        });
+
+        Matter.Events.on(engine, 'afterUpdate', () => {
+            const POCKET_OFFSET = 40;
+            const POCKET_FALL_RADIUS = 24;
+            const corners = [
+                [POCKET_OFFSET, POCKET_OFFSET],
+                [CANVAS_SIZE - POCKET_OFFSET, POCKET_OFFSET],
+                [POCKET_OFFSET, CANVAS_SIZE - POCKET_OFFSET],
+                [CANVAS_SIZE - POCKET_OFFSET, CANVAS_SIZE - POCKET_OFFSET]
+            ];
+
+            world.bodies.forEach(b => {
+                if (b.label.startsWith('coin') || b.label === 'striker') {
+                    for (let c of corners) {
+                        const dist = Math.hypot(b.position.x - c[0], b.position.y - c[1]);
+                        if (dist < POCKET_FALL_RADIUS) {
+                            if (!bodiesToRemove.includes(b)) {
+                                bodiesToRemove.push(b);
+                                playPocketSound();
+                            }
+                            break;
+                        }
+                    }
+                }
+            });
+
+            bodiesToRemove.forEach(b => {
+                Matter.World.remove(world, b);
+                if (b.label === 'coin_white') potted.white++;
+                if (b.label === 'coin_black') potted.black++;
+                if (b.label === 'coin_red') potted.red++;
+                if (b.label === 'striker') potted.striker++;
+            });
+            if (bodiesToRemove.length > 0) {
+                bodiesToRemove = [];
+            }
+        });
+
+        // ============================================================
+        // 11. BOARD & PIECES RENDERING
+        // ============================================================
+        function drawBoard() {
+            const THICKNESS = 35;
+
+            // Outer Dark Wood Frame
+            ctx.fillStyle = '#3E2723';
+            ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+            // Subtle inner frame wood rim
+            ctx.fillStyle = '#4E342E';
+            ctx.fillRect(4, 4, CANVAS_SIZE - 8, CANVAS_SIZE - 8);
+
+            // Inner Light Wood Board
+            ctx.fillStyle = '#E8C396';
+            ctx.fillRect(THICKNESS, THICKNESS, CANVAS_SIZE - THICKNESS * 2, CANVAS_SIZE - THICKNESS * 2);
+
+            // Frame joints
+            ctx.strokeStyle = '#27160C';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(0, 0); ctx.lineTo(THICKNESS, THICKNESS);
+            ctx.moveTo(CANVAS_SIZE, 0); ctx.lineTo(CANVAS_SIZE - THICKNESS, THICKNESS);
+            ctx.moveTo(0, CANVAS_SIZE); ctx.lineTo(THICKNESS, CANVAS_SIZE - THICKNESS);
+            ctx.moveTo(CANVAS_SIZE, CANVAS_SIZE); ctx.lineTo(CANVAS_SIZE - THICKNESS, CANVAS_SIZE - THICKNESS);
+            ctx.stroke();
+
+            // Inner shadow rim
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.18)';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(THICKNESS + 1.5, THICKNESS + 1.5, CANVAS_SIZE - (THICKNESS + 1.5) * 2, CANVAS_SIZE - (THICKNESS + 1.5) * 2);
+
+            // Center Decorations
+            const cx = CANVAS_SIZE / 2;
+            const cy = CANVAS_SIZE / 2;
+
+            // Outer dashed ring
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath(); ctx.arc(cx, cy, 95, 0, Math.PI * 2); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Middle rings
+            ctx.strokeStyle = '#A13333';
+            ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.arc(cx, cy, 75, 0, Math.PI * 2); ctx.stroke();
+
+            ctx.strokeStyle = '#222222';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(cx, cy, 65, 0, Math.PI * 2); ctx.stroke();
+
+            // Bullseye
+            ctx.fillStyle = '#A13333';
+            ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#222222';
+            ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.stroke();
+
+            // Center dot
+            ctx.fillStyle = '#E8C396';
+            ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
+
+            // Baselines
+            const drawBaseline = (x, y, w, h, isVertical) => {
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.lineWidth = 1.5;
+
+                if (isVertical) {
+                    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + h); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(x + w, y); ctx.lineTo(x + w, y + h); ctx.stroke();
+                } else {
+                    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + w, y); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(x, y + h); ctx.lineTo(x + w, y + h); ctx.stroke();
+                }
+
+                const r = 15;
+                const drawEnd = (endX, endY) => {
+                    ctx.fillStyle = '#A13333';
+                    ctx.beginPath(); ctx.arc(endX, endY, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                    ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+                    ctx.beginPath(); ctx.arc(endX, endY, r - 4, 0, Math.PI * 2); ctx.stroke();
+                };
+
+                if (isVertical) {
+                    drawEnd(x + w / 2, y);
+                    drawEnd(x + w / 2, y + h);
+                } else {
+                    drawEnd(x, y + h / 2);
+                    drawEnd(x + w, y + h / 2);
+                }
+            };
+
+            const bOffset = 150;
+            const bLength = 300;
+            const bThick = 26;
+
+            drawBaseline(bOffset, 472, bLength, bThick, false);
+            drawBaseline(bOffset, 102, bLength, bThick, false);
+            drawBaseline(102, bOffset, bThick, bLength, true);
+            drawBaseline(472, bOffset, bThick, bLength, true);
+
+            // Visual guide on baseline for direct cursor drag
+            if (gameState === 'IDLE' && strikerBody) {
+                ctx.strokeStyle = 'rgba(37, 99, 235, 0.22)';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(150, 485);
+                ctx.lineTo(450, 485);
+                ctx.stroke();
+
+                const sx = strikerBody.position.x;
+                ctx.fillStyle = '#2563EB';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                if (sx > 175) ctx.fillText('◀', sx - 29, 485);
+                if (sx < 425) ctx.fillText('▶', sx + 29, 485);
+            }
+
+            // Pockets
+            const offset = 40;
+            const pRadius = POCKET_RADIUS;
+            const corners = [
+                [offset, offset],
+                [CANVAS_SIZE - offset, offset],
+                [offset, CANVAS_SIZE - offset],
+                [CANVAS_SIZE - offset, CANVAS_SIZE - offset]
+            ];
+
+            corners.forEach(c => {
+                ctx.fillStyle = '#111111';
+                ctx.beginPath();
+                ctx.arc(c[0], c[1], pRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#2a2a2a';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(c[0], c[1], pRadius - 2, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#3E2723';
+                ctx.beginPath();
+                ctx.arc(c[0], c[1], pRadius + 1, 0, Math.PI * 2);
+                ctx.stroke();
+            });
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+            drawBoard();
+
+            // Draw Pieces
+            world.bodies.forEach(b => {
+                if (b.label.startsWith('coin') || b.label === 'striker') {
+                    ctx.translate(b.position.x, b.position.y);
+                    ctx.rotate(b.angle);
+
+                    // Drop Shadow
+                    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                    ctx.beginPath();
+                    ctx.arc(2, 3, b.circleRadius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Radial Gradient Bevel
+                    let grad = ctx.createRadialGradient(
+                        -b.circleRadius * 0.3, -b.circleRadius * 0.3, 2,
+                        0, 0, b.circleRadius
+                    );
+
+                    ctx.beginPath();
+                    ctx.arc(0, 0, b.circleRadius, 0, Math.PI * 2);
+
+                    if (b.label === 'coin_white') {
+                        grad.addColorStop(0, '#FFFFFF');
+                        grad.addColorStop(1, '#E6D5B8');
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        ctx.lineWidth = 1; ctx.strokeStyle = '#BBA480'; ctx.stroke();
+
+                        ctx.strokeStyle = '#C5B293'; ctx.lineWidth = 1.5;
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
+
+                    } else if (b.label === 'coin_black') {
+                        grad.addColorStop(0, '#666666');
+                        grad.addColorStop(1, '#1A1A1A');
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        ctx.lineWidth = 1; ctx.strokeStyle = '#000000'; ctx.stroke();
+
+                        ctx.strokeStyle = '#333333'; ctx.lineWidth = 1.5;
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
+
+                    } else if (b.label === 'coin_red') {
+                        grad.addColorStop(0, '#FF6B6B');
+                        grad.addColorStop(1, '#C21807');
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        ctx.lineWidth = 1; ctx.strokeStyle = '#7A0F04'; ctx.stroke();
+
+                        ctx.strokeStyle = '#9C1305'; ctx.lineWidth = 1.5;
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.6, 0, Math.PI * 2); ctx.stroke();
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.25, 0, Math.PI * 2); ctx.stroke();
+
+                    } else if (b.label === 'striker') {
+                        grad.addColorStop(0, '#FFFFFF');
+                        grad.addColorStop(1, '#D9E2E8');
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        ctx.lineWidth = 1.5; ctx.strokeStyle = '#1E3A8A'; ctx.stroke();
+
+                        ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 2;
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.65, 0, Math.PI * 2); ctx.stroke();
+
+                        ctx.fillStyle = '#2563EB';
+                        ctx.beginPath(); ctx.arc(0, 0, b.circleRadius * 0.2, 0, Math.PI * 2); ctx.fill();
+
+                        ctx.fillStyle = '#1E3A8A';
+                        ctx.beginPath(); ctx.arc(0, -b.circleRadius * 0.45, 3, 0, Math.PI * 2); ctx.fill();
+                    }
+
+                    ctx.rotate(-b.angle);
+                    ctx.translate(-b.position.x, -b.position.y);
+                }
+            });
+
+            // AIMING GUIDE & POWER METER
+            if (gameState === 'AIMING' && dragStart && dragCurrent && strikerBody) {
+                const dx = dragStart.x - dragCurrent.x;
+                const dy = dragStart.y - dragCurrent.y;
+                const dist = Math.hypot(dx, dy);
+                const maxDist = 150;
+                const clampedDist = Math.min(dist, maxDist);
+
+                if (clampedDist > 15) {
+                    const angle = Math.atan2(dy, dx);
+                    const startX = strikerBody.position.x;
+                    const startY = strikerBody.position.y;
+                    const dirX = Math.cos(angle);
+                    const dirY = Math.sin(angle);
+
+                    let t_min = Infinity;
+
+                    const minX = 35 + STRIKER_RADIUS;
+                    const maxX = CANVAS_SIZE - 35 - STRIKER_RADIUS;
+                    const minY = 35 + STRIKER_RADIUS;
+                    const maxY = CANVAS_SIZE - 35 - STRIKER_RADIUS;
+
+                    if (dirX > 0) t_min = Math.min(t_min, (maxX - startX) / dirX);
+                    else if (dirX < 0) t_min = Math.min(t_min, (minX - startX) / dirX);
+
+                    if (dirY > 0) t_min = Math.min(t_min, (maxY - startY) / dirY);
+                    else if (dirY < 0) t_min = Math.min(t_min, (minY - startY) / dirY);
+
+                    world.bodies.forEach(b => {
+                        if (b.label.startsWith('coin')) {
+                            const vecX = startX - b.position.x;
+                            const vecY = startY - b.position.y;
+                            const b_quad = 2 * (dirX * vecX + dirY * vecY);
+                            const c_quad = (vecX * vecX + vecY * vecY) - Math.pow(STRIKER_RADIUS + b.circleRadius, 2);
+                            const discriminant = (b_quad * b_quad) - (4 * c_quad);
+
+                            if (discriminant >= 0) {
+                                const t1 = (-b_quad - Math.sqrt(discriminant)) / 2;
+                                if (t1 > 0.01 && t1 < t_min) {
+                                    t_min = t1;
+                                }
+                            }
+                        }
+                    });
+
+                    const impactX = startX + dirX * t_min;
+                    const impactY = startY + dirY * t_min;
+                    const powerRatio = clampedDist / maxDist;
+
+                    const ringRadius = STRIKER_RADIUS + 14;
+                    ctx.beginPath();
+                    ctx.arc(startX, startY, ringRadius, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.arc(startX, startY, ringRadius, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * powerRatio));
+                    const hue = (1 - powerRatio) * 120;
+                    ctx.strokeStyle = `hsla(${hue}, 100%, 55%, 1)`;
+                    ctx.lineWidth = 4;
+                    ctx.lineCap = 'round';
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(impactX, impactY);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.arc(impactX, impactY, STRIKER_RADIUS, 0, Math.PI * 2);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // ============================================================
+        // 12. DIRECT CURSOR DRAGGING & TOUCH CONTROLS
+        // ============================================================
+        function getTouchPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = CANVAS_SIZE / rect.width;
+            const scaleY = CANVAS_SIZE / rect.height;
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function handleStart(e) {
+            if (gameState !== 'IDLE' || !strikerBody) return;
+            initAudio();
+            const pos = getTouchPos(e);
+            dragOriginPos = pos;
+
+            const distToStriker = Math.hypot(pos.x - strikerBody.position.x, pos.y - strikerBody.position.y);
+            const isNearBaseline = Math.abs(pos.y - 485) <= 45 && pos.x >= 120 && pos.x <= 480;
+
+            if (distToStriker <= strikerBody.circleRadius + 22) {
+                dragMode = 'STRIKER_TOUCH';
+                strikerStartX = strikerBody.position.x;
+                dragStart = { x: strikerBody.position.x, y: strikerBody.position.y };
+                dragCurrent = pos;
+            } else if (isNearBaseline) {
+                dragMode = 'POSITIONING';
+                updateStrikerX(pos.x);
+            }
+        }
+
+        function handleMove(e) {
+            if (!dragMode || !strikerBody) return;
+            if (e.cancelable) e.preventDefault();
+            const pos = getTouchPos(e);
+
+            if (dragMode === 'POSITIONING') {
+                updateStrikerX(pos.x);
+            } else if (dragMode === 'STRIKER_TOUCH') {
+                const deltaX = pos.x - dragOriginPos.x;
+                const deltaY = pos.y - dragOriginPos.y;
+                const dist = Math.hypot(deltaX, deltaY);
+
+                if (dist > 8) {
+                    if (deltaY > 6 || (Math.abs(deltaY) > Math.abs(deltaX) && dist > 14)) {
+                        dragMode = 'AIMING';
+                        setGameState('AIMING');
+                        dragStart = { x: strikerBody.position.x, y: strikerBody.position.y };
+                        dragCurrent = pos;
+                    } else {
+                        dragMode = 'POSITIONING';
+                        updateStrikerX(strikerStartX + deltaX);
+                    }
+                }
+            } else if (dragMode === 'AIMING') {
+                dragCurrent = pos;
+            }
+        }
+
+        function handleEnd(e) {
+            if (!dragMode) return;
+
+            if (dragMode === 'AIMING') {
+                const dx = dragStart.x - dragCurrent.x;
+                const dy = dragStart.y - dragCurrent.y;
+                const dist = Math.hypot(dx, dy);
+
+                if (dist > 15) {
+                    const maxDist = 150;
+                    const clampedDist = Math.min(dist, maxDist);
+                    const angle = Math.atan2(dy, dx);
+                    const speed = (clampedDist / maxDist) * 24;
+
+                    Matter.Body.setVelocity(strikerBody, {
+                        x: Math.cos(angle) * speed,
+                        y: Math.sin(angle) * speed
+                    });
+                    shotsTaken++;
+                    setGameState('MOVING');
+                    saveCarromState();
+                } else {
+                    setGameState('IDLE');
+                }
+            } else if (dragMode === 'POSITIONING' || dragMode === 'STRIKER_TOUCH') {
+                setGameState('IDLE');
+            }
+
+            dragMode = null;
+            dragStart = null;
+            dragCurrent = null;
+        }
+
+        canvas.addEventListener('mousedown', handleStart);
+        canvas.addEventListener('touchstart', handleStart, { passive: false });
+
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('touchmove', handleMove, { passive: false });
+        window.addEventListener('mouseup', handleEnd);
+        window.addEventListener('touchend', handleEnd, { passive: false });
+        window.addEventListener('touchcancel', () => { dragMode = null; dragStart = null; dragCurrent = null; if (gameState === 'AIMING') setGameState('IDLE'); });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (gameState === 'IDLE' && strikerBody) {
+                const pos = getTouchPos(e);
+                const dist = Math.hypot(pos.x - strikerBody.position.x, pos.y - strikerBody.position.y);
+                const isNearBaseline = Math.abs(pos.y - 485) <= 35 && pos.x >= 140 && pos.x <= 460;
+                if (dist <= strikerBody.circleRadius + 15) {
+                    canvas.style.cursor = 'grab';
+                } else if (isNearBaseline) {
+                    canvas.style.cursor = 'ew-resize';
+                } else {
+                    canvas.style.cursor = 'default';
+                }
+            } else {
+                canvas.style.cursor = 'default';
+            }
+        });
+
+        // ============================================================
+        // 13. GAME STATE LOOP
+        // ============================================================
+        function checkGameState() {
+            if (gameState === 'MOVING') {
+                let moving = false;
+
+                for (let i = 0; i < world.bodies.length; i++) {
+                    let b = world.bodies[i];
+                    if (!b.isStatic && b.label !== 'pocket') {
+                        if (b.speed > 0.05) {
+                            moving = true;
+                        } else if (b.speed > 0) {
+                            Matter.Body.setVelocity(b, { x: 0, y: 0 });
+                            Matter.Body.setAngularVelocity(b, 0);
+                        }
+                    }
+                }
+
+                if (!moving) {
+                    restTicks++;
+                    if (restTicks > 20) {
+                        setGameState('EVALUATE');
+                        evaluateLevel();
+                    }
+                } else {
+                    restTicks = 0;
+                }
+            }
+        }
+
+        function loop() {
+            Matter.Engine.update(engine, 1000 / 60);
+            render();
+            checkGameState();
+            if (gameState === 'MOVING' && performance.now() - lastSnapshotAt > 250) { saveCarromState(); lastSnapshotAt = performance.now(); }
+            requestAnimationFrame(loop);
+        }
+
+        // ============================================================
+        // 14. INITIALIZE
+        // ============================================================
+        window.gameIntroReady.then(() => {
+            let saved;
+            try { saved = JSON.parse(window.DBJamDemo.getItem(carromStorageKey) || 'null'); } catch {}
+            // Fixed authored edition mapping, independent of the player's prior results.
+            const level = [0, 1, 2][window.DBJamDemo.index] ?? 0;
+            loadLevel(level);
+            if (saved?.challengeId === currentLevel.challengeId && saved?.rulesVersion === RULES_VERSION) {
+                shotsTaken = Number.isInteger(saved.shots) && saved.shots >= 0 ? saved.shots : 0;
+                practiceRound = Boolean(saved.practice); completed = Boolean(saved.completed);
+                firstCompletionShots = saved.firstCompletionShots ?? null; bestReplayShots = saved.bestReplayShots ?? null;
+                if (Array.isArray(saved.pieces) && saved.potted) {
+                    world.bodies.filter(b => !b.isStatic).forEach(b => Matter.World.remove(world, b));
+                    potted = saved.potted; strikerBody = null;
+                    saved.pieces.forEach(piece => {
+                        const isStriker = piece.type === 'striker';
+                        const body = Matter.Bodies.circle(piece.x, piece.y, isStriker ? STRIKER_RADIUS : COIN_RADIUS, { restitution: 0.9, friction: 0, frictionAir: isStriker ? 0.012 : 0.015, density: isStriker ? 0.012 : 0.005, label: piece.type });
+                        Matter.Body.setVelocity(body, { x: piece.vx, y: piece.vy });
+                        Matter.Body.setAngle(body, piece.angle); Matter.Body.setAngularVelocity(body, piece.angularVelocity);
+                        Matter.World.add(world, body); if (isStriker) strikerBody = body;
+                    });
+                    ui.positionSlider.value = strikerBody?.position.x || 300;
+                }
+                if (completed) {
+                    setGameState('COMPLETE');
+                    showModal('लक्ष्य पूरा! 🎉', '', 'फिर खेलें', retryPuzzle, '🎉', true, false);
+                    if (!practiceRound) reportCompletion(true);
+                } else if (saved.state === 'MOVING') setGameState('MOVING');
+            }
+            saveCarromState();
+            requestAnimationFrame(loop);
+        });
+    </script>
+</body>
+
+</html>

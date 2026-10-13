@@ -13,7 +13,7 @@
     prepareStandaloneIntro('niti').then(window.finishGameIntro);
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>आज की नीति · दैनिक भास्कर खेल | Aaj Ki Niti</title>
+  <title>आज की नीति | Aaj Ki Niti · Dainik Bhaskar / दैनिक भास्कर</title>
   <meta name="description" content="आज की नीति — शांत, दैनिक विचार पूर्ति खेल। एक विचार को पूरा करें, उसका गहरा अर्थ समझें और सुंदर विचार-कार्ड साझा करें।">
   <meta name="theme-color" content="#faf9f6">
 
@@ -987,7 +987,7 @@
           </p>
 
           <div class="thought-card-footer">
-            <span>दैनिक भास्कर खेल</span>
+            <span>Dainik Bhaskar / दैनिक भास्कर</span>
           </div>
         </article>
 
@@ -1928,7 +1928,7 @@
         ctx.fillText('मौलिक विचार · डेमो के लिए लिखा गया', centerX, 1200);
         ctx.fillStyle = palette.accent;
         ctx.font = '600 25px "Noto Sans Devanagari", "Nirmala UI", sans-serif';
-        ctx.fillText('दैनिक भास्कर खेल', centerX, 1250);
+        ctx.fillText('Dainik Bhaskar / दैनिक भास्कर', centerX, 1250, width - 160);
 
         // Update in-page preview image
         try {
@@ -1993,7 +1993,7 @@
         } else {
           festGreeting = `🌸 आज की नीति — सप्रेम प्रेषक: ${familyName} 🌸\n\n`;
         }
-        return `${festGreeting}${data.fullThought}\n\nअर्थ: ${data.meaning}\n\nमौलिक विचार · डेमो के लिए लिखा गया\nदैनिक भास्कर खेल`;
+        return `${festGreeting}${data.fullThought}\n\nअर्थ: ${data.meaning}\n\nमौलिक विचार · डेमो के लिए लिखा गया\nDainik Bhaskar / दैनिक भास्कर`;
       }
 
       async function handleShareAction() {

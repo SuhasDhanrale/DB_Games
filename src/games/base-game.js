@@ -79,7 +79,7 @@ export class BaseGame {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h12"/></svg>
         </button>
         <div class="family-header__identity">
-          <span class="family-header__brand">${isHindi ? 'भास्कर खेल' : 'Bhaskar Games'}</span>
+          <span class="family-header__brand">${t('opening.brand')}</span>
           <h1 class="family-header__title">${t(this.titleKey)}</h1>
         </div>
         <button type="button" class="family-header__help" id="game-rules-btn" aria-label="${isHindi ? 'कैसे खेलें' : 'How to play'}">
@@ -178,9 +178,9 @@ export class BaseGame {
     this.isPaused = false;
 
     const result = recordResult(this.id, score, details);
-    const completion = result.firstResult ? recordGamePlay(this.id) : null;
-    const torchCelebration = completion?.firstCompletion
-      ? prepareTorchCelebration(completion.streak) : null;
+    const completion = result.firstResult && !details.restored ? recordGamePlay(this.id) : null;
+    const torchCelebration = completion
+      ? prepareTorchCelebration(completion.streak, { awarded: completion.awarded }) : null;
     if (!this.config.ownsResultScreen) playSfx('gameover');
     bus.emit(Events.GAME_ENDED, { gameId: this.id, score, mode: result.mode });
 

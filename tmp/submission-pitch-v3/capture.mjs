@@ -1,0 +1,38 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {chromium} from 'file:///C:/Users/Suhas/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+process.on('uncaughtException',e=>{console.error(e.stack??String(e));process.exit(1);});
+const assets='E:/WebGames/Dainik Bhaskar/tmp/submission-pitch-v3/assets';
+const base='http://127.0.0.1:5192/';
+await fs.mkdir(assets,{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+try{
+ const context=await browser.newContext({viewport:{width:390,height:690},deviceScaleFactor:2,reducedMotion:'reduce'});
+ const page=await context.newPage();
+ await page.addInitScript(()=>localStorage.setItem('db-game-intro:v1:wordal','seen'));
+ await page.route('https://fonts.googleapis.com/**',route=>route.abort());
+ await page.routeWebSocket('**/*',s=>s.close());
+ await page.goto(base+'news.html?day=d1',{waitUntil:'load'});
+ await page.locator('#feedView.active').waitFor();
+ await page.screenshot({path:path.join(assets,'journey-news-feed.png')});
+ console.log('Captured sample news feed');
+ await page.goto(base+'wordal.html?day=d1',{waitUntil:'load'});
+ await page.locator('.gi-play').click();
+ await page.waitForFunction(()=>Array.isArray(window.currentWordalTokens));
+ await page.locator('#viewGame.is-active').waitFor();
+ await page.evaluate(()=>document.fonts.ready);
+ await page.screenshot({path:path.join(assets,'journey-shabd-play.png')});
+ const tokens=await page.evaluate(()=>window.currentWordalTokens);
+ for(const token of tokens)await page.locator('.key-btn').filter({hasText:new RegExp('^'+token+'$')}).click();
+ await page.locator('#btnSubmitGuess').click();
+ await page.locator('#viewResult.is-active').waitFor();
+ await page.screenshot({path:path.join(assets,'journey-shabd-result.png')});
+ await page.locator('#btnReadArticleHere').click();
+ await page.locator('#viewArticle.is-active').waitFor();
+ await page.screenshot({path:path.join(assets,'journey-shabd-article.png')});
+ await page.locator('#btnArticleBackToResult').click();
+ await page.locator('#viewResult.is-active').waitFor();
+ const result=await page.locator('#resultWordDisplay').textContent();
+ console.log('Captured play, meaning and article; returned to result:',result);
+ await context.close();
+}finally{await browser.close();}

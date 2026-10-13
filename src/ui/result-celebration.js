@@ -106,10 +106,10 @@ export function showResultCelebration(slot, { game, details, lang = 'hi', animat
     doc.addEventListener('click', onAction, true);
     reducedMotion.addEventListener('change', finish);
     timer = setTimeout(finish, 1500);
-    if (copy.success) {
-      if (window.DBGameAudio) window.DBGameAudio.playSfx('success');
-      else { initAudio(); playSfx('success'); }
-    }
+  }
+  if (animate && copy.success) {
+    if (window.DBGameAudio) window.DBGameAudio.playSfx('completion');
+    else { initAudio(); playSfx('completion'); }
   }
 }
 

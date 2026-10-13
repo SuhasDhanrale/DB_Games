@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="शब्द की टाइलें खुलती हैं">
+  
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="#eef0ff"/>
+  <g class="tile"><rect x="14" y="30" width="22" height="34" rx="6" fill="#675579"/><text x="25" y="54" text-anchor="middle" fill="white" font-size="19" font-family="Nirmala UI,sans-serif">ख</text></g>
+  <g class="tile wordalB"><rect x="39" y="30" width="22" height="34" rx="6" fill="#8B7C99"/><text x="50" y="54" text-anchor="middle" fill="white" font-size="19" font-family="Nirmala UI,sans-serif">ब</text></g>
+  <g class="tile wordalC"><rect x="64" y="30" width="22" height="34" rx="6" fill="#466853"/><text x="75" y="54" text-anchor="middle" fill="white" font-size="19" font-family="Nirmala UI,sans-serif">र</text></g>
+  <path d="m42 76 6 6 12-13" fill="none" stroke="#466853" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

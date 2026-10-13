@@ -32,6 +32,12 @@
 .support-toggle { min-width: 68px; min-height: 44px; padding: 8px 12px; background: var(--family-subtle); border: 1px solid var(--family-border); border-radius: 12px; font-size: 13px; }
 .support-toggle[aria-pressed=true] { background: #dce8d8; color: #314e3c; border-color: #9dae98; }
 .support-danger { color: #873e36; }
+.support-name-form { padding: 16px 0; border-bottom: 1px solid var(--family-border); }
+.support-name-form label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+.support-name-form > div { display: flex; gap: 8px; }
+.support-name-form input { min-width: 0; flex: 1; min-height: 44px; padding: 8px 10px; border: 1px solid var(--family-border); border-radius: 10px; background: var(--family-surface); color: var(--family-ink); font: inherit; font-size: 14px; }
+.support-name-form input:focus-visible { outline: 3px solid #526f5c; outline-offset: 2px; }
+.support-name-form [role=status] { display: block; margin-top: 5px; font-size: 12px; color: #526f5c; }
 .support-view details { margin-top: 24px; }
 .support-view summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-size: 13px; }
 .modal:has(.support-view) { background: var(--family-paper); box-shadow: none; }

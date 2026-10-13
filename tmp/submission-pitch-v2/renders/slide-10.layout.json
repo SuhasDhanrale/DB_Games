@@ -1,0 +1,12 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/udsvah03","index":9,"layout":{"id":"ly/14ra9krq","name":"Blank"},"backgroundColor":"rgba(249,249,247,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/oza1gfyh","kind":"textbox","position":{"left":64,"top":47,"width":1152,"height":103},"text":"The story and the game stay connected","style":{"fontSize":44,"typeface":"Arial","color":"#20201F","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/1cfmhgne","kind":"textbox","position":{"left":1172,"top":686,"width":40,"height":25},"text":"10","style":{"fontSize":16,"typeface":"Arial","color":"#61605D","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/0b65obm9","kind":"textbox","position":{"left":64,"top":181,"width":682,"height":45},"text":"An invitation in context","style":{"fontSize":27,"typeface":"Arial","color":"#C93526","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/nex4jq5k","kind":"textbox","position":{"left":64,"top":233,"width":682,"height":108},"text":"A cricket story can invite a six-ball challenge. A word or news connection can invite a small discovery.","style":{"fontSize":27,"typeface":"Arial","color":"#20201F","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/mdonql4z","kind":"textbox","position":{"left":64,"top":364,"width":682,"height":45},"text":"A result with somewhere to go","style":{"fontSize":27,"typeface":"Arial","color":"#C93526","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/9gzml0nq","kind":"textbox","position":{"left":64,"top":416,"width":682,"height":108},"text":"Meaning and a relevant story preview give the reader a reason to continue reading.","style":{"fontSize":27,"typeface":"Arial","color":"#20201F","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/ofq5svm5","kind":"textbox","position":{"left":64,"top":575,"width":681,"height":89},"text":"Reading remains a choice. Returning to the game keeps the reader’s progress.","style":{"fontSize":29,"typeface":"Arial","color":"#20201F","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"im/ytkjutwz","kind":"image","position":{"left":902.31,"top":154,"width":223.38,"height":484}},
+{"id":"sh/ah8nu54b","kind":"textbox","position":{"left":864,"top":650,"width":300,"height":48},"text":"The prototype’s sample news journey","style":{"fontSize":18,"typeface":"Arial","color":"#61605D","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

@@ -8,10 +8,12 @@ import { MusicPlayer } from './music-player.js';
 
 const STORAGE_KEY_SFX   = 'audio:sfx';
 const STORAGE_KEY_MUSIC = 'audio:music';
+const STORAGE_KEY_VOLUME = 'audio:music-volume';
 
 let audioCtx = null;
 let sfxEnabled = true;
-let musicEnabled = true;
+let musicEnabled = false;
+let musicVolume = 0.18;
 let musicPlayer = null;
 let musicId = null;
 let musicPaused = false;
@@ -21,6 +23,12 @@ const listeners = new Set();
 
 /** Pre-defined sound effects (generated via oscillator, no files needed) */
 const SFX_DEFS = {
+  completion: [
+    { freq: 523.25, duration: 0.18, type: 'sine', gain: 0.24, delay: 0 },
+    { freq: 659.25, duration: 0.18, type: 'sine', gain: 0.24, delay: 0.16 },
+    { freq: 783.99, duration: 0.18, type: 'sine', gain: 0.24, delay: 0.32 },
+    { freq: 1046.5, duration: 0.36, type: 'sine', gain: 0.24, delay: 0.48 },
+  ],
   tap:        { freq: 600,  duration: 0.06, type: 'sine',     gain: 0.15 },
   success:    { freq: 880,  duration: 0.15, type: 'sine',     gain: 0.2, sweep: 1200 },
   error:      { freq: 200,  duration: 0.2,  type: 'sine',     gain: 0.07 },
@@ -36,7 +44,9 @@ const SFX_DEFS = {
  */
 export function initAudio() {
   sfxEnabled  = storage.get(STORAGE_KEY_SFX, true);
-  musicEnabled = storage.get(STORAGE_KEY_MUSIC, true);
+  musicEnabled = storage.get(STORAGE_KEY_MUSIC, false);
+  musicVolume = Math.max(0, Math.min(1, Number(storage.get(STORAGE_KEY_VOLUME, 0.18)) || 0));
+  musicPlayer?.setVolume(musicVolume);
   if (!initialized) {
     initialized = true;
     document.addEventListener('pointerdown', unlockAudio, true);
@@ -47,9 +57,11 @@ export function initAudio() {
     });
     window.addEventListener('pagehide', stopMusic);
     window.addEventListener('storage', event => {
-      if (!event.key || event.key === 'db-games:v1:' + STORAGE_KEY_MUSIC || event.key === 'db-games:v1:' + STORAGE_KEY_SFX) {
+      if (!event.key || [STORAGE_KEY_MUSIC, STORAGE_KEY_SFX, STORAGE_KEY_VOLUME].some(key => event.key === 'db-games:v1:' + key)) {
         sfxEnabled = storage.get(STORAGE_KEY_SFX, true);
-        musicEnabled = storage.get(STORAGE_KEY_MUSIC, true);
+        musicEnabled = storage.get(STORAGE_KEY_MUSIC, false);
+        musicVolume = Math.max(0, Math.min(1, Number(storage.get(STORAGE_KEY_VOLUME, 0.18)) || 0));
+        musicPlayer?.setVolume(musicVolume);
         syncMusic();
         listeners.forEach(listener => listener());
       }
@@ -65,7 +77,8 @@ function ensureContext() {
   if (!unlocked && !navigator.userActivation?.isActive) return null;
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    musicPlayer = new MusicPlayer(audioCtx);
+    musicPlayer = new MusicPlayer(audioCtx, () => listeners.forEach(listener => listener()));
+    musicPlayer.setVolume(musicVolume);
   }
   if (audioCtx.state === 'suspended') {
     audioCtx.resume().then(syncMusic).catch(() => {});
@@ -108,28 +121,36 @@ export function playSfx(name) {
 
   try {
     const ctx = ensureContext();
-    if (!ctx || ctx.state !== 'running') return;
-    const osc = ctx.createOscillator();
-    const gainNode = ctx.createGain();
+    if (!ctx) return;
+    const play = () => {
+      if (!sfxEnabled || ctx.state !== 'running') return;
+      for (const note of Array.isArray(def) ? def : [def]) {
+        const start = ctx.currentTime + (note.delay || 0);
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
 
-    osc.type = def.type;
-    osc.frequency.setValueAtTime(def.freq, ctx.currentTime);
+        osc.type = note.type;
+        osc.frequency.setValueAtTime(note.freq, start);
 
-    if (def.sweep) {
-      osc.frequency.linearRampToValueAtTime(def.sweep, ctx.currentTime + def.duration);
-    }
+        if (note.sweep) {
+          osc.frequency.linearRampToValueAtTime(note.sweep, start + note.duration);
+        }
 
-    gainNode.gain.setValueAtTime(0, ctx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(def.gain, ctx.currentTime + 0.006);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + def.duration);
-    gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + def.duration + 0.03);
+        gainNode.gain.setValueAtTime(0, start);
+        gainNode.gain.linearRampToValueAtTime(note.gain, start + 0.006);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, start + note.duration);
+        gainNode.gain.linearRampToValueAtTime(0, start + note.duration + 0.03);
 
-    osc.connect(gainNode);
-    gainNode.connect(ctx.destination);
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
 
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + def.duration + 0.05);
-    osc.onended = () => { osc.disconnect(); gainNode.disconnect(); };
+        osc.start(start);
+        osc.stop(start + note.duration + 0.05);
+        osc.onended = () => { osc.disconnect(); gainNode.disconnect(); };
+      }
+    };
+    if (ctx.state === 'suspended') ctx.resume().then(play).catch(() => {});
+    else play();
   } catch {
     // Silently fail if audio doesn't work
   }
@@ -149,6 +170,14 @@ export function haptic(intensity = 'light') {
 
 export function isSfxEnabled()   { return sfxEnabled; }
 export function isMusicEnabled() { return musicEnabled; }
+export function getMusicVolume() { return musicVolume; }
+export function getMusicStatus() { return musicPlayer?.state || 'idle'; }
+export function setMusicVolume(value) {
+  musicVolume = Math.max(0, Math.min(1, Number(value) || 0));
+  storage.set(STORAGE_KEY_VOLUME, musicVolume);
+  musicPlayer?.setVolume(musicVolume);
+  listeners.forEach(listener => listener());
+}
 
 export function setSfxEnabled(enabled) {
   sfxEnabled = enabled;
@@ -168,4 +197,5 @@ export default {
   startMusic, stopMusic, pauseMusic, resumeMusic, onAudioChange,
   isSfxEnabled, isMusicEnabled,
   setSfxEnabled, setMusicEnabled,
+  getMusicVolume, setMusicVolume, getMusicStatus,
 };

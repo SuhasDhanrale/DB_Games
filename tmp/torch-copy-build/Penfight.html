@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        if (window.self === window.top) {
+            window.location.href = '/';
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Real Pen Fight Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <!-- Matter.js for realistic 2D Physics -->
+    <script src="./vendor/matter-0.19.0.min.js"></script>
+
+    <style>body{background-color:var(--bg-app);touch-action:none;user-select:none;margin:0;padding:0;font-family:Inter,Noto Sans Devanagari,system-ui,sans-serif;overflow:hidden}#game-container{background:var(--bg-app);justify-content:center;align-items:center;width:100vw;height:100vh;display:flex;position:relative}canvas{cursor:crosshair;display:block;box-shadow:0 30px 60px #000c}#ui-layer{pointer-events:none;flex-direction:column;justify-content:space-between;width:100%;height:100%;display:flex;position:absolute;top:0;left:0}.school-font{font-family:Inter,Noto Sans Devanagari,system-ui,sans-serif}.score-board{color:#fff;text-shadow:2px 2px 4px #000c;justify-content:space-between;padding:20px 40px;font-size:2rem;display:flex}.p1-text{color:var(--color-primary)}.p2-text{color:var(--color-info)}#turn-announcement{opacity:0;text-shadow:3px 3px #000;white-space:nowrap;font-size:4rem;font-weight:700;transition:all .4s cubic-bezier(.175,.885,.32,1.275);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)scale(.5)}#turn-announcement.show{opacity:1;transform:translate(-50%,-50%)scale(1)}.instructions{text-align:center;color:#cbd5e1;backdrop-filter:blur(4px);background:#0009;padding:15px;font-size:1rem}#game-over{opacity:0;pointer-events:none;z-index:50;background:#000000d9;flex-direction:column;justify-content:center;align-items:center;transition:opacity .5s;display:flex;position:absolute;inset:0}#game-over.active{opacity:1;pointer-events:auto}.btn{color:#fff;text-transform:uppercase;cursor:pointer;background:linear-gradient(135deg,#f59e0b,#d97706);border:2px solid #fff;border-radius:8px;padding:12px 32px;font-size:1.25rem;font-weight:700;transition:transform .1s;box-shadow:0 4px 6px #0000004d}.btn:hover{transform:scale(1.05)}.btn:active{transform:scale(.95)}</style>
+  <link rel="stylesheet" crossorigin href="/assets/components-CWzRRK4t.css">
+</head>
+
+<body>
+
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+
+        <div id="ui-layer">
+            <div class="score-board school-font">
+                <div class="p1-text">Red Reynolds: <span id="score-p1">0</span></div>
+                <div class="p2-text">Blue Gripper: <span id="score-p2">0</span></div>
+            </div>
+
+            <div id="turn-announcement" class="school-font">Player 1's Turn</div>
+
+            <div class="instructions">
+                <strong>How to play:</strong> Click and drag <em>ON</em> your pen to pull back. Hit the ends to spin,
+                hit the middle to push. Knock them off the desk!
+            </div>
+        </div>
+
+        <div id="game-over">
+            <h1 id="winner-text" class="text-6xl school-font mb-4 text-white">Player X Wins!</h1>
+            <p id="winner-sub" class="text-xl text-gray-300 mb-8">They knocked the opponent off the desk.</p>
+            <button class="btn school-font" onclick="resetRound()">Next Round</button>
+        </div>
+    </div>
+
+    <script>
+        // Module aliases
+        const Engine = Matter.Engine,
+            Render = Matter.Render,
+            Runner = Matter.Runner,
+            Bodies = Matter.Bodies,
+            Body = Matter.Body,
+            Events = Matter.Events,
+            Vector = Matter.Vector;
+
+        // Game Constants
+        const GAME_WIDTH = 1200;
+        const GAME_HEIGHT = 800;
+        const DESK_WIDTH = 1000;
+        const DESK_HEIGHT = 600;
+
+        // Pen dimensions
+        const PEN_WIDTH = 160;
+        const PEN_HEIGHT = 14;
+
+        // State variables
+        let engine, runner;
+        let pen1, pen2;
+        let scores = { p1: 0, p2: 0 };
+        let currentTurn = 1; // 1 (Red) or 2 (Blue)
+        let gameState = 'STARTING'; // PLAYING, WAITING_FOR_STOP, FALLING, OVER
+        let scaleFactor = 1;
+        let renderOffset = { x: 0, y: 0 };
+
+        // Input state
+        let isAiming = false;
+        let aimStartPoint = null; // Where user clicked on the pen (World coords)
+        let aimCurrentPoint = null; // Where user dragged to (World coords)
+        let activeBody = null; // The pen body being dragged
+
+        // HTML Elements
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreP1El = document.getElementById('score-p1');
+        const scoreP2El = document.getElementById('score-p2');
+        const turnAnnounce = document.getElementById('turn-announcement');
+        const gameOverScreen = document.getElementById('game-over');
+        const winnerText = document.getElementById('winner-text');
+
+        function resize() {
+            // Keep canvas filling the screen visually, but map coordinates properly
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            // Calculate scale to fit the 1200x800 game area into the window with some padding
+            scaleFactor = Math.min(canvas.width / GAME_WIDTH, canvas.height / GAME_HEIGHT) * 0.95;
+
+            // Calculate center offset
+            renderOffset.x = canvas.width / 2 - (GAME_WIDTH / 2) * scaleFactor;
+            renderOffset.y = canvas.height / 2 - (GAME_HEIGHT / 2) * scaleFactor;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Screen coordinate to Game World coordinate
+        function screenToWorld(clientX, clientY) {
+            return {
+                x: (clientX - renderOffset.x) / scaleFactor,
+                y: (clientY - renderOffset.y) / scaleFactor
+            };
+        }
+
+        function createPen(x, y, angle, type, id) {
+            // Realistic physical properties for a pen on a desk
+            const options = {
+                friction: 0.7,        // High desk friction
+                frictionAir: 0.015,   // Reduced from 0.025 to allow more spin and sliding
+                restitution: 0.45,    // Plastic bounciness
+                density: 0.003,       // Mass
+                angle: angle,
+                label: 'pen_' + id,
+                // Custom properties for our render loop
+                plugin: {
+                    type: type,
+                    playerId: id,
+                    isFalling: false,
+                    scale: 1.0, // Used for fall animation
+                    opacity: 1.0
+                }
+            };
+
+            // Use chamfer for slightly rounded corners like a real pen
+            let body = Bodies.rectangle(x, y, PEN_WIDTH, PEN_HEIGHT, {
+                ...options,
+                chamfer: { radius: 3 }
+            });
+
+            return body;
+        }
+
+        function initPhysics() {
+            engine = Engine.create();
+            engine.gravity.y = 0; // Top-down view, gravity is handled by air friction
+
+            // P1 (Red Reynolds) left side, facing right
+            pen1 = createPen(GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2, 0, 'reynolds', 1);
+            // P2 (Blue Cello) right side, facing left
+            pen2 = createPen(GAME_WIDTH / 2 + 300, GAME_HEIGHT / 2, Math.PI, 'cello', 2);
+
+            Matter.World.add(engine.world, [pen1, pen2]);
+
+            runner = Runner.create();
+            Runner.run(runner, engine);
+
+            gameState = 'PLAYING';
+            showTurn();
+        }
+
+        function drawWoodDesk() {
+            // Desk coordinates in game space
+            const deskX = (GAME_WIDTH - DESK_WIDTH) / 2;
+            const deskY = (GAME_HEIGHT - DESK_HEIGHT) / 2;
+
+            ctx.save();
+            // Drop shadow for the desk
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            ctx.shadowBlur = 40;
+            ctx.shadowOffsetX = 10;
+            ctx.shadowOffsetY = 20;
+
+            // Base wood color
+            ctx.fillStyle = '#8B5A2B';
+            ctx.beginPath();
+            ctx.roundRect(deskX, deskY, DESK_WIDTH, DESK_HEIGHT, 15);
+            ctx.fill();
+            ctx.restore(); // Remove shadow for next drawings
+
+            // Draw wood grain/lines to make it look like a school desk
+            ctx.save();
+            ctx.clip(new Path2D(`M${deskX + 15},${deskY} h${DESK_WIDTH - 30} a15,15 0 0,1 15,15 v${DESK_HEIGHT - 30} a15,15 0 0,1 -15,15 h-${DESK_WIDTH - 30} a15,15 0 0,1 -15,-15 v-${DESK_HEIGHT - 30} a15,15 0 0,1 15,-15 z`));
+
+            ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < DESK_HEIGHT; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(deskX, deskY + i);
+                ctx.lineTo(deskX + DESK_WIDTH, deskY + i + (Math.random() * 10 - 5));
+                ctx.stroke();
+            }
+
+            // A faint notebook outline for aesthetic
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(deskX + 50, deskY + 50, 200, 280);
+
+            ctx.restore();
+        }
+
+        function drawPen(body) {
+            if (body.plugin.opacity <= 0) return;
+
+            const type = body.plugin.type;
+            const hw = PEN_WIDTH / 2;
+            const hh = PEN_HEIGHT / 2;
+
+            ctx.save();
+            ctx.translate(body.position.x, body.position.y);
+            ctx.rotate(body.angle);
+
+            // Apply scale/opacity for falling animation
+            ctx.scale(body.plugin.scale, body.plugin.scale);
+            ctx.globalAlpha = body.plugin.opacity;
+
+            // Drop shadow for the pen (slightly offset based on height)
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 4;
+            ctx.shadowOffsetY = 6;
+
+            if (type === 'reynolds') {
+                // RED REYNOLDS 045 STYLE
+                // White barrel
+                ctx.fillStyle = '#f8fafc';
+                ctx.beginPath();
+                ctx.roundRect(-hw + 30, -hh, PEN_WIDTH - 60, PEN_HEIGHT, 2);
+                ctx.fill();
+
+                // Red cap at the back
+                ctx.fillStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.roundRect(-hw, -hh - 1, 35, PEN_HEIGHT + 2, [3, 0, 0, 3]);
+                ctx.fill();
+
+                // Clip on cap
+                ctx.fillStyle = '#b91c1c';
+                ctx.fillRect(-hw + 5, -hh - 3, 20, 3);
+
+                // Tip cone (white)
+                ctx.fillStyle = '#f8fafc';
+                ctx.beginPath();
+                ctx.moveTo(hw - 30, -hh);
+                ctx.lineTo(hw - 5, -3);
+                ctx.lineTo(hw - 5, 3);
+                ctx.lineTo(hw - 30, hh);
+                ctx.fill();
+
+                // Red ink tip
+                ctx.fillStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.moveTo(hw - 5, -3);
+                ctx.lineTo(hw, 0);
+                ctx.lineTo(hw - 5, 3);
+                ctx.fill();
+
+                // Details/Branding line
+                ctx.fillStyle = '#cbd5e1';
+                ctx.fillRect(-hw + 40, -2, 50, 4);
+
+            } else if (type === 'cello') {
+                // BLUE CELLO GRIPPER STYLE
+                // Transparent blue barrel
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.85)';
+                ctx.beginPath();
+                ctx.roundRect(-hw + 20, -hh, PEN_WIDTH - 40, PEN_HEIGHT, 2);
+                ctx.fill();
+
+                // Blue cap at the back
+                ctx.fillStyle = '#1e3a8a';
+                ctx.beginPath();
+                ctx.roundRect(-hw, -hh, 22, PEN_HEIGHT, [3, 0, 0, 3]);
+                ctx.fill();
+
+                // Black rubber grip
+                ctx.fillStyle = '#111827';
+                ctx.fillRect(hw - 45, -hh - 1, 25, PEN_HEIGHT + 2);
+
+                // Ribs on grip
+                ctx.fillStyle = '#374151';
+                for (let i = 0; i < 4; i++) {
+                    ctx.fillRect(hw - 40 + (i * 5), -hh - 1, 2, PEN_HEIGHT + 2);
+                }
+
+                // Metal tip
+                ctx.fillStyle = '#9ca3af'; // Silver
+                ctx.beginPath();
+                ctx.moveTo(hw - 20, -hh);
+                ctx.lineTo(hw - 5, -2);
+                ctx.lineTo(hw - 5, 2);
+                ctx.lineTo(hw - 20, hh);
+                ctx.fill();
+
+                // Blue ink tip
+                ctx.fillStyle = '#1d4ed8';
+                ctx.beginPath();
+                ctx.moveTo(hw - 5, -2);
+                ctx.lineTo(hw, 0);
+                ctx.lineTo(hw - 5, 2);
+                ctx.fill();
+
+                // Inner ink tube visible through barrel
+                ctx.fillStyle = '#1d4ed8';
+                ctx.fillRect(-hw + 25, -2, PEN_WIDTH - 75, 4);
+            }
+
+            ctx.restore();
+        }
+
+        function getPointerPos(e) {
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+            return screenToWorld(clientX, clientY);
+        }
+
+        function handlePointerDown(e) {
+            if (gameState !== 'PLAYING') return;
+
+            let pos = getPointerPos(e);
+
+            // Determine active pen based on turn
+            let activePen = currentTurn === 1 ? pen1 : pen2;
+
+            // Check if they clicked ON their pen
+            // Matter.Query.point returns an array of bodies under the point
+            let clicked = Matter.Query.point([activePen], pos);
+
+            if (clicked.length > 0 && activePen.speed < 0.1) {
+                isAiming = true;
+                activeBody = activePen;
+                aimStartPoint = pos;
+                aimCurrentPoint = pos;
+            }
+        }
+
+        function handlePointerMove(e) {
+            if (!isAiming) return;
+            aimCurrentPoint = getPointerPos(e);
+        }
+
+        function handlePointerUp(e) {
+            if (!isAiming) return;
+            isAiming = false;
+
+            // Calculate pull vector (from current mouse back to start point)
+            let pullVector = Vector.sub(aimStartPoint, aimCurrentPoint);
+            let magnitude = Vector.magnitude(pullVector);
+
+            if (magnitude > 10) {
+                // Cap maximum force
+                const MAX_PULL = 400; // Increased max pull distance
+                if (magnitude > MAX_PULL) {
+                    pullVector = Vector.mult(Vector.normalise(pullVector), MAX_PULL);
+                }
+
+                // Force multiplier (tuned for realistic feel)
+                const FORCE_MULT = 0.0006; // Doubled to give much more power and rotation
+                let force = Vector.mult(pullVector, FORCE_MULT);
+
+                // Apply force EXACTLY where the user clicked.
+                // This creates realistic spin if they hit the edge, or straight push if center.
+                Body.applyForce(activeBody, aimStartPoint, force);
+
+                gameState = 'WAITING_FOR_STOP';
+            }
+
+            activeBody = null;
+        }
+
+        // Attach listeners
+        canvas.addEventListener('mousedown', handlePointerDown);
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('mouseup', handlePointerUp);
+
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handlePointerDown(e); }, { passive: false });
+        window.addEventListener('touchmove', (e) => { e.preventDefault(); handlePointerMove(e); }, { passive: false });
+        window.addEventListener('touchend', (e) => { e.preventDefault(); handlePointerUp(e); }, { passive: false });
+
+
+        function checkBounds() {
+            // Desk limits
+            const deskLeft = (GAME_WIDTH - DESK_WIDTH) / 2;
+            const deskRight = deskLeft + DESK_WIDTH;
+            const deskTop = (GAME_HEIGHT - DESK_HEIGHT) / 2;
+            const deskBottom = deskTop + DESK_HEIGHT;
+
+            // Check if center of gravity is off the desk
+            [pen1, pen2].forEach(pen => {
+                if (!pen.plugin.isFalling) {
+                    let cx = pen.position.x;
+                    let cy = pen.position.y;
+
+                    if (cx < deskLeft || cx > deskRight || cy < deskTop || cy > deskBottom) {
+                        pen.plugin.isFalling = true;
+                        gameState = 'FALLING'; // Pause normal play while animation happens
+                    }
+                }
+            });
+        }
+
+        function showTurn() {
+            turnAnnounce.textContent = currentTurn === 1 ? "Red's Turn" : "Blue's Turn";
+            turnAnnounce.style.color = currentTurn === 1 ? '#ef4444' : '#3b82f6';
+            turnAnnounce.classList.add('show');
+
+            setTimeout(() => {
+                turnAnnounce.classList.remove('show');
+            }, 1200);
+        }
+
+        function triggerWin(winner) {
+            gameState = 'OVER';
+            if (winner === 1) {
+                scores.p1++;
+                scoreP1El.textContent = scores.p1;
+                winnerText.textContent = "Red Reynolds Wins!";
+                winnerText.style.color = '#ef4444';
+                winnerSub = "Blue was knocked off the desk.";
+            } else if (winner === 2) {
+                scores.p2++;
+                scoreP2El.textContent = scores.p2;
+                winnerText.textContent = "Blue Gripper Wins!";
+                winnerText.style.color = '#3b82f6';
+                winnerSub = "Red was knocked off the desk.";
+            } else {
+                winnerText.textContent = "Draw!";
+                winnerText.style.color = '#ffffff';
+                winnerSub = "Both pens fell simultaneously.";
+            }
+
+            gameOverScreen.classList.add('active');
+        }
+
+        function resetRound() {
+            gameOverScreen.classList.remove('active');
+
+            // Remove old bodies
+            Matter.World.remove(engine.world, [pen1, pen2]);
+
+            // Re-create
+            pen1 = createPen(GAME_WIDTH / 2 - 300, GAME_HEIGHT / 2, 0, 'reynolds', 1);
+            pen2 = createPen(GAME_WIDTH / 2 + 300, GAME_HEIGHT / 2, Math.PI, 'cello', 2);
+            Matter.World.add(engine.world, [pen1, pen2]);
+
+            // Switch starting player
+            currentTurn = currentTurn === 1 ? 2 : 1;
+            gameState = 'PLAYING';
+            showTurn();
+        }
+
+        function drawAiming() {
+            if (!isAiming || !aimStartPoint || !aimCurrentPoint) return;
+
+            // The drag vector
+            let pullVector = Vector.sub(aimStartPoint, aimCurrentPoint);
+
+            // Visual clamping
+            const MAX_VISUAL = 400; // Matched with MAX_PULL
+            let mag = Vector.magnitude(pullVector);
+            if (mag > MAX_VISUAL) {
+                pullVector = Vector.mult(Vector.normalise(pullVector), MAX_VISUAL);
+            }
+
+            // Calculate trajectory end point
+            let endPoint = Vector.add(aimStartPoint, pullVector);
+
+            ctx.save();
+            // Draw rubber band (drag line)
+            ctx.beginPath();
+            ctx.moveTo(aimCurrentPoint.x, aimCurrentPoint.y);
+            ctx.lineTo(aimStartPoint.x, aimStartPoint.y);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Draw Aim Arrow (Force direction)
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.moveTo(aimStartPoint.x, aimStartPoint.y);
+            ctx.lineTo(endPoint.x, endPoint.y);
+
+            ctx.strokeStyle = currentTurn === 1 ? 'rgba(239, 68, 68, 0.9)' : 'rgba(59, 130, 246, 0.9)';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // Arrow head
+            let angle = Math.atan2(pullVector.y, pullVector.x);
+            ctx.translate(endPoint.x, endPoint.y);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-15, -7);
+            ctx.lineTo(-15, 7);
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fill();
+
+            ctx.restore();
+
+            // Draw strike point crosshair
+            ctx.beginPath();
+            ctx.arc(aimStartPoint.x, aimStartPoint.y, 6, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.fill();
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function render() {
+            requestAnimationFrame(render);
+
+            // Clear screen
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Set up camera/scaling transform
+            ctx.save();
+            ctx.translate(renderOffset.x, renderOffset.y);
+            ctx.scale(scaleFactor, scaleFactor);
+
+            // 1. Draw Desk
+            drawWoodDesk();
+
+            // 2. Game Logic Updates
+            if (gameState === 'WAITING_FOR_STOP') {
+                checkBounds();
+                if (gameState !== 'FALLING' && pen1.speed < 0.05 && pen2.speed < 0.05 && Math.abs(pen1.angularVelocity) < 0.01 && Math.abs(pen2.angularVelocity) < 0.01) {
+                    // Everyone stopped. Switch turn.
+                    currentTurn = currentTurn === 1 ? 2 : 1;
+                    gameState = 'PLAYING';
+                    showTurn();
+                }
+            } else if (gameState === 'FALLING') {
+                // Animate falling pens
+                let doneFalling = true;
+                [pen1, pen2].forEach(pen => {
+                    if (pen.plugin.isFalling) {
+                        // Make it ignore collisions
+                        pen.collisionFilter.mask = 0;
+                        // Shrink and fade
+                        pen.plugin.scale -= 0.05;
+                        pen.plugin.opacity -= 0.05;
+
+                        if (pen.plugin.scale > 0) {
+                            doneFalling = false;
+                        } else {
+                            pen.plugin.scale = 0;
+                            pen.plugin.opacity = 0;
+                        }
+                    }
+                });
+
+                if (doneFalling) {
+                    if (pen1.plugin.isFalling && pen2.plugin.isFalling) triggerWin(0); // Draw
+                    else if (pen1.plugin.isFalling) triggerWin(2);
+                    else triggerWin(1);
+                }
+            } else if (gameState === 'PLAYING') {
+                checkBounds(); // Catch a slow slide off the edge
+            }
+
+            // 3. Draw Pens
+            drawPen(pen1);
+            drawPen(pen2);
+
+            // 4. Draw UI overlays (Aiming)
+            if (gameState === 'PLAYING') {
+                drawAiming();
+            }
+
+            ctx.restore();
+        }
+
+        // Boot up
+        window.onload = () => {
+            initPhysics();
+            render();
+        };
+
+    </script>
+</body>
+
+</html>

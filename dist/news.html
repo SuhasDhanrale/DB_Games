@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <script src="./demo-session.js"></script>
-  <title>भास्कर खेल · समाचार | Dainik Bhaskar Games News</title>
-  <meta name="description" content="दैनिक भास्कर खेल लैब — खेल से जुड़े समाचार और आलेख">
+  <title>समाचार | Dainik Bhaskar / दैनिक भास्कर</title>
+  <meta name="description" content="Dainik Bhaskar / दैनिक भास्कर — खेल से जुड़े समाचार और आलेख">
   <meta name="theme-color" content="#F9F9F7">
 
   <link rel="stylesheet" crossorigin href="/assets/news-XKwKHbDJ.css">
@@ -20,7 +20,7 @@
     <!-- Top Masthead Header -->
     <header class="news-header">
       <a href="./index.html" class="news-header__back" id="topReturnBtn" aria-label="वापस लौटें">←</a>
-      <a href="./news.html" id="logoHomeLink" class="news-header__identity"><span>भास्कर खेल</span><strong id="readerTitle">खेल और कहानियाँ</strong></a>
+      <a href="./news.html" id="logoHomeLink" class="news-header__identity"><span>Dainik Bhaskar / दैनिक भास्कर</span><strong id="readerTitle">खेल और कहानियाँ</strong></a>
       <span class="news-demo">डेमो</span>
     </header>
 
@@ -112,8 +112,8 @@
 
     <!-- Footer -->
     <footer class="page-footer">
-      <div>भास्कर खेल · डेमो समाचार पृष्ठ</div>
-      <div style="margin-top: 4px;">दैनिक भास्कर गेम लैब प्रोटोटाइप 2026</div>
+      <div>Dainik Bhaskar / दैनिक भास्कर · डेमो समाचार पृष्ठ</div>
+      <div style="margin-top: 4px;">Dainik Bhaskar / दैनिक भास्कर प्रोटोटाइप 2026</div>
     </footer>
 
   </div>
@@ -452,7 +452,7 @@
         updateReturnButtons(effectiveGame, day);
         bottomReturnBtn.textContent = wordalSpoiled && effectiveGame === 'wordal' ? 'शब्द का अभ्यास करें →' : completedWordal(day) && effectiveGame === 'wordal' ? 'अपने परिणाम पर लौटें →' : article.matchId ? 'छह गेंदों की चुनौती खेलें →' : 'जुड़ा खेल खेलें →';
         topReturnBtn.href = game ? computeReturnUrl(game, day) : `./index.html?day=${encodeURIComponent(day)}`;
-        document.querySelector('.sample-notice-banner').textContent = article.sourceUrl ? 'आधिकारिक स्रोत पर आधारित मौलिक डेमो सारांश। यह भास्कर में प्रकाशित लेख नहीं है।' : 'प्रोटोटाइप के लिए तैयार नमूना संदर्भ सामग्री।';
+        document.querySelector('.sample-notice-banner').textContent = article.sourceUrl ? 'आधिकारिक स्रोत पर आधारित मौलिक डेमो सारांश। यह Dainik Bhaskar / दैनिक भास्कर में प्रकाशित लेख नहीं है।' : 'प्रोटोटाइप के लिए तैयार नमूना संदर्भ सामग्री।';
 
         articleView.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -504,7 +504,7 @@
             <h3 class="story-card-title">${escapeHtml(item.headline)}</h3>
             <p class="story-card-excerpt">${escapeHtml(item.excerpt)}</p>
             <div class="story-card-footer">
-              <span>${escapeHtml(item.gameId === 'wordal' ? 'आज का शब्द' : item.gameName ? 'संबंधित: ' + item.gameName : 'भास्कर खेल')}</span>
+              <span>${escapeHtml(item.gameId === 'wordal' ? 'आज का शब्द' : item.gameName ? 'संबंधित: ' + item.gameName : 'Dainik Bhaskar / दैनिक भास्कर')}</span>
               <span class="story-read-link">पूरा पढ़ें →</span>
             </div>
           `;

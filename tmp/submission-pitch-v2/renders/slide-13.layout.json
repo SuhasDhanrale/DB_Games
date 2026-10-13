@@ -1,0 +1,8 @@
+{"schema":"openai.presentation.layout/v5","unit":"px","slide":{"id":"sl/ou5m15","index":12,"layout":{"id":"ly/14ra9krq","name":"Blank"},"backgroundColor":"rgba(249,249,247,1)","position":{"left":0,"top":0,"width":1280,"height":720}},
+"elements":[
+{"id":"sh/ax4vy9sj","kind":"textbox","name":"Dainik Bhaskar / दैनिक भास्कर","position":{"left":64,"top":47,"width":1152,"height":107},"text":"Dainik Bhaskar / दैनिक भास्कर","style":{"fontSize":44,"typeface":"Nirmala UI","color":"#20201F","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/x0vetoba","kind":"textbox","name":"रोज़मर्रा की आदतों से,\nरोज़ के खेल तक।","position":{"left":64,"top":209,"width":1152,"height":208},"text":"रोज़मर्रा की आदतों से,\nरोज़ के खेल तक।","style":{"fontSize":72,"typeface":"Nirmala UI","color":"#20201F","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/wzmx0jap","kind":"textbox","name":"A small moment of participation\nwithin the daily new","position":{"left":64,"top":455,"width":1130,"height":106},"text":"A small moment of participation\nwithin the daily news habit.","style":{"fontSize":36,"typeface":"Arial","color":"#61605D","alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/j2dwvet0","kind":"textbox","name":"खबर से खेल तक, खेल से समझ तक।","position":{"left":64,"top":609,"width":1152,"height":69},"text":"खबर से खेल तक, खेल से समझ तक।","style":{"fontSize":39,"typeface":"Nirmala UI","color":"#C93526","bold":true,"alignment":"left"},"geometry":"rect","lineWidth":0},
+{"id":"sh/i14f2tsf","kind":"textbox","name":"13","position":{"left":1172,"top":686,"width":40,"height":24},"text":"13","style":{"fontSize":16,"typeface":"Arial","color":"#61605D","alignment":"left"},"geometry":"rect","lineWidth":0}
+]}

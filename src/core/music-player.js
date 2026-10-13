@@ -1,90 +1,86 @@
-import { createMusicCycle, midiFrequency, canonicalMusicId, MUSIC_SCORES } from './music-score.js';
+import { MUSIC_TRACKS, canonicalMusicId, musicTrackUrl } from './music-tracks.js';
 
-/* Schedule a short horizon on the audio clock; never use a timer per note.
-   A separate graph per run allows fade-out without leaking scheduled notes. */
+function holdGain(param, now) {
+  if (param.cancelAndHoldAtTime) param.cancelAndHoldAtTime(now);
+  else {
+    const current = param.value;
+    param.cancelScheduledValues(now);
+    param.setValueAtTime(current, now);
+  }
+}
+
+/* Stream one locally hosted recording. Web Audio supplies smooth fades while
+   the browser handles decoding and looping; no synthesized melody is used. */
 export class MusicPlayer {
-  constructor(context) {
+  constructor(context, onChange = () => {}) {
     this.context = context;
+    this.onChange = onChange;
     this.run = null;
+    this.volume = 0.18;
+    this.state = 'idle';
+    this.positions = new Map();
+  }
+
+  setState(state) { this.state = state; this.onChange(); }
+
+  setVolume(value) {
+    this.volume = Math.max(0, Math.min(1, Number(value) || 0));
+    if (this.run && this.state === 'playing') {
+      holdGain(this.run.gain.gain, this.context.currentTime);
+      this.run.gain.gain.setTargetAtTime(this.volume * this.run.track.level, this.context.currentTime, 0.04);
+    }
   }
 
   play(id) {
     id = canonicalMusicId(id);
-    if (!MUSIC_SCORES[id]) { this.stop(); return; }
+    const track = MUSIC_TRACKS[id];
+    if (!track) { this.stop(); return; }
     if (this.run?.id === id) return;
     this.stop();
-    const ctx = this.context;
-    const master = ctx.createGain();
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 1500;
-    filter.Q.value = 0.5;
-    master.gain.setValueAtTime(0, ctx.currentTime);
-    master.gain.linearRampToValueAtTime(0.32, ctx.currentTime + 1.2);
-    filter.connect(master);
-    master.connect(ctx.destination);
-    const run = { id, master, filter, voices: new Set(), cycle: 0, index: 0, start: ctx.currentTime + 0.08, score: createMusicCycle(id), timer: null };
+    const element = new Audio(musicTrackUrl(track));
+    element.loop = true;
+    element.preload = 'none';
+    const gain = this.context.createGain();
+    gain.gain.setValueAtTime(0, this.context.currentTime);
+    const source = this.context.createMediaElementSource(element);
+    source.connect(gain);
+    gain.connect(this.context.destination);
+    const run = { id, track, element, source, gain };
     this.run = run;
-    const tick = () => {
-      if (this.run !== run || ctx.state !== 'running') return;
-      // Background throttling must never dump a queue of missed notes at once.
-      if (ctx.currentTime > run.start + run.score.duration) {
-        run.start = ctx.currentTime + 0.08;
-        run.score = createMusicCycle(id, ++run.cycle);
-        run.index = 0;
-      }
-      while (run.index < run.score.events.length && run.start + run.score.events[run.index].time < ctx.currentTime + 0.2) {
-        const note = run.score.events[run.index++];
-        const when = run.start + note.time;
-        if (when >= ctx.currentTime) this.scheduleNote(run, note, when);
-      }
+    this.setState('loading');
+    element.addEventListener('loadedmetadata', () => {
+      const position = this.positions.get(id) || 0;
+      if (this.run === run && Number.isFinite(element.duration) && position < element.duration) element.currentTime = position;
+    }, { once: true });
+    const fail = () => {
+      if (this.run !== run) return;
+      this.stop();
+      this.setState('error');
     };
-    tick();
-    run.timer = setInterval(tick, 50);
-  }
-
-  scheduleNote(run, note, when) {
-    const ctx = this.context;
-    const osc = ctx.createOscillator();
-    const envelope = ctx.createGain();
-    // Smooth sine partials provide colour without a buzzy square/sawtooth edge.
-    const harmonics = note.tone === 'bell' ? [0, 1, 0.12, 0.025] : note.tone === 'pluck' ? [0, 1, 0.08, 0.035] : [0, 1, 0.035];
-    osc.setPeriodicWave(ctx.createPeriodicWave(new Float32Array(harmonics.length), new Float32Array(harmonics)));
-    osc.frequency.setValueAtTime(midiFrequency(note.midi), when);
-    const backing = note.voice === 'backing';
-    const peak = (backing ? 0.04 : 0.13) * note.level;
-    const attack = backing ? 0.18 : note.tone === 'warm' ? 0.08 : 0.035;
-    const hold = Math.max(attack + 0.04, note.duration * (note.tone === 'pluck' ? 0.58 : 0.78));
-    const end = when + hold + (backing ? 0.5 : 0.28);
-    envelope.gain.setValueAtTime(0, when);
-    envelope.gain.linearRampToValueAtTime(peak, when + attack);
-    envelope.gain.exponentialRampToValueAtTime(peak * 0.4, when + hold);
-    envelope.gain.exponentialRampToValueAtTime(0.0001, end - 0.015);
-    envelope.gain.linearRampToValueAtTime(0, end);
-    osc.connect(envelope);
-    envelope.connect(run.filter);
-    run.voices.add(osc);
-    osc.onended = () => { osc.disconnect(); envelope.disconnect(); run.voices.delete(osc); };
-    osc.start(when);
-    osc.stop(end);
+    element.addEventListener('error', fail, { once: true });
+    element.play().then(() => {
+      if (this.run !== run) { element.pause(); return; }
+      gain.gain.setValueAtTime(0, this.context.currentTime);
+      gain.gain.linearRampToValueAtTime(this.volume * track.level, this.context.currentTime + 0.8);
+      this.setState('playing');
+    }).catch(fail);
   }
 
   stop() {
     const run = this.run;
     if (!run) return;
     this.run = null;
-    clearInterval(run.timer);
+    this.positions.set(run.id, run.element.currentTime || 0);
     const now = this.context.currentTime;
-    if (run.master.gain.cancelAndHoldAtTime) run.master.gain.cancelAndHoldAtTime(now);
-    else {
-      const currentGain = run.master.gain.value;
-      run.master.gain.cancelScheduledValues(now);
-      run.master.gain.setValueAtTime(currentGain, now);
-    }
-    run.master.gain.setTargetAtTime(0, now, 0.035);
-    for (const osc of run.voices) {
-      try { osc.stop(now + 0.18); } catch { /* Already ended. */ }
-    }
-    setTimeout(() => { run.filter.disconnect(); run.master.disconnect(); }, 220);
+    holdGain(run.gain.gain, now);
+    run.gain.gain.setTargetAtTime(0, now, 0.035);
+    setTimeout(() => {
+      run.element.pause();
+      run.element.removeAttribute('src');
+      run.element.load();
+      run.source.disconnect();
+      run.gain.disconnect();
+    }, 220);
+    this.setState('idle');
   }
 }

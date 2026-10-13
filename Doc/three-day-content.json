@@ -4,7 +4,7 @@
   "locale": "hi-IN",
   "timeZone": "Asia/Kolkata",
   "editionMode": "manual-three-day",
-  "brandLabel": "भास्कर खेल · डेमो",
+  "brandLabel": "Dainik Bhaskar / दैनिक भास्कर · डेमो",
   "feedDisclosure": "डेमो समाचार फ़ीड · स्रोतों पर आधारित नमूना लेख",
   "nitiPolicy": "All three thoughts are original demo writing, not historical quotations.",
   "cricketPolicy": "All scenarios are fictional practice; no real-match comparison.",
@@ -152,7 +152,7 @@
         "articleId": "d1-feature",
         "articleLinkLabel": "खोज की एक कहानी पढ़ें",
         "shareCaption": "आज की नीति पढ़ें और अपना विचार साझा करें।",
-        "shareText": "नई बात समझने की शुरुआत सवाल पूछने से होती है।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · भास्कर खेल डेमो"
+        "shareText": "नई बात समझने की शुरुआत सवाल पूछने से होती है।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · Dainik Bhaskar / दैनिक भास्कर डेमो"
       },
       "shabd": {
         "id": "d1-shabd",
@@ -263,8 +263,9 @@
           }
         ],
         "clue": "खोज और अध्ययन",
+        "wordClue": "वैज्ञानिक नई जानकारी पाने के लिए यह करते हैं।",
         "meaning": "किसी विषय को व्यवस्थित ढंग से खोजने और समझने का काम।",
-        "extraHint": "इस डेमो में संकेत नहीं है।",
+        "extraHint": null,
         "maxChecks": 6,
         "articleId": "d1-feature",
         "articleLinkLabel": "इस शब्द से जुड़ी कहानी पढ़ें",
@@ -507,7 +508,7 @@
         "articleId": "d2-feature",
         "articleLinkLabel": "खेल की एक कहानी पढ़ें",
         "shareCaption": "आज की नीति पढ़ें और अपना विचार साझा करें।",
-        "shareText": "छोटा अभ्यास भी काम आता है, जब हम उसे नियमित दोहराएँ।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · भास्कर खेल डेमो"
+        "shareText": "छोटा अभ्यास भी काम आता है, जब हम उसे नियमित दोहराएँ।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · Dainik Bhaskar / दैनिक भास्कर डेमो"
       },
       "shabd": {
         "id": "d2-shabd",
@@ -618,8 +619,9 @@
           }
         ],
         "clue": "खेल और मुकाबला",
+        "wordClue": "ऐसा आयोजन जिसमें खिलाड़ी जीतने के लिए एक-दूसरे से मुकाबला करते हैं।",
         "meaning": "ऐसा आयोजन जिसमें भाग लेने वाले तय नियमों के अनुसार मुकाबला करते हैं।",
-        "extraHint": "इस डेमो में संकेत नहीं है।",
+        "extraHint": null,
         "maxChecks": 6,
         "articleId": "d2-feature",
         "articleLinkLabel": "इस शब्द से जुड़ी कहानी पढ़ें",
@@ -862,7 +864,7 @@
         "articleId": "d3-feature",
         "articleLinkLabel": "विरासत की एक कहानी पढ़ें",
         "shareCaption": "आज की नीति पढ़ें और अपना विचार साझा करें।",
-        "shareText": "विरासत अगली पीढ़ी तक पहुँचती है, जब हम उसे समझें और सँभालें।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · भास्कर खेल डेमो"
+        "shareText": "विरासत अगली पीढ़ी तक पहुँचती है, जब हम उसे समझें और सँभालें।\nमौलिक विचार · डेमो के लिए लिखा गया\nआज की नीति · Dainik Bhaskar / दैनिक भास्कर डेमो"
       },
       "shabd": {
         "id": "d3-shabd",
@@ -973,8 +975,9 @@
           }
         ],
         "clue": "इतिहास और धरोहर",
+        "wordClue": "अतीत की किसी महत्वपूर्ण घटना या जगह को हम ऐसा कहते हैं।",
         "meaning": "इतिहास से जुड़ा हुआ।",
-        "extraHint": "इस डेमो में संकेत नहीं है।",
+        "extraHint": null,
         "maxChecks": 6,
         "articleId": "d3-feature",
         "articleLinkLabel": "इस शब्द से जुड़ी कहानी पढ़ें",

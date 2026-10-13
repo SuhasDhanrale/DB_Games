@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="दो कार्डों के बीच जोड़ी जुड़ती है">
+  
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="#eaf1ff"/>
+  <g fill="white" stroke="#506D8A" stroke-width="2"><rect x="17" y="25" width="25" height="20" rx="6"/><rect x="17" y="55" width="25" height="20" rx="6"/><rect x="58" y="25" width="25" height="20" rx="6"/><rect x="58" y="55" width="25" height="20" rx="6"/></g>
+  <path class="link" d="M42 35C55 35 45 65 58 65" fill="none" stroke="#506D8A" stroke-width="3"/><path class="link jodoB" d="M42 65C55 65 45 35 58 35" fill="none" stroke="#466853" stroke-width="3"/>
+  <g fill="#506D8A"><circle cx="29" cy="35" r="4"/><circle cx="70" cy="65" r="4"/></g><g fill="#466853"><circle cx="29" cy="65" r="4"/><circle cx="70" cy="35" r="4"/></g>
+</svg>

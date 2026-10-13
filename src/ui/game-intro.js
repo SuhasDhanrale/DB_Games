@@ -1,19 +1,19 @@
 import '../styles/game-intro.css';
 
-// This preference is separate from the demo's temporary scores and editions.
+// Fallback for pages without the demo session. The host and its game frames
+// share DBJamDemo memory, so dismissing the host guide also dismisses the frame's.
 const seen = new Set();
 let standaloneIntro = null;
 const aliases = { neeti: 'niti', superover: 'cricket', carrom_puzzles: 'carrom' };
 const canonicalId = id => aliases[id] || id;
-const preferenceKey = id => `db-game-intro:v1:${canonicalId(id)}`;
 
 const copy = {
   hi: {
     heading: 'कैसे खेलें?', example: 'एक छोटा उदाहरण', play: 'खेले',
     note: 'मदद चाहिए? ऊपर ⓘ / ? वाला बटन दबाएँ।',
-    wordal: { title: 'आज का शब्द', caption: 'हर रंग एक संकेत है', labels: ['सही जगह', 'दूसरी जगह', 'शब्द में नहीं'], rules: [
-      ['शब्द पहचानें', 'आज की खबर से जुड़ा 5 अक्षरों का शब्द खोजें। आपके पास 6 प्रयास हैं।'],
-      ['अक्षर चुनें, फिर जाँचें', 'कीबोर्ड से 5 अक्षर भरें और “✓ जाँचें” दबाएँ।'],
+    wordal: { title: 'आज का शब्द', caption: 'हर रंग एक हिंट है', labels: ['सही जगह', 'दूसरी जगह', 'शब्द में नहीं'], rules: [
+      ['हिंट पढ़ें', 'छोटे हिंट से आज का शब्द पहचानें। आपके पास 6 प्रयास हैं।'],
+      ['5 खाने भरें, फिर जाँचें', 'एक बटन एक खाना भरता है। मात्रा साथ आती है, जैसे “का” या “नी”। फिर “✓ जाँचें” दबाएँ।'],
       ['रंग देखकर अगला प्रयास करें', 'हरा: सही जगह। पीला: दूसरी जगह। स्लेटी: शब्द में नहीं।'],
     ] },
     niti: { title: 'आज की नीति', caption: 'पढ़ें → चुनें → समझें', labels: ['अधूरा विचार', 'अपना उत्तर चुनें', 'पूरा विचार पढ़ें'], rules: [
@@ -27,9 +27,9 @@ const copy = {
       ['6 गेंदें, 2 विकेट', 'एक ओवर में खेल पूरा करें। दो विकेट गिरने पर पारी खत्म हो जाती है।'],
     ] },
     carrom: { title: 'आज का निशाना', caption: 'पीछे खींचें → निशाना साधें → छोड़ें', labels: ['स्ट्राइकर', 'लक्ष्य'], rules: [
-      ['आज का लक्ष्य देखें', 'ऊपर लिखा लक्ष्य पढ़ें। पहेली पूरी करने के लिए एक शॉट मिलता है।'],
+      ['आज का लक्ष्य देखें', 'ऊपर लिखा लक्ष्य पढ़ें। लक्ष्य पूरा होने तक शॉट लें; कुल शॉट गिने जाएँगे।'],
       ['स्ट्राइकर लगाएँ', 'स्ट्राइकर को नीचे की रेखा पर बाएँ या दाएँ खिसकाएँ।'],
-      ['खींचें और छोड़ें', 'स्ट्राइकर से पीछे खींचकर निशाना साधें, फिर छोड़ें। चूकें तो “पुनः प्रयास” करें।'],
+      ['खींचें और छोड़ें', 'स्ट्राइकर से पीछे खींचकर निशाना साधें, फिर छोड़ें। चूकें तो उसी बोर्ड पर अगला शॉट लें।'],
     ] },
     jodo: { title: 'आज की जोड़ी', caption: 'दो संबंधित कार्ड → एक जोड़ी', labels: ['आम', 'फल', 'दूध', 'पेय'], rules: [
       ['संबंध खोजें', 'दोनों सूचियों के कार्ड पढ़ें। कौन से दो तथ्य आपस में जुड़े हैं?'],
@@ -40,10 +40,10 @@ const copy = {
   en: {
     heading: 'How to play', example: 'A quick example', play: 'Got it, let’s play',
     note: 'Need a reminder? Use the ⓘ / ? button at the top.',
-    wordal: { title: 'Today’s Word', caption: 'Each colour gives you a clue', labels: ['Right place', 'Other place', 'Not in word'], rules: [
-      ['Find the word', 'Guess the 5-letter word connected to today’s news. You have 6 tries.'],
-      ['Choose letters, then check', 'Fill 5 letters using the keyboard and press “✓ जाँचें” (Check).'],
-      ['Use the colour clues', 'Green: right place. Yellow: another place. Grey: not in the word.'],
+    wordal: { title: 'Today’s Word', caption: 'Each colour gives you a hint', labels: ['Right place', 'Other place', 'Not in word'], rules: [
+      ['Read the hint', 'Use the short hint to guess today’s Hindi word. You have 6 tries.'],
+      ['Fill 5 boxes, then check', 'Each button fills one box. Vowel marks come with the letter, as in “का” or “नी”. Then press “✓ जाँचें” (Check).'],
+      ['Use the colour hints', 'Green: right place. Yellow: another place. Grey: not in the word.'],
     ] },
     niti: { title: 'Today’s Wisdom', caption: 'Read → choose → understand', labels: ['An unfinished thought', 'Choose your answer', 'Read the full thought'], rules: [
       ['Read the thought', 'One part of today’s thought is missing. Read it carefully.'],
@@ -56,9 +56,9 @@ const copy = {
       ['6 balls, 2 wickets', 'Play one over. The innings ends when two wickets fall.'],
     ] },
     carrom: { title: 'Aaj Ka Nishana', caption: 'Pull back → aim → release', labels: ['Striker', 'Target'], rules: [
-      ['Read today’s target', 'Check the goal above the board. You have one shot to solve the puzzle.'],
+      ['Read today’s target', 'Check the goal above the board. Keep shooting until you complete it; every shot counts.'],
       ['Place the striker', 'Slide the striker left or right along the bottom line.'],
-      ['Pull and release', 'Pull back from the striker to aim, then release. Use “पुनः प्रयास” (Retry) if you miss.'],
+      ['Pull and release', 'Pull back from the striker to aim, then release. After a miss, take another shot on the same board.'],
     ] },
     jodo: { title: 'Aaj Ki Jodi', caption: 'Two related cards → one pair', labels: ['Mango', 'Fruit', 'Milk', 'Drink'], rules: [
       ['Find the connection', 'Read the cards in both lists. Which two facts belong together?'],
@@ -78,8 +78,10 @@ function illustration(id, labels) {
 }
 
 export function hasSeenIntro(id) {
-  if (seen.has(canonicalId(id))) return true;
-  try { return localStorage.getItem(preferenceKey(id)) === 'seen'; } catch { return false; }
+  const key = canonicalId(id);
+  return window.DBJamDemo
+    ? window.DBJamDemo.getItem(`game-intro:${key}`) === 'seen'
+    : seen.has(key);
 }
 
 // A review link can show the first-visit experience without clearing browser data.
@@ -88,8 +90,9 @@ export function needsIntro(id) {
 }
 
 function markSeen(id) {
-  seen.add(canonicalId(id));
-  try { localStorage.setItem(preferenceKey(id), 'seen'); } catch { /* Memory fallback. */ }
+  const key = canonicalId(id);
+  if (window.DBJamDemo) window.DBJamDemo.setItem(`game-intro:${key}`, 'seen');
+  else seen.add(key);
 }
 
 export function renderGameIntro(container, id, { onPlay, lang = 'hi', replay = false } = {}) {

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script src="./demo-session.js"></script>
+  <title>समाचार | Dainik Bhaskar / दैनिक भास्कर</title>
+  <meta name="description" content="Dainik Bhaskar / दैनिक भास्कर — खेल से जुड़े समाचार और आलेख">
+  <meta name="theme-color" content="#F9F9F7">
+
+  <link rel="stylesheet" crossorigin href="/assets/news-XKwKHbDJ.css">
+</head>
+<body>
+
+  <!-- Top Red Accent Bar -->
+
+  <!-- Main Responsive Container -->
+  <div class="app-container">
+
+    <!-- Top Masthead Header -->
+    <header class="news-header">
+      <a href="./index.html" class="news-header__back" id="topReturnBtn" aria-label="वापस लौटें">←</a>
+      <a href="./news.html" id="logoHomeLink" class="news-header__identity"><span>Dainik Bhaskar / दैनिक भास्कर</span><strong id="readerTitle">खेल और कहानियाँ</strong></a>
+      <span class="news-demo">डेमो</span>
+    </header>
+
+    <!-- Navigation Bar (Dynamic back button + game return) -->
+    <div class="nav-toolbar" id="navToolbar">
+      <button type="button" class="btn-back-feed" id="btnBackToFeed" style="display: none;">
+        और कहानियाँ देखें →
+      </button>
+    </div>
+
+    <!-- VIEW 1: ARTICLE VIEW -->
+    <section class="view-section" id="articleView">
+      <article class="article-container">
+        <div class="article-header">
+          <div class="article-meta-top">
+            <span class="category-badge" id="artCategory">श्रेणी</span>
+            <span class="badge-prototype">नमूना सामग्री</span>
+          </div>
+
+          <h1 class="article-headline" id="artHeadline">शीर्षक</h1>
+
+          <!-- Source / Date Area -->
+          <div class="article-source-box" id="artSourceBox">
+            <div class="article-source-item" id="artSource">स्रोत: शोध संदर्भ स्थानधारक</div>
+            <div class="article-source-item" id="artDate">प्रारूप: प्रोटोटाइप डेमो</div>
+          </div>
+        </div>
+
+        <!-- Article Body Paragraphs -->
+        <div class="article-body" id="artBody">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Visible Notice Banner -->
+        <div class="sample-notice-banner">
+          <span class="sample-notice-icon">ℹ️</span>
+          <div>
+            <strong>नमूना सामग्री:</strong> यह प्रोटोटाइप के लिए तैयार की गई परीक्षण सामग्री है। जल्द ही शोध-सत्यापित आलेख यहाँ उपलब्ध कराया जाएगा।
+          </div>
+        </div>
+
+        <!-- Prominent Return Card at Bottom -->
+        <div class="article-return-card">
+          <div class="return-card-title">कहानी से खेल तक</div>
+          <p class="return-card-desc" id="returnCardDesc">
+            कहानी की पृष्ठभूमि जानने के बाद वापस खेल में लौटें और अपनी चुनौती जारी रखें।
+          </p>
+          <a href="./index.html" class="btn-return-game" id="bottomReturnBtn">
+            खेल पर लौटें
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <!-- VIEW 2: SMALL MOCK FEED VIEW -->
+    <section class="view-section" id="feedView">
+      <div class="feed-header-card">
+          <h2 class="feed-title">खबर से खेल तक</h2>
+        <p class="feed-desc">शब्द का अर्थ, एक मैच की पृष्ठभूमि या कोई नई कड़ी। खेल से जुड़ी कहानियाँ, जब पढ़ने का मन हो।</p>
+        <div class="feed-action-bar">
+          <span class="badge-prototype">नमूना सामग्री · डेमो फ़ीड</span>
+        </div>
+      </div>
+
+      <div class="stories-list" id="storiesList">
+        <!-- Rendered by JavaScript -->
+      </div>
+    </section>
+
+    <!-- VIEW 3: MISSING STORY (FRIENDLY 404) -->
+    <section class="view-section" id="missingView">
+      <div class="missing-story-card">
+        <div class="missing-icon">📰</div>
+        <h2 class="missing-title">कहानी उपलब्ध नहीं है</h2>
+        <p class="missing-desc" id="missingMessage">
+          माफ़ कीजिए, आपके द्वारा खोजी गई कहानी यहाँ नहीं मिली। शायद इसका लिंक बदल गया है या यह सामग्री अभी तैयार की जा रही है।
+        </p>
+
+        <div class="missing-actions">
+          <a href="./index.html" class="btn-return-game" id="missingReturnBtn">
+            खेल पर लौटें
+          </a>
+          <button type="button" class="btn-return-game btn-return-game-secondary" id="btnBrowseFeedFromMissing">
+            उपलब्ध कहानियाँ देखें
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+      <div>Dainik Bhaskar / दैनिक भास्कर · डेमो समाचार पृष्ठ</div>
+      <div style="margin-top: 4px;">Dainik Bhaskar / दैनिक भास्कर प्रोटोटाइप 2026</div>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPT: SELF-CONTAINED ROUTING & EDITABLE ARTICLES DATA -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ============================================================
+         EDITABLE ARTICLES DATA STORE
+         Short original Hindi placeholder copy, visibly labelled "नमूना सामग्री".
+         No invented current news, sources, statistics, journalist names or dates.
+         ============================================================ */
+      const ARTICLES_DATA = {
+        'd1-feature': {
+          id: 'd1-feature',
+          day: 'd1',
+          category: 'विज्ञान · अंतरिक्ष विशेष',
+          gameId: 'wordal',
+          gameName: 'आज का शब्द',
+          headline: 'भारत के चार अंतरिक्ष मिशन क्या खोजते हैं',
+          excerpt: 'चाँद, सूर्य और मंगल को देखने वाले मिशनों के अलग-अलग उद्देश्य जानें।',
+          body: [
+            'भारत के अंतरिक्ष मिशनों के काम एक जैसे नहीं हैं। चंद्रयान-3 के उद्देश्यों में चाँद पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था। आदित्य-एल1 सूर्य के अध्ययन के लिए बनाया गया है।',
+            'मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल को समझना शामिल था। एस्ट्रोसैट खगोलीय पिंडों को एक्स-रे, दृश्य और पराबैंगनी प्रकाश में एक साथ देख सकता है।',
+            'इस डेमो संस्करण में वैज्ञानिक अन्वेषण और खोज के कई पहलू प्रस्तुत किए गए हैं। आज का शब्द (अनुसंधान) भी इसी विषय से जुड़ा है। यह संदर्भ सामग्री है, किसी नई घटना की खबर नहीं।'
+          ],
+          source: 'स्रोत: ISRO Chandrayaan-3, Aditya-L1, Mars Orbiter, AstroSat प्रलेखन',
+          sourceUrl: 'https://www.isro.gov.in/ISRO_EN/Chandrayaan3_New.html',
+          date: 'अद्यतन: अंतरिक्ष संदर्भ'
+        },
+        'd1-cricket': {
+          id: 'd1-cricket',
+          day: 'd1',
+          category: 'क्रिकेट अभ्यास',
+          gameId: 'superover',
+          gameName: 'आज का ओवर',
+          headline: 'अभ्यास चुनौती में 6 गेंदों पर 10 रन चाहिए',
+          excerpt: 'सही समय और सही चुनाव की छह गेंदों वाली चुनौती। मैदान की खाली दिशा देखें और सधे हुए या बड़े शॉट में से चुनें।',
+          body: [
+            'यह एक काल्पनिक क्रिकेट अभ्यास स्थिति है। आपकी टीम को जीतने के लिए आखिरी 6 गेंदों में 10 रन चाहिए। दो विकेट गिरने पर पारी रुक जाएगी।',
+            'मैदान की खाली दिशा देखें और सधे हुए या बड़े शॉट में से चुनें। गेंद निशान तक पहुँचे, तब शॉट खेलें। यह किसी वास्तविक मैच का स्कोर या परिणाम नहीं है।'
+          ],
+          source: 'स्रोत: काल्पनिक अभ्यास स्थिति',
+          date: 'अद्यतन: अभ्यास मैच'
+        },
+        'd2-feature': {
+          id: 'd2-feature',
+          day: 'd2',
+          category: 'खेल · पेरिस 2024',
+          gameId: 'wordal',
+          gameName: 'आज का शब्द',
+          headline: 'पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते',
+          excerpt: 'चार खिलाड़ी, चार स्पर्धाएँ। पेरिस 2024 की चुनी हुई उपलब्धियों को जानें।',
+          body: [
+            'पेरिस ओलंपिक 2024 में मनु भाकर ने महिला 10 मीटर एयर पिस्टल में कांस्य पदक जीता। नीरज चोपड़ा ने पुरुष भाला फेंक में रजत पदक हासिल किया।',
+            'स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल 3 पोज़िशन में कांस्य जीता। अमन सहरावत ने पुरुष 57 किग्रा फ्रीस्टाइल कुश्ती में कांस्य पदक जीता।',
+            'इन चार उपलब्धियों को सही स्पर्धा के साथ पहचानना आज के खेल की चुनौती है। यह चयन पूरी भारतीय पदक सूची नहीं है। आज का शब्द (प्रतियोगिता) इसी खेल भावना से जुड़ा है।'
+          ],
+          source: 'स्रोत: PIB प्रेस विज्ञप्तियां (पेरिस 2024)',
+          sourceUrl: 'https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2038138&lang=2&reg=48',
+          date: 'अद्यतन: पेरिस ओलंपिक संदर्भ'
+        },
+        'd2-cricket': {
+          id: 'd2-cricket',
+          day: 'd2',
+          category: 'क्रिकेट अभ्यास',
+          gameId: 'superover',
+          gameName: 'आज का ओवर',
+          headline: 'अभ्यास चुनौती में 6 गेंदों पर 15 रन चाहिए',
+          excerpt: 'सही समय और सही चुनाव की छह गेंदों वाली चुनौती। आखिरी 6 गेंदों में 15 रन का लक्ष्य साधें।',
+          body: [
+            'यह एक काल्पनिक क्रिकेट अभ्यास स्थिति है। आपकी टीम को जीतने के लिए आखिरी 6 गेंदों में 15 रन चाहिए। दो विकेट गिरने पर पारी रुक जाएगी।',
+            'मैदान की खाली दिशा देखें और सधे हुए या बड़े शॉट में से चुनें। गेंद निशान तक पहुँचे, तब शॉट खेलें। यह किसी वास्तविक मैच का स्कोर या परिणाम नहीं है।'
+          ],
+          source: 'स्रोत: काल्पनिक अभ्यास स्थिति',
+          date: 'अद्यतन: अभ्यास मैच'
+        },
+        'd3-feature': {
+          id: 'd3-feature',
+          day: 'd3',
+          category: 'संस्कृति · विश्व धरोहर',
+          gameId: 'wordal',
+          gameName: 'आज का शब्द',
+          headline: 'भारत की चार धरोहरें और उनके राज्य',
+          excerpt: 'गुजरात से ओडिशा तक, चार जगहों की पहचान, बनावट और विरासत को समझें।',
+          body: [
+            'धोलावीरा गुजरात में हड़प्पा सभ्यता का एक स्थल है। वहाँ की जल व्यवस्था उस समय की नगर योजना को समझने में मदद करती है। कर्नाटक के हम्पी में विजयनगर के अवशेष हैं।',
+            'मध्य प्रदेश में साँची के बौद्ध स्मारक हैं। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना से जुड़ी अपनी बनावट के लिए जाना जाता है। ये चारों स्थल यूनेस्को की विश्व धरोहर सूची में दर्ज हैं।',
+            'विरासत अगली पीढ़ी तक तभी पहुँचती है जब हम उसके ऐतिहासिक महत्व को समझें और उसकी देखभाल करें। आज का शब्द (ऐतिहासिक) इसी धरोहर से प्रेरित है।'
+          ],
+          source: 'स्रोत: UNESCO विश्व धरोहर प्रलेखन',
+          date: 'अद्यतन: सांस्कृतिक संदर्भ'
+        },
+        'd3-cricket': {
+          id: 'd3-cricket',
+          day: 'd3',
+          category: 'क्रिकेट अभ्यास',
+          gameId: 'superover',
+          gameName: 'आज का ओवर',
+          headline: 'अभ्यास चुनौती में 11 रन बचाइए',
+          excerpt: 'सही समय और सही चुनाव की छह गेंदों वाली चुनौती। मेहमान टीम को 12 रन चाहिए, उसे 10 या कम पर रोकिए।',
+          body: [
+            'यह एक काल्पनिक क्रिकेट अभ्यास स्थिति है। मेहमान टीम को 6 गेंदों में जीतने के लिए 12 रन चाहिए। उसे 10 या कम पर रोकने पर आप जीतेंगे; 11 पर बराबरी होगी।',
+            'हर गेंद से पहले बल्लेबाज की कमजोर जगह का संकेत पढ़ें। गेंद का प्रकार चुनकर सही समय पर डालें। दो विकेट लेने पर पारी रुकती है। यह किसी वास्तविक मैच का परिणाम नहीं है।'
+          ],
+          source: 'स्रोत: काल्पनिक अभ्यास स्थिति',
+          date: 'अद्यतन: अभ्यास मैच'
+        },
+        'language-tech': {
+          id: 'language-tech',
+          day: 'd1',
+          category: 'भाषा और तकनीक',
+          gameId: 'wordal',
+          gameName: 'खबर शब्द (Wordal)',
+          headline: 'डिजिटल युग में हिंदी भाषा और शब्द संरचना का विकास',
+          excerpt: 'कंप्यूटर और स्मार्टफ़ोन पर देवनागरी लिपि के बढ़ते प्रयोग ने भाषा सीखने और दैनिक पहेलियों को एक नया रूप दिया है।',
+          body: [
+            'यह प्रोटोटाइप के लिए तैयार की गई मूल नमूना सामग्री है। डिजिटल माध्यमों पर भारतीय भाषाओं के विस्तार के साथ शब्दावली और लिपि की संरचना में नए प्रयोग देखे जा रहे हैं।',
+            'शब्द पहेलियों और भाषा-आधारित खेलों का उद्देश्य न केवल मनोरंजन है, बल्कि रोज़मर्रा की भाषा से जुड़ने का एक सहज अवसर प्रदान करना भी है। इस स्थान पर शोध-आधारित विस्तृत आलेख जोड़ा जाएगा।'
+          ],
+          source: 'स्रोत: भाषा तकनीकी अध्ययन प्रभाग (नमूना विवरण)',
+          date: 'अद्यतन: प्रारूप डेमो'
+        },
+        'cricket-archive': {
+          id: 'cricket-archive',
+          day: 'd2',
+          category: 'क्रिकेट अभिलेखागार',
+          gameId: 'superover',
+          gameName: 'आज का ओवर (Aaj Ka Over)',
+          headline: 'सुपर ओवर का रोमांच और ऐतिहासिक पलों की स्मृतियाँ',
+          excerpt: 'सीमित ओवरों के मैच जब टाई होते हैं, तब 6 गेंदों का मुकाबला रणनीति, दबाव और एकाग्रता की सबसे बड़ी परीक्षा बन जाता है।',
+          body: [
+            'यह प्रोटोटाइप के लिए तैयार की गई मूल नमूना सामग्री है। क्रिकेट इतिहास में सुपर ओवर और निर्णायक ओवरों का विशेष स्थान रहा है, जहाँ हर गेंद मैच का रुख मोड़ देती है।',
+            'मैदान पर बल्लेबाज़ और गेंदबाज़ के बीच चलने वाले मानसिक द्वंद्व को खेल के माध्यम से अनुभव करने के बाद खिलाड़ी यहाँ उस रोमांच के पीछे की पृष्ठभूमि जान सकते हैं। जल्द ही यहाँ प्रामाणिक अभिलेखीय सामग्री जोड़ी जाएगी।'
+          ],
+          source: 'स्रोत: खेल अभिलेखागार संकलन (नमूना विवरण)',
+          date: 'अद्यतन: प्रारूप डेमो'
+        },
+        'heritage': {
+          id: 'heritage',
+          day: 'd3',
+          category: 'पारंपरिक खेल और धरोहर',
+          gameId: 'carrom',
+          gameName: 'आज का निशाना (Aaj Ka Nishana)',
+          headline: 'भारतीय बैठक और आँगन से क्लब तक: कैरम की सांस्कृतिक यात्रा',
+          excerpt: 'लकड़ी के बोर्ड और स्ट्राइकर का यह खेल पीढ़ियों से परिवारों को जोड़ने और कोण व गति की सहज समझ बढ़ाने का माध्यम रहा है।',
+          body: [
+            'यह प्रोटोटाइप के लिए तैयार की गई मूल नमूना सामग्री है। कैरम जैसे पारंपरिक खेल भारतीय घरों में सामाजिक जुड़ाव और सटीक निशानेबाज़ी का अनोखा संगम प्रस्तुत करते हैं।',
+            'बोर्ड के चार कोनों और स्ट्राइकर के रिबाउंड की भौतिकी हर उम्र के खिलाड़ियों को आकर्षित करती है। खेल में पहेली हल करने के बाद खिलाड़ी यहाँ इस पारंपरिक कला की पृष्ठभूमि पढ़ सकते हैं। शोधित सामग्री इस अनुभाग में जोड़ी जाएगी।'
+          ],
+          source: 'स्रोत: सांस्कृतिक धरोहर प्रलेखन (नमूना विवरण)',
+          date: 'अद्यतन: प्रारूप डेमो'
+        }
+      };
+
+      /* ============================================================
+         STRICT ALLOWLIST FOR RETURN DESTINATIONS & VALID DAYS
+         Preserves day parameter in return URL.
+         Never accepts an arbitrary return URL.
+         ============================================================ */
+      const ALLOWED_GAMES = {
+        'wordal': './wordal.html',
+        'niti': './niti.html',
+        'superover': './Superover.html',
+        'carrom': './Carrom_Puzzles.html',
+        'jodo': './jodo.html'
+      };
+
+      const ASIAN_ARTICLES = {
+        'asian-final': {
+          id: 'asian-final', day: 'd1', gameId: 'superover', matchId: 'asian-final', gameName: 'आज का ओवर · अभ्यास',
+          category: 'खेल · एशियाई खेल 2026', headline: 'भारत–पाकिस्तान फाइनल: 19 रन की जीत से भारत को स्वर्ण',
+          excerpt: '3 अक्टूबर का मुकाबला: भारत ने 211/6 बनाए और पाकिस्तान को 192/6 पर रोका। मैच से प्रेरित छह गेंदों की चुनौती खेलें।',
+          body: ['3 अक्टूबर 2026 को निस्शिन के कोरोगी स्पोर्ट्स पार्क में खेले गए पुरुष क्रिकेट फाइनल में भारत ने पाकिस्तान को 19 रन से हराया। भारत ने 20 ओवर में 211/6 बनाए; पाकिस्तान की पारी 192/6 पर समाप्त हुई।', 'यह एक नियमित टी20 मुकाबला था, टाई के बाद खेला जाने वाला सुपर ओवर नहीं। यहाँ “आज का ओवर” नाम का खेल इसी मुकाबले से प्रेरित छह गेंदों का अभ्यास है।', 'खेल में 18 रन का बल्लेबाजी लक्ष्य और 15 रन का गेंदबाजी लक्ष्य अभ्यास के लिए बनाए गए हैं। ये असली मैच के आखिरी ओवर के समीकरण नहीं हैं। अपना परिणाम देखें, फिर असली मैच से तुलना करें।'],
+          source: 'स्रोत: BCCI आधिकारिक मैच रिकॉर्ड', sourceUrl: 'https://www.bcci.tv/matches/1d466763-a1a9-4120-a576-73135df57d9a/More/news', date: 'मुकाबला: 3 अक्टूबर 2026 · शोध जाँच: 11 अक्टूबर 2026'
+        },
+        'asian-semi': {
+          id: 'asian-semi', day: 'd2', gameId: 'superover', matchId: 'asian-semi', gameName: 'आज का ओवर · अभ्यास',
+          category: 'खेल · एशियाई खेल 2026', headline: 'भारत–श्रीलंका सेमीफाइनल: 124 रन की जीत से फाइनल में भारत',
+          excerpt: '1 अक्टूबर का मुकाबला: भारत 169/7, श्रीलंका 45 ऑल आउट। इस जीत की पृष्ठभूमि जानें और छह गेंदों का अभ्यास खेलें।',
+          body: ['1 अक्टूबर 2026 को निस्शिन में पुरुष क्रिकेट के सेमीफाइनल में भारत ने श्रीलंका को 124 रन से हराया। भारत ने 20 ओवर में 169/7 बनाए। श्रीलंका की पारी 9.5 ओवर में 45 रन पर समाप्त हुई।', 'यह जीत भारत को फाइनल तक ले गई। यह नियमित टी20 मैच था; इसमें टाई-ब्रेक सुपर ओवर नहीं हुआ।', 'इस कहानी से जुड़ा खेल छह गेंदों की सरल अभ्यास चुनौती है। 18/15 रन के लक्ष्य और दो विकेट का नियम खेल के लिए बनाए गए हैं। खिलाड़ी का परिणाम असली मैच का परिणाम नहीं बदलता।'],
+          source: 'स्रोत: BCCI आधिकारिक मैच रिकॉर्ड', sourceUrl: 'https://www.bcci.tv/matches/244555/More/news', date: 'मुकाबला: 1 अक्टूबर 2026 · शोध जाँच: 11 अक्टूबर 2026'
+        }
+      };
+      Object.assign(ARTICLES_DATA, ASIAN_ARTICLES);
+      // Keep existing inbound article links, replacing the obsolete fictional cricket copy.
+      for (const [id, matchId] of Object.entries({ 'd1-cricket':'asian-final', 'd2-cricket':'asian-semi', 'd3-cricket':'asian-final', 'cricket-archive':'asian-final' })) {
+        ARTICLES_DATA[id] = { ...ASIAN_ARTICLES[matchId], id, day: id.slice(0, 2), hiddenFromFeed: true };
+      }
+      let selectedArticleMatch = null;
+      const ALLOWED_DAYS = ['d1', 'd2', 'd3'];
+      const DEFAULT_DAY = 'd1';
+
+      // Parse Query Parameters
+      function parseParams() {
+        const params = new URLSearchParams(window.location.search);
+        const articleParam = params.get('article');
+        const gameParam = params.get('game');
+        const dayParam = params.get('day');
+
+        // Sanitize day: d1, d2 or d3; default d1
+        const cleanDay = (dayParam && ALLOWED_DAYS.includes(dayParam.toLowerCase()))
+          ? dayParam.toLowerCase()
+          : DEFAULT_DAY;
+
+        // Clean game: only if present in explicit allowlist
+        const cleanGame = (gameParam && Object.prototype.hasOwnProperty.call(ALLOWED_GAMES, gameParam.toLowerCase()))
+          ? gameParam.toLowerCase()
+          : null;
+
+        return {
+          articleId: articleParam ? articleParam.trim() : null,
+          game: cleanGame,
+          day: cleanDay
+        };
+      }
+
+      // Compute Return URL strictly from allowlist
+      function computeReturnUrl(game, day) {
+        if (game && ALLOWED_GAMES[game]) {
+          const matchParam = game === 'superover' && selectedArticleMatch ? `&match=${encodeURIComponent(selectedArticleMatch)}` : '';
+          return `${ALLOWED_GAMES[game]}?day=${encodeURIComponent(day)}${matchParam}${game === 'wordal' && wordalSpoiled ? '&practice=1' : ''}`;
+        }
+        // Fallback destination if no recognized game is provided
+        return `./index.html`;
+      }
+
+      // DOM Elements
+      const articleView = document.getElementById('articleView');
+      const feedView = document.getElementById('feedView');
+      const missingView = document.getElementById('missingView');
+      const navToolbar = document.getElementById('navToolbar');
+      const btnBackToFeed = document.getElementById('btnBackToFeed');
+      const topReturnBtn = document.getElementById('topReturnBtn');
+      const bottomReturnBtn = document.getElementById('bottomReturnBtn');
+      const missingReturnBtn = document.getElementById('missingReturnBtn');
+      const btnBrowseFeedFromMissing = document.getElementById('btnBrowseFeedFromMissing');
+      const logoHomeLink = document.getElementById('logoHomeLink');
+      const storiesList = document.getElementById('storiesList');
+      let wordalSpoiled = false;
+      const completedWordal = day => {
+        try { return JSON.parse(window.DBJamDemo.getItem('db-jam:v2:wordal:' + day) || 'null')?.isGameOver; } catch { return false; }
+      };
+
+      // Update all return buttons with sanitized destination
+      function updateReturnButtons(game, day) {
+        const targetUrl = computeReturnUrl(game, day);
+        topReturnBtn.setAttribute('href', targetUrl);
+        bottomReturnBtn.setAttribute('href', targetUrl);
+        missingReturnBtn.setAttribute('href', targetUrl);
+
+        // Friendly label indicating destination if game is known
+        const returnText = 'खेल पर लौटें';
+        topReturnBtn.textContent = '←';
+        bottomReturnBtn.textContent = returnText;
+        missingReturnBtn.textContent = returnText;
+      }
+
+      // Hide all view sections
+      function hideAllViews() {
+        articleView.classList.remove('active');
+        feedView.classList.remove('active');
+        missingView.classList.remove('active');
+      }
+
+      // Render Article View
+      function showArticle(articleId, game, day) {
+        hideAllViews();
+        const article = ARTICLES_DATA[articleId];
+
+        if (!article) {
+          showMissingStory(articleId, game, day);
+          return;
+        }
+
+        const effectiveGame = game || article.gameId;
+        selectedArticleMatch = article.matchId || null;
+        const storyEdition = article.day || day;
+        wordalSpoiled = articleId === storyEdition + '-feature' && !completedWordal(storyEdition);
+        if (wordalSpoiled) window.DBJamDemo.setItem('wordal:spoiled:' + storyEdition, 'true');
+        document.getElementById('readerTitle').textContent = 'इस खेल से जुड़ी खबर';
+
+        // Populate article details
+        document.getElementById('artCategory').textContent = article.category || 'समाचार';
+        document.getElementById('artHeadline').textContent = article.headline || '';
+
+        // Source and Date Area
+        const sourceElem = document.getElementById('artSource');
+        const dateElem = document.getElementById('artDate');
+        if (article.source) {
+          sourceElem.textContent = article.source;
+          if (article.sourceUrl) {
+            const sourceLink = document.createElement('a');
+            sourceLink.href = article.sourceUrl;
+            sourceLink.target = '_blank';
+            sourceLink.rel = 'noopener noreferrer';
+            sourceLink.textContent = ' · आधिकारिक रिकॉर्ड देखें ↗';
+            sourceLink.style.textDecoration = 'underline';
+            sourceElem.appendChild(sourceLink);
+          }
+          sourceElem.style.display = 'block';
+        } else {
+          sourceElem.style.display = 'none';
+        }
+
+        if (article.date) {
+          dateElem.textContent = article.date;
+          dateElem.style.display = 'block';
+        } else {
+          dateElem.style.display = 'none';
+        }
+
+        // Paragraphs
+        const bodyElem = document.getElementById('artBody');
+        bodyElem.innerHTML = '';
+        if (Array.isArray(article.body)) {
+          article.body.forEach(function (paraText) {
+            const p = document.createElement('p');
+            p.textContent = paraText;
+            bodyElem.appendChild(p);
+          });
+        }
+
+        // Return card note
+        const returnCardDesc = document.getElementById('returnCardDesc');
+        if (effectiveGame && ALLOWED_GAMES[effectiveGame]) {
+          returnCardDesc.textContent = wordalSpoiled && effectiveGame === 'wordal' ? 'इस कहानी में शब्द का उत्तर खुल चुका है। अब इसे अभ्यास के रूप में खेलें; यह आपका पहला दैनिक परिणाम नहीं बनेगा।' : 'खेल का अर्थ और पृष्ठभूमि साथ-साथ। अपनी गति से खेलें या सहेजे हुए परिणाम पर लौटें।';
+        } else {
+          returnCardDesc.textContent = 'कहानी की पृष्ठभूमि जानने के बाद वापस खेल में लौटें और अपनी चुनौती जारी रखें।';
+        }
+
+        // Navigation state
+        btnBackToFeed.style.display = 'inline-flex';
+        updateReturnButtons(effectiveGame, day);
+        bottomReturnBtn.textContent = wordalSpoiled && effectiveGame === 'wordal' ? 'शब्द का अभ्यास करें →' : completedWordal(day) && effectiveGame === 'wordal' ? 'अपने परिणाम पर लौटें →' : article.matchId ? 'छह गेंदों की चुनौती खेलें →' : 'जुड़ा खेल खेलें →';
+        topReturnBtn.href = game ? computeReturnUrl(game, day) : `./index.html?day=${encodeURIComponent(day)}`;
+        document.querySelector('.sample-notice-banner').textContent = article.sourceUrl ? 'आधिकारिक स्रोत पर आधारित मौलिक डेमो सारांश। यह Dainik Bhaskar / दैनिक भास्कर में प्रकाशित लेख नहीं है।' : 'प्रोटोटाइप के लिए तैयार नमूना संदर्भ सामग्री।';
+
+        articleView.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Render Missing Story View
+      function showMissingStory(articleId, game, day) {
+        hideAllViews();
+        const missingDesc = document.getElementById('missingMessage');
+        const safeId = String(articleId || '').replace(/[^\w-]/g, '');
+
+        missingDesc.innerHTML = 'माफ़ कीजिए, आपके द्वारा खोजी गई कहानी <strong>"' + safeId + '"</strong> उपलब्ध नहीं है। शायद इसका लिंक बदल गया है या यह अभी तैयार नहीं है।';
+
+        btnBackToFeed.style.display = 'none';
+        updateReturnButtons(game, day);
+
+        missingView.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Render Small Mock Feed View
+      function showFeed(game, day) {
+        hideAllViews();
+        selectedArticleMatch = null;
+        wordalSpoiled = false;
+        document.getElementById('readerTitle').textContent = 'खेल और कहानियाँ';
+
+        storiesList.innerHTML = '';
+        const articleKeys = Object.keys(ARTICLES_DATA).filter(id => !ARTICLES_DATA[id].hiddenFromFeed && (!ARTICLES_DATA[id].day || ARTICLES_DATA[id].day === day));
+
+        // Prioritize stories for the active day
+        articleKeys.sort(function (a, b) {
+          const matchA = ARTICLES_DATA[a].day === day ? 1 : 0;
+          const matchB = ARTICLES_DATA[b].day === day ? 1 : 0;
+          return matchB - matchA;
+        });
+
+        articleKeys.forEach(function (id) {
+          const item = ARTICLES_DATA[id];
+          const card = document.createElement('a');
+          card.className = 'story-card';
+          card.href = 'javascript:void(0);';
+
+          card.innerHTML = `
+            <div class="story-card-top">
+              <span class="category-badge">${escapeHtml(item.category)}</span>
+              <span class="badge-prototype">${item.matchId ? 'मुकाबले की पृष्ठभूमि' : item.day === 'd2' ? 'पुराना संदर्भ' : 'संदर्भ सामग्री'}</span>
+            </div>
+            <h3 class="story-card-title">${escapeHtml(item.headline)}</h3>
+            <p class="story-card-excerpt">${escapeHtml(item.excerpt)}</p>
+            <div class="story-card-footer">
+              <span>${escapeHtml(item.gameId === 'wordal' ? 'आज का शब्द' : item.gameName ? 'संबंधित: ' + item.gameName : 'Dainik Bhaskar / दैनिक भास्कर')}</span>
+              <span class="story-read-link">पूरा पढ़ें →</span>
+            </div>
+          `;
+
+          card.addEventListener('click', function (e) {
+            e.preventDefault();
+            navigateToArticle(id, game, day);
+          });
+
+          storiesList.appendChild(card);
+        });
+
+        btnBackToFeed.style.display = 'none';
+        updateReturnButtons(game, day);
+        topReturnBtn.textContent = '←';
+        topReturnBtn.href = `./index.html?day=${encodeURIComponent(day)}`;
+
+        feedView.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Helper: Navigate internally and update URL query cleanly
+      function navigateToArticle(articleId, game, day) {
+        const query = new URLSearchParams();
+        if (articleId) query.set('article', articleId);
+        if (game) query.set('game', game);
+        if (day) query.set('day', day);
+
+        const newUrl = window.location.pathname + '?' + query.toString();
+        try {
+          window.history[window.parent.DBNewsReader ? 'replaceState' : 'pushState']({ articleId: articleId, game: game, day: day }, '', newUrl);
+        } catch (e) {
+          // Graceful fallback for file:// protocol environments that restrict pushState
+        }
+
+        showArticle(articleId, game, day);
+      }
+
+      // Helper: Navigate back to feed internally
+      function navigateToFeed(game, day) {
+        const query = new URLSearchParams();
+        if (game) query.set('game', game);
+        if (day) query.set('day', day);
+
+        const queryString = query.toString();
+        const newUrl = window.location.pathname + (queryString ? '?' + queryString : '');
+        try {
+          window.history[window.parent.DBNewsReader ? 'replaceState' : 'pushState']({ articleId: null, game: game, day: day }, '', newUrl);
+        } catch (e) {
+          // Graceful fallback
+        }
+
+        showFeed(game, day);
+      }
+
+      // Helper: Escape text for safe HTML rendering
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // Handle Route on load or popstate
+      function route() {
+        const params = parseParams();
+
+        if (params.articleId) {
+          showArticle(params.articleId, params.game, params.day);
+        } else {
+          showFeed(params.game, params.day);
+        }
+      }
+
+      // Event Listeners
+      btnBackToFeed.addEventListener('click', function () {
+        const params = parseParams();
+        navigateToFeed(params.game, params.day);
+      });
+
+      btnBrowseFeedFromMissing.addEventListener('click', function () {
+        const params = parseParams();
+        navigateToFeed(params.game, params.day);
+      });
+
+      logoHomeLink.addEventListener('click', function (event) {
+        event.preventDefault();
+        const params = parseParams();
+        navigateToFeed(params.game, params.day);
+      });
+
+      // Browser Back / Forward button handling
+      window.addEventListener('popstate', function () {
+        route();
+      });
+
+      // Initial routing execution
+      route();
+
+      // The app reuses this reader while keeping the underlying screen mounted.
+      window.DBNewsView = {
+        open(search) {
+          history.replaceState(null, '', window.location.pathname + search);
+          route();
+        }
+      };
+      [topReturnBtn, bottomReturnBtn, missingReturnBtn].forEach(function (link) {
+        link.addEventListener('click', function (event) {
+          if (window.parent.DBNewsReader) {
+            event.preventDefault();
+            window.parent.DBNewsReader.close(link.href);
+          }
+        });
+      });
+      window.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') window.parent.DBNewsReader?.close();
+      });
+
+    })();
+  </script>
+</body>
+</html>

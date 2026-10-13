@@ -1,0 +1,1 @@
+import"./audio-Bg9QUBUX.js";import{i as e,t}from"./game-family-DYdof5ev.js";import"./result-celebration-BqMZkvfW.js";import{o as n,r,s as i}from"./play-history-BOC_Po8A.js";t(`carrom`),window.recordStandaloneCarrom=e=>{i(),r(`carrom`,100,e).firstResult&&!e.restored&&n(`carrom`)},e(`carrom`).then(window.finishGameIntro);

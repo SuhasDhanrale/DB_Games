@@ -1,0 +1,140 @@
+[
+  {
+    "original_slide": 1,
+    "new_slide": 2,
+    "difference_bounds": null,
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 2,
+    "new_slide": 3,
+    "difference_bounds": [
+      1181,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 3,
+    "new_slide": 4,
+    "difference_bounds": [
+      1181,
+      690,
+      1189,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 4,
+    "new_slide": 5,
+    "difference_bounds": [
+      1181,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 5,
+    "new_slide": 6,
+    "difference_bounds": [
+      1181,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 6,
+    "new_slide": 7,
+    "difference_bounds": [
+      1181,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 7,
+    "new_slide": 8,
+    "difference_bounds": [
+      1181,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 8,
+    "new_slide": 9,
+    "difference_bounds": [
+      1181,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 9,
+    "new_slide": 10,
+    "difference_bounds": [
+      1172,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 10,
+    "new_slide": 11,
+    "difference_bounds": [
+      1181,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 11,
+    "new_slide": 12,
+    "difference_bounds": [
+      1181,
+      690,
+      1189,
+      702
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 12,
+    "new_slide": 13,
+    "difference_bounds": [
+      1181,
+      690,
+      1190,
+      703
+    ],
+    "only_page_number_changed": true
+  },
+  {
+    "original_slide": 13,
+    "new_slide": 14,
+    "difference_bounds": [
+      1181,
+      690,
+      1189,
+      703
+    ],
+    "only_page_number_changed": true
+  }
+]

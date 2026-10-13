@@ -3,6 +3,7 @@
 <head>
   <script src="./game-navigation.js"></script>
   <script src="./demo-session.js"></script>
+  <script src="./jodo-content.js"></script>
   <meta charset="UTF-8">
   <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
   <script type="module">
@@ -13,7 +14,7 @@
     prepareStandaloneIntro('jodo').then(window.finishGameIntro);
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>आज की जोड़ी · भास्कर खेल | Dainik Bhaskar Aaj Ki Jodi</title>
+  <title>आज की जोड़ी | Aaj Ki Jodi · Dainik Bhaskar / दैनिक भास्कर</title>
   <meta name="description" content="आज की जोड़ी — चार वस्तुओं और उनके संबंधित तथ्यों को मिलाने का दैनिक ज्ञानवर्धक खेल।">
   <meta name="theme-color" content="#faf9f6">
 
@@ -112,6 +113,16 @@
       white-space: nowrap;
       border: 0;
     }
+
+    .edition-note { margin-bottom: 14px; }
+    .edition-note h1 { font-size: 22px; }
+    .edition-note p, .source-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; }
+    #match-insights { margin-bottom: 16px; }
+    #match-insights[hidden] { display: none; }
+    .review-item p { margin-top: 8px; font-size: 13px; line-height: 1.65; }
+    .source-link { display: block; padding: 12px 0; color: #215b38; text-decoration: underline; min-height: 44px; font-size: 13px; }
+    .completion-copy { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    @media (max-width: 380px) { .board-grid, .board-header-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 28px; } }
 
     /* Top Accent Line */
     .top-accent-bar {
@@ -994,6 +1005,13 @@
   <!-- Main Shell -->
   <main class="app-container" id="app">
 
+    <header class="edition-note">
+      <h1>आज की जोड़ी</h1>
+      <p id="edition-label"></p>
+      <p>डेमो सामग्री · संपादकीय रूप से तय जोड़ियाँ और सारांश। भास्कर की प्रकाशित रिपोर्टिंग नहीं।</p>
+      <p id="verification-label"></p>
+    </header>
+
     <!-- Single Streamlined Direction & Progress Bar -->
     <div class="info-bar" id="info-bar">
       <span class="instruction-text" id="instruction-text">एक कार्ड से दूसरे कार्ड तक रेखा खींचें या टैप करें</span>
@@ -1044,6 +1062,7 @@
 
     </section>
     </div>
+    <section id="match-insights" class="review-list" aria-label="मिली जोड़ियों का अर्थ" aria-live="polite"></section>
 
     <footer class="play-footer" id="play-footer">
       <!-- Hint Control -->
@@ -1053,7 +1072,7 @@
           <span id="hint-label">संकेत लें · 1 उपलब्ध</span>
         </button>
       </div>
-      <p>चार जोड़ियाँ, चार नई बातें।<br>खेल के बाद जानें हर जोड़ी की कहानी।</p>
+      <p>हर सही जोड़ी पर जानें संबंध क्यों मायने रखता है।<br>गलत उत्तर पर फिर कोशिश करें। संकेत एक जोड़ी दिखाता है · 15 अंक कम।</p>
     </footer>
 
     <!-- STEP 2: Final Result Panel (Ultra-compact, No-Scroll) -->
@@ -1069,6 +1088,8 @@
 
       <!-- Concise Review of all 4 Pairs & Explanations -->
       <div class="review-section">
+        <p class="completion-copy">आज की खबरों से चार बातें समझीं</p>
+        <p>इस डेमो दौर के स्रोतों की तारीख और संस्करण का लेबल ऊपर देखें।</p>
         <div class="review-title">हर जोड़ी के बारे में जानें</div>
         <div class="review-list" id="review-list">
           <!-- Rendered via JS with distinct pair colors -->
@@ -1079,8 +1100,8 @@
 
     <footer class="result-footer" id="result-footer" aria-label="खेल के बाद" hidden>
       <div class="result-actions-row">
-        <button type="button" class="btn-action btn-action-news family-secondary" id="btn-result-article">
-          <span>📖 जुड़ी खबरें</span>
+        <button type="button" class="btn-action btn-action-news family-secondary" id="btn-play-again">
+          <span>फिर खेलें · अभ्यास</span>
         </button>
         <button type="button" class="btn-action btn-action-next family-primary" id="btn-more-games">
           <span>🎮 और खेल</span>
@@ -1091,7 +1112,7 @@
   </main>
 
   <!-- In-File Article Reader Panel Modal -->
-  <div class="article-modal" id="article-modal" role="dialog" aria-modal="true" aria-labelledby="article-modal-title">
+  <div class="article-modal" id="article-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="article-modal-title">
     <div class="article-sheet">
       <div class="article-top-bar">
         <span class="article-badge">डेमो संदर्भ लेख</span>
@@ -1108,6 +1129,7 @@
         <!-- Paragraphs injected here -->
       </div>
 
+      <a id="article-original" class="source-link" target="_blank" rel="noopener noreferrer">मूल स्रोत पढ़ें ↗ (नया टैब)</a>
       <div class="article-source-note" id="article-source-note">
         स्रोतों पर आधारित डेमो संदर्भ सामग्री।
       </div>
@@ -1141,7 +1163,7 @@
         </li>
         <li>
           <span class="step-num">3</span>
-          <span>प्रत्येक सही जोड़ी का रंग अलग होगा। सभी 4 जोड़ियाँ मिलाने पर संपूर्ण सीख और स्कोर देखें।</span>
+          <span>हर सही जोड़ी के बाद उसका अर्थ और स्रोत पढ़ें। गलत उत्तर पर फिर कोशिश करें। एक संकेत एक जोड़ी दिखाता है और 15 अंक कम करता है।</span>
         </li>
       </ul>
 
@@ -1186,145 +1208,21 @@
       }
     ];
 
-    const CONTENT = {
-      editions: [
-        {
-          id: "d1",
-          title: "संस्करण 1",
-          theme: "अंतरिक्ष",
-          article: {
-            category: "विज्ञान",
-            title: "भारत के चार अंतरिक्ष मिशन क्या खोजते हैं",
-            summary: "चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के अलग-अलग तरीके।",
-            body: [
-              "भारत के अंतरिक्ष मिशनों के काम एक जैसे नहीं हैं। चंद्रयान-3 के उद्देश्यों में चंद्रमा पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था। आदित्य-L1 सूर्य के अध्ययन के लिए बनाया गया भारतीय मिशन है।",
-              "मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल का अध्ययन शामिल था। एस्ट्रोसैट खगोलीय स्रोतों का अलग-अलग तरंगदैर्घ्यों में एक साथ अध्ययन करता है।",
-              "इस संस्करण के ‘आज की जोड़ी’ खेल में हर मिशन को उसके मुख्य काम से मिलाइए।"
-            ],
-            sourceNote: "इसरो (ISRO) आधिकारिक मिशन विवरण पर आधारित डेमो संदर्भ सामग्री।"
-          },
-          pairs: [
-            {
-              id: "d1-p1",
-              left: "चंद्रयान-3",
-              right: "चंद्रमा पर सॉफ्ट लैंडिंग और रोवर",
-              explanation: "चंद्रयान-3 के उद्देश्यों में चंद्रमा पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था।"
-            },
-            {
-              id: "d1-p2",
-              left: "आदित्य-L1",
-              right: "सूर्य का अध्ययन",
-              explanation: "आदित्य-L1 सूर्य का अध्ययन करने के लिए बनाया गया भारतीय मिशन है।"
-            },
-            {
-              id: "d1-p3",
-              left: "मंगलयान",
-              right: "मंगल की सतह और वायुमंडल का अध्ययन",
-              explanation: "मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल का अध्ययन शामिल था।"
-            },
-            {
-              id: "d1-p4",
-              left: "एस्ट्रोसैट",
-              right: "कई तरंगदैर्घ्यों में खगोलीय अध्ययन",
-              explanation: "एस्ट्रोसैट खगोलीय स्रोतों का अलग-अलग तरंगदैर्घ्यों में एक साथ अध्ययन करता है।"
-            }
-          ],
-          leftOrder: [1, 2, 3, 4],
-          rightOrder: [3, 1, 4, 2]
-        },
-        {
-          id: "d2",
-          title: "संस्करण 2",
-          theme: "पेरिस 2024",
-          article: {
-            category: "खेल",
-            title: "पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते",
-            summary: "चार नाम, चार अलग स्पर्धाएँ। पदक के साथ स्पर्धा पहचानिए।",
-            body: [
-              "पेरिस ओलंपिक 2024 में मनु भाकर ने महिला 10 मीटर एयर पिस्टल स्पर्धा में कांस्य पदक जीता। नीरज चोपड़ा ने पुरुष भाला फेंक स्पर्धा में रजत पदक जीता।",
-              "स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल थ्री पोज़िशन्स स्पर्धा में कांस्य पदक जीता। अमन सहरावत ने पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा स्पर्धा में कांस्य पदक जीता।"
-            ],
-            sourceNote: "पीआईबी (PIB) और ओलंपिक रिकॉर्ड्स पर आधारित संदर्भ सामग्री।"
-          },
-          pairs: [
-            {
-              id: "d2-p1",
-              left: "मनु भाकर",
-              right: "महिला 10 मीटर एयर पिस्टल में कांस्य",
-              explanation: "मनु भाकर ने पेरिस 2024 की महिला 10 मीटर एयर पिस्टल स्पर्धा में कांस्य पदक जीता।"
-            },
-            {
-              id: "d2-p2",
-              left: "नीरज चोपड़ा",
-              right: "पुरुष भाला फेंक में रजत",
-              explanation: "नीरज चोपड़ा ने पेरिस 2024 की पुरुष भाला फेंक स्पर्धा में रजत पदक जीता।"
-            },
-            {
-              id: "d2-p3",
-              left: "स्वप्निल कुसाले",
-              right: "पुरुष 50 मीटर राइफल 3P में कांस्य",
-              explanation: "स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल थ्री पोज़िशन्स स्पर्धा में कांस्य पदक जीता।"
-            },
-            {
-              id: "d2-p4",
-              left: "अमन सहरावत",
-              right: "पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा में कांस्य",
-              explanation: "अमन सहरावत ने पुरुष फ्रीस्टाइल कुश्ती 57 किग्रा स्पर्धा में कांस्य पदक जीता।"
-            }
-          ],
-          leftOrder: [1, 2, 3, 4],
-          rightOrder: [2, 4, 1, 3]
-        },
-        {
-          id: "d3",
-          title: "संस्करण 3",
-          theme: "धरोहर",
-          article: {
-            category: "संस्कृति",
-            title: "भारत की चार धरोहरें और उनके राज्य",
-            summary: "गुजरात से ओडिशा तक, चार जगहों की पहचान और इतिहास।",
-            body: [
-              "धोलावीरा गुजरात में हड़प्पा सभ्यता का एक स्थल है, जो अपनी सुदृढ़ जल व्यवस्था और नगर योजना के लिए जाना जाता है। कर्नाटक के हम्पी में विजयनगर साम्राज्य के ऐतिहासिक अवशेष हैं।",
-              "मध्य प्रदेश का साँची अपने ऐतिहासिक बौद्ध स्मारकों के लिए प्रसिद्ध है। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना पर आधारित अपनी बनावट के लिए जाना जाता है।"
-            ],
-            sourceNote: "यूनेस्को (UNESCO) विश्व धरोहर अभिलेखों पर आधारित संदर्भ सामग्री।"
-          },
-          pairs: [
-            {
-              id: "d3-p1",
-              left: "धोलावीरा",
-              right: "गुजरात (हड़प्पा जल योजना)",
-              explanation: "गुजरात का धोलावीरा हड़प्पा सभ्यता का स्थल है, जो अपनी जल व्यवस्था के लिए जाना जाता है।"
-            },
-            {
-              id: "d3-p2",
-              left: "हम्पी",
-              right: "कर्नाटक (विजयनगर साम्राज्य)",
-              explanation: "कर्नाटक के हम्पी में विजयनगर साम्राज्य के ऐतिहासिक अवशेष हैं।"
-            },
-            {
-              id: "d3-p3",
-              left: "साँची",
-              right: "मध्य प्रदेश (बौद्ध स्तूप)",
-              explanation: "मध्य प्रदेश का साँची अपने बौद्ध स्मारकों के लिए जाना जाता है।"
-            },
-            {
-              id: "d3-p4",
-              left: "कोणार्क",
-              right: "ओडिशा (सूर्य मंदिर)",
-              explanation: "ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना पर आधारित बनावट के लिए प्रसिद्ध है।"
-            }
-          ],
-          leftOrder: [1, 2, 3, 4],
-          rightOrder: [4, 3, 2, 1]
-        }
-      ]
-    };
+    const CONTENT = window.JodoContent;
+    // Structural checks complement editorial review of the meanings.
+    for (const edition of CONTENT.editions) {
+      const unique = field => new Set(edition.pairs.map(pair => pair[field])).size === 4;
+      if (edition.pairs.length !== 4 || !['id', 'left', 'right', 'url'].every(unique) ||
+          !['leftOrder', 'rightOrder'].every(field => [...edition[field]].sort().join() === '1,2,3,4') ||
+          edition.pairs.some(pair => !['explanation', 'why', 'source', 'dateLabel', 'freshness', 'articleTitle'].every(field => pair[field]) || !/^https:\/\//.test(pair.url))) {
+        throw new Error('Invalid authored Jodi edition: ' + edition.id);
+      }
+    }
 
     /* ============================================================
        APPLICATION STATE
        ============================================================ */
-    const STORAGE_PREFIX = "db-jam:v2:jodo:";
+    const STORAGE_PREFIX = "jodo:authored:" + CONTENT.revision + ":";
     const DEFAULT_INSTRUCTION = "एक कार्ड से दूसरे कार्ड तक रेखा खींचें या टैप करें";
     const memoryStore = {};
 
@@ -1566,6 +1464,11 @@
     function render(celebrate = false) {
       const edition = getCurrentEdition();
 
+      document.getElementById('edition-label').textContent = edition.title + ' · ' + edition.freshness;
+      document.getElementById('verification-label').textContent = 'स्रोत जाँचे: 13 अक्टूबर 2026 · यह लाइव समाचार फ़ीड नहीं है।';
+      renderInsights(document.getElementById('match-insights'), edition.pairs.filter(pair => state.matchedPairIds.includes(pair.id)));
+      document.getElementById('match-insights').hidden = state.isCompleted;
+
       // Progress Counter
       const matchedCount = state.matchedPairIds.length;
       document.getElementById("progress-count").textContent = `${matchedCount}/4 जोड़ियाँ`;
@@ -1593,6 +1496,25 @@
       requestAnimationFrame(() => {
         updateMatchedConnectionLines();
       });
+    }
+
+    function renderInsights(container, pairs) {
+      container.replaceChildren();
+      for (const pair of pairs) {
+        const item = document.createElement('article');
+        item.className = 'review-item';
+        item.dataset.pairIdx = getPairIndex(pair.id);
+        item.innerHTML = `<h2 class="review-pair-name">${escapeHtml(pair.left)} → ${escapeHtml(pair.right)}</h2>
+          <p>${state.assistedPairIds.includes(pair.id) ? 'संकेत से मिली जोड़ी · ' : ''}${escapeHtml(pair.explanation)}</p>
+          <p><strong>क्यों मायने रखता है:</strong> ${escapeHtml(pair.why)}</p>
+          <p class="source-meta">${escapeHtml(pair.source)} · ${escapeHtml(pair.dateLabel)} · ${escapeHtml(pair.freshness)}</p>
+          <a class="source-link" href="#article=${encodeURIComponent(pair.id)}">लेख पढ़ें: ${escapeHtml(pair.articleTitle)}</a>`;
+        item.querySelector('a').addEventListener('click', event => {
+          event.preventDefault();
+          openArticleModal(pair.id, event.currentTarget);
+        });
+        container.appendChild(item);
+      }
     }
 
     function renderBoard(edition) {
@@ -1704,6 +1626,10 @@
       let pointerStartX = 0;
       let pointerStartY = 0;
       let hasDragged = false;
+      // Keyboard activation has no pointer sequence; pointer taps are handled below.
+      cardBtn.addEventListener('click', event => {
+        if (event.detail === 0) handleCardClick(side, pairId);
+      });
 
       cardBtn.addEventListener("pointerdown", (e) => {
         if (isProcessing || state.isCompleted) return;
@@ -1808,6 +1734,8 @@
         isDragging = false;
         dragSource = null;
 
+        if (e.type === 'pointercancel') return;
+
         if (wasDragged) {
           const elemUnder = document.elementFromPoint(e.clientX, e.clientY)?.closest(".card-btn");
           if (elemUnder && elemUnder.dataset.side !== source.side && !elemUnder.classList.contains("is-matched")) {
@@ -1829,7 +1757,7 @@
       if (isProcessing || state.isCompleted) return;
 
       const pair = getPairById(pairId);
-      if (!pair) return;
+      if (!pair || state.matchedPairIds.includes(pairId)) return;
 
       if (side === "left") {
         if (selectedLeftId === pairId) {
@@ -1866,10 +1794,12 @@
       }
     }
 
-    /* Core Pair Evaluation: NO mid-game interruption! */
+    /* Each match reveals editorial context without blocking the next attempt. */
     function executePairEvaluation(leftId, rightId) {
       const leftPair = getPairById(leftId);
       const rightPair = getPairById(rightId);
+      if (!leftPair || !rightPair || isProcessing || state.isCompleted ||
+          state.matchedPairIds.includes(leftId) || state.matchedPairIds.includes(rightId)) return;
 
       if (leftId === rightId) {
         // --- CORRECT MATCH ---
@@ -2025,19 +1955,7 @@
       // Populate Short Explanations with matching pair colors
       const reviewList = document.getElementById("review-list");
       if (reviewList) {
-        reviewList.innerHTML = "";
-        const edition = getCurrentEdition();
-
-        edition.pairs.forEach((pair, idx) => {
-          const item = document.createElement("div");
-          item.className = "review-item";
-          item.dataset.pairIdx = idx;
-          item.innerHTML = `
-            <div class="review-pair-name">${escapeHtml(pair.left)} ➔ ${escapeHtml(pair.right)}</div>
-            <div class="review-explanation">${escapeHtml(pair.explanation)}</div>
-          `;
-          reviewList.appendChild(item);
-        });
+        renderInsights(reviewList, getCurrentEdition().pairs);
       }
 
       resultPanel.style.display = "block";
@@ -2087,35 +2005,55 @@
     }
 
     /* Modal Handlers */
-    function openArticleModal() {
-      const edition = getCurrentEdition();
-      const article = edition.article;
-      if (!article) return;
-
-      document.getElementById("article-category").textContent = article.category;
-      document.getElementById("article-modal-title").textContent = article.title;
-      document.getElementById("article-summary").textContent = article.summary;
-
-      const bodyContainer = document.getElementById("article-body");
-      bodyContainer.innerHTML = "";
-      article.body.forEach(para => {
-        const p = document.createElement("p");
-        p.textContent = para;
-        bodyContainer.appendChild(p);
-      });
-
-      document.getElementById("article-source-note").textContent = article.sourceNote || "डेमो संदर्भ लेख।";
-
-      const modal = document.getElementById("article-modal");
-      modal.classList.add("is-open");
-      announce("संदर्भ लेख खुला: " + article.title);
+    let articleReturnFocus = null;
+    let articleReturnScroll = 0;
+    function openArticleModal(pairId, trigger = null, fromHistory = false) {
+      const pair = getPairById(pairId);
+      if (!pair || !state.matchedPairIds.includes(pairId)) return;
+      saveEditionState();
+      articleReturnFocus = trigger || document.activeElement;
+      articleReturnScroll = window.scrollY;
+      document.getElementById('article-category').textContent = pair.freshness + ' · ' + pair.source;
+      document.getElementById('article-modal-title').textContent = pair.articleTitle;
+      document.getElementById('article-summary').textContent = pair.explanation;
+      document.getElementById('article-body').textContent = 'क्यों मायने रखता है: ' + pair.why;
+      document.getElementById('article-source-note').textContent = pair.source + ' · ' + pair.dateLabel + ' · स्रोत जाँचे: 13 अक्टूबर 2026। यह संपादकीय डेमो सारांश है, भास्कर की रिपोर्ट नहीं।';
+      document.getElementById('article-original').href = pair.url;
+      const modal = document.getElementById('article-modal');
+      modal.classList.add('is-open');
+      modal.querySelector('.article-sheet').scrollTop = 0;
+      document.getElementById('app').inert = true;
+      document.body.style.overflow = 'hidden';
+      if (!fromHistory) history.pushState({ jodoArticle: pairId }, '', '#article=' + encodeURIComponent(pairId));
+      document.getElementById('btn-close-article-top').focus();
+      announce('डेमो संदर्भ लेख खुला: ' + pair.articleTitle);
     }
 
-    function closeArticleModal() {
-      const modal = document.getElementById("article-modal");
-      modal.classList.remove("is-open");
-      announce("संदर्भ लेख बंद हुआ");
+    function closeArticleModal(fromHistory = false) {
+      const modal = document.getElementById('article-modal');
+      if (!modal.classList.contains('is-open')) return;
+      if (!fromHistory && history.state?.jodoArticle) { history.back(); return; }
+      modal.classList.remove('is-open');
+      document.getElementById('app').inert = false;
+      document.body.style.overflow = '';
+      window.scrollTo(0, articleReturnScroll);
+      const focusTarget = articleReturnFocus?.isConnected ? articleReturnFocus : document.querySelector('#review-list a, #match-insights a');
+      focusTarget?.focus({ preventScroll: true });
+      announce('खेल पर लौटे। आपकी प्रगति सुरक्षित है।');
     }
+
+    window.addEventListener('popstate', () => {
+      const pairId = new URLSearchParams(location.hash.slice(1)).get('article');
+      if (pairId) openArticleModal(pairId, null, true);
+      else closeArticleModal(true);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Tab' || !document.getElementById('article-modal').classList.contains('is-open')) return;
+      const nodes = [...document.getElementById('article-modal').querySelectorAll('button, a[href]')];
+      const first = nodes[0], last = nodes.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
 
     function openRulesModal() {
       const modal = document.getElementById("rules-modal");
@@ -2189,15 +2127,11 @@
       const btnMoreGames = document.getElementById("btn-more-games");
       if (btnMoreGames) btnMoreGames.addEventListener("click", handleMoreGames);
 
-      // Article Reader
-      const btnResultArticle = document.getElementById("btn-result-article");
-      if (btnResultArticle) btnResultArticle.addEventListener("click", openArticleModal);
-
       const btnCloseArticleTop = document.getElementById("btn-close-article-top");
-      if (btnCloseArticleTop) btnCloseArticleTop.addEventListener("click", closeArticleModal);
+      if (btnCloseArticleTop) btnCloseArticleTop.addEventListener("click", () => closeArticleModal());
 
       const btnCloseArticleBottom = document.getElementById("btn-close-article-bottom");
-      if (btnCloseArticleBottom) btnCloseArticleBottom.addEventListener("click", closeArticleModal);
+      if (btnCloseArticleBottom) btnCloseArticleBottom.addEventListener("click", () => closeArticleModal());
 
       const articleModal = document.getElementById("article-modal");
       if (articleModal) {
@@ -2228,6 +2162,8 @@
       });
 
       render();
+      const articleId = new URLSearchParams(location.hash.slice(1)).get('article');
+      if (articleId) openArticleModal(articleId, null, true);
     });
   </script>
 </body>

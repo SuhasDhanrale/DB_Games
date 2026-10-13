@@ -12,12 +12,12 @@ export function recordResult(gameId, score, details = {}) {
   const key = `${date}:${edition}:${id}`;
   const first = history.find(entry => entry.key === key && entry.mode === 'daily');
   // Restoring a completed result must not create a practice attempt.
-  if (details.restored && first) return { firstResult: false, mode: 'daily' };
+  if (details.restored && (first || details.mode === 'practice')) return { firstResult: false, mode: 'daily' };
   const mode = details.mode === 'practice' || first ? 'practice' : 'daily';
   const entry = { key, gameId: id, date, edition, score: Number.isFinite(score) ? score : 0, details, mode };
   if (mode === 'daily') history.push(entry);
   else {
-    const practice = history.find(item => item.key === key && item.mode === 'practice' && (item.details.role || '') === (details.role || '') && (item.details.matchId || '') === (details.matchId || ''));
+    const practice = history.find(item => item.key === key && item.mode === 'practice' && (item.details.role || '') === (details.role || '') && (item.details.matchId || '') === (details.matchId || '') && (id !== 'carrom' || (details.challengeId && details.rulesVersion && item.details.challengeId === details.challengeId && item.details.rulesVersion === details.rulesVersion)));
     if (practice) {
       const best = practice.bestDetails || practice.details;
       const improved = id === 'carrom' ? details.shots < best.shots : id === 'cricket' ? (details.role === 'BOWLING' ? details.runs < best.runs : details.runs > best.runs) : false;

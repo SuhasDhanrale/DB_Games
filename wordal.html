@@ -13,8 +13,8 @@
     prepareStandaloneIntro('wordal').then(window.finishGameIntro);
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>आज का शब्द · दैनिक भास्कर खेल | Aaj Ka Shabd</title>
-  <meta name="description" content="आज का शब्द — दैनिक 5 अक्षरों की हिंदी शब्द पहेली। आज की सुर्खियों में छिपा शब्द खोजें और मुख्य खबर से जुड़ें।">
+  <title>आज का शब्द | Aaj Ka Shabd · Dainik Bhaskar / दैनिक भास्कर</title>
+  <meta name="description" content="आज का शब्द — हिंट पढ़ें, 5 खाने भरें और 6 प्रयासों में हिंदी शब्द पहचानें।">
   <meta name="theme-color" content="#faf9f6">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -911,26 +911,27 @@
          ============================================================ -->
     <section class="view-screen is-active" id="viewGame" aria-label="खेल पटल">
       
-      <!-- Editorial Compact Clue Header -->
-      <div class="editorial-clue-card family-note" id="headlineClueBanner">
+      <!-- Crossword-style clue; the answer appears after the game. -->
+      <div class="editorial-clue-card family-note" id="headlineClueBanner" aria-labelledby="clueLabel headlineBannerTitle">
         <div class="clue-card-left">
           <div class="clue-tag-row">
-            <span class="clue-badge">📰 दैनिक शब्द खोज</span>
-            <span class="clue-topic" id="topicHintBadge">विषय: खोज और अध्ययन</span>
+            <span class="clue-badge" id="clueLabel">आज का हिंट</span>
+            <span class="clue-topic" id="practiceBadge" hidden>अभ्यास</span>
           </div>
           <div class="clue-title-row">
-            <span class="clue-title" id="headlineBannerTitle">आज की सुर्खियों में छिपा 5 अक्षरों का शब्द</span>
-            <span id="headlineBannerDesc" class="sr-only">यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।</span>
+            <p class="clue-title" id="headlineBannerTitle">वैज्ञानिक नई जानकारी पाने के लिए यह करते हैं।</p>
+            <span id="headlineBannerDesc" class="sr-only">हिंट से शब्द पहचानें। नीचे के बटनों से पाँच खाने भरें। हर खाने में एक अक्षर समूह आएगा।</span>
           </div>
-        </div>
-        <div class="clue-card-right">
-          <span class="clue-attempt-pill" id="stepPillLabel">प्रयास 1/6</span>
         </div>
       </div>
 
       <!-- 5x6 Board -->
       <div class="board-container">
-        <div id="game-board" role="grid" aria-label="शब्द ग्रिड">
+        <div class="board-meta">
+          <span>5 खाने भरें</span>
+          <span class="clue-attempt-pill" id="stepPillLabel" role="status" aria-live="polite" aria-atomic="true">प्रयास 1 / 6</span>
+        </div>
+        <div id="game-board" role="grid" aria-label="शब्द ग्रिड" aria-describedby="headlineBannerTitle headlineBannerDesc">
           <!-- Populated by JavaScript -->
         </div>
       </div>
@@ -1023,7 +1024,7 @@
 
         <div class="article-source-meta" id="artReaderMeta">
           <span id="artReaderPeriod">अंतरिक्ष मिशनों पर संदर्भ लेख</span> · 
-          <span>दैनिक भास्कर खेल लैब (डेमो संदर्भ)</span>
+          <span>Dainik Bhaskar / दैनिक भास्कर (डेमो संदर्भ)</span>
         </div>
 
         <div class="article-body-text" id="artReaderBody">
@@ -1060,9 +1061,9 @@
         <button type="button" class="modal-close-btn" id="btnCloseHelp" aria-label="बंद करें">✕</button>
       </div>
       <div class="modal-body">
-        <p>• <strong>लक्ष्य:</strong> आज की मुख्य खबर में छिपे <strong>5 अक्षरों</strong> के शब्द को 6 प्रयासों में पहचानें।</p>
-        <p>• 24 अक्षरों वाले कीबोर्ड से 5 अक्षर चुनकर <strong>✓ जाँचें</strong> दबाएँ।</p>
-        <p>• हर प्रयास के बाद रंग से संकेत मिलेंगे:</p>
+        <p>• <strong>हिंट पढ़ें:</strong> ऊपर दिए हिंट से आज का शब्द पहचानें। आपके पास 6 प्रयास हैं।</p>
+        <p>• <strong>5 खाने भरें:</strong> नीचे के बटनों से अक्षर समूह चुनें। एक बटन एक खाना भरता है। मात्रा साथ आती है, जैसे <strong>का</strong> या <strong>नी</strong>। फिर <strong>✓ जाँचें</strong> दबाएँ।</p>
+        <p>• हर प्रयास के बाद रंग से हिंट मिलेंगे:</p>
         
         <div class="rule-item">
           <div class="rule-color-box" style="background-color: var(--color-correct);">अ</div>
@@ -1122,6 +1123,7 @@
           theme: 'जिज्ञासा और खोज',
           periodLabel: 'अंतरिक्ष विशेष',
           clue: 'खोज और अध्ययन',
+          wordClue: 'वैज्ञानिक नई जानकारी पाने के लिए यह करते हैं।',
           headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
           subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
           answer: 'अनुसंधान',
@@ -1158,6 +1160,7 @@
           theme: 'अभ्यास और प्रयास',
           periodLabel: 'पेरिस 2024 की यादें',
           clue: 'खेल और मुकाबला',
+          wordClue: 'ऐसा आयोजन जिसमें खिलाड़ी जीतने के लिए एक-दूसरे से मुकाबला करते हैं।',
           headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
           subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
           answer: 'प्रतियोगिता',
@@ -1194,6 +1197,7 @@
           theme: 'विरासत और देखभाल',
           periodLabel: 'भारत की विरासत',
           clue: 'इतिहास और धरोहर',
+          wordClue: 'अतीत की किसी महत्वपूर्ण घटना या जगह को हम ऐसा कहते हैं।',
           headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
           subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
           answer: 'ऐतिहासिक',
@@ -1264,7 +1268,7 @@
       const headlineBannerTitle = document.getElementById('headlineBannerTitle');
       const headlineBannerDesc = document.getElementById('headlineBannerDesc');
       const stepPillLabel = document.getElementById('stepPillLabel');
-      const topicHintBadge = document.getElementById('topicHintBadge');
+      const practiceBadge = document.getElementById('practiceBadge');
 
       // Keyboard elements
       const kbRow1 = document.getElementById('kbRow1');
@@ -1500,6 +1504,11 @@
       }
 
       function updateActiveRowDisplay() {
+        gameBoard.querySelectorAll('.board-row').forEach((row, index) => {
+          const active = index === currentAttempt && !isGameOver;
+          row.classList.toggle('is-current', active);
+          row.setAttribute('aria-label', `प्रयास ${index + 1}${active ? ', अभी भरें' : ''}`);
+        });
         for (let c = 0; c < TOTAL_COLS; c++) {
           const tile = document.getElementById(`tile-${currentAttempt}-${c}`);
           if (!tile) continue;
@@ -1514,7 +1523,7 @@
         }
 
         if (stepPillLabel) {
-          stepPillLabel.textContent = `प्रयास ${Math.min(currentAttempt + 1, 6)}/6`;
+          stepPillLabel.textContent = `प्रयास ${Math.min(currentAttempt + 1, TOTAL_ROWS)} / ${TOTAL_ROWS}`;
         }
       }
 
@@ -1538,7 +1547,7 @@
           updateActiveRowDisplay();
           saveGameState();
         } else {
-          showToast('5 अक्षर पूरे हैं, "जाँचें" दबाएँ', 'alert', 1400);
+          showToast('5 खाने भर गए, "जाँचें" दबाएँ', 'alert', 1400);
         }
       }
 
@@ -1599,7 +1608,7 @@
         if (isGameOver || isInputLocked) return;
 
         if (currentRowTokens.length < TOTAL_COLS) {
-          showToast('5 अक्षर पूरे करें', 'alert', 1600);
+          showToast('पहले 5 खाने भरें', 'alert', 1600);
           shakeCurrentRow();
           return;
         }
@@ -1771,10 +1780,9 @@
         // Update Banner Details
         const edition = EDITIONS_DATA[dayId];
         isPractice = new URLSearchParams(location.search).get('practice') === '1' || window.DBJamDemo.getItem('wordal:spoiled:' + currentDay) === 'true';
-        if (headlineBannerTitle) headlineBannerTitle.textContent = isPractice ? 'अभ्यास · कहानी पढ़ने के बाद शब्द आज़माएँ' : 'आज का पाँच अक्षरों का शब्द पहचानें';
-        if (headlineBannerDesc) headlineBannerDesc.textContent = isPractice ? 'कहानी पढ़ने से उत्तर खुल चुका है। यह अभ्यास आपके पहले दैनिक परिणाम से अलग रहेगा।' : 'इस डेमो संस्करण का पाँच अक्षरों का शब्द पहचानें। आपके पास छह प्रयास हैं।';
-        if (topicHintBadge) topicHintBadge.textContent = `विषय: ${edition.clue}`;
-        if (stepPillLabel) stepPillLabel.textContent = `प्रयास 1/6`;
+        if (headlineBannerTitle) headlineBannerTitle.textContent = edition.wordClue;
+        if (headlineBannerDesc) headlineBannerDesc.textContent = isPractice ? 'कहानी पढ़ने से उत्तर खुल चुका है। यह अभ्यास आपके पहले दैनिक परिणाम से अलग रहेगा।' : 'हिंट से शब्द पहचानें। नीचे के बटनों से पाँच खाने भरें। हर खाने में एक अक्षर समूह आएगा।';
+        if (practiceBadge) practiceBadge.hidden = !isPractice;
 
         // Debug Logger: Print solution word to console for easy verification
         window.currentWordalSolution = edition.answer;
@@ -1844,11 +1852,11 @@
           emojiGrid += '\n';
         });
 
-        const shareText = `दैनिक भास्कर · आज का शब्द\n${edition.label} (${edition.periodLabel})\nशब्द: ${edition.answer}\nप्रयास: ${isGameWon ? boardGuesses.length + '/6' : 'खुलासा'}\n\n${emojiGrid}\nदैनिक भास्कर खेल लैब पर खेलें।`;
+        const shareText = `Dainik Bhaskar / दैनिक भास्कर · आज का शब्द\n${edition.label} (${edition.periodLabel})\nशब्द: ${edition.answer}\nप्रयास: ${isGameWon ? boardGuesses.length + '/6' : 'खुलासा'}\n\n${emojiGrid}\nDainik Bhaskar / दैनिक भास्कर पर खेलें।`;
 
         if (navigator.share) {
           navigator.share({
-            title: 'आज का शब्द · दैनिक भास्कर',
+            title: 'आज का शब्द · Dainik Bhaskar / दैनिक भास्कर',
             text: shareText
           }).catch(() => {});
         } else if (navigator.clipboard) {

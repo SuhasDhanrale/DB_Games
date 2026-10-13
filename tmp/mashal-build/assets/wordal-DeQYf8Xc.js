@@ -1,0 +1,1 @@
+import"./audio-Bg9QUBUX.js";import{i as e,t}from"./game-family-DYdof5ev.js";import"./result-celebration-BqMZkvfW.js";t(`wordal`),e(`wordal`).then(window.finishGameIntro);

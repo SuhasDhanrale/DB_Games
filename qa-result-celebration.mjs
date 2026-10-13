@@ -148,10 +148,11 @@ try {
     else if (game === 'cricket') await frame.evaluate(() => { initMatch(); totalRuns = targetRuns; ballsBowled = 4; endMatch(true); });
     else await frame.evaluate(() => { shotsTaken = 1; potted.white = 1; evaluateLevel(); });
     await frame.locator('.result-celebration').waitFor();
-    if (game === 'wordal') await frame.locator('.torch-card').waitFor();
+    if (game === 'wordal') await hub.locator('.torch-popup').waitFor();
     assert.equal(await frame.locator('.result-celebration').count(), 1, 'Only one celebration in each embedded result');
     assert.equal(await hub.locator('.modal-backdrop.visible').count(), 0, 'No second platform result popup');
     await hub.screenshot({ path: `Doc/review-images/celebration-embedded-${game}-390.png` });
+    if (game === 'wordal') await hub.locator('.torch-card__skip').click();
     await hub.locator('#game-back-btn').click();
     await hub.locator('.hub-screen.active').waitFor();
   }

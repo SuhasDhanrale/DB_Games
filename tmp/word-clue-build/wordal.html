@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="hi" data-game-theme="wordal">
+<head>
+  <script src="./game-navigation.js"></script>
+  <script src="./demo-session.js"></script>
+  <meta charset="UTF-8">
+  <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>आज का शब्द | Aaj Ka Shabd · Dainik Bhaskar / दैनिक भास्कर</title>
+  <meta name="description" content="आज का शब्द — संकेत पढ़ें, 5 खाने भरें और 6 प्रयासों में हिंदी शब्द पहचानें।">
+  <meta name="theme-color" content="#faf9f6">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+  <style>:root{--color-primary:#e23a28;--color-primary-hover:#c52c1c;--color-primary-light:#fdece9;--color-primary-subtle:#fff5f4;--color-accent-gold:#f90;--color-accent-amber:#d97706;--color-correct:#1e824c;--color-correct-light:#e8f8f0;--color-present:#d97706;--color-present-light:#fef3c7;--color-absent:#4b5563;--color-absent-light:#e5e7eb;--color-empty:#fff;--color-bg:#f9f9f7;--color-surface:#fff;--color-surface-soft:#f4f1ea;--color-surface-warm:#faf8f5;--text-main:#1c1c1c;--text-muted:#555;--text-subtle:#7a7a7a;--text-white:#fff;--border-subtle:#1c1c1c1f;--border-medium:#1c1c1c38;--border-active:#e23a28;--shadow-sm:0 2px 6px #0000000d;--shadow-md:0 4px 14px #00000012;--shadow-lg:0 10px 28px #0000001c;--shadow-focus:0 0 0 3px #e23a2840;--font-stack:"Noto Sans Devanagari", "Nirmala UI", "Mangal", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;--radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-xl:18px;--radius-full:9999px}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}body{background-color:var(--color-bg);color:var(--text-main);font-family:var(--font-stack);touch-action:manipulation;flex-direction:column;align-items:center;height:100vh;max-height:100vh;padding:0;font-size:15px;line-height:1.4;display:flex;overflow:hidden}.sr-only{clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;width:1px;height:1px;margin:-1px;padding:0;position:absolute;overflow:hidden}.app-container{background-color:var(--color-bg);box-sizing:border-box;flex-direction:column;width:100%;max-width:440px;height:100vh;max-height:100vh;padding:6px 10px 8px;display:flex;position:relative;overflow:hidden}.editorial-clue-card{border:1px solid var(--border-subtle);border-left:3.5px solid var(--color-primary);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);background:linear-gradient(135deg,#fff 0%,#faf8f5 100%);flex-shrink:0;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;padding:6px 10px;display:flex}.clue-card-left{flex-direction:column;gap:2px;min-width:0;display:flex}.clue-tag-row{align-items:center;gap:8px;font-size:11px;display:flex}.clue-badge{color:var(--color-primary);letter-spacing:.3px;font-weight:800}.clue-topic{color:var(--color-accent-amber);font-weight:700}.clue-title-row{align-items:center;display:flex}.clue-title{color:var(--text-main);white-space:nowrap;text-overflow:ellipsis;font-size:13px;font-weight:800;overflow:hidden}.clue-card-right{flex-shrink:0}.clue-attempt-pill{color:var(--color-primary);background:var(--color-primary-light);border-radius:var(--radius-full);border:1px solid #e23a2833;align-items:center;padding:3px 8px;font-size:11px;font-weight:800;display:inline-flex}.view-screen{flex-direction:column;flex-grow:1;width:100%;height:100%;min-height:0;display:none}.view-screen.is-active{animation:.2s ease-out forwards fadeIn;display:flex}@keyframes fadeIn{0%{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}#viewGame.view-screen.is-active{flex-direction:column;justify-content:space-between;height:100%;display:flex;overflow:hidden}#viewResult.view-screen.is-active,#viewArticle.view-screen.is-active{-webkit-overflow-scrolling:touch;padding-bottom:24px;display:flex;overflow-y:auto}.board-container{flex:auto;justify-content:center;align-items:center;width:100%;min-height:0;margin:2px 0 4px;display:flex}#game-board{grid-gap:5px;grid-template-rows:repeat(6,1fr);width:100%;max-width:255px;display:grid}.board-row{grid-gap:5px;grid-template-columns:repeat(5,1fr);display:grid}.tile{aspect-ratio:1;border:2px solid var(--border-medium);background-color:var(--color-empty);max-height:42px;color:var(--text-main);user-select:none;border-radius:7px;justify-content:center;align-items:center;font-size:20px;font-weight:800;transition:border-color .15s,background-color .2s,transform .1s;display:flex;position:relative}.tile[data-state=tbd]{border-color:var(--border-active);background-color:var(--color-surface-warm);transform:scale(1.04)}.tile.correct{background-color:var(--color-correct)!important;border-color:var(--color-correct)!important;color:#fff!important}.tile.present{background-color:var(--color-present)!important;border-color:var(--color-present)!important;color:#fff!important}.tile.absent{background-color:var(--color-absent)!important;border-color:var(--color-absent)!important;color:#fff!important}.tile.flip{animation:.5s ease-in-out forwards flipTile}@keyframes flipTile{0%{transform:rotateX(0)}50%{transform:rotateX(90deg)}to{transform:rotateX(0)}}.board-row.shake{animation:.4s ease-in-out shakeRow}@keyframes shakeRow{0%,to{transform:translate(0)}20%,60%{transform:translate(-6px)}40%,80%{transform:translate(6px)}}.keyboard-wrapper{flex-shrink:0;width:100%;margin-top:auto;padding-bottom:2px}.keyboard-row{touch-action:manipulation;justify-content:center;gap:3px;width:100%;margin-bottom:3px;display:flex}.key-btn{border:1px solid var(--border-subtle);background-color:var(--color-surface);color:var(--text-main);cursor:pointer;user-select:none;touch-action:manipulation;border-radius:6px;flex:1;justify-content:center;align-items:center;height:40px;font-family:inherit;font-size:15px;font-weight:700;transition:all .12s;display:flex;box-shadow:0 1px 2px #0000000d}.key-btn:active{background-color:var(--color-surface-soft);transform:scale(.95)}.key-btn.correct{background-color:var(--color-correct)!important;border-color:var(--color-correct)!important;color:#fff!important}.key-btn.present{background-color:var(--color-present)!important;border-color:var(--color-present)!important;color:#fff!important}.key-btn.absent{opacity:.85;background-color:var(--color-absent)!important;border-color:var(--color-absent)!important;color:#fff!important}.action-keys-row{grid-template-columns:1fr 1.6fr;gap:6px;margin-top:4px;display:grid}.btn-action-key{cursor:pointer;touch-action:manipulation;border:none;border-radius:8px;justify-content:center;align-items:center;gap:6px;min-height:42px;font-family:inherit;font-size:14px;font-weight:700;transition:all .15s;display:flex}.btn-action-backspace{background-color:var(--color-surface-soft);color:var(--text-main);border:1px solid var(--border-medium)}.btn-action-backspace:active{background-color:var(--color-absent-light)}.btn-action-submit{background-color:var(--color-primary);color:#fff;box-shadow:0 3px 8px #e23a2840}.btn-action-submit:hover{background-color:var(--color-primary-hover)}.btn-action-submit:active{transform:scale(.98)}.result-container{flex-direction:column;gap:14px;padding-top:4px;display:flex}.result-hero-card{border:1.5px solid var(--border-subtle);border-radius:var(--radius-lg);text-align:center;box-shadow:var(--shadow-md);background:linear-gradient(135deg,#fff 0%,#fffbf5 100%);padding:16px;position:relative;overflow:hidden}.result-hero-card:before{content:"";background:linear-gradient(90deg, var(--color-correct) 0%, var(--color-accent-gold) 100%);height:4px;position:absolute;top:0;left:0;right:0}.result-status-pill{border-radius:var(--radius-full);align-items:center;gap:5px;margin-bottom:8px;padding:3px 12px;font-size:12px;font-weight:700;display:inline-flex}.result-status-pill.win{background-color:var(--color-correct-light);color:var(--color-correct);border:1px solid #1e824c33}.result-status-pill.revealed{background-color:var(--color-present-light);color:var(--color-present);border:1px solid #d9770633}.result-word-title{color:var(--text-main);letter-spacing:.5px;margin-bottom:8px;font-size:28px;font-weight:900;line-height:1.15}.result-meaning-box{background:var(--color-surface-soft);border-radius:var(--radius-md);text-align:left;border-left:3px solid var(--color-accent-gold);padding:10px 14px}.result-meaning-label{color:var(--text-subtle);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;font-size:11px;font-weight:800}.result-meaning-text{color:var(--text-main);font-size:14px;line-height:1.45}.news-connection-card{border:1.5px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);background:#fff;padding:14px;position:relative}.news-connection-header{align-items:center;gap:6px;margin-bottom:8px;display:flex}.news-connection-badge{background:var(--color-primary-light);color:var(--color-primary);border-radius:var(--radius-full);align-items:center;gap:4px;padding:3px 8px;font-size:11px;font-weight:800;display:inline-flex}.news-connection-topic{color:var(--text-muted);margin-left:auto;font-size:12px;font-weight:600}.news-connection-headline{color:var(--text-main);margin-bottom:8px;font-size:16px;font-weight:800;line-height:1.35}.news-snippet-box{color:#334155;border:1px solid #e2e8f0;border-left:3.5px solid var(--color-primary);background:#f8fafc;border-radius:4px 8px 8px 4px;margin-bottom:14px;padding:10px 12px;font-size:13.5px;line-height:1.6}.word-highlight-tag{color:#92400e;background:#fef3c7;border:1px solid #fcd34d;border-radius:4px;padding:1px 6px;font-weight:800;display:inline}.result-actions-dual{grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;display:grid}.btn-result-primary{background:linear-gradient(135deg, var(--color-primary) 0%, #c52c1c 100%);color:#fff;border-radius:var(--radius-md);cursor:pointer;touch-action:manipulation;text-align:center;border:none;justify-content:center;align-items:center;gap:6px;padding:12px 10px;font-family:inherit;font-size:14px;font-weight:800;text-decoration:none;transition:all .15s;display:flex;box-shadow:0 3px 10px #e23a2840}.btn-result-primary:hover{transform:translateY(-1px);box-shadow:0 5px 14px #e23a2859}.btn-result-primary:active{transform:scale(.98)}.btn-result-secondary{background:var(--color-surface);color:var(--text-main);border-radius:var(--radius-md);border:1.5px solid var(--border-medium);cursor:pointer;box-shadow:var(--shadow-sm);touch-action:manipulation;text-align:center;justify-content:center;align-items:center;gap:6px;padding:12px 10px;font-family:inherit;font-size:14px;font-weight:700;text-decoration:none;transition:all .15s;display:flex}.btn-result-secondary:hover{background:var(--color-surface-soft);border-color:var(--color-primary);color:var(--color-primary)}.btn-result-secondary:active{transform:scale(.98)}.article-reader-container{border:1px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);background:#fff;flex-direction:column;gap:14px;padding:18px 16px;display:flex}.article-nav-top{border-bottom:1px solid var(--border-subtle);justify-content:space-between;align-items:center;padding-bottom:10px;display:flex}.btn-back-to-result{background:var(--color-surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-full);color:var(--text-main);cursor:pointer;align-items:center;gap:5px;padding:6px 12px;font-family:inherit;font-size:12px;font-weight:700;display:inline-flex}.article-meta-badge{color:var(--color-primary);background:var(--color-primary-light);border-radius:var(--radius-full);padding:3px 8px;font-size:11px;font-weight:700}.article-headline-main{color:var(--text-main);font-size:22px;font-weight:800;line-height:1.3}.article-source-meta{color:var(--text-muted);flex-wrap:wrap;gap:8px;font-size:12px;display:flex}.article-body-text{color:var(--text-main);flex-direction:column;gap:12px;font-size:15px;line-height:1.65;display:flex}.article-sources-box{background:var(--color-surface-soft);border-radius:var(--radius-md);color:var(--text-muted);border-left:3px solid var(--color-accent-gold);padding:10px 12px;font-size:12px}.article-sources-box a{color:var(--color-primary);font-weight:600;text-decoration:underline}.article-reader-footer{border-top:1px solid var(--border-subtle);flex-direction:column;gap:8px;padding-top:10px;display:flex}#toast-container{z-index:2000;pointer-events:none;flex-direction:column;align-items:center;gap:8px;width:90%;max-width:360px;display:flex;position:fixed;top:60px;left:50%;transform:translate(-50%)}.toast-msg{color:#fff;box-shadow:var(--shadow-lg);opacity:1;text-align:center;background:#1c1c1c;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:700;transition:opacity .3s,transform .3s}.toast-msg.toast-success{background:var(--color-correct)}.toast-msg.toast-alert{background:var(--color-primary)}.modal-backdrop{z-index:3000;backdrop-filter:blur(2px);background:#000000a6;justify-content:center;align-items:center;padding:16px;display:none;position:fixed;inset:0}.modal-backdrop.is-open{animation:.2s ease-out fadeIn;display:flex}.modal-card{border-radius:var(--radius-lg);width:100%;max-width:420px;box-shadow:var(--shadow-lg);border:1px solid var(--border-subtle);background:#fff;padding:20px;position:relative}.modal-header{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}.modal-title{color:var(--text-main);font-size:18px;font-weight:800}.modal-close-btn{cursor:pointer;color:var(--text-muted);background:0 0;border:none;padding:4px;font-size:20px;line-height:1}.modal-body{color:var(--text-main);flex-direction:column;gap:10px;font-size:14px;line-height:1.55;display:flex}.rule-item{align-items:flex-start;gap:10px;display:flex}.rule-color-box{color:#fff;border-radius:4px;flex-shrink:0;justify-content:center;align-items:center;width:24px;height:24px;font-size:12px;font-weight:800;display:flex}.modal-footer{justify-content:flex-end;gap:8px;margin-top:16px;display:flex}.btn-modal-action{border-radius:var(--radius-md);cursor:pointer;border:none;padding:9px 16px;font-family:inherit;font-size:13px;font-weight:700}@media (width<=380px){.app-container{padding:8px 10px 24px}.game-main-title{font-size:21px}.tile{font-size:19px}.key-btn{height:44px;font-size:14px}.headline-banner-title{font-size:16px}}</style>
+  <script type="module" crossorigin src="/assets/wordal-DnrDWrk-.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/audio-Bg9QUBUX.js">
+  <link rel="modulepreload" crossorigin href="/assets/game-family-DZ2gqSJm.js">
+  <link rel="modulepreload" crossorigin href="/assets/result-celebration-BqMZkvfW.js">
+  <link rel="stylesheet" crossorigin href="/assets/game-family-BeZO0gSU.css">
+  <link rel="stylesheet" crossorigin href="/assets/result-celebration-BJvK6YRw.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Main Responsive Container -->
+  <main class="app-container">
+
+    <!-- ============================================================
+         VIEW SCREEN 1: WORD PUZZLE PLAY SCREEN (चरण 1: शब्द पहेली)
+         ============================================================ -->
+    <section class="view-screen is-active" id="viewGame" aria-label="खेल पटल">
+      
+      <!-- Crossword-style clue; the answer appears after the game. -->
+      <div class="editorial-clue-card family-note" id="headlineClueBanner" aria-labelledby="clueLabel headlineBannerTitle">
+        <div class="clue-card-left">
+          <div class="clue-tag-row">
+            <span class="clue-badge" id="clueLabel">आज का संकेत</span>
+            <span class="clue-topic" id="practiceBadge" hidden>अभ्यास</span>
+          </div>
+          <div class="clue-title-row">
+            <p class="clue-title" id="headlineBannerTitle">वैज्ञानिक नई जानकारी पाने के लिए यह करते हैं।</p>
+            <span id="headlineBannerDesc" class="sr-only">संकेत से शब्द पहचानें। नीचे के बटनों से पाँच खाने भरें। हर खाने में एक अक्षर समूह आएगा।</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5x6 Board -->
+      <div class="board-container">
+        <div class="board-meta">
+          <span>5 खाने भरें</span>
+          <span class="clue-attempt-pill" id="stepPillLabel" role="status" aria-live="polite" aria-atomic="true">प्रयास 1 / 6</span>
+        </div>
+        <div id="game-board" role="grid" aria-label="शब्द ग्रिड" aria-describedby="headlineBannerTitle headlineBannerDesc">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- 24-key Hindi Keyboard -->
+      <div class="keyboard-wrapper" id="keyboardWrapper">
+        <div class="keyboard-row" id="kbRow1"></div>
+        <div class="keyboard-row" id="kbRow2"></div>
+        <div class="keyboard-row" id="kbRow3"></div>
+
+        <div class="action-keys-row">
+          <button type="button" class="btn-action-key btn-action-backspace family-secondary" id="btnBackspace" aria-label="हटाएँ">
+            ⌫ हटाएँ
+          </button>
+          <button type="button" class="btn-action-key btn-action-submit family-primary" id="btnSubmitGuess" aria-label="जाँचें">
+            ✓ जाँचें
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW SCREEN 2: INTERCONNECTION & NEWS SCREEN (चरण 2: खबरों से जुड़ाव)
+         ============================================================ -->
+    <section class="view-screen" id="viewResult" aria-label="शब्द परिणाम और खबरों से जुड़ाव">
+      <div class="result-container">
+
+        <!-- Hero Card with Revealed Word & Meaning -->
+        <div class="result-hero-card family-panel">
+          <div data-result-celebration></div>
+          <div class="result-status-pill win" id="resultStatusPill">
+            🎉 बधाई! शब्द हल किया
+          </div>
+          <h2 class="result-word-title" id="resultWordDisplay">अनुसंधान</h2>
+          <span id="resultUnitsDisplay" class="sr-only"></span>
+          
+          <div class="result-meaning-box">
+            <div class="result-meaning-label">शब्द का अर्थ:</div>
+            <div class="result-meaning-text" id="resultMeaningText">
+              किसी विषय को व्यवस्थित ढंग से खोजने और समझने का काम।
+            </div>
+          </div>
+        </div>
+
+        <!-- The News Connection Card -->
+        <article class="news-connection-card family-panel">
+          <div class="news-connection-header">
+            <span class="news-connection-badge">इस शब्द से जुड़ी खबर</span>
+            <span class="news-connection-topic" id="newsConnectionTopic">विज्ञान विशेष</span>
+          </div>
+
+          <h3 class="news-connection-headline" id="newsConnectionHeadline">
+            भारत के चार अंतरिक्ष मिशन क्या खोजते हैं
+          </h3>
+
+          <div class="news-snippet-box" id="newsSnippetBox">
+            “चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के लिए वैज्ञानिक <span class="word-highlight-tag" id="highlightTagWord">अनुसंधान</span> लगातार नए आयाम स्थापित कर रहा है। चंद्रयान, आदित्य और मंगलयान के उद्देश्यों को समझें।”
+          </div>
+
+          <!-- Redirection & Actions: 2 Buttons Side by Side -->
+          <div class="result-actions-dual">
+            <button type="button" class="btn-result-primary family-primary" id="btnReadArticleHere">
+              📖 जुड़ी खबर पढ़ें
+            </button>
+            <button type="button" class="btn-result-secondary family-secondary" id="btnMoreGames">
+              🎮 और खेल
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============================================================
+         VIEW SCREEN 3: IN-FILE ARTICLE READER VIEW (जुड़ी खबर का पूरा लेख)
+         ============================================================ -->
+    <section class="view-screen" id="viewArticle" aria-label="संबंधित आलेख">
+      <article class="article-reader-container">
+        
+        <div class="article-nav-top">
+          <button type="button" class="btn-back-to-result" id="btnArticleBackToResult">
+            ← खेल परिणाम पर लौटें
+          </button>
+          <span class="article-meta-badge" id="artReaderCategory">विज्ञान</span>
+        </div>
+
+        <h2 class="article-headline-main" id="artReaderHeadline">
+          भारत के चार अंतरिक्ष मिशन क्या खोजते हैं
+        </h2>
+
+        <div class="article-source-meta" id="artReaderMeta">
+          <span id="artReaderPeriod">अंतरिक्ष मिशनों पर संदर्भ लेख</span> · 
+          <span>Dainik Bhaskar / दैनिक भास्कर (डेमो संदर्भ)</span>
+        </div>
+
+        <div class="article-body-text" id="artReaderBody">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <div class="article-sources-box" id="artReaderSources">
+          <strong>सत्यापित संदर्भ स्रोत:</strong>
+          <div id="artReaderSourcesList" style="margin-top: 4px;"></div>
+        </div>
+
+        <div class="result-actions-dual" style="margin-top: 10px;">
+          <button type="button" class="btn-result-primary family-primary" id="btnArticleBackBottom">
+            ← परिणाम पर लौटें
+          </button>
+          <button type="button" class="btn-result-secondary family-secondary" id="btnArticleMoreGames">
+            🎮 और खेल
+          </button>
+        </div>
+
+      </article>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       MODALS: HELP RULES & GIVE UP CONFIRMATION
+       ============================================================ -->
+  <!-- Help Modal -->
+  <div class="modal-backdrop" id="modalHelp" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="helpModalTitle">आज का शब्द कैसे खेलें?</h3>
+        <button type="button" class="modal-close-btn" id="btnCloseHelp" aria-label="बंद करें">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>• <strong>संकेत पढ़ें:</strong> ऊपर दिए संकेत से आज का शब्द पहचानें। आपके पास 6 प्रयास हैं।</p>
+        <p>• <strong>5 खाने भरें:</strong> नीचे के बटनों से अक्षर समूह चुनें। एक बटन एक खाना भरता है। मात्रा साथ आती है, जैसे <strong>का</strong> या <strong>नी</strong>। फिर <strong>✓ जाँचें</strong> दबाएँ।</p>
+        <p>• हर प्रयास के बाद रंग से संकेत मिलेंगे:</p>
+        
+        <div class="rule-item">
+          <div class="rule-color-box" style="background-color: var(--color-correct);">अ</div>
+          <div><strong>हरा रंग (सही जगह):</strong> यह अक्षर शब्द में बिल्कुल सही स्थान पर है।</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-color-box" style="background-color: var(--color-present);">नु</div>
+          <div><strong>पीला रंग (दूसरी जगह):</strong> यह अक्षर शब्द में मौजूद है, लेकिन दूसरे स्थान पर।</div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-color-box" style="background-color: var(--color-absent);">श</div>
+          <div><strong>स्लेटी रंग (शब्द में नहीं):</strong> यह अक्षर आज के शब्द में कहीं नहीं है।</div>
+        </div>
+
+        <p style="margin-top: 6px; font-size: 13px; color: var(--text-muted); background: var(--color-surface-soft); padding: 8px; border-radius: 6px;">
+          💡 <strong>खबर से जुड़ाव:</strong> शब्द पूरा होते ही आपको अगले चरण में शब्द का अर्थ और आज की मुख्य खबर से इसका संबंध दिखेगा!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-action btn-action-submit family-primary" id="btnOkHelp">खेले</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Give Up / Reveal Modal -->
+  <div class="modal-backdrop" id="modalGiveUp" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">क्या आप उत्तर देखना चाहते हैं?</h3>
+        <button type="button" class="modal-close-btn" id="btnCloseGiveUp" aria-label="रद्द करें">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>उत्तर देखने पर यह खेल समाप्त हो जाएगा और आपको शब्द का अर्थ व आज की खबर से इसका जुड़ाव दिखाया जाएगा।</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-modal-action btn-action-backspace family-secondary" id="btnCancelGiveUp">खेलते रहें</button>
+        <button type="button" class="btn-modal-action btn-action-submit family-primary" id="btnConfirmGiveUp">उत्तर दिखाएँ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PLAIN JAVASCRIPT CLOSURE (NO EXTERNAL DEPENDENCIES)
+       ============================================================ -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ============================================================
+         EDITIONS & NEWS ARTICLES DATA (Self-contained, 3 Days)
+         Matches Dainik Bhaskar Detailed Design & three-day-content.json
+         ============================================================ */
+      const EDITIONS_DATA = {
+        'd1': {
+          id: 'd1',
+          label: 'दिन 1',
+          theme: 'जिज्ञासा और खोज',
+          periodLabel: 'अंतरिक्ष विशेष',
+          clue: 'खोज और अध्ययन',
+          wordClue: 'वैज्ञानिक नई जानकारी पाने के लिए यह करते हैं।',
+          headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
+          subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
+          answer: 'अनुसंधान',
+          answerTokens: ['अ', 'नु', 'सं', 'धा', 'न'],
+          meaning: 'किसी विषय को व्यवस्थित ढंग से खोजने और समझने का काम।',
+          relatedArticleId: 'd1-feature',
+          newsHeadline: 'भारत के चार अंतरिक्ष मिशन क्या खोजते हैं',
+          newsCategory: 'विज्ञान · अंतरिक्ष विशेष',
+          newsExcerpt: 'चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के लिए वैज्ञानिक अनुसंधान लगातार नए आयाम स्थापित कर रहा है। चंद्रयान, आदित्य और मंगलयान के उद्देश्यों को समझें।',
+          newsConnectionWhy: 'चंद्रयान-3, आदित्य-एल1 और मंगलयान जैसे भारत के अंतरिक्ष मिशन लगातार नई खोज और अनुसंधान में जुटे हैं। आज की मुख्य खबर में जानिए कि ये मिशन क्या खोज रहे हैं।',
+          article: {
+            id: 'd1-feature',
+            category: 'विज्ञान',
+            title: 'भारत के चार अंतरिक्ष मिशन क्या खोजते हैं',
+            summary: 'चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के अलग-अलग तरीके।',
+            period: 'अंतरिक्ष मिशनों पर संदर्भ लेख',
+            kind: 'researched-demo',
+            sources: [
+              { id: 'S01', title: 'ISRO Chandrayaan 3 objectives', url: 'https://www.isro.gov.in/ISRO_EN/Chandrayaan3_New.html' },
+              { id: 'S02', title: 'ISRO Aditya L1 mission details', url: 'https://www.isro.gov.in/Aditya_L1-MissionDetails.html' },
+              { id: 'S03', title: 'ISRO Mars Orbiter objectives', url: 'https://www.isro.gov.in/mission_objective_C25.html' },
+              { id: 'S04', title: 'ISRO AstroSat', url: 'https://www.isro.gov.in/AstroSat.html' }
+            ],
+            paragraphs: [
+              'भारत के अंतरिक्ष मिशनों के काम एक जैसे नहीं हैं। चंद्रयान-3 के उद्देश्यों में चाँद पर सुरक्षित उतरना, रोवर चलाना और वहीं वैज्ञानिक प्रयोग करना शामिल था। आदित्य-एल1 सूर्य के अध्ययन के लिए बनाया गया है।',
+              'मंगलयान के वैज्ञानिक उद्देश्यों में मंगल की सतह और वायुमंडल को समझना शामिल था। एस्ट्रोसैट खगोलीय पिंडों को एक्स-रे, दृश्य और पराबैंगनी प्रकाश में एक साथ देख सकता है।',
+              'इस डेमो संस्करण में वैज्ञानिक अन्वेषण और खोज के कई पहलू प्रस्तुत किए गए हैं। आज का शब्द भी इसी विषय से जुड़ा है। यह संदर्भ सामग्री है, किसी नई घटना की खबर नहीं।'
+            ]
+          }
+        },
+        'd2': {
+          id: 'd2',
+          label: 'दिन 2',
+          theme: 'अभ्यास और प्रयास',
+          periodLabel: 'पेरिस 2024 की यादें',
+          clue: 'खेल और मुकाबला',
+          wordClue: 'ऐसा आयोजन जिसमें खिलाड़ी जीतने के लिए एक-दूसरे से मुकाबला करते हैं।',
+          headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
+          subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
+          answer: 'प्रतियोगिता',
+          answerTokens: ['प्र', 'ति', 'यो', 'गि', 'ता'],
+          meaning: 'ऐसा आयोजन जिसमें भाग लेने वाले तय नियमों के अनुसार मुकाबला करते हैं।',
+          relatedArticleId: 'd2-feature',
+          newsHeadline: 'पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते',
+          newsCategory: 'खेल · पेरिस ओलंपिक 2024',
+          newsExcerpt: 'विश्वस्तरीय मंच पर हर मुकाबला अनुशासन, अभ्यास और कड़ी प्रतियोगिता की कसौटी होता है। जानिए भारत के चार पदकवीरों की ऐतिहासिक उपलब्धियाँ।',
+          newsConnectionWhy: 'ओलंपिक जैसे वैश्विक मंच पर हर पदक निरंतर अभ्यास और कड़ी प्रतियोगिता का परिणाम होता है। आज की मुख्य खबर में जानिए पेरिस 2024 के ऐतिहासिक पदक विजेताओं की कहानी।',
+          article: {
+            id: 'd2-feature',
+            category: 'खेल',
+            title: 'पेरिस 2024 में इन चार खिलाड़ियों ने किन स्पर्धाओं में पदक जीते',
+            summary: 'चार नाम, चार अलग स्पर्धाएँ। पदक के साथ स्पर्धा पहचानिए।',
+            period: 'ऐतिहासिक संदर्भ · पेरिस ओलंपिक 2024',
+            kind: 'researched-demo',
+            sources: [
+              { id: 'S05', title: 'PIB Manu Bhaker bronze 28 July 2024', url: 'https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=2038138&lang=2&reg=48' },
+              { id: 'S06', title: 'PIB Neeraj Chopra silver 9 August 2024', url: 'https://www.pib.gov.in/FeaturesDeatils.aspx?ModuleId=2&NoteId=153309&lang=2&reg=48' },
+              { id: 'S07', title: 'PIB Swapnil Kusale bronze 1 August 2024', url: 'https://www.pib.gov.in/Pressreleaseshare.aspx?PRID=2040211&lang=2&reg=48' },
+              { id: 'S08', title: 'PIB Aman Sehrawat bronze 9 August 2024', url: 'https://www.pib.gov.in/PressReleasePage.aspx?PRID=2043947&lang=2&reg=48' }
+            ],
+            paragraphs: [
+              'पेरिस ओलंपिक 2024 में मनु भाकर ने महिला 10 मीटर एयर पिस्टल में कांस्य पदक जीता। नीरज चोपड़ा ने पुरुष भाला फेंक में रजत पदक हासिल किया।',
+              'स्वप्निल कुसाले ने पुरुष 50 मीटर राइफल 3 पोज़िशन में कांस्य जीता। अमन सहरावत ने पुरुष 57 किग्रा फ्रीस्टाइल कुश्ती में कांस्य पदक जीता।',
+              'इन चार उपलब्धियों को सही स्पर्धा के साथ पहचानना खेल की सच्ची पहचान है। वैश्विक मंच पर सफलता केवल निरंतर अभ्यास और प्रतियोगिता के सम्मान से संभव होती है।'
+            ]
+          }
+        },
+        'd3': {
+          id: 'd3',
+          label: 'दिन 3',
+          theme: 'विरासत और देखभाल',
+          periodLabel: 'भारत की विरासत',
+          clue: 'इतिहास और धरोहर',
+          wordClue: 'अतीत की किसी महत्वपूर्ण घटना या जगह को हम ऐसा कहते हैं।',
+          headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
+          subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
+          answer: 'ऐतिहासिक',
+          answerTokens: ['ऐ', 'ति', 'हा', 'सि', 'क'],
+          meaning: 'इतिहास से जुड़ा हुआ।',
+          relatedArticleId: 'd3-feature',
+          newsHeadline: 'भारत की चार धरोहरें और उनके राज्य',
+          newsCategory: 'संस्कृति · विश्व धरोहर',
+          newsExcerpt: 'धोलावीरा, हम्पी, साँची और कोणार्क जैसे ऐतिहासिक स्थल हमारी समृद्ध सांस्कृतिक पहचान और कालजयी वास्तुकला के अनमोल धरोहर हैं।',
+          newsConnectionWhy: 'धोलावीरा, हम्पी, साँची और कोणार्क जैसे ऐतिहासिक स्थल भारतीय सभ्यता, गौरवशाली इतिहास और समृद्ध वास्तुकला के जीवंत प्रमाण हैं।',
+          article: {
+            id: 'd3-feature',
+            category: 'संस्कृति',
+            title: 'भारत की चार धरोहरें और उनके राज्य',
+            summary: 'गुजरात से ओडिशा तक, चार जगहों की पहचान और इतिहास।',
+            period: 'विश्व धरोहर स्थलों पर संदर्भ लेख',
+            kind: 'researched-demo',
+            sources: [
+              { id: 'S09', title: 'UNESCO Dholavira', url: 'https://whc.unesco.org/en/list/1645/' },
+              { id: 'S10', title: 'UNESCO Hampi', url: 'https://whc.unesco.org/en/list/241/' },
+              { id: 'S11', title: 'UNESCO Sanchi', url: 'https://whc.unesco.org/en/list/524/' },
+              { id: 'S12', title: 'UNESCO Konark', url: 'https://whc.unesco.org/en/list/246/' }
+            ],
+            paragraphs: [
+              'धोलावीरा गुजरात में हड़प्पा सभ्यता का एक स्थल है। वहाँ की जल व्यवस्था उस समय की नगर योजना को समझने में मदद करती है। कर्नाटक के हम्पी में विजयनगर के अवशेष हैं।',
+              'मध्य प्रदेश में साँची के बौद्ध स्मारक हैं। ओडिशा का कोणार्क सूर्य मंदिर सूर्य के रथ की कल्पना से जुड़ी अपनी बनावट के लिए जाना जाता है। ये चारों स्थल यूनेस्को की विश्व धरोहर सूची में दर्ज हैं।',
+              'विरासत अगली पीढ़ी तक तभी पहुँचती है जब हम उसके ऐतिहासिक महत्व को समझें और उसकी देखभाल करें।'
+            ]
+          }
+        }
+      };
+
+      // Exactly 24 reusable Hindi keyboard keys in 3 rows of 8
+      const KEYBOARD_ROWS = [
+        ['अ', 'नु', 'सं', 'धा', 'न', 'प्र', 'ति', 'यो'],
+        ['गि', 'ता', 'ऐ', 'हा', 'सि', 'क', 'आ', 'का'],
+        ['श', 'वा', 'णी', 'रा', 'ज', 'नी', 'म', 'भा']
+      ];
+
+      const TOTAL_ROWS = 6;
+      const TOTAL_COLS = 5;
+
+      /* ============================================================
+         STATE MANAGEMENT
+         ============================================================ */
+      let currentDay = 'd1';
+      let currentAttempt = 0;
+      let currentCol = 0;
+      let boardGuesses = []; // Array of { tokens: string[], evaluations: string[] }
+      let currentRowTokens = [];
+      let isGameOver = false;
+      let isGameWon = false;
+      let isRevealed = false;
+      let keyStateMap = {}; // key -> 'correct' | 'present' | 'absent'
+      let isInputLocked = false;
+      let isPractice = false;
+      let restoredResult = false;
+      let resultCelebrated = false;
+
+      // DOM Elements
+      const viewGame = document.getElementById('viewGame');
+      const viewResult = document.getElementById('viewResult');
+      const viewArticle = document.getElementById('viewArticle');
+      const gameBoard = document.getElementById('game-board');
+      const toastContainer = document.getElementById('toast-container');
+
+      // Headline banner elements
+      const headlineBannerTitle = document.getElementById('headlineBannerTitle');
+      const headlineBannerDesc = document.getElementById('headlineBannerDesc');
+      const stepPillLabel = document.getElementById('stepPillLabel');
+      const practiceBadge = document.getElementById('practiceBadge');
+
+      // Keyboard elements
+      const kbRow1 = document.getElementById('kbRow1');
+      const kbRow2 = document.getElementById('kbRow2');
+      const kbRow3 = document.getElementById('kbRow3');
+      const btnBackspace = document.getElementById('btnBackspace');
+      const btnSubmitGuess = document.getElementById('btnSubmitGuess');
+      const btnGiveUp = document.getElementById('btnGiveUp');
+
+      // Navigation / Modals
+      const tabD1 = document.getElementById('tab-d1');
+      const tabD2 = document.getElementById('tab-d2');
+      const tabD3 = document.getElementById('tab-d3');
+      const btnHelp = document.getElementById('btnHelp');
+      const modalHelp = document.getElementById('modalHelp');
+      const btnCloseHelp = document.getElementById('btnCloseHelp');
+      const btnOkHelp = document.getElementById('btnOkHelp');
+      const modalGiveUp = document.getElementById('modalGiveUp');
+      const btnCloseGiveUp = document.getElementById('btnCloseGiveUp');
+      const btnCancelGiveUp = document.getElementById('btnCancelGiveUp');
+      const btnConfirmGiveUp = document.getElementById('btnConfirmGiveUp');
+      const btnResetRound = document.getElementById('btnResetRound');
+
+      // Result Screen elements
+      const resultStatusPill = document.getElementById('resultStatusPill');
+      const resultWordDisplay = document.getElementById('resultWordDisplay');
+      const resultUnitsDisplay = document.getElementById('resultUnitsDisplay');
+      const resultMeaningText = document.getElementById('resultMeaningText');
+      const newsConnectionTopic = document.getElementById('newsConnectionTopic');
+      const newsConnectionHeadline = document.getElementById('newsConnectionHeadline');
+      const newsSnippetBox = document.getElementById('newsSnippetBox');
+      const highlightTagWord = document.getElementById('highlightTagWord');
+      const btnReadArticleHere = document.getElementById('btnReadArticleHere');
+      const btnMoreGames = document.getElementById('btnMoreGames');
+
+      // Article Reader elements
+      const artReaderCategory = document.getElementById('artReaderCategory');
+      const artReaderHeadline = document.getElementById('artReaderHeadline');
+      const artReaderPeriod = document.getElementById('artReaderPeriod');
+      const artReaderBody = document.getElementById('artReaderBody');
+      const artReaderSourcesList = document.getElementById('artReaderSourcesList');
+      const btnArticleBackToResult = document.getElementById('btnArticleBackToResult');
+      const btnArticleBackBottom = document.getElementById('btnArticleBackBottom');
+      const btnArticleToFeedLink = document.getElementById('btnArticleToFeedLink');
+
+      /* ============================================================
+         HELPERS: TOAST & AUDIO/HAPTIC
+         ============================================================ */
+      function showToast(message, type = 'normal', duration = 2200) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-msg' + (type === 'success' ? ' toast-success' : type === 'alert' ? ' toast-alert' : '');
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(-10px)';
+          setTimeout(() => {
+            if (toast.parentNode) toast.parentNode.removeChild(toast);
+          }, 300);
+        }, duration);
+      }
+
+      /* ============================================================
+         URL PARAMETERS & DAY SELECTION
+         ============================================================ */
+      function getDayFromUrl() {
+        return window.DBJamDemo.day;
+      }
+
+      function updateUrlDay(day) {
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set('day', day);
+          window.history.replaceState({ day: day }, '', url.toString());
+        } catch (e) {
+          // Fallback for isolated file:// execution
+        }
+      }
+
+      /* ============================================================
+         IN-MEMORY DEMO STATE (Key: db-jam:v2:wordal:<dayId>)
+         ============================================================ */
+      function getStorageKey(dayId) {
+        return `db-jam:v2:wordal:${dayId}`;
+      }
+
+      function saveGameState() {
+        try {
+          const data = {
+            currentAttempt,
+            currentRowTokens,
+            boardGuesses,
+            isGameOver,
+            isGameWon,
+            isRevealed,
+            keyStateMap
+          };
+          window.DBJamDemo.setItem(getStorageKey(currentDay), JSON.stringify(data));
+        } catch (e) {
+          // Ignore malformed transient state.
+        }
+      }
+
+      function loadGameState() {
+        try {
+          const raw = window.DBJamDemo.getItem(getStorageKey(currentDay));
+          if (raw) {
+            return JSON.parse(raw);
+          }
+        } catch (e) {}
+        return null;
+      }
+
+      function clearCurrentDayState() {
+        try {
+          window.DBJamDemo.removeItem(getStorageKey(currentDay));
+        } catch (e) {}
+      }
+
+      /* ============================================================
+         VIEW SWITCHING
+         ============================================================ */
+      function showView(viewId) {
+        viewGame.classList.remove('is-active');
+        viewResult.classList.remove('is-active');
+        viewArticle.classList.remove('is-active');
+
+        if (viewId === 'game') {
+          viewGame.classList.add('is-active');
+        } else if (viewId === 'result') {
+          populateResultScreen();
+          viewResult.classList.add('is-active');
+          window.DBResultCelebration.show(viewResult.querySelector('[data-result-celebration]'), {
+            game: 'wordal', details: { solved: isGameWon, attempts: boardGuesses.length },
+            animate: !resultCelebrated,
+          });
+          resultCelebrated = true;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          // Solving or using all six attempts completes the game; revealing early does not.
+          if (!restoredResult && (isGameWon || boardGuesses.length >= TOTAL_ROWS)) {
+            try {
+              window.parent?.DBGameLab?.endGame?.(isGameWon ? 100 - ((boardGuesses.length - 1) * 10) : 0, { solved: isGameWon, attempts: boardGuesses.length, edition: currentDay, mode: isPractice ? 'practice' : 'daily' });
+            } catch (e) {}
+            restoredResult = true;
+          }
+        } else if (viewId === 'article') {
+          populateArticleReader();
+          viewArticle.classList.add('is-active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      /* ============================================================
+         KEYBOARD RENDERING
+         ============================================================ */
+      function renderKeyboard() {
+        kbRow1.innerHTML = '';
+        kbRow2.innerHTML = '';
+        kbRow3.innerHTML = '';
+
+        KEYBOARD_ROWS[0].forEach(key => kbRow1.appendChild(createKeyButton(key)));
+        KEYBOARD_ROWS[1].forEach(key => kbRow2.appendChild(createKeyButton(key)));
+        KEYBOARD_ROWS[2].forEach(key => kbRow3.appendChild(createKeyButton(key)));
+      }
+
+      function createKeyButton(key) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'key-btn';
+        btn.dataset.key = key;
+        btn.textContent = key;
+
+        // Apply saved status if any
+        if (keyStateMap[key]) {
+          btn.classList.add(keyStateMap[key]);
+        }
+
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          handleKeyPress(key);
+        });
+
+        return btn;
+      }
+
+      function updateKeyboardColors() {
+        document.querySelectorAll('.key-btn').forEach(btn => {
+          const k = btn.dataset.key;
+          btn.classList.remove('correct', 'present', 'absent');
+          if (keyStateMap[k]) {
+            btn.classList.add(keyStateMap[k]);
+          }
+        });
+      }
+
+      /* ============================================================
+         BOARD RENDERING & TILE LOGIC
+         ============================================================ */
+      function renderBoard() {
+        gameBoard.innerHTML = '';
+
+        for (let r = 0; r < TOTAL_ROWS; r++) {
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'board-row';
+          rowDiv.id = `board-row-${r}`;
+          rowDiv.setAttribute('role', 'row');
+
+          for (let c = 0; c < TOTAL_COLS; c++) {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            tile.id = `tile-${r}-${c}`;
+            tile.setAttribute('role', 'gridcell');
+
+            // Populate if already guessed in saved state
+            if (boardGuesses[r]) {
+              const guessedLetter = boardGuesses[r].tokens[c] || '';
+              const evalState = boardGuesses[r].evaluations[c] || '';
+              tile.textContent = guessedLetter;
+              if (evalState) {
+                tile.classList.add(evalState);
+              }
+            } else if (r === currentAttempt && currentRowTokens[c]) {
+              tile.textContent = currentRowTokens[c];
+              tile.dataset.state = 'tbd';
+            }
+
+            rowDiv.appendChild(tile);
+          }
+
+          gameBoard.appendChild(rowDiv);
+        }
+      }
+
+      function updateActiveRowDisplay() {
+        gameBoard.querySelectorAll('.board-row').forEach((row, index) => {
+          const active = index === currentAttempt && !isGameOver;
+          row.classList.toggle('is-current', active);
+          row.setAttribute('aria-label', `प्रयास ${index + 1}${active ? ', अभी भरें' : ''}`);
+        });
+        for (let c = 0; c < TOTAL_COLS; c++) {
+          const tile = document.getElementById(`tile-${currentAttempt}-${c}`);
+          if (!tile) continue;
+
+          if (currentRowTokens[c]) {
+            tile.textContent = currentRowTokens[c];
+            tile.dataset.state = 'tbd';
+          } else {
+            tile.textContent = '';
+            tile.removeAttribute('data-state');
+          }
+        }
+
+        if (stepPillLabel) {
+          stepPillLabel.textContent = `प्रयास ${Math.min(currentAttempt + 1, TOTAL_ROWS)} / ${TOTAL_ROWS}`;
+        }
+      }
+
+      function shakeCurrentRow() {
+        const row = document.getElementById(`board-row-${currentAttempt}`);
+        if (row) {
+          row.classList.add('shake');
+          setTimeout(() => row.classList.remove('shake'), 400);
+        }
+      }
+
+      /* ============================================================
+         INPUT HANDLING
+         ============================================================ */
+      function handleKeyPress(key) {
+        if (isGameOver || isInputLocked) return;
+
+        if (currentCol < TOTAL_COLS) {
+          currentRowTokens[currentCol] = key;
+          currentCol++;
+          updateActiveRowDisplay();
+          saveGameState();
+        } else {
+          showToast('5 खाने भर गए, "जाँचें" दबाएँ', 'alert', 1400);
+        }
+      }
+
+      function handleBackspace() {
+        if (isGameOver || isInputLocked) return;
+
+        if (currentCol > 0) {
+          currentCol--;
+          currentRowTokens.pop();
+          updateActiveRowDisplay();
+          saveGameState();
+        }
+      }
+
+      /* ============================================================
+         TWO-PASS FEEDBACK ALGORITHM
+         (Exact logic specified in Section 7 of Detailed Design)
+         ============================================================ */
+      function evaluateGuess(guessTokens, answerTokens) {
+        const evaluations = Array(TOTAL_COLS).fill('absent');
+        const remainingAnswerCounts = {};
+
+        // Pass 1: Mark exact positions as 'correct'
+        for (let i = 0; i < TOTAL_COLS; i++) {
+          if (guessTokens[i] === answerTokens[i]) {
+            evaluations[i] = 'correct';
+          } else {
+            const ansChar = answerTokens[i];
+            remainingAnswerCounts[ansChar] = (remainingAnswerCounts[ansChar] || 0) + 1;
+          }
+        }
+
+        // Pass 2: Mark remaining matching tokens as 'present' if available in answer
+        for (let i = 0; i < TOTAL_COLS; i++) {
+          if (evaluations[i] !== 'correct') {
+            const guessedChar = guessTokens[i];
+            if (remainingAnswerCounts[guessedChar] && remainingAnswerCounts[guessedChar] > 0) {
+              evaluations[i] = 'present';
+              remainingAnswerCounts[guessedChar]--;
+            }
+          }
+        }
+
+        return evaluations;
+      }
+
+      function upgradeKeyStatus(key, status) {
+        const current = keyStateMap[key];
+        if (current === 'correct') return; // Cannot downgrade
+        if (current === 'present' && status === 'absent') return; // Cannot downgrade present to absent
+        keyStateMap[key] = status;
+      }
+
+      /* ============================================================
+         SUBMIT GUESS
+         ============================================================ */
+      function submitGuess() {
+        if (isGameOver || isInputLocked) return;
+
+        if (currentRowTokens.length < TOTAL_COLS) {
+          showToast('पहले 5 खाने भरें', 'alert', 1600);
+          shakeCurrentRow();
+          return;
+        }
+
+        isInputLocked = true;
+        const edition = EDITIONS_DATA[currentDay];
+        const guessTokens = [...currentRowTokens];
+        const evaluations = evaluateGuess(guessTokens, edition.answerTokens);
+
+        // Check if all correct
+        const allCorrect = evaluations.every(e => e === 'correct');
+
+        // Animate tiles flip sequentially
+        const rowIdx = currentAttempt;
+        for (let c = 0; c < TOTAL_COLS; c++) {
+          const tile = document.getElementById(`tile-${rowIdx}-${c}`);
+          setTimeout(() => {
+            if (tile) {
+              tile.removeAttribute('data-state');
+              tile.classList.add('flip');
+              tile.classList.add(evaluations[c]);
+            }
+            // Update keyboard key state
+            upgradeKeyStatus(guessTokens[c], evaluations[c]);
+            updateKeyboardColors();
+          }, c * 140);
+        }
+
+        // After animation completes
+        setTimeout(() => {
+          boardGuesses.push({
+            tokens: guessTokens,
+            evaluations: evaluations
+          });
+
+          if (allCorrect) {
+            isGameOver = true;
+            isGameWon = true;
+            isRevealed = false;
+            saveGameState();
+
+            // Optional DBGameLab Parent integration call
+            try {
+              if (window.parent && window.parent.DBGameLab && typeof window.parent.DBGameLab.addScore === 'function') {
+                window.parent.DBGameLab.addScore(100 - (rowIdx * 10));
+              }
+            } catch (e) {}
+
+            // Transition to Screen 2: News Interconnection Screen
+            showView('result');
+
+          } else if (currentAttempt + 1 >= TOTAL_ROWS) {
+            // Out of attempts
+            isGameOver = true;
+            isGameWon = false;
+            isRevealed = true;
+            saveGameState();
+            showView('result');
+
+          } else {
+            // Next row
+            currentAttempt++;
+            currentCol = 0;
+            currentRowTokens = [];
+            isInputLocked = false;
+            saveGameState();
+            updateActiveRowDisplay();
+          }
+        }, TOTAL_COLS * 140 + 200);
+      }
+
+      /* ============================================================
+         GIVE UP / REVEAL ANSWER
+         ============================================================ */
+      function confirmGiveUp() {
+        modalGiveUp.classList.remove('is-open');
+        isGameOver = true;
+        isGameWon = false;
+        isRevealed = true;
+        saveGameState();
+        showView('result');
+      }
+
+      /* ============================================================
+         POPULATE SCREEN 2: INTERCONNECTION & NEWS SCREEN
+         ============================================================ */
+      function populateResultScreen() {
+        const edition = EDITIONS_DATA[currentDay];
+        
+        // Result Pill
+        if (resultStatusPill) {
+          if (isGameWon) {
+            resultStatusPill.className = 'result-status-pill win';
+            resultStatusPill.textContent = `${boardGuesses.length}/6 कोशिशों में हल किया`;
+          } else {
+            resultStatusPill.className = 'result-status-pill revealed';
+            resultStatusPill.textContent = '📖 शब्द का खुलासा';
+          }
+          if (isPractice) resultStatusPill.textContent = 'अभ्यास · ' + resultStatusPill.textContent;
+        }
+
+        // Hero Word & Meaning
+        if (resultWordDisplay) resultWordDisplay.textContent = edition.answer;
+        if (resultUnitsDisplay) resultUnitsDisplay.textContent = edition.answerTokens.join(' · ');
+        if (resultMeaningText) resultMeaningText.textContent = edition.meaning;
+
+        // News Interconnection Details
+        if (newsConnectionTopic) newsConnectionTopic.textContent = edition.periodLabel;
+        if (newsConnectionHeadline) newsConnectionHeadline.textContent = edition.newsHeadline;
+        if (newsSnippetBox) {
+          const rawExcerpt = edition.newsExcerpt || '';
+          const word = edition.answer;
+          if (rawExcerpt.includes(word)) {
+            const highlightedText = rawExcerpt.replace(word, `<span class="word-highlight-tag">${word}</span>`);
+            newsSnippetBox.innerHTML = `“${highlightedText}”`;
+          } else {
+            newsSnippetBox.innerHTML = `“${rawExcerpt}”`;
+          }
+        }
+
+        // Update Links
+        const targetNewsUrl = `./news.html?day=${encodeURIComponent(currentDay)}&article=${encodeURIComponent(edition.relatedArticleId)}`;
+        if (btnArticleToFeedLink) btnArticleToFeedLink.href = targetNewsUrl;
+      }
+
+      /* ============================================================
+         POPULATE SCREEN 3: IN-FILE ARTICLE READER
+         ============================================================ */
+      function populateArticleReader() {
+        const edition = EDITIONS_DATA[currentDay];
+        const art = edition.article;
+
+        artReaderCategory.textContent = art.category;
+        artReaderHeadline.textContent = art.title;
+        artReaderPeriod.textContent = art.period;
+
+        artReaderBody.innerHTML = '';
+        art.paragraphs.forEach(p => {
+          const para = document.createElement('p');
+          para.textContent = p;
+          artReaderBody.appendChild(para);
+        });
+
+        artReaderSourcesList.innerHTML = '';
+        art.sources.forEach(s => {
+          const srcItem = document.createElement('div');
+          srcItem.style.marginBottom = '4px';
+          srcItem.innerHTML = `• <a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.title}</a>`;
+          artReaderSourcesList.appendChild(srcItem);
+        });
+      }
+
+      /* ============================================================
+         EDITION SWITCHING & INITIALIZATION
+         ============================================================ */
+      function switchEdition(dayId) {
+        if (!EDITIONS_DATA[dayId]) return;
+
+        currentDay = dayId;
+        updateUrlDay(dayId);
+
+        // Update tabs active state (if present)
+        [tabD1, tabD2, tabD3].filter(Boolean).forEach(tab => {
+          const isTabActive = tab.dataset.day === dayId;
+          tab.classList.toggle('is-active', isTabActive);
+          tab.setAttribute('aria-selected', isTabActive ? 'true' : 'false');
+        });
+
+        // Update Banner Details
+        const edition = EDITIONS_DATA[dayId];
+        isPractice = new URLSearchParams(location.search).get('practice') === '1' || window.DBJamDemo.getItem('wordal:spoiled:' + currentDay) === 'true';
+        if (headlineBannerTitle) headlineBannerTitle.textContent = edition.wordClue;
+        if (headlineBannerDesc) headlineBannerDesc.textContent = isPractice ? 'कहानी पढ़ने से उत्तर खुल चुका है। यह अभ्यास आपके पहले दैनिक परिणाम से अलग रहेगा।' : 'संकेत से शब्द पहचानें। नीचे के बटनों से पाँच खाने भरें। हर खाने में एक अक्षर समूह आएगा।';
+        if (practiceBadge) practiceBadge.hidden = !isPractice;
+
+        // Debug Logger: Print solution word to console for easy verification
+        window.currentWordalSolution = edition.answer;
+        window.currentWordalTokens = edition.answerTokens;
+        const debugMsg = `Day: ${dayId} | शब्द (Solution): "${edition.answer}" | Tokens: [${edition.answerTokens.map(t => `'${t}'`).join(', ')}] | Clue: "${edition.clue}"`;
+        console.log('%c[आज का शब्द · Solution]', 'background: #E23A28; color: #fff; font-weight: bold; padding: 2px 6px; border-radius: 4px;', debugMsg);
+        try {
+          if (window.parent && window.parent !== window && window.parent.console) {
+            window.parent.console.log('%c[आज का शब्द · Solution]', 'background: #E23A28; color: #fff; font-weight: bold; padding: 2px 6px; border-radius: 4px;', debugMsg);
+          }
+        } catch (e) {}
+
+        // Reset memory variables
+        currentAttempt = 0;
+        currentCol = 0;
+        currentRowTokens = [];
+        boardGuesses = [];
+        keyStateMap = {};
+        isGameOver = false;
+        isGameWon = false;
+        isRevealed = false;
+        isInputLocked = false;
+        restoredResult = false;
+        resultCelebrated = false;
+        window.DBResultCelebration.clear(viewResult.querySelector('[data-result-celebration]'));
+
+        // Restore saved state if exists
+        const saved = loadGameState();
+        if (saved) {
+          currentAttempt = saved.currentAttempt || 0;
+          currentRowTokens = saved.currentRowTokens || [];
+          currentCol = currentRowTokens.length;
+          boardGuesses = saved.boardGuesses || [];
+          isGameOver = !!saved.isGameOver;
+          isGameWon = !!saved.isGameWon;
+          isRevealed = !!saved.isRevealed;
+          keyStateMap = saved.keyStateMap || {};
+          restoredResult = isGameOver;
+          resultCelebrated = isGameOver;
+        }
+
+        renderKeyboard();
+        renderBoard();
+        updateActiveRowDisplay();
+
+        // If this edition was already finished, show result directly
+        if (isGameOver) {
+          showView('result');
+        } else {
+          showView('game');
+        }
+      }
+
+      /* ============================================================
+         SHARE RESULTS
+         ============================================================ */
+      function shareResult() {
+        const edition = EDITIONS_DATA[currentDay];
+        let emojiGrid = '';
+        
+        boardGuesses.forEach(g => {
+          g.evaluations.forEach(ev => {
+            if (ev === 'correct') emojiGrid += '🟩';
+            else if (ev === 'present') emojiGrid += '🟨';
+            else emojiGrid += '⬜';
+          });
+          emojiGrid += '\n';
+        });
+
+        const shareText = `Dainik Bhaskar / दैनिक भास्कर · आज का शब्द\n${edition.label} (${edition.periodLabel})\nशब्द: ${edition.answer}\nप्रयास: ${isGameWon ? boardGuesses.length + '/6' : 'खुलासा'}\n\n${emojiGrid}\nDainik Bhaskar / दैनिक भास्कर पर खेलें।`;
+
+        if (navigator.share) {
+          navigator.share({
+            title: 'आज का शब्द · Dainik Bhaskar / दैनिक भास्कर',
+            text: shareText
+          }).catch(() => {});
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(shareText).then(() => {
+            showToast('परिणाम कॉपी किया गया! व्हाट्सएप पर साझा करें', 'success', 2200);
+          }).catch(() => {
+            showToast('शेयर कॉपी उपलब्ध नहीं है', 'alert');
+          });
+        } else {
+          showToast('परिणाम क्लिपबोर्ड में कॉपी नहीं हो सका', 'alert');
+        }
+      }
+
+      /* ============================================================
+         EVENT LISTENERS
+         ============================================================ */
+      // Keyboard Action Keys
+      if (btnBackspace) {
+        btnBackspace.addEventListener('click', (e) => {
+          e.preventDefault();
+          handleBackspace();
+        });
+      }
+
+      if (btnSubmitGuess) {
+        btnSubmitGuess.addEventListener('click', (e) => {
+          e.preventDefault();
+          submitGuess();
+        });
+      }
+
+      // Help Modal actions
+      if (btnCloseHelp && modalHelp) {
+        btnCloseHelp.addEventListener('click', () => modalHelp.classList.remove('is-open'));
+      }
+      if (btnOkHelp && modalHelp) {
+        btnOkHelp.addEventListener('click', () => modalHelp.classList.remove('is-open'));
+      }
+
+      // Expose help modal for parent app envelope and postMessage
+      window.openHelpModal = function() {
+        if (modalHelp) modalHelp.classList.add('is-open');
+      };
+
+      window.addEventListener('message', (e) => {
+        if (e.data && (e.data.type === 'OPEN_RULES' || e.data.type === 'OPEN_HELP')) {
+          window.openHelpModal();
+        }
+      });
+
+      // Screen 2 Actions: 2 Buttons Side by Side
+      if (btnReadArticleHere) {
+        btnReadArticleHere.addEventListener('click', () => {
+          const bridge = window.parent?.DBGameLab;
+          if (bridge?.openArticle) bridge.openArticle(`./news.html?day=${encodeURIComponent(currentDay)}&article=${encodeURIComponent(EDITIONS_DATA[currentDay].relatedArticleId)}`);
+          else showView('article');
+        });
+      }
+
+      if (btnMoreGames) {
+        btnMoreGames.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.DBGameNavigation.goHome();
+        });
+      }
+
+      // Screen 3 Actions (Article Reader)
+      if (btnArticleBackToResult) {
+        btnArticleBackToResult.addEventListener('click', () => {
+          showView('result');
+        });
+      }
+
+      if (btnArticleBackBottom) {
+        btnArticleBackBottom.addEventListener('click', () => {
+          showView('result');
+        });
+      }
+
+      const btnArticleMoreGames = document.getElementById('btnArticleMoreGames');
+      if (btnArticleMoreGames) {
+        btnArticleMoreGames.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.DBGameNavigation.goHome();
+        });
+      }
+
+      // Physical Keyboard typing support (Backspace and Enter)
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace') {
+          handleBackspace();
+        } else if (e.key === 'Enter') {
+          submitGuess();
+        }
+      });
+
+      // Initialize with day from URL
+      const initialDay = getDayFromUrl();
+      window.gameIntroReady.then(() => switchEdition(initialDay));
+
+    })();
+  </script>
+</body>
+</html>

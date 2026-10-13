@@ -4,6 +4,8 @@ import { getPlayHistory, readRound } from '../systems/play-history.js';
 import { navigate } from '../core/router.js';
 import { openModal, closeModal } from '../ui/components.js';
 import '../styles/support.css';
+import '../styles/torch.css';
+import { torchCardMarkup } from '../ui/torch.js';
 
 const GAMES = ['wordal', 'niti', 'cricket', 'carrom', 'jodo'];
 const title = id => t('game' + (GAMES.indexOf(id) + 1) + '.title');
@@ -15,8 +17,9 @@ function skill(history, id, reference, hi) {
   }
   const candidates = history.filter(entry => entry.gameId === id).flatMap(entry => [entry.details, entry.bestDetails].filter(Boolean));
   if (id === 'carrom') {
-    const shots = candidates.map(d => d.shots).filter(Number.isFinite);
-    return shots.length ? (hi ? `निजी सर्वश्रेष्ठ · ${Math.min(...shots)} शॉट` : `Personal best · ${Math.min(...shots)} shots`) : '';
+    if (!reference?.details.challengeId || !reference?.details.rulesVersion) return '';
+    const shots = candidates.filter(d => d.challengeId === reference.details.challengeId && d.rulesVersion === reference.details.rulesVersion).map(d => d.shots).filter(Number.isFinite);
+    return shots.length ? (hi ? `इसी चुनौती में सर्वश्रेष्ठ · ${Math.min(...shots)} शॉट` : `Same challenge best · ${Math.min(...shots)} shots`) : '';
   }
   if (id === 'cricket' && reference?.details.role) {
     const role = reference.details.role;
@@ -46,6 +49,7 @@ function progressContent(container) {
   const playedDays = Object.keys(prog.dailyHistory).filter(date => date >= weekStart.toISOString().slice(0, 10) && date <= today).length;
   container.classList.add('support-view');
   container.innerHTML = `
+    <aside class="torch-card" lang="${getLang()}">${torchCardMarkup()}</aside>
     <p class="support-muted">${hi ? 'अपनी रफ़्तार से खेलें। कोई एक खेल भी काफ़ी है।' : 'Play at your pace. One game is enough.'}</p>
     <div class="support-summary"><div><strong>${playedDays}</strong><span>${hi ? 'पिछले सात दिनों में खेला' : 'Days played in the last seven'}</span></div><div><strong>${prog.streak}</strong><span>${hi ? 'लगातार खेले गए दिन' : 'Consecutive days played'}</span></div></div>
     <h3>${hi ? 'आज के खेल' : "Today's games"}</h3>
@@ -59,7 +63,7 @@ function progressContent(container) {
       return `<button type="button" class="support-game" data-game-theme="${id}" data-progress-game="${id}"><span class="support-game__mark" aria-hidden="true">${first ? '✓' : ['अ', '“', '↗', '◎', '⌘'][index]}</span><span class="support-game__copy"><strong>${title(id)}</strong><span>${status}</span>${improvement ? `<span>${improvement}</span>` : ''}</span><span aria-hidden="true">→</span></button>`;
     }).join('')}</div>
     ${history.length ? `<h3>${hi ? 'आपके परिणाम' : 'Your results'}</h3>${history.slice(-15).reverse().map(entry => `<div class="support-history"><strong>${title(entry.gameId)}</strong><p>${summary(entry, hi)}</p><p>${entry.date} · ${hi ? 'डेमो संस्करण' : 'Demo edition'} ${entry.edition.slice(1)} · ${entry.mode === 'practice' ? (hi ? 'अभ्यास' : 'Practice') : (hi ? 'पहला परिणाम' : 'First result')}</p></div>`).join('')}` : `<div class="support-empty">${hi ? 'आपका पहला परिणाम यहीं मिलेगा। आज मनपसंद खेल से शुरुआत करें।' : 'Your first result will appear here. Start with a game you enjoy.'}</div>`}
-    <p class="support-muted" style="margin-top:20px">${window.DBJamDemo.persistent ? (hi ? 'प्रगति इसी डिवाइस के ब्राउज़र में सहेजी जाती है। ब्राउज़र डेटा हटाने पर यह मिट जाएगी।' : 'Progress is saved in this browser on this device. Clearing browser data removes it.') : (hi ? 'इस ब्राउज़र में सहेजने की अनुमति नहीं है। प्रगति केवल इस खुले सत्र तक रहेगी।' : 'This browser blocks saving. Progress lasts only for this open session.')}</p>`;
+    <p class="support-muted" style="margin-top:20px">${hi ? 'मशाल का लेवल इस ब्राउज़र में सहेजा जाता है। रिफ़्रेश करने पर इस सत्र के परिणाम मिट जाएँगे और अगला डेमो संस्करण खुलेगा।' : 'Your Mashal level is saved in this browser. Refresh clears this visit’s results and opens the next demo edition.'}</p>`;
   container.querySelectorAll('[data-progress-game]').forEach(button => button.addEventListener('click', () => { closeModal(); navigate('/game/' + button.dataset.progressGame); }));
 }
 export function openProgress() {
