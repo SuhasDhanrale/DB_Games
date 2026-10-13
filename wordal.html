@@ -7,6 +7,8 @@
   <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
   <script type="module">
     import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+    import { installGameInteractionGuides } from './src/ui/game-interactions.js';
+    installGameInteractionGuides('wordal');
     import './src/ui/result-celebration.js';
     import { installGameMusic } from './src/ui/game-music.js';
     installGameMusic('wordal');
@@ -1545,6 +1547,7 @@
           currentRowTokens[currentCol] = key;
           currentCol++;
           updateActiveRowDisplay();
+          document.dispatchEvent(new CustomEvent('wordal-interaction', { detail: 'type' }));
           saveGameState();
         } else {
           showToast('5 खाने भर गए, "जाँचें" दबाएँ', 'alert', 1400);
@@ -1614,6 +1617,7 @@
         }
 
         isInputLocked = true;
+        document.dispatchEvent(new CustomEvent('wordal-interaction', { detail: 'check' }));
         const edition = EDITIONS_DATA[currentDay];
         const guessTokens = [...currentRowTokens];
         const evaluations = evaluateGuess(guessTokens, edition.answerTokens);

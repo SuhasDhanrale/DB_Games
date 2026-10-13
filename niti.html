@@ -7,6 +7,8 @@
   <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
   <script type="module">
     import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+    import { installGameInteractionGuides } from './src/ui/game-interactions.js';
+    installGameInteractionGuides('niti');
     import './src/ui/result-celebration.js';
     import { installGameMusic } from './src/ui/game-music.js';
     installGameMusic('niti');

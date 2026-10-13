@@ -156,3 +156,9 @@ Saved `output/submission-pitch-v5/Dainik Bhaskar Khel - Submission v5.pptx`. Fou
 - The return slide uses existing intro icons with shorter text for today's payoff, tomorrow's invitation and depth over time. The planned publishing/generation/hosted-sharing boundary remains visible.
 
 All fourteen final slide renders were inspected, including the affected palette variants. Package, layout and font checks passed with zero findings and warnings. The final deck retains the native table on slide 5. Native PowerPoint execution was not tested. Private build and validation evidence is in `tmp/submission-pitch-v5`.
+
+## Dialogue identities, version 6
+
+Added Hindi names and ages inside the five opening dialogue boxes, using the organizer brief's personas: Rajesh Verma 36 (cricket), Ram Kishore Verma 43 (childhood play), Mahendra Meena 35 (busy with work), Om Prakash Maurya 53 (morning thought) and Neha Yadav 28 (curiosity). These dialogue assignments remain authored storytelling, not quotations or verified behavior. A visible caption says the dialogues are fictional and inspired by the supplied reader personas. Sources for names and ages: organizer brief pp. 13–17.
+
+Saved `output/submission-pitch-v6/Dainik Bhaskar Khel - Submission v6.pptx`, fourteen slides. The dialogue slide was visually checked; the other thirteen renders match version 5 pixel for pixel. Validation records are in `tmp/submission-pitch-v6`.

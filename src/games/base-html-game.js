@@ -87,7 +87,9 @@ export class HtmlIframeGame extends BaseGame {
     if (!celebration) return;
     const anchors = {
       wordal: '.result-hero-card',
-      niti: '#meaning-reveal-box',
+      // The share-card step hides the meaning box immediately after completion.
+      // Keep its pending celebration attached to the whole Niti screen.
+      niti: '#app',
       cricket: '.news-scorecard',
       carrom: '#modal-desc',
       jodo: '.result-header-minimal',

@@ -8,6 +8,7 @@
     <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
     <script type="module">
         import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+        import './src/ui/game-interactions.js';
         import './src/ui/result-celebration.js';
     import { installGameMusic } from './src/ui/game-music.js';
     installGameMusic('cricket');
@@ -859,7 +860,7 @@
         <div class="over-footer">
         <div class="balls-strip" id="ballsStrip" aria-label="इस ओवर की गेंदें"><div class="ball-badge" id="ball-0">—</div><div class="ball-badge" id="ball-1">—</div><div class="ball-badge" id="ball-2">—</div><div class="ball-badge" id="ball-3">—</div><div class="ball-badge" id="ball-4">—</div><div class="ball-badge" id="ball-5">—</div></div>
         </div>
-        <div class="bottom-controls"><div class="gesture-hint-pill" id="gestureHintPill"><span class="hint-icon" id="hintIcon">☝</span><span class="hint-text" id="hintText">गेंद पास आए तो उंगली सरकाकर शॉट खेलें</span></div></div>
+        <div class="bottom-controls"><div class="gesture-hint-pill" id="gestureHintPill"><span class="hint-icon" id="hintIcon">👇</span><span class="hint-text" id="hintText">गेंद पास आए तो उंगली सरकाकर शॉट खेलें</span></div></div>
     </div>
 
     <!-- How to Play & Rules Modal -->
@@ -1366,6 +1367,20 @@
         // Automatic delivery sequencing & pitch drag state
         let autoNextBallTimer = null;
         let isDraggingPitchTarget = false;
+        let interactionGuide;
+
+        function installCricketGuide() {
+            interactionGuide = window.DBInteractionGuides.create({
+                game: 'cricket',
+                isActive: () => matchStarted && !helpOpen && !isDraggingPitchTarget && !touchStartPos && [STATES.IDLE, STATES.RUNUP, STATES.IN_FLIGHT].includes(gameState),
+                getSteps: () => currentRole === ROLES.BATTING ? [
+                    { id: 'bat', surface: canvas, from: { x: .5, y: .72 }, to: { x: .28, y: .54 }, label: 'गेंद हरे निशान पर आए तो सरकाएँ', labelY: .88 },
+                    { id: 'bat', surface: canvas, from: { x: .5, y: .72 }, to: { x: .72, y: .54 }, label: 'शॉट की दिशा में उंगली सरकाएँ', labelY: .88 },
+                ] : [
+                    { id: 'bowl', surface: canvas, from: { x: .5, y: .48 }, to: { x: .55, y: .36 }, label: 'पिच पर जगह चुनें → उंगली छोड़ें', labelY: .76 },
+                ],
+            });
+        }
 
         // Bowling Setup & Length Options
         const BOWLING_LENGTHS = {
@@ -3551,6 +3566,7 @@
             if (currentRole === ROLES.BOWLING && isDraggingPitchTarget) {
                 isDraggingPitchTarget = false;
                 applyPitchDragPoint(pt);
+                interactionGuide?.used('bowl');
                 // Dropping/releasing finger immediately delivers this ball!
                 startDelivery();
                 touchStartPos = null;
@@ -3567,6 +3583,7 @@
 
             if (currentRole === ROLES.BATTING) {
                 if (dir) {
+                    interactionGuide?.used('bat');
                     triggerSwipeShot(dir);
                 }
             }
@@ -3724,6 +3741,7 @@
                 }
             } catch {}
             requestAnimationFrame(gameLoop);
+            installCricketGuide();
         });
     </script>
 </body>

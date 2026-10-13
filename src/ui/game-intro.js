@@ -1,4 +1,5 @@
 import '../styles/game-intro.css';
+import { createInteractionGuide, interactionPoint } from './interaction-guide.js';
 
 // Fallback for pages without the demo session. The host and its game frames
 // share DBJamDemo memory, so dismissing the host guide also dismisses the frame's.
@@ -107,10 +108,39 @@ export function renderGameIntro(container, id, { onPlay, lang = 'hi', replay = f
     <footer class="gi-footer"><button type="button" class="gi-play">${text.play}</button><p>${text.note}</p></footer>
   </section>`;
   const button = container.querySelector('.gi-play');
+  const figure = container.querySelector('.gi-demo');
+  const guide = id === 'wordal' ? null : createInteractionGuide({
+    game: `example-${id}`, labels: false, remember: false, compact: true, mount: container,
+    // The example inside the standalone dialog remains visible while its live
+    // game guide is paused. Use the illustration's own coordinates for resizing.
+    isActive: () => container.isConnected,
+    getSteps: () => {
+      if (!figure.getClientRects().length) return [];
+      const surface = figure.querySelector('svg') || figure;
+      const point = (x, y) => {
+        const p = surface.createSVGPoint(); p.x = x; p.y = y;
+        const actual = p.matrixTransform(surface.getScreenCTM());
+        const rect = surface.getBoundingClientRect();
+        return { x: (actual.x - rect.left) / rect.width, y: (actual.y - rect.top) / rect.height };
+      };
+      if (id === 'carrom') return [
+        { id: 'position', surface, from: point(151, 113), to: point(185, 113) },
+        { id: 'shoot', surface, from: point(151, 113), to: point(136, 138) },
+      ];
+      if (id === 'cricket') return [
+        { id: 'swipe-left', surface, from: point(80, 105), to: point(49, 75) },
+        { id: 'swipe-right', surface, from: point(80, 105), to: point(118, 78) },
+        { id: 'bowl', surface, from: point(238, 88), to: point(238, 63) },
+      ];
+      if (id === 'jodo') return [{ id: 'pair', surface: figure, from: interactionPoint(figure, figure.querySelector('.gi-pair--a')), to: interactionPoint(figure, figure.querySelector('.gi-pair--b')) }];
+      return [{ id: 'choose', surface: figure, from: interactionPoint(figure, figure.querySelector('.gi-choice')) }];
+    },
+    allowDialog: true,
+  });
   const play = () => { if (!replay) markSeen(id); onPlay?.(); };
   button.addEventListener('click', play, { once: true });
   button.focus({ preventScroll: true });
-  return () => button.removeEventListener('click', play);
+  return () => { button.removeEventListener('click', play); guide?.destroy(); };
 }
 
 // Direct HTML links use the same introduction as games opened from the hub.

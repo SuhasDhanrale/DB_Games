@@ -8,6 +8,7 @@
     "dev:superover": "vite --open /Superover.html",
     "build": "vite build",
     "build:single": "node scripts/build-single.mjs",
+    "test:mashal": "node tests/mashal-progression.mjs && node tests/mashal-popup-browser.mjs",
     "preview": "vite preview"
   },
   "keywords": [],

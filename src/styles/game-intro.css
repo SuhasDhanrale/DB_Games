@@ -38,9 +38,6 @@
 .gi-pair--b, .gi-pair--d { right: 0; }
 .gi-check { color: #496e43; animation: gi-select 4s ease-in-out infinite; }
 .gi-connection { animation: gi-connect 4s ease-in-out infinite; }
-.gi-striker { animation: gi-strike 4s ease-in-out infinite; }
-.gi-coin { animation: gi-pocket 4s ease-in-out infinite; }
-.gi-pull { animation: gi-select 4s ease-in-out infinite; }
 .gi-ball { animation: gi-delivery 4s ease-in-out infinite; }
 .gi-placement { animation: gi-select 4s ease-in-out infinite; }
 .gi-cricket-labels { display: flex; justify-content: space-around; font-size: 10px; margin-top: -3px; }

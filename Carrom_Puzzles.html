@@ -8,6 +8,7 @@
     <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
     <script type="module">
         import { prepareStandaloneIntro } from './src/ui/game-intro.js';
+        import './src/ui/game-interactions.js';
         import './src/ui/result-celebration.js';
     import { installGameMusic } from './src/ui/game-music.js';
     installGameMusic('carrom');
@@ -632,6 +633,22 @@
             positionSlider: document.getElementById('position-slider'),
             retryBtn: document.getElementById('retry-btn')
         };
+        let interactionGuide;
+
+        function installCarromGuide() {
+            interactionGuide = window.DBInteractionGuides.create({
+                game: 'carrom',
+                isActive: () => gameState === 'IDLE' && !dragMode && !completed && ui.modalBackdrop.classList.contains('hidden'),
+                getSteps: () => {
+                    if (!strikerBody) return [];
+                    const from = { x: strikerBody.position.x / CANVAS_SIZE, y: strikerBody.position.y / CANVAS_SIZE };
+                    return [
+                        { id: 'position', surface: canvas, from, to: { x: from.x > .6 ? from.x - .14 : from.x + .14, y: from.y }, label: 'स्ट्राइकर को बाएँ या दाएँ खिसकाएँ', labelY: .62 },
+                        { id: 'shoot', surface: canvas, from, to: { x: from.x - .035, y: Math.min(.96, from.y + .13) }, label: 'पीछे खींचें → निशाना साधें → छोड़ें', labelY: .62 },
+                    ];
+                },
+            });
+        }
 
         function setGameState(newState) {
             gameState = newState;
@@ -657,6 +674,7 @@
         // Slider Input Event
         ui.positionSlider.addEventListener('input', (e) => {
             if (gameState === 'IDLE') {
+                interactionGuide?.used('position');
                 updateStrikerX(parseFloat(e.target.value));
             }
         });
@@ -1235,6 +1253,7 @@
             const pos = getTouchPos(e);
 
             if (dragMode === 'POSITIONING') {
+                interactionGuide?.used('position');
                 updateStrikerX(pos.x);
             } else if (dragMode === 'STRIKER_TOUCH') {
                 const deltaX = pos.x - dragOriginPos.x;
@@ -1249,6 +1268,7 @@
                         dragCurrent = pos;
                     } else {
                         dragMode = 'POSITIONING';
+                        interactionGuide?.used('position');
                         updateStrikerX(strikerStartX + deltaX);
                     }
                 }
@@ -1276,6 +1296,8 @@
                         y: Math.sin(angle) * speed
                     });
                     shotsTaken++;
+                    interactionGuide?.used('shoot');
+                    interactionGuide?.used('position');
                     setGameState('MOVING');
                     saveCarromState();
                 } else {
@@ -1387,6 +1409,7 @@
                 } else if (saved.state === 'MOVING') setGameState('MOVING');
             }
             saveCarromState();
+            installCarromGuide();
             requestAnimationFrame(loop);
         });
     </script>

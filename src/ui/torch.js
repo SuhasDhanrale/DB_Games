@@ -67,7 +67,9 @@ export function showTorchCelebration(anchor, celebration) {
     if (popup?.open) popup.close();
     popup?.remove();
   };
-  const isVisible = () => anchor.isConnected && anchor.checkVisibility({ checkVisibilityCSS: true });
+  // checkVisibility is missing in older browsers/WebViews and blocks every game.
+  const isVisible = () => anchor.isConnected && anchor.getClientRects().length > 0
+    && anchorDoc.defaultView.getComputedStyle(anchor).visibility === 'visible';
   const check = () => {
     if (stopped) return;
     if (!isVisible()) {

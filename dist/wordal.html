@@ -7,7 +7,7 @@
   <script>window.gameIntroReady = new Promise(resolve => { window.finishGameIntro = resolve; });</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>आज का शब्द | Aaj Ka Shabd · Dainik Bhaskar / दैनिक भास्कर</title>
-  <meta name="description" content="आज का शब्द — दैनिक 5 अक्षरों की हिंदी शब्द पहेली। आज की सुर्खियों में छिपा शब्द खोजें और मुख्य खबर से जुड़ें।">
+  <meta name="description" content="आज का शब्द — हिंट पढ़ें, 5 खाने भरें और 6 प्रयासों में हिंदी शब्द पहचानें।">
   <meta name="theme-color" content="#faf9f6">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,11 +15,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <style>:root{--color-primary:#e23a28;--color-primary-hover:#c52c1c;--color-primary-light:#fdece9;--color-primary-subtle:#fff5f4;--color-accent-gold:#f90;--color-accent-amber:#d97706;--color-correct:#1e824c;--color-correct-light:#e8f8f0;--color-present:#d97706;--color-present-light:#fef3c7;--color-absent:#4b5563;--color-absent-light:#e5e7eb;--color-empty:#fff;--color-bg:#f9f9f7;--color-surface:#fff;--color-surface-soft:#f4f1ea;--color-surface-warm:#faf8f5;--text-main:#1c1c1c;--text-muted:#555;--text-subtle:#7a7a7a;--text-white:#fff;--border-subtle:#1c1c1c1f;--border-medium:#1c1c1c38;--border-active:#e23a28;--shadow-sm:0 2px 6px #0000000d;--shadow-md:0 4px 14px #00000012;--shadow-lg:0 10px 28px #0000001c;--shadow-focus:0 0 0 3px #e23a2840;--font-stack:"Noto Sans Devanagari", "Nirmala UI", "Mangal", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;--radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-xl:18px;--radius-full:9999px}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}body{background-color:var(--color-bg);color:var(--text-main);font-family:var(--font-stack);touch-action:manipulation;flex-direction:column;align-items:center;height:100vh;max-height:100vh;padding:0;font-size:15px;line-height:1.4;display:flex;overflow:hidden}.sr-only{clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;width:1px;height:1px;margin:-1px;padding:0;position:absolute;overflow:hidden}.app-container{background-color:var(--color-bg);box-sizing:border-box;flex-direction:column;width:100%;max-width:440px;height:100vh;max-height:100vh;padding:6px 10px 8px;display:flex;position:relative;overflow:hidden}.editorial-clue-card{border:1px solid var(--border-subtle);border-left:3.5px solid var(--color-primary);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);background:linear-gradient(135deg,#fff 0%,#faf8f5 100%);flex-shrink:0;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;padding:6px 10px;display:flex}.clue-card-left{flex-direction:column;gap:2px;min-width:0;display:flex}.clue-tag-row{align-items:center;gap:8px;font-size:11px;display:flex}.clue-badge{color:var(--color-primary);letter-spacing:.3px;font-weight:800}.clue-topic{color:var(--color-accent-amber);font-weight:700}.clue-title-row{align-items:center;display:flex}.clue-title{color:var(--text-main);white-space:nowrap;text-overflow:ellipsis;font-size:13px;font-weight:800;overflow:hidden}.clue-card-right{flex-shrink:0}.clue-attempt-pill{color:var(--color-primary);background:var(--color-primary-light);border-radius:var(--radius-full);border:1px solid #e23a2833;align-items:center;padding:3px 8px;font-size:11px;font-weight:800;display:inline-flex}.view-screen{flex-direction:column;flex-grow:1;width:100%;height:100%;min-height:0;display:none}.view-screen.is-active{animation:.2s ease-out forwards fadeIn;display:flex}@keyframes fadeIn{0%{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}#viewGame.view-screen.is-active{flex-direction:column;justify-content:space-between;height:100%;display:flex;overflow:hidden}#viewResult.view-screen.is-active,#viewArticle.view-screen.is-active{-webkit-overflow-scrolling:touch;padding-bottom:24px;display:flex;overflow-y:auto}.board-container{flex:auto;justify-content:center;align-items:center;width:100%;min-height:0;margin:2px 0 4px;display:flex}#game-board{grid-gap:5px;grid-template-rows:repeat(6,1fr);width:100%;max-width:255px;display:grid}.board-row{grid-gap:5px;grid-template-columns:repeat(5,1fr);display:grid}.tile{aspect-ratio:1;border:2px solid var(--border-medium);background-color:var(--color-empty);max-height:42px;color:var(--text-main);user-select:none;border-radius:7px;justify-content:center;align-items:center;font-size:20px;font-weight:800;transition:border-color .15s,background-color .2s,transform .1s;display:flex;position:relative}.tile[data-state=tbd]{border-color:var(--border-active);background-color:var(--color-surface-warm);transform:scale(1.04)}.tile.correct{background-color:var(--color-correct)!important;border-color:var(--color-correct)!important;color:#fff!important}.tile.present{background-color:var(--color-present)!important;border-color:var(--color-present)!important;color:#fff!important}.tile.absent{background-color:var(--color-absent)!important;border-color:var(--color-absent)!important;color:#fff!important}.tile.flip{animation:.5s ease-in-out forwards flipTile}@keyframes flipTile{0%{transform:rotateX(0)}50%{transform:rotateX(90deg)}to{transform:rotateX(0)}}.board-row.shake{animation:.4s ease-in-out shakeRow}@keyframes shakeRow{0%,to{transform:translate(0)}20%,60%{transform:translate(-6px)}40%,80%{transform:translate(6px)}}.keyboard-wrapper{flex-shrink:0;width:100%;margin-top:auto;padding-bottom:2px}.keyboard-row{touch-action:manipulation;justify-content:center;gap:3px;width:100%;margin-bottom:3px;display:flex}.key-btn{border:1px solid var(--border-subtle);background-color:var(--color-surface);color:var(--text-main);cursor:pointer;user-select:none;touch-action:manipulation;border-radius:6px;flex:1;justify-content:center;align-items:center;height:40px;font-family:inherit;font-size:15px;font-weight:700;transition:all .12s;display:flex;box-shadow:0 1px 2px #0000000d}.key-btn:active{background-color:var(--color-surface-soft);transform:scale(.95)}.key-btn.correct{background-color:var(--color-correct)!important;border-color:var(--color-correct)!important;color:#fff!important}.key-btn.present{background-color:var(--color-present)!important;border-color:var(--color-present)!important;color:#fff!important}.key-btn.absent{opacity:.85;background-color:var(--color-absent)!important;border-color:var(--color-absent)!important;color:#fff!important}.action-keys-row{grid-template-columns:1fr 1.6fr;gap:6px;margin-top:4px;display:grid}.btn-action-key{cursor:pointer;touch-action:manipulation;border:none;border-radius:8px;justify-content:center;align-items:center;gap:6px;min-height:42px;font-family:inherit;font-size:14px;font-weight:700;transition:all .15s;display:flex}.btn-action-backspace{background-color:var(--color-surface-soft);color:var(--text-main);border:1px solid var(--border-medium)}.btn-action-backspace:active{background-color:var(--color-absent-light)}.btn-action-submit{background-color:var(--color-primary);color:#fff;box-shadow:0 3px 8px #e23a2840}.btn-action-submit:hover{background-color:var(--color-primary-hover)}.btn-action-submit:active{transform:scale(.98)}.result-container{flex-direction:column;gap:14px;padding-top:4px;display:flex}.result-hero-card{border:1.5px solid var(--border-subtle);border-radius:var(--radius-lg);text-align:center;box-shadow:var(--shadow-md);background:linear-gradient(135deg,#fff 0%,#fffbf5 100%);padding:16px;position:relative;overflow:hidden}.result-hero-card:before{content:"";background:linear-gradient(90deg, var(--color-correct) 0%, var(--color-accent-gold) 100%);height:4px;position:absolute;top:0;left:0;right:0}.result-status-pill{border-radius:var(--radius-full);align-items:center;gap:5px;margin-bottom:8px;padding:3px 12px;font-size:12px;font-weight:700;display:inline-flex}.result-status-pill.win{background-color:var(--color-correct-light);color:var(--color-correct);border:1px solid #1e824c33}.result-status-pill.revealed{background-color:var(--color-present-light);color:var(--color-present);border:1px solid #d9770633}.result-word-title{color:var(--text-main);letter-spacing:.5px;margin-bottom:8px;font-size:28px;font-weight:900;line-height:1.15}.result-meaning-box{background:var(--color-surface-soft);border-radius:var(--radius-md);text-align:left;border-left:3px solid var(--color-accent-gold);padding:10px 14px}.result-meaning-label{color:var(--text-subtle);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;font-size:11px;font-weight:800}.result-meaning-text{color:var(--text-main);font-size:14px;line-height:1.45}.news-connection-card{border:1.5px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);background:#fff;padding:14px;position:relative}.news-connection-header{align-items:center;gap:6px;margin-bottom:8px;display:flex}.news-connection-badge{background:var(--color-primary-light);color:var(--color-primary);border-radius:var(--radius-full);align-items:center;gap:4px;padding:3px 8px;font-size:11px;font-weight:800;display:inline-flex}.news-connection-topic{color:var(--text-muted);margin-left:auto;font-size:12px;font-weight:600}.news-connection-headline{color:var(--text-main);margin-bottom:8px;font-size:16px;font-weight:800;line-height:1.35}.news-snippet-box{color:#334155;border:1px solid #e2e8f0;border-left:3.5px solid var(--color-primary);background:#f8fafc;border-radius:4px 8px 8px 4px;margin-bottom:14px;padding:10px 12px;font-size:13.5px;line-height:1.6}.word-highlight-tag{color:#92400e;background:#fef3c7;border:1px solid #fcd34d;border-radius:4px;padding:1px 6px;font-weight:800;display:inline}.result-actions-dual{grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;display:grid}.btn-result-primary{background:linear-gradient(135deg, var(--color-primary) 0%, #c52c1c 100%);color:#fff;border-radius:var(--radius-md);cursor:pointer;touch-action:manipulation;text-align:center;border:none;justify-content:center;align-items:center;gap:6px;padding:12px 10px;font-family:inherit;font-size:14px;font-weight:800;text-decoration:none;transition:all .15s;display:flex;box-shadow:0 3px 10px #e23a2840}.btn-result-primary:hover{transform:translateY(-1px);box-shadow:0 5px 14px #e23a2859}.btn-result-primary:active{transform:scale(.98)}.btn-result-secondary{background:var(--color-surface);color:var(--text-main);border-radius:var(--radius-md);border:1.5px solid var(--border-medium);cursor:pointer;box-shadow:var(--shadow-sm);touch-action:manipulation;text-align:center;justify-content:center;align-items:center;gap:6px;padding:12px 10px;font-family:inherit;font-size:14px;font-weight:700;text-decoration:none;transition:all .15s;display:flex}.btn-result-secondary:hover{background:var(--color-surface-soft);border-color:var(--color-primary);color:var(--color-primary)}.btn-result-secondary:active{transform:scale(.98)}.article-reader-container{border:1px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);background:#fff;flex-direction:column;gap:14px;padding:18px 16px;display:flex}.article-nav-top{border-bottom:1px solid var(--border-subtle);justify-content:space-between;align-items:center;padding-bottom:10px;display:flex}.btn-back-to-result{background:var(--color-surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-full);color:var(--text-main);cursor:pointer;align-items:center;gap:5px;padding:6px 12px;font-family:inherit;font-size:12px;font-weight:700;display:inline-flex}.article-meta-badge{color:var(--color-primary);background:var(--color-primary-light);border-radius:var(--radius-full);padding:3px 8px;font-size:11px;font-weight:700}.article-headline-main{color:var(--text-main);font-size:22px;font-weight:800;line-height:1.3}.article-source-meta{color:var(--text-muted);flex-wrap:wrap;gap:8px;font-size:12px;display:flex}.article-body-text{color:var(--text-main);flex-direction:column;gap:12px;font-size:15px;line-height:1.65;display:flex}.article-sources-box{background:var(--color-surface-soft);border-radius:var(--radius-md);color:var(--text-muted);border-left:3px solid var(--color-accent-gold);padding:10px 12px;font-size:12px}.article-sources-box a{color:var(--color-primary);font-weight:600;text-decoration:underline}.article-reader-footer{border-top:1px solid var(--border-subtle);flex-direction:column;gap:8px;padding-top:10px;display:flex}#toast-container{z-index:2000;pointer-events:none;flex-direction:column;align-items:center;gap:8px;width:90%;max-width:360px;display:flex;position:fixed;top:60px;left:50%;transform:translate(-50%)}.toast-msg{color:#fff;box-shadow:var(--shadow-lg);opacity:1;text-align:center;background:#1c1c1c;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:700;transition:opacity .3s,transform .3s}.toast-msg.toast-success{background:var(--color-correct)}.toast-msg.toast-alert{background:var(--color-primary)}.modal-backdrop{z-index:3000;backdrop-filter:blur(2px);background:#000000a6;justify-content:center;align-items:center;padding:16px;display:none;position:fixed;inset:0}.modal-backdrop.is-open{animation:.2s ease-out fadeIn;display:flex}.modal-card{border-radius:var(--radius-lg);width:100%;max-width:420px;box-shadow:var(--shadow-lg);border:1px solid var(--border-subtle);background:#fff;padding:20px;position:relative}.modal-header{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}.modal-title{color:var(--text-main);font-size:18px;font-weight:800}.modal-close-btn{cursor:pointer;color:var(--text-muted);background:0 0;border:none;padding:4px;font-size:20px;line-height:1}.modal-body{color:var(--text-main);flex-direction:column;gap:10px;font-size:14px;line-height:1.55;display:flex}.rule-item{align-items:flex-start;gap:10px;display:flex}.rule-color-box{color:#fff;border-radius:4px;flex-shrink:0;justify-content:center;align-items:center;width:24px;height:24px;font-size:12px;font-weight:800;display:flex}.modal-footer{justify-content:flex-end;gap:8px;margin-top:16px;display:flex}.btn-modal-action{border-radius:var(--radius-md);cursor:pointer;border:none;padding:9px 16px;font-family:inherit;font-size:13px;font-weight:700}@media (width<=380px){.app-container{padding:8px 10px 24px}.game-main-title{font-size:21px}.tile{font-size:19px}.key-btn{height:44px;font-size:14px}.headline-banner-title{font-size:16px}}</style>
-  <script type="module" crossorigin src="/assets/wordal-DNqqs2_v.js"></script>
+  <script type="module" crossorigin src="/assets/wordal-Bb4ex3oO.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/audio-Bg9QUBUX.js">
-  <link rel="modulepreload" crossorigin href="/assets/game-family-Cqe99UV1.js">
-  <link rel="modulepreload" crossorigin href="/assets/result-celebration-BqMZkvfW.js">
-  <link rel="stylesheet" crossorigin href="/assets/game-family-DbAZw0Md.css">
+  <link rel="modulepreload" crossorigin href="/assets/game-family-D5FE7jM4.js">
+  <link rel="modulepreload" crossorigin href="/assets/result-celebration-DQKJee6U.js">
+  <link rel="stylesheet" crossorigin href="/assets/game-family-DPMvG-VR.css">
   <link rel="stylesheet" crossorigin href="/assets/result-celebration-BJvK6YRw.css">
 </head>
 <body>
@@ -35,26 +35,27 @@
          ============================================================ -->
     <section class="view-screen is-active" id="viewGame" aria-label="खेल पटल">
       
-      <!-- Editorial Compact Clue Header -->
-      <div class="editorial-clue-card family-note" id="headlineClueBanner">
+      <!-- Crossword-style clue; the answer appears after the game. -->
+      <div class="editorial-clue-card family-note" id="headlineClueBanner" aria-labelledby="clueLabel headlineBannerTitle">
         <div class="clue-card-left">
           <div class="clue-tag-row">
-            <span class="clue-badge">📰 दैनिक शब्द खोज</span>
-            <span class="clue-topic" id="topicHintBadge">विषय: खोज और अध्ययन</span>
+            <span class="clue-badge" id="clueLabel">आज का हिंट</span>
+            <span class="clue-topic" id="practiceBadge" hidden>अभ्यास</span>
           </div>
           <div class="clue-title-row">
-            <span class="clue-title" id="headlineBannerTitle">आज की सुर्खियों में छिपा 5 अक्षरों का शब्द</span>
-            <span id="headlineBannerDesc" class="sr-only">यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।</span>
+            <p class="clue-title" id="headlineBannerTitle">वैज्ञानिक नई जानकारी पाने के लिए यह करते हैं।</p>
+            <span id="headlineBannerDesc" class="sr-only">हिंट से शब्द पहचानें। नीचे के बटनों से पाँच खाने भरें। हर खाने में एक अक्षर समूह आएगा।</span>
           </div>
-        </div>
-        <div class="clue-card-right">
-          <span class="clue-attempt-pill" id="stepPillLabel">प्रयास 1/6</span>
         </div>
       </div>
 
       <!-- 5x6 Board -->
       <div class="board-container">
-        <div id="game-board" role="grid" aria-label="शब्द ग्रिड">
+        <div class="board-meta">
+          <span>5 खाने भरें</span>
+          <span class="clue-attempt-pill" id="stepPillLabel" role="status" aria-live="polite" aria-atomic="true">प्रयास 1 / 6</span>
+        </div>
+        <div id="game-board" role="grid" aria-label="शब्द ग्रिड" aria-describedby="headlineBannerTitle headlineBannerDesc">
           <!-- Populated by JavaScript -->
         </div>
       </div>
@@ -184,9 +185,9 @@
         <button type="button" class="modal-close-btn" id="btnCloseHelp" aria-label="बंद करें">✕</button>
       </div>
       <div class="modal-body">
-        <p>• <strong>लक्ष्य:</strong> आज की मुख्य खबर में छिपे <strong>5 अक्षरों</strong> के शब्द को 6 प्रयासों में पहचानें।</p>
-        <p>• 24 अक्षरों वाले कीबोर्ड से 5 अक्षर चुनकर <strong>✓ जाँचें</strong> दबाएँ।</p>
-        <p>• हर प्रयास के बाद रंग से संकेत मिलेंगे:</p>
+        <p>• <strong>हिंट पढ़ें:</strong> ऊपर दिए हिंट से आज का शब्द पहचानें। आपके पास 6 प्रयास हैं।</p>
+        <p>• <strong>5 खाने भरें:</strong> नीचे के बटनों से अक्षर समूह चुनें। एक बटन एक खाना भरता है। मात्रा साथ आती है, जैसे <strong>का</strong> या <strong>नी</strong>। फिर <strong>✓ जाँचें</strong> दबाएँ।</p>
+        <p>• हर प्रयास के बाद रंग से हिंट मिलेंगे:</p>
         
         <div class="rule-item">
           <div class="rule-color-box" style="background-color: var(--color-correct);">अ</div>
@@ -246,6 +247,7 @@
           theme: 'जिज्ञासा और खोज',
           periodLabel: 'अंतरिक्ष विशेष',
           clue: 'खोज और अध्ययन',
+          wordClue: 'वैज्ञानिक नई जानकारी पाने के लिए यह करते हैं।',
           headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
           subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
           answer: 'अनुसंधान',
@@ -282,6 +284,7 @@
           theme: 'अभ्यास और प्रयास',
           periodLabel: 'पेरिस 2024 की यादें',
           clue: 'खेल और मुकाबला',
+          wordClue: 'ऐसा आयोजन जिसमें खिलाड़ी जीतने के लिए एक-दूसरे से मुकाबला करते हैं।',
           headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
           subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
           answer: 'प्रतियोगिता',
@@ -318,6 +321,7 @@
           theme: 'विरासत और देखभाल',
           periodLabel: 'भारत की विरासत',
           clue: 'इतिहास और धरोहर',
+          wordClue: 'अतीत की किसी महत्वपूर्ण घटना या जगह को हम ऐसा कहते हैं।',
           headingPrompt: 'आज की सुर्खियों में छिपा शब्द',
           subPrompt: 'यह शब्द आज की सुर्खियों और मुख्य खबर में छिपा है। 5 अक्षरों का सही शब्द पहचानिए।',
           answer: 'ऐतिहासिक',
@@ -388,7 +392,7 @@
       const headlineBannerTitle = document.getElementById('headlineBannerTitle');
       const headlineBannerDesc = document.getElementById('headlineBannerDesc');
       const stepPillLabel = document.getElementById('stepPillLabel');
-      const topicHintBadge = document.getElementById('topicHintBadge');
+      const practiceBadge = document.getElementById('practiceBadge');
 
       // Keyboard elements
       const kbRow1 = document.getElementById('kbRow1');
@@ -624,6 +628,11 @@
       }
 
       function updateActiveRowDisplay() {
+        gameBoard.querySelectorAll('.board-row').forEach((row, index) => {
+          const active = index === currentAttempt && !isGameOver;
+          row.classList.toggle('is-current', active);
+          row.setAttribute('aria-label', `प्रयास ${index + 1}${active ? ', अभी भरें' : ''}`);
+        });
         for (let c = 0; c < TOTAL_COLS; c++) {
           const tile = document.getElementById(`tile-${currentAttempt}-${c}`);
           if (!tile) continue;
@@ -638,7 +647,7 @@
         }
 
         if (stepPillLabel) {
-          stepPillLabel.textContent = `प्रयास ${Math.min(currentAttempt + 1, 6)}/6`;
+          stepPillLabel.textContent = `प्रयास ${Math.min(currentAttempt + 1, TOTAL_ROWS)} / ${TOTAL_ROWS}`;
         }
       }
 
@@ -660,9 +669,10 @@
           currentRowTokens[currentCol] = key;
           currentCol++;
           updateActiveRowDisplay();
+          document.dispatchEvent(new CustomEvent('wordal-interaction', { detail: 'type' }));
           saveGameState();
         } else {
-          showToast('5 अक्षर पूरे हैं, "जाँचें" दबाएँ', 'alert', 1400);
+          showToast('5 खाने भर गए, "जाँचें" दबाएँ', 'alert', 1400);
         }
       }
 
@@ -723,12 +733,13 @@
         if (isGameOver || isInputLocked) return;
 
         if (currentRowTokens.length < TOTAL_COLS) {
-          showToast('5 अक्षर पूरे करें', 'alert', 1600);
+          showToast('पहले 5 खाने भरें', 'alert', 1600);
           shakeCurrentRow();
           return;
         }
 
         isInputLocked = true;
+        document.dispatchEvent(new CustomEvent('wordal-interaction', { detail: 'check' }));
         const edition = EDITIONS_DATA[currentDay];
         const guessTokens = [...currentRowTokens];
         const evaluations = evaluateGuess(guessTokens, edition.answerTokens);
@@ -895,10 +906,9 @@
         // Update Banner Details
         const edition = EDITIONS_DATA[dayId];
         isPractice = new URLSearchParams(location.search).get('practice') === '1' || window.DBJamDemo.getItem('wordal:spoiled:' + currentDay) === 'true';
-        if (headlineBannerTitle) headlineBannerTitle.textContent = isPractice ? 'अभ्यास · कहानी पढ़ने के बाद शब्द आज़माएँ' : 'आज का पाँच अक्षरों का शब्द पहचानें';
-        if (headlineBannerDesc) headlineBannerDesc.textContent = isPractice ? 'कहानी पढ़ने से उत्तर खुल चुका है। यह अभ्यास आपके पहले दैनिक परिणाम से अलग रहेगा।' : 'इस डेमो संस्करण का पाँच अक्षरों का शब्द पहचानें। आपके पास छह प्रयास हैं।';
-        if (topicHintBadge) topicHintBadge.textContent = `विषय: ${edition.clue}`;
-        if (stepPillLabel) stepPillLabel.textContent = `प्रयास 1/6`;
+        if (headlineBannerTitle) headlineBannerTitle.textContent = edition.wordClue;
+        if (headlineBannerDesc) headlineBannerDesc.textContent = isPractice ? 'कहानी पढ़ने से उत्तर खुल चुका है। यह अभ्यास आपके पहले दैनिक परिणाम से अलग रहेगा।' : 'हिंट से शब्द पहचानें। नीचे के बटनों से पाँच खाने भरें। हर खाने में एक अक्षर समूह आएगा।';
+        if (practiceBadge) practiceBadge.hidden = !isPractice;
 
         // Debug Logger: Print solution word to console for easy verification
         window.currentWordalSolution = edition.answer;
