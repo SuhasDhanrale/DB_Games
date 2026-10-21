@@ -889,27 +889,11 @@
     </div>
 
     <!-- Match result, driven by the existing win/loss flag -->
-    <div class="modal-overlay hidden" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resTitle" aria-describedby="resNarrative">
+    <div class="modal-overlay hidden" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resTitle-heading" aria-describedby="resNarrative">
         <div class="modal-card">
-            <div class="modal-header">
-                <div class="modal-header-brand">
-                    <span style="font-size: 1.4rem;" id="resEmoji">🏆</span>
-                    <div>
-                        <div class="modal-title" id="resTitle">आज का ओवर समाप्त!</div>
-                        <div class="modal-subtitle">Dainik Bhaskar / दैनिक भास्कर विशेष</div>
-                    </div>
-                </div>
-            </div>
             <div class="modal-body">
-                <div data-result-celebration></div>
-                <div class="news-header">
-                    <span style="font-size: 0.75rem; letter-spacing: 0.5px; font-weight: 800;">Dainik Bhaskar / दैनिक भास्कर · खेल विशेष</span>
-                    <span style="font-size: 0.72rem; color: #FDCB6E;" id="resDateBadge">आपका खेल</span>
-                </div>
-
-                <div class="news-headline" id="resHeadline">
-                    आज के ओवर में अंतिम गेंद पर रोमांचक जीत!
-                </div>
+                <div id="resTitle" data-result-celebration></div>
+                <p class="result-context" id="resDateBadge">आपका खेल · अभ्यास</p>
 
                 <div class="news-scorecard">
                     <div>
@@ -926,14 +910,17 @@
                     </div>
                 </div>
 
-                <div style="background: #F9F9F7; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;" id="resNarrative">
-                    आपने लक्ष्य हासिल कर लिया।
-                </div>
-                <div class="match-context result-history"><strong>असली मैच</strong><p id="resActualMatch"></p><a id="resMatchStory" href="./news.html?article=asian-final&game=superover">मुकाबले की खबर पढ़ें →</a><a id="resMatchSource" target="_blank" rel="noopener noreferrer">आधिकारिक स्कोर देखें ↗</a></div>
+                <p class="result-context" id="resNarrative"></p>
+                <div data-mashal-progress></div>
+                <article class="result-story">
+                    <span class="result-story__label">असली मैच</span>
+                    <h3 class="result-story__headline" id="resActualMatch"></h3>
+                    <a class="result-story__action" id="resMatchStory" href="./news.html?article=asian-final&game=superover">खबर पढ़ें →</a>
+                </article>
             </div>
             <div class="modal-footer">
                 <button class="btn-modal-secondary family-secondary" id="resMoreGamesBtn">🎮 और खेल</button>
-                <button class="btn-modal-primary family-primary" id="resPlayAgainBtn">फिर से खेलें 🏏</button>
+                <button class="btn-modal-primary family-primary" id="resPlayAgainBtn">फिर खेलें</button>
             </div>
         </div>
     </div>
@@ -1356,7 +1343,6 @@
         const hintText = document.getElementById('hintText');
 
         const resultModal = document.getElementById('resultModal');
-        const resHeadline = document.getElementById('resHeadline');
         const resRuns = document.getElementById('resRuns');
         const resWickets = document.getElementById('resWickets');
         const resBoundaries = document.getElementById('resBoundaries');
@@ -2328,40 +2314,44 @@
                 if (totalRuns >= targetRuns) {
                     isWin = true;
                     narrative = currentLang === 'hi' ?
-                        `आपने ${ballsBowled} गेंदों में ${totalRuns} रन बनाकर लक्ष्य हासिल कर लिया!` :
-                        `You reached the target with ${totalRuns} runs in ${ballsBowled} balls.`;
+                        `लक्ष्य पूरा · ${ballsBowled} गेंद` :
+                        `Target reached · ${ballsBowled} balls`;
                 } else {
                     isWin = false;
                     narrative = currentLang === 'hi' ?
-                        `आपने ${ballsBowled} गेंदों में ${totalRuns} रन बनाए। जीत के लिए ${targetRuns - totalRuns} रन और चाहिए थे।` :
-                        `Fell short by ${targetRuns - totalRuns} runs. Thrilling battle!`;
+                        `लक्ष्य से ${targetRuns - totalRuns} रन कम · ${ballsBowled} गेंद` :
+                        `${targetRuns - totalRuns} runs short · ${ballsBowled} balls`;
                 }
             } else {
                 if (totalRuns < targetRuns) {
                     isWin = true;
                     narrative = currentLang === 'hi' ?
-                        `आपने सामने वाली टीम को ${totalRuns} रन पर रोककर लक्ष्य बचा लिया!` :
-                        `You defended the target, keeping the other team to ${totalRuns} runs.`;
+                        `${targetRuns} रन का लक्ष्य बचाया · ${ballsBowled} गेंद` :
+                        `Defended a target of ${targetRuns} · ${ballsBowled} balls`;
                 } else {
                     isWin = false;
                     narrative = currentLang === 'hi' ?
-                        `सामने वाली टीम ने ${totalRuns} रन बनाकर लक्ष्य हासिल कर लिया। फिर कोशिश करें!` :
-                        `Opponent chased the total in the final deliveries. Great contest!`;
+                        `विपक्ष ने ${targetRuns} रन का लक्ष्य पाया · ${ballsBowled} गेंद` :
+                        `Opponent reached the target of ${targetRuns} · ${ballsBowled} balls`;
                 }
             }
 
             resultModal.dataset.outcome = isWin ? 'win' : 'loss';
-            document.getElementById('resTitle').textContent = t('title');
-            document.getElementById('resEmoji').textContent = '🏏';
-            resHeadline.textContent = currentLang === 'hi' ? 'आपका स्कोरकार्ड' : 'Your scorecard';
             resRuns.textContent = totalRuns;
             resWickets.textContent = wickets;
             resBoundaries.textContent = boundariesCount;
             resNarrative.textContent = narrative;
             const historicalMatch = ASIAN_MATCHES[selectedMatchId];
-            document.getElementById('resDateBadge').textContent = `आपका खेल · ${getPlayerTeam().name}`;
-            document.getElementById('resActualMatch').textContent = `${historicalMatch.stage} · ${historicalMatch.date}। ${historicalMatch.scores}। ${historicalMatch.outcome}`;
-            document.getElementById('resMatchSource').href = historicalMatch.source;
+            document.getElementById('resDateBadge').textContent = currentLang === 'hi'
+                ? `अभ्यास · ${getPlayerTeam().name} की ${currentRole === ROLES.BATTING ? 'बल्लेबाजी' : 'गेंदबाजी'}`
+                : `Practice · ${getPlayerTeam().name} ${currentRole === ROLES.BATTING ? 'batting' : 'bowling'}`;
+            document.getElementById('resRunsLbl').textContent = currentRole === ROLES.BOWLING
+                ? (currentLang === 'hi' ? 'विपक्ष के रन' : 'Opponent runs') : (currentLang === 'hi' ? 'रन' : 'Runs');
+            document.getElementById('resWicketsLbl').textContent = currentLang === 'hi' ? 'विकेट' : 'Wickets';
+            document.getElementById('resBoundariesLbl').textContent = currentLang === 'hi' ? 'चौके/छक्के' : 'Boundaries';
+            document.getElementById('resActualMatch').textContent = historicalMatch.headline;
+            document.getElementById('resPlayAgainBtn').textContent = currentLang === 'hi' ? 'फिर खेलें' : 'Play again';
+            document.getElementById('resMoreGamesBtn').textContent = currentLang === 'hi' ? '🎮 और खेल' : 'More games';
             document.getElementById('resMatchStory').href = matchStoryUrl(historicalMatch.id);
 
             resultModal.classList.remove('hidden');

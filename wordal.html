@@ -964,39 +964,34 @@
         <!-- Hero Card with Revealed Word & Meaning -->
         <div class="result-hero-card family-panel">
           <div data-result-celebration></div>
-          <div class="result-status-pill win" id="resultStatusPill">
-            🎉 बधाई! शब्द हल किया
-          </div>
           <h2 class="result-word-title" id="resultWordDisplay">अनुसंधान</h2>
           <span id="resultUnitsDisplay" class="sr-only"></span>
           
           <div class="result-meaning-box">
-            <div class="result-meaning-label">शब्द का अर्थ:</div>
+            <div class="result-meaning-label">अर्थ</div>
             <div class="result-meaning-text" id="resultMeaningText">
               किसी विषय को व्यवस्थित ढंग से खोजने और समझने का काम।
             </div>
           </div>
         </div>
 
-        <!-- The News Connection Card -->
-        <article class="news-connection-card family-panel">
+        <div data-mashal-progress></div>
+        <!-- The shared story teaser keeps the full article one tap away. -->
+        <article class="news-connection-card family-panel result-story">
           <div class="news-connection-header">
-            <span class="news-connection-badge">इस शब्द से जुड़ी खबर</span>
+            <span class="news-connection-badge result-story__label">जुड़ी खबर</span>
             <span class="news-connection-topic" id="newsConnectionTopic">विज्ञान विशेष</span>
           </div>
 
-          <h3 class="news-connection-headline" id="newsConnectionHeadline">
+          <h3 class="news-connection-headline result-story__headline" id="newsConnectionHeadline">
             भारत के चार अंतरिक्ष मिशन क्या खोजते हैं
           </h3>
 
-          <div class="news-snippet-box" id="newsSnippetBox">
-            “चाँद, सूर्य, मंगल और दूर के खगोलीय पिंडों को समझने के लिए वैज्ञानिक <span class="word-highlight-tag" id="highlightTagWord">अनुसंधान</span> लगातार नए आयाम स्थापित कर रहा है। चंद्रयान, आदित्य और मंगलयान के उद्देश्यों को समझें।”
-          </div>
 
           <!-- Redirection & Actions: 2 Buttons Side by Side -->
           <div class="result-actions-dual">
             <button type="button" class="btn-result-primary family-primary" id="btnReadArticleHere">
-              📖 जुड़ी खबर पढ़ें
+              खबर पढ़ें
             </button>
             <button type="button" class="btn-result-secondary family-secondary" id="btnMoreGames">
               🎮 और खेल
@@ -1295,14 +1290,11 @@
       const btnResetRound = document.getElementById('btnResetRound');
 
       // Result Screen elements
-      const resultStatusPill = document.getElementById('resultStatusPill');
       const resultWordDisplay = document.getElementById('resultWordDisplay');
       const resultUnitsDisplay = document.getElementById('resultUnitsDisplay');
       const resultMeaningText = document.getElementById('resultMeaningText');
       const newsConnectionTopic = document.getElementById('newsConnectionTopic');
       const newsConnectionHeadline = document.getElementById('newsConnectionHeadline');
-      const newsSnippetBox = document.getElementById('newsSnippetBox');
-      const highlightTagWord = document.getElementById('highlightTagWord');
       const btnReadArticleHere = document.getElementById('btnReadArticleHere');
       const btnMoreGames = document.getElementById('btnMoreGames');
 
@@ -1405,7 +1397,7 @@
           populateResultScreen();
           viewResult.classList.add('is-active');
           window.DBResultCelebration.show(viewResult.querySelector('[data-result-celebration]'), {
-            game: 'wordal', details: { solved: isGameWon, attempts: boardGuesses.length },
+            game: 'wordal', details: { solved: isGameWon, attempts: boardGuesses.length, practice: isPractice },
             animate: !resultCelebrated,
           });
           resultCelebrated = true;
@@ -1702,18 +1694,6 @@
       function populateResultScreen() {
         const edition = EDITIONS_DATA[currentDay];
         
-        // Result Pill
-        if (resultStatusPill) {
-          if (isGameWon) {
-            resultStatusPill.className = 'result-status-pill win';
-            resultStatusPill.textContent = `${boardGuesses.length}/6 कोशिशों में हल किया`;
-          } else {
-            resultStatusPill.className = 'result-status-pill revealed';
-            resultStatusPill.textContent = '📖 शब्द का खुलासा';
-          }
-          if (isPractice) resultStatusPill.textContent = 'अभ्यास · ' + resultStatusPill.textContent;
-        }
-
         // Hero Word & Meaning
         if (resultWordDisplay) resultWordDisplay.textContent = edition.answer;
         if (resultUnitsDisplay) resultUnitsDisplay.textContent = edition.answerTokens.join(' · ');
@@ -1722,16 +1702,6 @@
         // News Interconnection Details
         if (newsConnectionTopic) newsConnectionTopic.textContent = edition.periodLabel;
         if (newsConnectionHeadline) newsConnectionHeadline.textContent = edition.newsHeadline;
-        if (newsSnippetBox) {
-          const rawExcerpt = edition.newsExcerpt || '';
-          const word = edition.answer;
-          if (rawExcerpt.includes(word)) {
-            const highlightedText = rawExcerpt.replace(word, `<span class="word-highlight-tag">${word}</span>`);
-            newsSnippetBox.innerHTML = `“${highlightedText}”`;
-          } else {
-            newsSnippetBox.innerHTML = `“${rawExcerpt}”`;
-          }
-        }
 
         // Update Links
         const targetNewsUrl = `./news.html?day=${encodeURIComponent(currentDay)}&article=${encodeURIComponent(edition.relatedArticleId)}`;

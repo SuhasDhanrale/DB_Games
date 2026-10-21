@@ -3,7 +3,7 @@
 .opening-brand { color: #252522; font-size: clamp(23px, 6vw, 30px); font-weight: 800; line-height: 1.5; text-wrap: balance; }
 .opening-games { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; gap: clamp(5px, 2vw, 10px); margin: 32px 0 26px; }
 .opening-game { animation: opening-arrive .45s ease both; animation-delay: calc(var(--intro-order) * .16s); }
-.opening-game svg { width: 100%; height: auto; max-height: 76px; display: block; }
+.opening-game svg, .opening-game img { width: 100%; height: auto; max-height: 76px; display: block; }
 .opening-caption { color: #615f59; font-size: clamp(14px, 3.8vw, 17px); line-height: 1.8; text-wrap: balance; }
 .hub-replay { width: 44px; height: 44px; flex-shrink: 0; color: #77736b; font-size: 23px; }
 .hub-replay:focus-visible { outline: 3px solid #282824; outline-offset: 2px; }

@@ -1,7 +1,7 @@
 import { BaseGame } from './base-game.js';
 import { gameUrl } from './game-assets.js';
 import { needsIntro, renderGameIntro } from '../ui/game-intro.js';
-import { getLang } from '../i18n/index.js';
+import { getLang, t } from '../i18n/index.js';
 import { openNews } from '../ui/news-reader.js';
 import { showTorchCelebration } from '../ui/torch.js';
 import audio from '../core/audio.js';
@@ -17,7 +17,6 @@ export class HtmlIframeGame extends BaseGame {
     const launch = () => {
       this._introCleanup?.();
       this._introCleanup = null;
-      this.start();
       this.onStart();
     };
     if (!needsIntro(this.id)) launch();
@@ -29,8 +28,16 @@ export class HtmlIframeGame extends BaseGame {
 
   onStart() {
     const area = this.getGameArea();
+    const isHindi = getLang() === 'hi';
+    const rulesButton = this.container.querySelector('#game-rules-btn');
+    rulesButton.disabled = true;
+    area.setAttribute('aria-busy', 'true');
     area.innerHTML = `
-      <iframe src="${gameUrl(this.config.htmlFile)}" style="width: 100%; height: 100%; border: none;" id="game-iframe-${this.id}"></iframe>
+      <section class="game-loading" role="status">
+        <p>${isHindi ? 'खेल तैयार हो रहा है…' : 'Getting your game ready…'}</p>
+        <div class="loading-bar" role="progressbar" aria-label="${isHindi ? 'लोड हो रहा है…' : 'Loading…'}"></div>
+      </section>
+      <iframe class="game-frame is-loading" title="${t(this.titleKey)}" aria-hidden="true" tabindex="-1" style="width: 100%; height: 100%; border: none;" id="game-iframe-${this.id}"></iframe>
     `;
 
     // Expose DBGameLab globally on host window so window.parent.DBGameLab works
@@ -44,7 +51,17 @@ export class HtmlIframeGame extends BaseGame {
     window.DBGameLab = bridge;
 
     const iframe = area.querySelector('iframe');
-    iframe.onload = () => {
+    const loading = area.querySelector('.game-loading');
+    let active = true;
+    let paintFrame;
+    let loadTask;
+    const failed = () => {
+      if (!active) return;
+      area.setAttribute('aria-busy', 'false');
+      loading.innerHTML = `<p>${isHindi ? 'खेल नहीं खुल सका। वापस जाकर फिर कोशिश करें।' : 'The game could not load. Go back and try again.'}</p>`;
+    };
+    iframe.onload = async () => {
+      if (!active || iframe.contentDocument?.URL === 'about:blank') return;
       try {
         if (iframe.contentWindow) {
           iframe.contentWindow.DBGameLab = bridge;
@@ -58,10 +75,49 @@ export class HtmlIframeGame extends BaseGame {
             }
           });
         }
+        if (!iframe.contentWindow?.gameIntroReady) throw new Error('Game initialization unavailable');
+        await iframe.contentWindow.gameIntroReady;
+        // Let the child's initialization and first canvas frame finish before
+        // removing the host's loading screen.
+        await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        if (!active) return;
+        iframe.classList.remove('is-loading');
+        iframe.removeAttribute('aria-hidden');
+        iframe.removeAttribute('tabindex');
+        area.setAttribute('aria-busy', 'false');
+        loading.remove();
+        rulesButton.disabled = false;
       } catch (e) {
-        console.warn("Could not inject DBGameLab object into iframe:", e);
+        console.warn('Could not initialize game iframe:', e);
+        failed();
       }
     };
+    iframe.onerror = failed;
+
+    // Rendering the loader alone does not paint it. Yield through two frames
+    // and a task before decoding srcdoc, starting music or loading game scripts.
+    const afterActivation = () => {
+      if (!active) return;
+      // A returning player can skip the intro while the router's new screen is
+      // still transparent. Wait for activation before giving the loader a paint.
+      if (!this.container.classList.contains('active')) {
+        paintFrame = requestAnimationFrame(afterActivation);
+        return;
+      }
+      paintFrame = requestAnimationFrame(() => {
+        loadTask = setTimeout(() => {
+          if (!active) return;
+          try {
+            this.start();
+            iframe.src = gameUrl(this.config.htmlFile);
+          } catch (error) {
+            console.warn('Could not load game:', error);
+            failed();
+          }
+        }, 0);
+      });
+    };
+    paintFrame = requestAnimationFrame(afterActivation);
 
     // Also listen for postMessage events from child games
     const onMessage = (event) => {
@@ -76,6 +132,12 @@ export class HtmlIframeGame extends BaseGame {
     window.addEventListener('message', onMessage);
 
     this._cleanupFns.push(() => {
+      active = false;
+      cancelAnimationFrame(paintFrame);
+      clearTimeout(loadTask);
+      iframe.onload = null;
+      iframe.onerror = null;
+      iframe.remove();
       window.removeEventListener('message', onMessage);
       if (window.DBGameLab === bridge) {
         delete window.DBGameLab;
@@ -86,13 +148,13 @@ export class HtmlIframeGame extends BaseGame {
   showTorchCelebration(celebration) {
     if (!celebration) return;
     const anchors = {
-      wordal: '.result-hero-card',
+      wordal: '#viewResult',
       // The share-card step hides the meaning box immediately after completion.
       // Keep its pending celebration attached to the whole Niti screen.
       niti: '#app',
-      cricket: '.news-scorecard',
-      carrom: '#modal-desc',
-      jodo: '.result-header-minimal',
+      cricket: '#resultModal',
+      carrom: '#modal-backdrop',
+      jodo: '#result-panel',
     };
     const doc = this.getGameArea().querySelector('iframe')?.contentDocument;
     const anchor = doc?.querySelector(anchors[this.theme]);

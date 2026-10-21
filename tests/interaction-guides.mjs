@@ -17,7 +17,7 @@ await mkdir('tmp/interaction-guides', { recursive: true });
 async function cue(step) {
   await page.locator(`${live}[data-step="${step}"]:not([hidden])`).waitFor();
   assert.equal(await page.locator(live).evaluate(el => getComputedStyle(el).pointerEvents), 'none');
-  assert.equal(await page.locator(`${live} .interaction-guide__finger`).innerText(), '☝️');
+  assert.equal(await page.locator(`${live} .interaction-guide__finger`).innerText(), '👇');
   assert.equal(await page.locator(`${live} .interaction-guide__finger`).evaluate(el => getComputedStyle(el).transform), 'matrix(-1, 0, 0, -1, 0, 0)');
 }
 async function noCue() { await page.locator(`${live}:not([hidden])`).waitFor({ state: 'hidden' }); }

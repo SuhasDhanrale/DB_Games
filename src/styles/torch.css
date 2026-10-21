@@ -1,3 +1,6 @@
+.torch-result-progress { display: flex; align-items: center; gap: 8px; box-sizing: border-box; margin: 0; padding: 10px 12px; border: 1px solid #e1cba7; border-radius: 10px; background: #fcf5e8; color: #644b31; font-family: inherit; font-size: 13px; font-weight: 600; line-height: 1.6; text-align: left; }
+.torch-result-progress svg { width: 15px; height: 24px; flex-shrink: 0; }
+.torch-result-progress span { min-width: 0; overflow-wrap: anywhere; }
 .torch-card { box-sizing: border-box; position: relative; flex-shrink: 0; width: 100%; margin: 12px 0; padding: 16px; border: 1px solid #e1cba7; border-radius: 18px; background: radial-gradient(ellipse at 20% 40%, #ffedc7 0, transparent 60%), #fcf5e8; color: #644b31; text-align: left; font-family: inherit; overflow: hidden; }
 .torch-card *, .torch-card *::before, .torch-card *::after { box-sizing: border-box; }
 .torch-card__identity { display: flex; align-items: center; gap: 9px; }

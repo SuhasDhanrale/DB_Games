@@ -1,15 +1,24 @@
-function installSingleFile({ pages, assets }) {
+function installSingleFile() {
   const decoder = new TextDecoder();
   const decodedPages = new Map();
+  const embeddedAssets = new Map();
+  function embedded(kind, path) {
+    const node = document.getElementById(`db-embedded-${kind}:${path}`);
+    if (!node) throw new Error(`Missing embedded ${kind}: ${path}`);
+    const value = node.textContent;
+    node.remove();
+    return value;
+  }
   window.DBSingleFile = {
     asset(path) {
-      if (!assets[path]) throw new Error(`Missing embedded asset: ${path}`);
-      return assets[path];
+      if (!embeddedAssets.has(path)) embeddedAssets.set(path, embedded('asset', path));
+      return embeddedAssets.get(path);
     },
     page(file, search = '') {
-      if (!pages[file]) throw new Error(`Missing embedded page: ${file}`);
       if (!decodedPages.has(file)) {
-        const bytes = Uint8Array.from(atob(pages[file]), character => character.charCodeAt(0));
+        const binary = atob(embedded('page', file));
+        const bytes = new Uint8Array(binary.length);
+        for (let index = 0; index < binary.length; index++) bytes[index] = binary.charCodeAt(index);
         decodedPages.set(file, decoder.decode(bytes));
       }
       const url = new URL(file + search, window.location.href);

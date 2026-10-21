@@ -62,7 +62,7 @@ export function createInteractionGuide({ game, getSteps, isActive = () => true, 
     }
     const touch = document.createElement('span');
     touch.className = 'interaction-guide__touch';
-    touch.innerHTML = '<span class="interaction-guide__ring"></span><span class="interaction-guide__finger">☝️</span>';
+    touch.innerHTML = '<span class="interaction-guide__ring"></span><span class="interaction-guide__finger">👇</span>';
     layer.appendChild(touch);
     if (labels && step.label) {
       const label = document.createElement('span');

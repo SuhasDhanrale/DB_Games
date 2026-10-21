@@ -13,6 +13,16 @@ export function openingMarkup() {
     <p class="opening-caption">${t('opening.caption')}</p>`;
 }
 
+export function finishOpening(root) {
+  if (!root) return;
+  // The router activates its first screen on the second animation frame.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    root.setAttribute('aria-busy', 'false');
+    root.classList.add('fade-out');
+    setTimeout(() => root.remove(), 350);
+  }));
+}
+
 export function playOpening(root, onComplete) {
   if (!root) { onComplete(); return; }
   let finished = false;

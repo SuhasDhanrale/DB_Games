@@ -37,6 +37,7 @@ try {
     });
     await page.goto(base + '?day=d1');
     await page.locator('.hub-screen.active').waitFor();
+    await page.locator('#loading-screen').waitFor({ state: 'detached' });
     assert.match(await page.title(), /दैनिक भास्कर/);
     for (const [id, help, close] of games) {
       await page.evaluate(id => { location.hash = '#/game/' + id; }, id);
@@ -45,6 +46,8 @@ try {
       const frame = await (await iframe.elementHandle()).contentFrame();
       await frame.waitForFunction(() => window.gameIntroReady);
       await frame.evaluate(() => window.gameIntroReady);
+      await iframe.waitFor({ state: 'visible' });
+      await page.locator('.game-player.active .game-loading').waitFor({ state: 'detached' });
       assert.equal(await frame.evaluate(() => window.DBJamDemo === window.parent.DBJamDemo), true);
       assert.equal(await frame.evaluate(() => window.DB_BUILD_PAGE_URL.searchParams.get('day')), 'd1');
       assert.equal(await frame.locator('.gi-dialog').count(), 0);
@@ -63,8 +66,8 @@ try {
         assert.equal(await frame.locator('.team-flag').evaluateAll(nodes => nodes.every(node => node.complete && node.naturalWidth > 0)), true);
         await frame.evaluate(() => initMatch());
         await frame.evaluate(() => { totalRuns = 0; ballsBowled = 6; endMatch(false); });
-        await page.locator('.torch-card').waitFor();
-        await page.locator('.torch-card__skip').click();
+        await frame.locator('.torch-result-progress:visible').waitFor();
+        assert.equal(await page.locator('.torch-popup').count(), 0);
         await frame.locator('#resMatchStory').click();
         await page.locator('#news-reader').waitFor({ state: 'visible' });
         const news = await (await page.locator('#news-reader iframe').elementHandle()).contentFrame();
@@ -80,8 +83,8 @@ try {
           await frame.locator(`#right-cards-col [data-pair-id="${pair}"]`).click();
         }
         await frame.locator('#result-panel').waitFor({ state: 'visible' });
-        await page.locator('.torch-card').waitFor();
-        await page.locator('.torch-card__skip').click();
+        await frame.locator('.torch-result-progress:visible').waitFor();
+        assert.equal(await page.locator('.torch-popup').count(), 0);
         await frame.locator('#review-list a').first().click();
         await frame.locator('#article-modal.is-open').waitFor();
         await frame.locator('#btn-close-article-bottom').click();

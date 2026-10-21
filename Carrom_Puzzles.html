@@ -432,6 +432,7 @@
             <div class="modal-icon-badge" id="modal-icon">🎉</div>
             <h2 id="modal-title" class="modal-title">शानदार शॉट!</h2>
             <div id="modal-desc" class="modal-desc">आपने लक्ष्य सफलतापूर्वक पूरा कर लिया!</div>
+            <div data-mashal-progress></div>
             <div class="carrom-result-actions">
                 <button id="modal-more-games-btn" class="family-secondary" type="button" hidden>🎮 और खेल</button>
                 <button id="modal-btn" class="modal-btn family-primary" type="button">पुनः प्रयास</button>
@@ -702,14 +703,15 @@
             ui.modalBackdrop.classList.remove('hidden');
             ui.modalTitle.innerText = title;
             ui.modalDesc.innerText = desc;
+            ui.modalDesc.hidden = isResult;
+            ui.modalBackdrop.querySelector('[data-mashal-progress]').hidden = !isResult;
             ui.modalBtn.innerText = btnText;
             ui.modalIcon.innerText = icon;
             ui.modalBackdrop.querySelector('.modal-card').classList.toggle('is-result', isResult);
             const celebration = ui.modalBackdrop.querySelector('[data-result-celebration]');
             if (isResult) {
-                ui.modalDesc.innerText = `कुल शॉट: ${shotsTaken}\nपहली पूर्णता: ${firstCompletionShots} शॉट${bestReplayShots === null ? "" : ` · सर्वश्रेष्ठ रीप्ले: ${bestReplayShots} शॉट`}`;
                 window.DBResultCelebration.show(celebration, {
-                    game: 'carrom', details: { shots: shotsTaken }, animate: animateResult,
+                    game: 'carrom', details: { shots: shotsTaken, practice: practiceRound, firstCompletionShots, bestReplayShots }, animate: animateResult,
                 });
             } else window.DBResultCelebration.clear(celebration);
             ui.modalBtn.onclick = () => {

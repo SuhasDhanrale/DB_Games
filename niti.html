@@ -982,6 +982,7 @@
 
         <!-- Central Thought Card -->
         <article class="thought-card family-panel" id="thought-card" aria-label="आज का विचार">
+          <div data-result-celebration></div>
           <span class="thought-quote-mark" aria-hidden="true">“</span>
           
           <p class="thought-content" id="thought-text-container">
@@ -994,21 +995,21 @@
         </article>
 
         <!-- Meaning Box: Revealed after answering -->
-        <div data-result-celebration></div>
         <div class="meaning-reveal-box" id="meaning-reveal-box" aria-live="polite">
           <div class="meaning-label">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
               <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
             </svg>
-            <span>विचार का अर्थ</span>
+            <span>अर्थ</span>
           </div>
           <p class="meaning-text" id="meaning-text">
             <!-- Populated from CONTENT -->
           </p>
         </div>
 
-        <!-- 4 Options in 2x2 Grid (A, B on top, C, D on bottom) -->
+        <div data-mashal-progress></div>
+        <!-- Answer choices disappear after confirmation. -->
         <div class="options-grid" id="options-grid" role="radiogroup" aria-label="चार विकल्प">
           <!-- Rendered dynamically as 2x2 grid -->
         </div>
@@ -1058,6 +1059,7 @@
 
         <!-- 3. Bottom Compact Studio Dock: Name Input + Share CTA + Nav -->
         <div class="card-studio-dock">
+          <div data-mashal-progress></div>
           
           <!-- Name Personalization Input -->
           <div class="name-input-bar">
@@ -1081,7 +1083,7 @@
           <!-- Navigation Row: Home -->
           <div class="dock-actions-row">
             <button type="button" class="btn-dock-action family-secondary" id="btn-go-home">
-              <span>🏠 मुख्य पृष्ठ</span>
+              <span>🎮 और खेल</span>
             </button>
           </div>
 
@@ -1100,7 +1102,6 @@
       <div class="share-sheet-handle"></div>
       <div class="share-sheet-header">
         <h3 class="share-sheet-title">कार्ड साझा करें</h3>
-        <p class="share-sheet-subtitle">अपने नाम के साथ विचार साझा करें या डाउनलोड करें</p>
       </div>
       
       <div class="share-sheet-options">
@@ -1116,8 +1117,7 @@
             </svg>
           </div>
           <div class="share-opt-info">
-            <span class="share-opt-title">व्हाट्सएप / ऐप्स पर भेजें</span>
-            <span class="share-opt-desc">इमेज और विचार सीधे शेयर करें</span>
+            <span class="share-opt-title">ऐप पर साझा करें</span>
           </div>
           <span class="share-opt-arrow">→</span>
         </button>
@@ -1132,8 +1132,7 @@
             </svg>
           </div>
           <div class="share-opt-info">
-            <span class="share-opt-title">PNG इमेज डाउनलोड करें</span>
-            <span class="share-opt-desc">गैलरी में 1080×1350 कार्ड सेव करें</span>
+            <span class="share-opt-title">कार्ड डाउनलोड करें</span>
           </div>
           <span class="share-opt-arrow">→</span>
         </button>
@@ -1147,8 +1146,7 @@
             </svg>
           </div>
           <div class="share-opt-info">
-            <span class="share-opt-title">विचार टेक्स्ट कॉपी करें</span>
-            <span class="share-opt-desc">मैसेज या स्टेटस के लिए टेक्स्ट</span>
+            <span class="share-opt-title">टेक्स्ट कॉपी करें</span>
           </div>
           <span class="share-opt-arrow">→</span>
         </button>
@@ -1360,6 +1358,7 @@
         const saved = loadStoredEdition(currentDayId);
         const isConfirmed = !!(saved && saved.confirmed);
         const effectiveSelectedId = isConfirmed ? saved.selectedOption : selectedOptionId;
+        els.thoughtCard.classList.toggle('is-result', isConfirmed);
 
         els.themeNameText.textContent = data.theme;
 
@@ -1391,7 +1390,7 @@
           els.meaningText.textContent = data.meaning;
           els.meaningRevealBox.classList.add('is-visible');
           window.DBResultCelebration.show(document.querySelector('[data-result-celebration]'), {
-            game: 'niti', details: { correct: saved.isCorrect }, animate: celebrate,
+            game: 'niti', details: { correct: saved.isCorrect, selectedText: data.options.find(opt => opt.id === saved.selectedOption)?.text }, animate: celebrate,
           });
         } else {
           els.meaningRevealBox.classList.remove('is-visible');
@@ -1400,7 +1399,8 @@
 
         // 2x2 Options Grid (A, B on top, C, D on bottom)
         els.optionsGrid.innerHTML = '';
-        data.options.forEach((opt, index) => {
+        els.optionsGrid.hidden = isConfirmed;
+        if (!isConfirmed) data.options.forEach((opt, index) => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'opt-card-btn';
@@ -1421,37 +1421,14 @@
           btn.appendChild(badge);
           btn.appendChild(textWrap);
 
-          if (isConfirmed) {
-            btn.disabled = true;
-            btn.setAttribute('aria-disabled', 'true');
-
-            const isUserChoice = (saved.selectedOption === opt.id);
-            const isAuthoredCorrect = opt.isCorrect;
-
-            if (isAuthoredCorrect) {
-              btn.classList.add('is-correct');
-              badge.textContent = '✓';
-            } else if (isUserChoice) {
-              btn.classList.add('is-wrong');
-              badge.textContent = '✕';
-            } else {
-              btn.classList.add('is-dimmed');
-            }
-          } else {
-            const isSelected = (opt.id === effectiveSelectedId);
-            if (isSelected) {
-              btn.classList.add('is-selected');
-              btn.setAttribute('aria-checked', 'true');
-            } else {
-              btn.setAttribute('aria-checked', 'false');
-            }
-
-            btn.addEventListener('click', () => {
-              selectedOptionId = opt.id;
-              saveStoredEdition(currentDayId, { confirmed: false, selectedOption: selectedOptionId });
-              renderStep1();
-            });
-          }
+          const isSelected = opt.id === effectiveSelectedId;
+          btn.classList.toggle('is-selected', isSelected);
+          btn.setAttribute('aria-checked', String(isSelected));
+          btn.addEventListener('click', () => {
+            selectedOptionId = opt.id;
+            saveStoredEdition(currentDayId, { confirmed: false, selectedOption: selectedOptionId });
+            renderStep1();
+          });
 
           els.optionsGrid.appendChild(btn);
         });
@@ -1460,7 +1437,7 @@
         if (isConfirmed) {
           els.btnStep1Action.disabled = false;
           els.btnStep1Action.classList.add('is-goto-card');
-          els.btnStep1Label.textContent = 'विचार कार्ड बनाएं एवं साझा करें →';
+          els.btnStep1Label.textContent = 'कार्ड बनाएं';
           els.btnStep1Action.querySelector('svg').style.display = 'none';
         } else {
           els.btnStep1Action.classList.remove('is-goto-card');

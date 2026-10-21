@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
@@ -8,6 +8,24 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Dainik Bhaskar / दैनिक भास्कर · Game Lab</title>
+
+  <!-- The opening must render without waiting for app CSS, JavaScript or media. -->
+  <style id="startup-critical">
+    body { margin: 0; background: #ebebe6; font-family: system-ui, sans-serif; }
+    #app-root { position: relative; width: 100%; max-width: 480px; height: 100dvh; margin: auto; background: #faf9f6; }
+    #loading-screen { position: absolute; inset: 0; z-index: 600; display: flex; align-items: center; justify-content: center; box-sizing: border-box; padding: 24px; background: #faf9f6; transition: opacity .3s; }
+    #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+    .opening-content { width: 100%; max-width: 390px; text-align: center; margin: auto; }
+    .opening-brand { color: #252522; font-size: clamp(23px, 6vw, 30px); font-weight: 800; line-height: 1.5; }
+    .opening-games { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 32px 0 26px; }
+    .opening-game img { display: block; width: 100%; height: auto; }
+    .opening-caption { color: #615f59; font-size: 16px; line-height: 1.8; }
+    .loading-bar { width: min(220px, 100%); height: 4px; margin: 24px auto 12px; overflow: hidden; border-radius: 4px; background: #e5e6dd; }
+    .loading-bar::after { content: ''; display: block; width: 40%; height: 100%; border-radius: inherit; background: #597762; animation: loading-slide 1.2s ease-in-out infinite alternate; }
+    .loading-label { color: #615f59; font-size: 13px; line-height: 1.6; }
+    @keyframes loading-slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+    @media (prefers-reduced-motion: reduce) { .loading-bar::after { animation: none; width: 100%; opacity: .65; } }
+  </style>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,10 +37,24 @@
 <body>
   <!-- Mobile Envelope Shell -->
   <div id="app-root">
-    <!-- The opening animation is rendered by main.js. -->
-    <div id="loading-screen" class="loading-screen"></div>
+    <div id="loading-screen" class="loading-screen opening-screen" aria-busy="true">
+      <div class="opening-content">
+        <h1 class="opening-brand" data-i18n="opening.brand">Dainik Bhaskar / दैनिक भास्कर</h1>
+        <div class="opening-games" aria-hidden="true">
+          <div class="opening-game" style="--intro-order:0"><img src="/src/assets/intro/wordal.svg" width="100" height="100" alt="" /></div>
+          <div class="opening-game" style="--intro-order:1"><img src="/src/assets/intro/niti.svg" width="100" height="100" alt="" /></div>
+          <div class="opening-game" style="--intro-order:2"><img src="/src/assets/intro/cricket.svg" width="100" height="100" alt="" /></div>
+          <div class="opening-game" style="--intro-order:3"><img src="/src/assets/intro/carrom.svg" width="100" height="100" alt="" /></div>
+          <div class="opening-game" style="--intro-order:4"><img src="/src/assets/intro/jodo.svg" width="100" height="100" alt="" /></div>
+        </div>
+        <p class="opening-caption" data-i18n="opening.caption">पाँच खेल, पाँच मूड, हर दिन नया कुछ.</p>
+        <div class="loading-bar" role="progressbar" aria-label="लोड हो रहा है…" data-i18n-aria="common.loading"></div>
+        <p class="loading-label" role="status" data-i18n="common.loading">लोड हो रहा है…</p>
+      </div>
+    </div>
   </div>
 
+  <!-- app-resources -->
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

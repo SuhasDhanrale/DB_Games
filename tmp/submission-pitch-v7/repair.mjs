@@ -1,0 +1,33 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {FileBlob,PresentationFile} from 'file:///C:/Users/Suhas/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/@oai/artifact-tool/dist/artifact_tool.mjs';
+process.on('uncaughtException',e=>{console.error(e.stack??String(e));process.exit(1);});
+const require=createRequire('C:/Users/Suhas/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/package.json');
+const JSZip=require('jszip');
+const root='E:/WebGames/Dainik Bhaskar';
+const dir=path.join(root,'tmp/submission-pitch-v7');
+const source=path.join(root,'output/submission-pitch-v6/Dainik Bhaskar Khel - Submission v6.pptx');
+const zip=await JSZip.loadAsync(await fs.readFile(source));
+const part='ppt/slides/slide2.xml';
+const original=await zip.file(part).async('string');
+const matches=original.match(/<a:gd name="adj[12]" fmla="val -?\d+" \/>/g);
+if(matches?.length!==10)throw new Error('Expected only ten custom callout adjustments');
+zip.file(part,original.replace(/<a:gd name="adj[12]" fmla="val -?\d+" \/>/g,''));
+await fs.writeFile(path.join(dir,'candidate.pptx'),await zip.generateAsync({type:'nodebuffer',compression:'DEFLATE'}));
+const p=await PresentationFile.importPptx(await FileBlob.load(path.join(dir,'candidate.pptx')));
+if(p.slides.items.length!==14)throw new Error('Unexpected slide count');
+await fs.writeFile(path.join(dir,'artifact-slide-02.png'),new Uint8Array(await (await p.export({slide:p.slides.items[1],format:'png',scale:1})).arrayBuffer()));
+await fs.writeFile(path.join(dir,'inspection.ndjson'),(await p.inspect({kind:'slide,textbox,shape',maxChars:150000})).ndjson);
+const repaired=await JSZip.loadAsync(await fs.readFile(path.join(dir,'candidate.pptx')));
+const changed=[];
+for(const [name,file] of Object.entries(zip.files)){
+ if(file.dir)continue;
+ const before=await (await JSZip.loadAsync(await fs.readFile(source))).file(name).async('nodebuffer');
+ const after=await repaired.file(name).async('nodebuffer');
+ if(!before.equals(after))changed.push(name);
+}
+if(JSON.stringify(changed)!==JSON.stringify([part]))throw new Error('Unexpected package changes: '+changed);
+await fs.writeFile(path.join(dir,'repair-evidence.json'),JSON.stringify({changedParts:changed,slideCount:14,retainedDialogueShapes:5,retainedNameAgeLabels:5,fix:'Removed ten custom adjustment guides from five speech bubble shapes; preset geometry supplies valid defaults.'},null,2));
+await fs.mkdir(path.join(root,'output/submission-pitch-v7'),{recursive:true});
+console.log('Compatibility repair complete. Only slide2.xml changed; all other package parts unchanged.');

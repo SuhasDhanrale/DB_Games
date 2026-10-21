@@ -9,7 +9,7 @@ import { initI18n, translateDOM } from './i18n/index.js';
 import { initAudio } from './core/audio.js';
 import { resetDailyChallenges } from './systems/progression.js';
 import { initToastSystem, initModalSystem } from './ui/components.js';
-import { playOpening } from './ui/opening.js';
+import { finishOpening } from './ui/opening.js';
 
 // Router & Screens
 import { initRouter, addRoute } from './core/router.js';
@@ -26,6 +26,17 @@ import './games/game-4/index.js';
 import './games/game-5/index.js';
 
 async function bootstrap() {
+  // Give the HTML opening a paint before initializing the app. The single-file
+  // build keeps its embedded media inert until an individual game needs it.
+  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  await Promise.all([...document.querySelectorAll('link[data-app-style]')].map(link => {
+    if (link.sheet || link.dataset.loaded) return;
+    if (link.dataset.failed) throw new Error('App stylesheet failed to load');
+    return new Promise((resolve, reject) => {
+      link.addEventListener('load', resolve, { once: true });
+      link.addEventListener('error', () => reject(new Error('App stylesheet failed to load')), { once: true });
+    });
+  }));
   // 1. Initialize core systems
   initI18n();
   initAudio();
@@ -45,22 +56,27 @@ async function bootstrap() {
   addRoute('/settings', renderSettings);
   addRoute('/game/:id', renderGamePlayer);
 
-  // 5. Hide Loading Screen
+  // 5. Mount the app behind the opening, then reveal it once it has painted.
   const loadingScreen = document.getElementById('loading-screen');
   const appRoot = document.getElementById('app-root');
 
-  playOpening(loadingScreen, () => {
-    // 6. Start Router (mounts initial screen)
-    initRouter(appRoot);
-    
-    // Translate any lingering DOM nodes (though screens handle their own usually)
-    translateDOM();
+  initRouter(appRoot);
+  translateDOM();
+  finishOpening(loadingScreen);
+}
+
+function startApp() {
+  bootstrap().catch(error => {
+    console.error('[Startup]', error);
+    const label = document.querySelector('#loading-screen .loading-label');
+    if (label) label.textContent = 'खेल नहीं खुल सके। फिर कोशिश करने के लिए पेज दोबारा खोलें।';
+    document.querySelector('#loading-screen .loading-bar')?.remove();
   });
 }
 
 // Start app when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootstrap);
+  document.addEventListener('DOMContentLoaded', startApp);
 } else {
-  bootstrap();
+  startApp();
 }

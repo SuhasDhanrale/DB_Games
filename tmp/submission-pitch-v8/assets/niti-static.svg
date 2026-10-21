@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="आज की नीति">
+  <defs><clipPath id="tile"><rect x="5" y="5" width="90" height="90" rx="24"/></clipPath></defs>
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="#F3E6CD"/>
+  <g clip-path="url(#tile)"><g transform="translate(8 8) scale(0.58)" fill="none">
+    <path d="M27 150 Q27 120 55 117 H89 Q119 126 120 150" fill="#bd7846"/><path d="M60 103 H82 L88 126 Q72 139 53 124Z" fill="#b78556"/>
+    <path d="M39 61 Q32 24 70 23 Q105 26 103 59 L96 86 L46 88Z" fill="#493c30"/><path d="M79 29 Q107 4 120 22 Q109 24 109 37 Q109 54 94 55" fill="#493c30"/><ellipse cx="70" cy="77" rx="30" ry="38" fill="#cf9e68"/><path d="M43 64 Q45 38 69 38 Q90 38 98 61 L97 50 Q90 26 65 32 Q40 34 39 61Z" fill="#493c30"/>
+    <path d="M51 73 L59 72 M80 72 L88 73" stroke="#493c30" stroke-width="3" stroke-linecap="round"/><path d="M69 76 L65 89 L73 89 M60 100 Q70 104 79 99" stroke="#886044" stroke-width="2" stroke-linecap="round"/><path d="M65 49 L75 49 M65 54 L75 54" stroke="#a54c36" stroke-width="2"/>
+  </g></g>
+</svg>

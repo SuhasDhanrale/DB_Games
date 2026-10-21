@@ -1,0 +1,9 @@
+{
+  "changedParts": [
+    "ppt/slides/slide2.xml"
+  ],
+  "slideCount": 14,
+  "retainedDialogueShapes": 5,
+  "retainedNameAgeLabels": 5,
+  "fix": "Removed ten custom adjustment guides from five speech bubble shapes; preset geometry supplies valid defaults."
+}

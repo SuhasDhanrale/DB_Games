@@ -162,3 +162,8 @@ All fourteen final slide renders were inspected, including the affected palette 
 Added Hindi names and ages inside the five opening dialogue boxes, using the organizer brief's personas: Rajesh Verma 36 (cricket), Ram Kishore Verma 43 (childhood play), Mahendra Meena 35 (busy with work), Om Prakash Maurya 53 (morning thought) and Neha Yadav 28 (curiosity). These dialogue assignments remain authored storytelling, not quotations or verified behavior. A visible caption says the dialogues are fictional and inspired by the supplied reader personas. Sources for names and ages: organizer brief pp. 13–17.
 
 Saved `output/submission-pitch-v6/Dainik Bhaskar Khel - Submission v6.pptx`, fourteen slides. The dialogue slide was visually checked; the other thirteen renders match version 5 pixel for pixel. Validation records are in `tmp/submission-pitch-v6`.
+
+## v7 — PowerPoint compatibility repair (14 October 2026)
+Latest saved deck: output/submission-pitch-v7/Dainik Bhaskar Khel - Submission v7.pptx.
+The custom adjustment guides in slide 2 speech bubbles caused PowerPoint to require repair and remove most dialogue shapes. Removed only those ten adjustment guides; default preset speech bubbles retain all five quotes and name/age labels. Only ppt/slides/slide2.xml changed; every other package part is byte-identical to v6. Final v7 opened normally in installed PowerPoint without OpenAndRepair, with 14 slides and 12 shapes on slide 2; all 14 slides exported successfully. Changed slide visually inspected. Package/layout validation: zero findings and warnings.
+

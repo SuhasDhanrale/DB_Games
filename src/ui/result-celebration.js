@@ -10,33 +10,37 @@ const symbols = {
   jodo: '<rect x="6" y="13" width="11" height="14" rx="3"/><rect x="23" y="13" width="11" height="14" rx="3"/><path d="M17 20h6"/>',
 };
 
-// Praise follows real results; attempts and hints never imply a flawless solve.
+// One factual outcome owns the result; extra copy is reserved for useful detail.
 export function resultCopy(game, details = {}, lang = 'hi') {
   const en = lang === 'en';
   const message = (titleHi, bodyHi, titleEn, bodyEn, success = true) => ({
     title: en ? titleEn : titleHi, body: en ? bodyEn : bodyHi, success,
   });
   if (game === 'wordal') {
-    if (!details.solved) return details.attempts > 0
-      ? message('आपकी कोशिश मायने रखती है', 'आज शब्द नहीं मिला। रंगों के संकेत से अगली बार नया तरीका आज़माएँ।', 'Your effort matters', 'The word stayed hidden today. Use the colour clues to try a new approach next time.', false)
-      : message('आज का शब्द जानें', 'शब्द और उसका अर्थ पढ़ें। अगली पहेली में खुद आज़माएँ।', 'Discover today’s word', 'Read the word and its meaning. Try the next puzzle yourself.', false);
-    if (details.attempts === 1) return message('कमाल!', 'पहली कोशिश में शब्द खोज लिया।', 'Amazing!', 'You found the word on your first try.');
-    if (details.attempts > 3) return message('शानदार!', 'कोशिश जारी रखी और शब्द खोज लिया। अभ्यास से हुनर निखरता है।', 'Well done!', 'You kept trying and found the word. Practice helps you build your skill.');
-    return message('शानदार!', 'शब्द खोज लिया।', 'Well done!', 'You found the word.');
+    const attempts = details.attempts ?? 0;
+    const titleHi = details.solved ? `शब्द मिला · ${attempts}/6 प्रयास`
+      : attempts >= 6 ? 'शब्द नहीं मिला · 6/6 प्रयास' : 'उत्तर देखा';
+    const titleEn = details.solved ? `Word found · ${attempts}/6 tries`
+      : attempts >= 6 ? 'Word not found · 6/6 tries' : 'Answer revealed';
+    return message(titleHi, details.practice ? 'अभ्यास' : '', titleEn, details.practice ? 'Practice' : '', !!details.solved);
   }
   if (game === 'niti') return details.correct
-    ? message('शानदार!', 'विचार सही पूरा किया। अब उसका अर्थ जानें।', 'Well done!', 'You completed the thought correctly. Explore its meaning below.')
-    : message('सीखने का एक मौका', 'सही उत्तर और उसका अर्थ देखें। यह सीख आगे काम आ सकती है।', 'A chance to learn', 'Read the correct answer and its meaning. Take this lesson into your next try.', false);
+    ? message('सही उत्तर', '', 'Correct answer', '')
+    : message('चुना उत्तर सही नहीं था', details.selectedText ? `आपने चुना: ${details.selectedText}` : '', 'Incorrect answer', details.selectedText ? `You chose: ${details.selectedText}` : '', false);
   if (game === 'cricket') return details.won
-    ? message('शानदार!', 'आपने मैच जीत लिया।', 'Well played!', 'You won the match.')
-    : message('आपकी कोशिश मायने रखती है', 'इस बार जीत नहीं मिली। फिर खेलें—अभ्यास से हुनर निखरता है।', 'Your effort matters', 'No win this time. Play again—practice helps you build your skill.', false);
-  if (game === 'carrom') return details.shots === 1
-    ? message('कमाल!', 'एक ही शॉट में लक्ष्य पूरा किया।', 'Amazing!', 'You completed the challenge in one shot.')
-    : message('शानदार!', 'कोशिश जारी रखी और लक्ष्य पूरा किया। अभ्यास से निशाना निखरता है।', 'Well done!', 'You kept trying and completed the challenge. Practice helps you refine your aim.');
+    ? message('आप जीत गए!', '', 'You won!', '')
+    : message('इस बार हार हुई', '', 'You lost this round', '', false);
+  if (game === 'carrom') {
+    const comparison = details.practice && details.firstCompletionShots != null && details.bestReplayShots != null;
+    return message(`लक्ष्य पूरा · ${details.shots} शॉट`, comparison ? `अभ्यास · पहली बार: ${details.firstCompletionShots} · सर्वश्रेष्ठ: ${details.bestReplayShots}` : '',
+      `Target complete · ${details.shots} ${details.shots === 1 ? 'shot' : 'shots'}`, comparison ? `Practice · First: ${details.firstCompletionShots} · Best: ${details.bestReplayShots}` : '');
+  }
   if (game === 'jodo') {
-    if (details.wrongMatches === 0 && details.assistedPairs === 0) return message('एकदम सही!', 'बिना गलती और बिना संकेत चारों जोड़ियाँ खोज लीं।', 'Perfect!', 'You found all four pairs without mistakes or hints.');
-    if (details.assistedPairs > 0) return message('बढ़िया!', 'संकेत की मदद से चारों जोड़ियाँ पूरी कीं। अब उनके संबंध जानें।', 'Good work!', 'You completed all four pairs with a hint. Explore their connections below.');
-    return message('शानदार!', 'कोशिश जारी रखी और चारों जोड़ियाँ खोज लीं।', 'Well done!', 'You kept trying and found all four pairs.');
+    const scored = Number.isFinite(details.score);
+    return message(`चारों जोड़ियाँ पूरी${scored ? ` · ${details.score} अंक` : ''}`,
+      `${details.practice ? 'अभ्यास · ' : ''}गलत जोड़: ${details.wrongMatches ?? 0} · संकेत: ${details.assistedPairs ?? 0}`,
+      `All four pairs complete${scored ? ` · ${details.score} points` : ''}`,
+      `${details.practice ? 'Practice · ' : ''}Wrong matches: ${details.wrongMatches ?? 0} · Hints: ${details.assistedPairs ?? 0}`);
   }
   return null;
 }
@@ -64,7 +68,9 @@ export function showResultCelebration(slot, { game, details, lang = 'hi', animat
   card.dataset.outcome = copy.success ? 'success' : 'attempt';
   card.innerHTML = `<div class="result-celebration__stamp" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none">${symbols[game]}</svg><span class="result-celebration__rays"></span>${copy.success ? '<span class="result-celebration__check">✓</span>' : ''}</div><div class="result-celebration__copy"><h3 class="result-celebration__title"></h3><p class="result-celebration__body"></p></div><button type="button" class="result-celebration__skip" hidden></button>`;
   card.querySelector('h3').textContent = copy.title;
+  if (slot.id) card.querySelector('h3').id = `${slot.id}-heading`;
   card.querySelector('p').textContent = copy.body;
+  card.querySelector('p').hidden = !copy.body;
   const skip = card.querySelector('button');
   skip.textContent = lang === 'en' ? 'Skip' : 'छोड़ें';
   skip.setAttribute('aria-label', lang === 'en' ? 'Skip celebration animation' : 'जश्न का एनीमेशन छोड़ें');
@@ -89,7 +95,7 @@ export function showResultCelebration(slot, { game, details, lang = 'hi', animat
   skip.addEventListener('click', () => {
     finish();
     const nextAction = [...doc.querySelectorAll('button:not(:disabled), a[href]')].find(control =>
-      control !== skip && control.tabIndex >= 0 && control.checkVisibility() &&
+      control !== skip && control.tabIndex >= 0 && control.getClientRects().length > 0 && view.getComputedStyle(control).visibility === 'visible' &&
       (skip.compareDocumentPosition(control) & view.Node.DOCUMENT_POSITION_FOLLOWING));
     nextAction?.focus({ preventScroll: true });
     skip.hidden = true;

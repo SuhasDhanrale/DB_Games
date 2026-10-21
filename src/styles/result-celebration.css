@@ -1,13 +1,13 @@
 .result-celebration {
   position: relative;
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 36px minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 9px;
   box-sizing: border-box;
   width: 100%;
   margin: 0 0 12px;
-  padding: 14px;
+  padding: 12px;
   background: var(--game-tint, #f1efe8);
   border: 1px solid transparent;
   border-radius: var(--family-control-radius, 12px);
@@ -20,14 +20,14 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border: 1px solid currentColor;
   border-radius: 50%;
   background: var(--family-surface, #fffefa);
   transform: rotate(-7deg);
 }
-.result-celebration__stamp svg { width: 32px; height: 32px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.result-celebration__stamp svg { width: 27px; height: 27px; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .result-celebration__check {
   position: absolute;
   right: -3px;
@@ -42,7 +42,9 @@
   color: var(--family-surface, #fffefa);
   font: 700 11px/1 system-ui, sans-serif;
 }
-.result-celebration .result-celebration__title { margin: 0; padding-right: 38px; color: inherit; font-size: 17px; font-weight: 800; line-height: 1.55; }
+.result-celebration .result-celebration__title { margin: 0; color: inherit; font-size: 16px; font-weight: 800; line-height: 1.55; }
+.result-celebration.is-celebrating .result-celebration__title { padding-right: 38px; }
+.result-celebration__body[hidden] { display: none; }
 .result-celebration .result-celebration__body { margin: 3px 0 0; color: inherit; font-size: 13px; font-weight: 400; line-height: 1.7; }
 .result-celebration__skip {
   position: absolute;
@@ -89,4 +91,29 @@
   .result-celebration.is-celebrating .result-celebration__rays { animation: none; }
 }
 .result-celebration:empty,
-[data-result-celebration]:empty { display: none; }
+[data-result-celebration]:empty,
+[data-mashal-progress]:empty { display: none; }
+[data-mashal-progress][hidden] { display: none; }
+
+/* Shared result hierarchy and story teaser, with game-specific context. */
+[data-game-theme] .result-context { margin: 10px 0; font-size: 13px; line-height: 1.65; color: var(--family-muted); }
+[data-game-theme] .result-story { padding: 16px; border: 1px solid var(--family-border); border-radius: var(--family-radius); background: var(--family-surface); text-align: left; }
+[data-game-theme] .result-story__label { display: inline-block; padding: 3px 8px; background: var(--game-tint); border-radius: 6px; color: var(--game-ink); font-size: 11px; font-weight: 700; }
+[data-game-theme] .result-story__headline { margin: 10px 0; color: var(--family-ink); font-size: 16px; line-height: 1.6; font-weight: 750; }
+[data-game-theme] .result-story__action { display: inline-flex; align-items: center; min-height: 44px; color: var(--game-ink); font-size: 14px; font-weight: 700; }
+[data-game-theme="niti"] #options-grid[hidden] { display: none; }
+[data-game-theme="niti"] .thought-card.is-result .thought-quote-mark { display: none; }
+[data-game-theme="niti"] .thought-card.is-result .result-celebration { margin-bottom: 12px; }
+[data-game-theme="jodo"] .app-container.is-completed .edition-note { display: none; }
+[data-game-theme="jodo"] #result-panel { scroll-margin-top: 16px; }
+[data-game-theme="jodo"] .has-game-music #result-panel { scroll-margin-top: calc(80px + env(safe-area-inset-top, 0px)); }
+[data-game-theme="jodo"] .review-link { display: block; color: inherit; text-decoration: none; padding: 6px 0; }
+[data-game-theme="jodo"] .review-link .review-pair-name { display: block; font-size: 14px; line-height: 1.6; }
+[data-game-theme="jodo"] .review-link .review-explanation { display: block; margin-top: 4px; font-size: 13px; line-height: 1.65; }
+[data-game-theme="jodo"] .review-link:hover .review-pair-name { text-decoration: underline; }
+[data-game-theme="carrom"] #modal-desc[hidden] { display: none; }
+[data-game-theme="cricket"] #resultModal .modal-body { padding-top: 20px; }
+[data-game-theme="cricket"] #resultModal .modal-body > :is(.result-context, [data-result-celebration]) { margin: 0; }
+[data-game-theme="cricket"] #resultModal .result-celebration { margin: 0; }
+[data-game-theme="cricket"] .has-game-music #resultModal { padding-top: calc(80px + env(safe-area-inset-top, 0px)); }
+[data-game-theme="cricket"] .has-game-music #resultModal .modal-card { max-height: calc(100dvh - 96px - env(safe-area-inset-top, 0px)); }

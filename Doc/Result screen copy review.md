@@ -4,7 +4,7 @@ Reviewed 14 October 2026. Scope: the five daily games in the home collection, th
 
 The biggest opportunities are Jodi and Over. Nishana is already compact. Across the collection, the result is often stated once by the shared celebration and again by a status, score, or explanatory sentence. Keep one outcome, useful performance facts, the game's payoff, and its next actions.
 
-These are recommendations; result-screen changes have not been applied in this review.
+The user approved these recommendations, and they were implemented on 14 October 2026. The review below preserves the reasoning and examples.
 
 ## What to cut, combine, and retain
 
@@ -75,3 +75,13 @@ Reviewed rendered success results for all five games at 390×844, Shabd after si
 Text inventory: [inventory.json](../tmp/result-copy-audit/inventory.json). Review captures and the collection script are in `tmp/result-copy-audit/` and `tmp/result-copy-audit.mjs`.
 
 Source entry points: `src/ui/result-celebration.js`, `src/ui/torch.js`, `wordal.html` (`populateResultScreen`), `niti.html` (`renderStep1` and share sheet), `Superover.html` (`resultModal` and `endMatch`), `Carrom_Puzzles.html` (`showModal`), and `jodo.html` (`renderInsights`, `renderResultPanel`, `openArticleModal`).
+
+## Applied changes
+
+All five games now use one factual result stamp. Shabd's attempt pill and excerpt were removed; Niti keeps a wrong choice in the outcome instead of retaining the options grid; Over uses one outcome and a role-specific target summary; Nishana puts shots and optional practice comparison in the stamp; Jodi shows four clickable relationships with one takeaway each and keeps full detail in its reader. Shabd and Over share story-teaser styling. Niti's card studio and share sheet use shorter action labels, with card attribution preserved.
+
+Mashal's ordinary progress is a shared inline row. Its larger popup appears only for a newly earned level and leaves the row visible after dismissal. Already-counted games omit +1, and restored/practice results do not repeat the award. Niti's answer and studio steps reuse the progress row so quick navigation retains the earned progress.
+
+The result checks are in `qa-result-copy.mjs`; built-app Mashal checks remain in `tests/mashal-popup-browser.mjs`. Updated captures are in `tmp/result-copy-after/`. The 360×640 Shabd result was checked by solving at a taller viewport and then resizing: the pre-existing gameplay board overlaps the keyboard at that short standalone size. This change does not claim to fix that gameplay layout.
+
+Validation completed: result layouts at 360×640 and 1280×900; incorrect answers, exhausted attempts, hinted matches, practice comparisons, both cricket roles, article/source access, share actions, English, reduced motion and animation skipping. Mashal progression and packaged-browser checks passed for direct single-file, HTTP single-file and production outputs, covering ordinary progress, level increases, quick Niti navigation, aliases, already-counted editions, replay and restoration. Final emitted-file checks also verified that Carrom's rules hide the result reward. Production and single-file builds completed successfully; `build/index.html` contains the updated collection.

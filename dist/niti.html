@@ -16,12 +16,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rozha+One&family=Yatra+One&family=Martel:wght@600;700;800&family=Noto+Sans+Devanagari:wght@500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <style>:root{--color-primary:#e23a28;--color-primary-hover:#c52c1c;--color-primary-light:#fdece9;--color-accent-gold:#d35400;--color-success:#1e824c;--color-success-bg:#e8f8f0;--color-success-border:#a3e4d7;--color-wrong:#c0392b;--color-wrong-bg:#fdedec;--color-wrong-border:#f5b7b1;--color-bg:#f7f6f2;--color-surface:#fff;--color-surface-soft:#f2efe9;--color-surface-warm:#faf8f4;--text-main:#1a1a1a;--text-muted:#555;--text-subtle:#7a7a7a;--border-subtle:#1a1a1a1a;--border-medium:#1a1a1a33;--shadow-sm:0 2px 6px #0000000d;--shadow-md:0 4px 14px #00000014;--shadow-lg:0 10px 28px #00000024;--shadow-focus:0 0 0 3px #e23a2840;--font-stack:"Noto Sans Devanagari", "Nirmala UI", "Mangal", "Devanagari Sangam MN", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;--font-serif:"Rozha One", "Martel", "Georgia", serif;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-full:9999px}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}html,body{background-color:var(--color-bg);height:100%;color:var(--text-main);font-family:var(--font-stack);font-size:15px;line-height:1.45;overflow:hidden}.top-accent-bar{z-index:100;background:linear-gradient(90deg,#e23a28 0%,#f39c12 100%);width:100%;height:3px;position:absolute;top:0;left:0}.app-container{background-color:var(--color-bg);flex-direction:column;width:100%;max-width:480px;height:100%;margin:0 auto;padding:6px 12px 8px;display:flex;position:relative;overflow:hidden}.step-view{flex-direction:column;flex:1;height:100%;min-height:0;animation:.22s ease-out fadeIn;display:none}.step-view.is-active{display:flex}@keyframes fadeIn{0%{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}.step1-content-wrap{flex-direction:column;flex:1;justify-content:center;gap:10px;min-height:0;display:flex}.thought-category-pill{color:var(--color-primary);background:var(--color-primary-light);border-radius:var(--radius-full);letter-spacing:.3px;align-self:center;align-items:center;gap:6px;padding:3px 14px;font-size:12px;font-weight:700;display:inline-flex}.thought-card{background:var(--color-surface);border:1.5px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);flex-direction:column;padding:16px 18px 14px;transition:all .25s;display:flex;position:relative}.thought-card:before{content:"";background:linear-gradient(90deg,#e23a28b3 0%,#f39c1280 100%);border-radius:3px 3px 0 0;height:3px;position:absolute;top:0;left:20px;right:20px}.thought-quote-mark{color:var(--color-primary);opacity:.35;font-size:30px;line-height:1;font-family:var(--font-serif);user-select:none;margin-bottom:-6px;display:block}.thought-content{color:var(--text-main);letter-spacing:-.2px;font-size:18px;font-weight:600;line-height:1.6}.thought-blank-slot{vertical-align:middle;text-align:center;min-width:110px;margin:0 4px;transition:all .2s;display:inline-block}.thought-blank-slot.is-empty{color:#1c1c1c66;border-radius:var(--radius-sm);background:#e23a280d;border-bottom:2px dashed #e23a288c;padding:0 8px;font-weight:500}.thought-blank-slot.is-preview{color:#b7791f;border-radius:var(--radius-sm);background:#fff8e1;border:1.5px solid #ffc107;padding:1px 9px;font-weight:700;box-shadow:0 1px 4px #ffc10740}.thought-blank-slot.is-correct{background:var(--color-success-bg);border:1.5px solid var(--color-success-border);color:var(--color-success);border-radius:var(--radius-sm);padding:1px 10px;font-weight:700}.thought-blank-slot.is-wrong{background:var(--color-wrong-bg);border:1.5px solid var(--color-wrong-border);color:var(--color-wrong);border-radius:var(--radius-sm);padding:1px 10px;font-weight:700}.thought-card-footer{color:var(--text-subtle);justify-content:flex-end;margin-top:8px;font-size:11.5px;display:flex}.meaning-reveal-box{background:var(--color-surface-warm);border:1px solid #d3540033;border-left:3.5px solid var(--color-accent-gold);border-radius:var(--radius-sm);padding:10px 14px;animation:.3s ease-out forwards fadeInSlideUp;display:none}.meaning-reveal-box.is-visible{display:block}@keyframes fadeInSlideUp{0%{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}.meaning-label{color:var(--color-accent-gold);text-transform:uppercase;letter-spacing:.3px;align-items:center;gap:6px;margin-bottom:4px;font-size:12px;font-weight:700;display:flex}.meaning-text{color:var(--text-main);font-size:14px;font-weight:500;line-height:1.5}.options-grid{grid-template-columns:1fr 1fr;gap:8px 10px;margin-top:2px;display:grid}.opt-card-btn{background:var(--color-surface);border:1.5px solid var(--border-subtle);border-radius:var(--radius-md);min-height:50px;color:var(--text-main);text-align:left;cursor:pointer;box-shadow:var(--shadow-sm);user-select:none;align-items:center;gap:8px;padding:8px 10px;font-family:inherit;font-size:14px;font-weight:600;transition:all .16s;display:flex;position:relative}.opt-card-btn:hover:not(:disabled){border-color:var(--border-medium);background:var(--color-surface-warm);transform:translateY(-1px)}.opt-badge{background:var(--color-surface-soft);border:1px solid var(--border-subtle);width:25px;height:25px;color:var(--text-muted);border-radius:50%;flex-shrink:0;justify-content:center;align-items:center;font-size:12px;font-weight:800;transition:all .16s;display:flex}.opt-text{flex:1;font-size:13.5px;line-height:1.35}.opt-card-btn.is-selected{border-color:var(--color-primary);background:var(--color-primary-light);color:var(--color-primary-hover);box-shadow:0 2px 8px #e23a2826}.opt-card-btn.is-selected .opt-badge{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}.opt-card-btn:disabled{cursor:default;transform:none}.opt-card-btn.is-correct{border-color:var(--color-success);background:var(--color-success-bg);color:var(--color-success);font-weight:700}.opt-card-btn.is-correct .opt-badge{background:var(--color-success);color:#fff;border-color:var(--color-success)}.opt-card-btn.is-wrong{border-color:var(--color-wrong);background:var(--color-wrong-bg);color:var(--color-wrong)}.opt-card-btn.is-wrong .opt-badge{background:var(--color-wrong);color:#fff;border-color:var(--color-wrong)}.opt-card-btn.is-dimmed{opacity:.45;background:var(--color-surface-soft);border-color:var(--border-subtle)}.step-bottom-bar{margin-top:auto;padding-top:8px}.btn-main-action{background:var(--color-primary);color:#fff;border-radius:var(--radius-md);cursor:pointer;border:none;justify-content:center;align-items:center;gap:8px;width:100%;min-height:48px;font-family:inherit;font-size:15px;font-weight:700;transition:all .16s;display:flex;box-shadow:0 3px 10px #e23a2840}.btn-main-action:hover:not(:disabled){background:var(--color-primary-hover);transform:translateY(-1px)}.btn-main-action:disabled{color:#888;box-shadow:none;cursor:not-allowed;background:#d8d8d8;transform:none}.btn-main-action.is-goto-card{background:linear-gradient(135deg,#e23a28 0%,#d35400 100%);animation:2s infinite alternate pulseButton;box-shadow:0 4px 14px #e23a2859}@keyframes pulseButton{0%{transform:scale(1)}to{transform:scale(1.015)}}.step2-layout{flex-direction:column;flex:1;gap:8px;min-width:0;height:100%;min-height:0;display:flex;overflow:hidden}.theme-segmented-bar{background:var(--color-surface);border:1.5px solid var(--border-medium);border-radius:var(--radius-lg);flex-shrink:0;grid-template-columns:repeat(3,1fr);gap:7px;padding:5px 6px;display:grid;position:relative;box-shadow:0 2px 10px #0000000f}.theme-tab-btn{border:1.5px solid var(--border-subtle);background:var(--color-surface-warm);border-radius:var(--radius-md);color:var(--text-muted);cursor:pointer;user-select:none;justify-content:center;align-items:center;gap:5px;padding:7px 4px;font-family:inherit;font-size:13px;font-weight:700;transition:all .2s cubic-bezier(.16,1,.3,1);display:flex;position:relative;box-shadow:0 1px 3px #0000000a}.theme-tab-btn:hover{color:var(--text-main);border-color:var(--border-medium);transform:translateY(-1px)}.theme-tab-btn .theme-dot{background:0 0;border-radius:50%;flex-shrink:0;width:6px;height:6px;transition:all .2s}.theme-tab-btn[data-theme=classic]{border-color:#e23a282e}.theme-tab-btn[data-theme=navratri]{border-color:#c0392b33}.theme-tab-btn[data-theme=diwali]{border-color:#f1c40f59}.theme-tab-btn.is-active{font-weight:800;transform:translateY(-1.5px)}.theme-tab-btn[data-theme=classic].is-active{color:#c52c1c;background:linear-gradient(135deg,#fff5f2 0%,#fdeae6 100%);border-color:#e23a28;box-shadow:0 3px 10px #e23a2838}.theme-tab-btn[data-theme=classic].is-active .theme-dot{background:#e23a28;box-shadow:0 0 6px #e23a2899}.theme-tab-btn[data-theme=navratri].is-active{color:#922b21;background:linear-gradient(135deg,#fff6ed 0%,#feebda 100%);border-color:#c0392b;box-shadow:0 3px 10px #c0392b38}.theme-tab-btn[data-theme=navratri].is-active .theme-dot{background:#c0392b;box-shadow:0 0 6px #c0392b99}.theme-tab-btn[data-theme=diwali].is-active{color:#f7dc6f;background:linear-gradient(135deg,#2d0b3b 0%,#16041f 100%);border-color:#f1c40f;box-shadow:0 4px 14px #f1c40f59}.theme-tab-btn[data-theme=diwali].is-active .theme-dot{background:#f1c40f;box-shadow:0 0 8px #f1c40fe6}@keyframes themeBarGlowIntro{0%{transform:scale(.98);box-shadow:0 0 #e23a2866}50%{transform:scale(1.01);box-shadow:0 0 0 4px #e23a282e}to{transform:scale(1);box-shadow:0 2px 10px #0000000f}}.step-view.is-active .theme-segmented-bar{animation:.5s ease-out themeBarGlowIntro}body:has(#step-card.is-active) .app-container{padding-top:48px}.card-stage{flex:1;justify-content:center;align-items:center;min-width:0;min-height:0;padding:4px 6px;display:flex;position:relative;overflow:hidden;container-type:size}.card-preview-frame{aspect-ratio:4/5;justify-content:center;align-items:center;width:min(100%,80cqh);max-width:100%;max-height:100%;display:inline-flex;position:relative}.card-preview-frame:before{content:"";filter:blur(14px);z-index:1;pointer-events:none;background:#e23a281f;border-radius:16px;transition:background .3s;position:absolute;inset:-4px}.card-stage[data-active-theme=diwali] .card-preview-frame:before{background:#f1c40f38}.card-stage[data-active-theme=navratri] .card-preview-frame:before{background:#c0392b2e}.card-preview-img{z-index:2;aspect-ratio:4/5;object-fit:contain;background:#fff;border:1px solid #00000014;border-radius:12px;width:100%;max-width:100%;height:100%;max-height:100%;transition:transform .2s;display:block;position:relative;box-shadow:0 10px 28px #0000002e,0 2px 6px #00000014}.card-studio-dock{background:var(--color-surface);border:1.5px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);flex-direction:column;flex-shrink:0;gap:6px;padding:8px 10px;display:flex}.name-input-bar{background:var(--color-surface-warm);border:1.5px solid var(--border-subtle);border-radius:var(--radius-md);align-items:center;gap:6px;padding:5px 10px;transition:all .15s;display:flex}.name-input-bar:focus-within{border-color:var(--color-primary);box-shadow:var(--shadow-focus);background:#fff}.name-input-field{min-width:0;color:var(--text-main);background:0 0;border:none;outline:none;flex:1;font-family:inherit;font-size:13.5px;font-weight:700}.name-input-field::placeholder{color:var(--text-subtle);font-size:12.5px;font-weight:500}.name-clear-btn{color:var(--text-subtle);cursor:pointer;background:0 0;border:none;border-radius:50%;padding:2px 6px;font-size:13px}.name-clear-btn:hover{color:var(--text-main)}.btn-share-hero{color:#fff;border-radius:var(--radius-md);cursor:pointer;background:linear-gradient(135deg,#e23a28 0%,#d35400 100%);border:none;justify-content:center;align-items:center;gap:8px;width:100%;min-height:42px;font-family:inherit;font-size:15px;font-weight:700;transition:all .16s;display:flex;box-shadow:0 4px 14px #e23a2847}.btn-share-hero:hover{transform:translateY(-1px);box-shadow:0 6px 18px #e23a2859}.dock-actions-row{grid-template-columns:1fr;gap:6px;display:grid}.btn-dock-action{background:var(--color-surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);min-height:32px;color:var(--text-muted);cursor:pointer;justify-content:center;align-items:center;gap:5px;font-family:inherit;font-size:12px;font-weight:700;text-decoration:none;transition:all .15s;display:flex}.btn-dock-action:hover{color:var(--text-main);border-color:var(--border-medium);background:#fff}.share-sheet-backdrop{backdrop-filter:blur(4px);z-index:1500;opacity:0;pointer-events:none;background:#0000008c;flex-direction:column;justify-content:flex-end;transition:opacity .22s;display:flex;position:fixed;inset:0}.share-sheet-backdrop.is-open{opacity:1;pointer-events:auto}.share-sheet-modal{background:#fff;border-radius:20px 20px 0 0;flex-direction:column;gap:12px;width:100%;max-width:480px;margin:0 auto;padding:12px 16px 20px;transition:transform .26s cubic-bezier(.16,1,.3,1);display:flex;transform:translateY(100%);box-shadow:0 -8px 32px #00000040}.share-sheet-backdrop.is-open .share-sheet-modal{transform:translateY(0)}.share-sheet-handle{background:#d8d8d8;border-radius:3px;align-self:center;width:38px;height:4.5px;margin-bottom:2px}.share-sheet-header{text-align:center}.share-sheet-title{color:var(--text-main);font-size:16px;font-weight:800}.share-sheet-subtitle{color:var(--text-muted);margin-top:2px;font-size:12px}.share-sheet-options{flex-direction:column;gap:8px;display:flex}.share-opt-row{border:1.5px solid var(--border-subtle);border-radius:var(--radius-md);background:var(--color-surface-warm);cursor:pointer;text-align:left;align-items:center;gap:12px;padding:10px 14px;font-family:inherit;transition:all .15s;display:flex}.share-opt-row:hover{border-color:var(--border-medium);background:#fff;transform:translateY(-1px)}.share-opt-row.is-whatsapp{background:#f0fdf4;border-color:#86efac}.share-opt-row.is-whatsapp .share-opt-icon{color:#fff;background:#22c55e}.share-opt-icon{background:var(--color-surface-soft);width:38px;height:38px;color:var(--text-main);border-radius:10px;flex-shrink:0;justify-content:center;align-items:center;display:flex}.share-opt-icon.is-download{background:var(--color-primary-light);color:var(--color-primary)}.share-opt-icon.is-copy{color:#d97706;background:#fef3c7}.share-opt-info{flex-direction:column;flex:1;display:flex}.share-opt-title{color:var(--text-main);font-size:14px;font-weight:700}.share-opt-desc{color:var(--text-muted);font-size:11.5px}.share-opt-arrow{color:var(--text-subtle);font-size:16px;font-weight:700}.share-sheet-cancel-btn{background:var(--color-surface-soft);border-radius:var(--radius-md);color:var(--text-muted);cursor:pointer;border:none;margin-top:4px;padding:10px;font-family:inherit;font-size:13.5px;font-weight:700;transition:background .15s}.share-sheet-cancel-btn:hover{color:var(--text-main);background:#eae6df}.toast-pill{color:#fff;border-radius:var(--radius-full);box-shadow:var(--shadow-lg);z-index:2000;opacity:0;pointer-events:none;white-space:nowrap;background:#1c1c1c;padding:7px 16px;font-size:12.5px;font-weight:600;transition:all .22s cubic-bezier(.175,.885,.32,1.275);position:fixed;bottom:16px;left:50%;transform:translate(-50%)translateY(80px)}.toast-pill.is-visible{opacity:1;transform:translate(-50%)translateY(0)}#shareCanvas{display:none}</style>
-  <script type="module" crossorigin src="/assets/niti-CJK22eFz.js"></script>
+  <script type="module" crossorigin src="/assets/niti-DuCD2rH-.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/audio-Bg9QUBUX.js">
-  <link rel="modulepreload" crossorigin href="/assets/game-family-D5FE7jM4.js">
-  <link rel="modulepreload" crossorigin href="/assets/result-celebration-DQKJee6U.js">
-  <link rel="stylesheet" crossorigin href="/assets/game-family-DPMvG-VR.css">
-  <link rel="stylesheet" crossorigin href="/assets/result-celebration-BJvK6YRw.css">
+  <link rel="modulepreload" crossorigin href="/assets/game-family-T44oftxu.js">
+  <link rel="modulepreload" crossorigin href="/assets/result-celebration-C9K2qsQO.js">
+  <link rel="stylesheet" crossorigin href="/assets/game-family-CHAW_5tg.css">
+  <link rel="stylesheet" crossorigin href="/assets/result-celebration-DTy7ZPQH.css">
 </head>
 <body>
 
@@ -44,6 +44,7 @@
 
         <!-- Central Thought Card -->
         <article class="thought-card family-panel" id="thought-card" aria-label="आज का विचार">
+          <div data-result-celebration></div>
           <span class="thought-quote-mark" aria-hidden="true">“</span>
           
           <p class="thought-content" id="thought-text-container">
@@ -56,21 +57,21 @@
         </article>
 
         <!-- Meaning Box: Revealed after answering -->
-        <div data-result-celebration></div>
         <div class="meaning-reveal-box" id="meaning-reveal-box" aria-live="polite">
           <div class="meaning-label">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
               <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
             </svg>
-            <span>विचार का अर्थ</span>
+            <span>अर्थ</span>
           </div>
           <p class="meaning-text" id="meaning-text">
             <!-- Populated from CONTENT -->
           </p>
         </div>
 
-        <!-- 4 Options in 2x2 Grid (A, B on top, C, D on bottom) -->
+        <div data-mashal-progress></div>
+        <!-- Answer choices disappear after confirmation. -->
         <div class="options-grid" id="options-grid" role="radiogroup" aria-label="चार विकल्प">
           <!-- Rendered dynamically as 2x2 grid -->
         </div>
@@ -120,6 +121,7 @@
 
         <!-- 3. Bottom Compact Studio Dock: Name Input + Share CTA + Nav -->
         <div class="card-studio-dock">
+          <div data-mashal-progress></div>
           
           <!-- Name Personalization Input -->
           <div class="name-input-bar">
@@ -143,7 +145,7 @@
           <!-- Navigation Row: Home -->
           <div class="dock-actions-row">
             <button type="button" class="btn-dock-action family-secondary" id="btn-go-home">
-              <span>🏠 मुख्य पृष्ठ</span>
+              <span>🎮 और खेल</span>
             </button>
           </div>
 
@@ -162,7 +164,6 @@
       <div class="share-sheet-handle"></div>
       <div class="share-sheet-header">
         <h3 class="share-sheet-title">कार्ड साझा करें</h3>
-        <p class="share-sheet-subtitle">अपने नाम के साथ विचार साझा करें या डाउनलोड करें</p>
       </div>
       
       <div class="share-sheet-options">
@@ -178,8 +179,7 @@
             </svg>
           </div>
           <div class="share-opt-info">
-            <span class="share-opt-title">व्हाट्सएप / ऐप्स पर भेजें</span>
-            <span class="share-opt-desc">इमेज और विचार सीधे शेयर करें</span>
+            <span class="share-opt-title">ऐप पर साझा करें</span>
           </div>
           <span class="share-opt-arrow">→</span>
         </button>
@@ -194,8 +194,7 @@
             </svg>
           </div>
           <div class="share-opt-info">
-            <span class="share-opt-title">PNG इमेज डाउनलोड करें</span>
-            <span class="share-opt-desc">गैलरी में 1080×1350 कार्ड सेव करें</span>
+            <span class="share-opt-title">कार्ड डाउनलोड करें</span>
           </div>
           <span class="share-opt-arrow">→</span>
         </button>
@@ -209,8 +208,7 @@
             </svg>
           </div>
           <div class="share-opt-info">
-            <span class="share-opt-title">विचार टेक्स्ट कॉपी करें</span>
-            <span class="share-opt-desc">मैसेज या स्टेटस के लिए टेक्स्ट</span>
+            <span class="share-opt-title">टेक्स्ट कॉपी करें</span>
           </div>
           <span class="share-opt-arrow">→</span>
         </button>
@@ -422,6 +420,7 @@
         const saved = loadStoredEdition(currentDayId);
         const isConfirmed = !!(saved && saved.confirmed);
         const effectiveSelectedId = isConfirmed ? saved.selectedOption : selectedOptionId;
+        els.thoughtCard.classList.toggle('is-result', isConfirmed);
 
         els.themeNameText.textContent = data.theme;
 
@@ -453,7 +452,7 @@
           els.meaningText.textContent = data.meaning;
           els.meaningRevealBox.classList.add('is-visible');
           window.DBResultCelebration.show(document.querySelector('[data-result-celebration]'), {
-            game: 'niti', details: { correct: saved.isCorrect }, animate: celebrate,
+            game: 'niti', details: { correct: saved.isCorrect, selectedText: data.options.find(opt => opt.id === saved.selectedOption)?.text }, animate: celebrate,
           });
         } else {
           els.meaningRevealBox.classList.remove('is-visible');
@@ -462,7 +461,8 @@
 
         // 2x2 Options Grid (A, B on top, C, D on bottom)
         els.optionsGrid.innerHTML = '';
-        data.options.forEach((opt, index) => {
+        els.optionsGrid.hidden = isConfirmed;
+        if (!isConfirmed) data.options.forEach((opt, index) => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'opt-card-btn';
@@ -483,37 +483,14 @@
           btn.appendChild(badge);
           btn.appendChild(textWrap);
 
-          if (isConfirmed) {
-            btn.disabled = true;
-            btn.setAttribute('aria-disabled', 'true');
-
-            const isUserChoice = (saved.selectedOption === opt.id);
-            const isAuthoredCorrect = opt.isCorrect;
-
-            if (isAuthoredCorrect) {
-              btn.classList.add('is-correct');
-              badge.textContent = '✓';
-            } else if (isUserChoice) {
-              btn.classList.add('is-wrong');
-              badge.textContent = '✕';
-            } else {
-              btn.classList.add('is-dimmed');
-            }
-          } else {
-            const isSelected = (opt.id === effectiveSelectedId);
-            if (isSelected) {
-              btn.classList.add('is-selected');
-              btn.setAttribute('aria-checked', 'true');
-            } else {
-              btn.setAttribute('aria-checked', 'false');
-            }
-
-            btn.addEventListener('click', () => {
-              selectedOptionId = opt.id;
-              saveStoredEdition(currentDayId, { confirmed: false, selectedOption: selectedOptionId });
-              renderStep1();
-            });
-          }
+          const isSelected = opt.id === effectiveSelectedId;
+          btn.classList.toggle('is-selected', isSelected);
+          btn.setAttribute('aria-checked', String(isSelected));
+          btn.addEventListener('click', () => {
+            selectedOptionId = opt.id;
+            saveStoredEdition(currentDayId, { confirmed: false, selectedOption: selectedOptionId });
+            renderStep1();
+          });
 
           els.optionsGrid.appendChild(btn);
         });
@@ -522,7 +499,7 @@
         if (isConfirmed) {
           els.btnStep1Action.disabled = false;
           els.btnStep1Action.classList.add('is-goto-card');
-          els.btnStep1Label.textContent = 'विचार कार्ड बनाएं एवं साझा करें →';
+          els.btnStep1Label.textContent = 'कार्ड बनाएं';
           els.btnStep1Action.querySelector('svg').style.display = 'none';
         } else {
           els.btnStep1Action.classList.remove('is-goto-card');

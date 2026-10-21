@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { resolve, sep } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'file:///C:/Users/Suhas/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
@@ -38,7 +38,7 @@ async function testPage(target, legacy = false) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.routeWebSocket('**/*', socket => socket.close());
-  return { context, page, errors, base };
+  return { context, page, errors, base, target };
 }
 
 async function startEdition(test, edition) {
@@ -89,28 +89,51 @@ async function complete(frame, id, quick = false) {
   }
 }
 
-async function assertPopup(test, expectedBars, awarded, milestone = false) {
+async function assertResultProgress(test, frame, expectedBars, awarded, milestone = false) {
   const { page } = test;
+  const row = frame.locator('.torch-result-progress:visible');
+  await row.waitFor({ state: 'visible', timeout: 7000 });
+  assert.equal(await row.count(), 1, 'One visible progress row per result');
+  assert.equal(await row.getAttribute('data-awarded'), String(awarded));
+  assert.equal((await row.textContent()).includes('+1'), awarded, 'Only a new daily completion shows +1');
+  const levelLabel = await row.getAttribute('lang') === 'en' ? 'Level' : 'स्तर';
+  assert.match(await row.textContent(), new RegExp(`${levelLabel} ${Math.floor(expectedBars / 5) + 1} · ${expectedBars % 5}/5`));
+  const rowBounds = await row.boundingBox();
+  assert(rowBounds.width > 0 && rowBounds.x >= 0 && rowBounds.x + rowBounds.width <= 391, 'Inline progress fits a phone');
+  const savedBars = await page.evaluate(key => {
+    try { return JSON.parse(localStorage.getItem(key) || '[]').length; } catch { return null; }
+  }, ledgerKey);
+  if (savedBars !== null) assert.equal(savedBars, expectedBars, 'Built app saves exactly one bar per game per day');
   const popup = page.locator('.torch-popup');
+  if (!milestone) {
+    await page.waitForTimeout(1250);
+    assert.equal(await popup.count(), 0, 'Ordinary and already-counted completions stay inline');
+    assert.deepEqual(test.errors, [], 'No browser errors');
+    if (process.env.MASHAL_QA_CAPTURE && expectedBars === 1) {
+      await mkdir('tmp/result-copy-after', { recursive: true });
+      await page.screenshot({ path: `tmp/result-copy-after/${test.target}-mashal-${await row.getAttribute('lang')}.png` });
+    }
+    return;
+  }
   await popup.waitFor({ state: 'visible', timeout: 7000 });
   assert.equal(await popup.count(), 1, 'One popup per completion');
   assert.equal(await popup.evaluate(node => node.matches(':modal')), true, 'Popup appears above the entire game');
   const feeding = await popup.locator('.is-feeding').count();
   assert.equal(feeding, awarded ? 1 : 0, 'Only a new daily completion animates +1');
   if (milestone) assert.match(await popup.locator('.torch-card__title').textContent(), /नया स्तर/);
-  if (!awarded) assert.match(await popup.locator('.torch-card__rule').textContent(), /पहले ही गिना/);
   const bounds = await popup.boundingBox();
   assert(bounds.width > 0 && bounds.x >= 0 && bounds.x + bounds.width <= 391, 'Popup fits a phone');
   await popup.locator('.torch-card__skip').waitFor({ state: 'visible' });
   assert.equal(await popup.locator('[role=progressbar]').getAttribute('aria-valuenow'), String(expectedBars % 5));
   assert.equal(await popup.locator('.torch-card__level b').textContent(), String(Math.floor(expectedBars / 5) + 1));
-  const savedBars = await page.evaluate(key => {
-    try { return JSON.parse(localStorage.getItem(key) || '[]').length; } catch { return null; }
-  }, ledgerKey);
-  if (savedBars !== null) assert.equal(savedBars, expectedBars, 'Built app saves exactly one bar per game per day');
   assert.deepEqual(test.errors, [], 'No browser errors');
+  if (process.env.MASHAL_QA_CAPTURE) {
+    await mkdir('tmp/result-copy-after', { recursive: true });
+    await page.screenshot({ path: `tmp/result-copy-after/${test.target}-mashal-level-up.png` });
+  }
   await popup.locator('.torch-card__skip').click();
   await popup.waitFor({ state: 'detached' });
+  assert.equal(await row.count(), 1, 'Dismissing the milestone preserves inline progress');
 }
 
 async function home(page) {
@@ -126,13 +149,20 @@ try {
         const editions = scenario === 'legacy' ? ['d1'] : ['d1', 'd2', 'd3'];
         for (const edition of editions) {
           await startEdition(test, edition);
+          if (scenario === 'quick') await test.page.locator('#hub-lang-toggle').click();
           const selected = scenario === 'quick' ? ['niti'] : games;
           for (const [index, id] of selected.entries()) {
             const routeId = edition === 'd2' ? aliases[id] || id : id;
             const frame = await openGame(test.page, routeId);
             await complete(frame, id, scenario === 'quick');
             const expectedBars = scenario === 'quick' ? 1 : edition === 'd1' ? index + 1 : 5;
-            await assertPopup(test, expectedBars, edition === 'd1', expectedBars === 5 && edition === 'd1');
+            await assertResultProgress(test, frame, expectedBars, edition === 'd1', expectedBars === 5 && edition === 'd1');
+            if (scenario === 'quick') assert.equal(await frame.locator('.torch-result-progress:visible').getAttribute('lang'), 'en');
+            if (id === 'carrom') {
+              await frame.evaluate(() => showRulesModal());
+              assert.equal(await frame.locator('.torch-result-progress:visible').count(), 0, 'Progress belongs to the result, not the rules');
+              assert.equal(await frame.locator('#modal-desc').isVisible(), true, 'The shared modal still shows rules');
+            }
             await home(test.page);
             // Opening a saved result must never repeat the popup or daily award.
             const restored = await openGame(test.page, routeId);
@@ -146,7 +176,7 @@ try {
               assert.equal(await test.page.evaluate(key => JSON.parse(localStorage.getItem(key) || '[]').length, ledgerKey), expectedBars, 'Practice does not award a bar');
             }
             await home(test.page);
-            console.log(`PASS ${target} ${scenario} ${edition} ${routeId}: popup, daily award, dismissal and restoration`);
+            console.log(`PASS ${target} ${scenario} ${edition} ${routeId}: inline progress, milestone, daily award and restoration`);
           }
         }
         if (scenario === 'quick') {

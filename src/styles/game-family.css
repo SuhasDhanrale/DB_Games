@@ -46,8 +46,13 @@
 .family-header svg { width: 18px; height: 18px; }
 .family-header button:active { background: var(--game-tint); }
 .family-header button:focus-visible { outline: 3px solid var(--game-accent); outline-offset: 2px; }
+.family-header button:disabled { opacity: .5; cursor: default; }
 .game-player .game-area { min-height: 0; }
 .game-player iframe { display: block; flex: 1; min-height: 0; background: var(--family-paper); }
+.game-player .game-frame.is-loading { visibility: hidden; }
+.game-loading { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; color: var(--family-muted); background: var(--family-paper); text-align: center; font-size: 15px; line-height: 1.7; }
+.game-loading .loading-bar { margin-top: 16px; }
+.game-loading .loading-bar::after { background: var(--game-accent); }
 
 /* The first-play walkthrough shares the game's colour and common controls. */
 :is(.game-player, html[data-game-theme]) .game-intro { background: var(--family-paper); color: var(--family-ink); font-family: var(--family-font); }

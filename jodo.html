@@ -1083,16 +1083,12 @@
         <div class="result-title-wrap">
           <div data-result-celebration></div>
         </div>
-        <div class="result-score-chip">
-          <span id="score-display">100</span> <small>अंक</small>
-        </div>
       </div>
 
-      <!-- Concise Review of all 4 Pairs & Explanations -->
+      <div data-mashal-progress></div>
+      <p class="result-context" id="result-edition-label"></p>
+      <!-- Four takeaways; the existing reader keeps full explanations and sources. -->
       <div class="review-section">
-        <p class="completion-copy">आज की खबरों से चार बातें समझीं</p>
-        <p>इस डेमो दौर के स्रोतों की तारीख और संस्करण का लेबल ऊपर देखें।</p>
-        <div class="review-title">हर जोड़ी के बारे में जानें</div>
         <div class="review-list" id="review-list">
           <!-- Rendered via JS with distinct pair colors -->
         </div>
@@ -1103,7 +1099,7 @@
     <footer class="result-footer" id="result-footer" aria-label="खेल के बाद" hidden>
       <div class="result-actions-row">
         <button type="button" class="btn-action btn-action-news family-secondary" id="btn-play-again">
-          <span>फिर खेलें · अभ्यास</span>
+          <span>फिर खेलें</span>
         </button>
         <button type="button" class="btn-action btn-action-next family-primary" id="btn-more-games">
           <span>🎮 और खेल</span>
@@ -1500,13 +1496,16 @@
       });
     }
 
-    function renderInsights(container, pairs) {
+    function renderInsights(container, pairs, { compact = false } = {}) {
       container.replaceChildren();
       for (const pair of pairs) {
         const item = document.createElement('article');
         item.className = 'review-item';
         item.dataset.pairIdx = getPairIndex(pair.id);
-        item.innerHTML = `<h2 class="review-pair-name">${escapeHtml(pair.left)} → ${escapeHtml(pair.right)}</h2>
+        item.innerHTML = compact ? `<a class="review-link" href="#article=${encodeURIComponent(pair.id)}" aria-label="लेख पढ़ें: ${escapeHtml(pair.articleTitle)}">
+          <span class="review-pair-name">${escapeHtml(pair.left)} → ${escapeHtml(pair.right)} <span aria-hidden="true">↗</span></span>
+          <span class="review-explanation">${escapeHtml(pair.why)}</span>
+        </a>` : `<h2 class="review-pair-name">${escapeHtml(pair.left)} → ${escapeHtml(pair.right)}</h2>
           <p>${state.assistedPairIds.includes(pair.id) ? 'संकेत से मिली जोड़ी · ' : ''}${escapeHtml(pair.explanation)}</p>
           <p><strong>क्यों मायने रखता है:</strong> ${escapeHtml(pair.why)}</p>
           <p class="source-meta">${escapeHtml(pair.source)} · ${escapeHtml(pair.dateLabel)} · ${escapeHtml(pair.freshness)}</p>
@@ -1955,18 +1954,18 @@
       if (infoBar) infoBar.style.display = "none";
 
       const currentScore = calculateScore(state.wrongMatches, state.assistedPairs);
-      const scoreEl = document.getElementById("score-display");
-      if (scoreEl) scoreEl.textContent = currentScore;
+      const edition = getCurrentEdition();
+      document.getElementById('result-edition-label').textContent = edition.title + ' · ' + edition.freshness;
 
       // Populate Short Explanations with matching pair colors
       const reviewList = document.getElementById("review-list");
       if (reviewList) {
-        renderInsights(reviewList, getCurrentEdition().pairs);
+        renderInsights(reviewList, edition.pairs, { compact: true });
       }
 
       resultPanel.style.display = "block";
       window.DBResultCelebration.show(resultPanel.querySelector('[data-result-celebration]'), {
-        game: 'jodo', details: { wrongMatches: state.wrongMatches, assistedPairs: state.assistedPairs },
+        game: 'jodo', details: { wrongMatches: state.wrongMatches, assistedPairs: state.assistedPairs, score: currentScore, practice: state.isPractice },
         animate: celebrate,
       });
       resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });

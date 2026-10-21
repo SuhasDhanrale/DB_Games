@@ -65,10 +65,8 @@ function standaloneAdapters(embedded) {
       let code = source;
       if (path.endsWith('/src/games/base-html-game.js')) {
         code = replaceRequired(code,
-          'src="${gameUrl(this.config.htmlFile)}"',
-          '', 'game iframe');
-        code = replaceRequired(code, "const iframe = area.querySelector('iframe');",
-          "const iframe = area.querySelector('iframe');\n    iframe.srcdoc = window.DBSingleFile.page(this.config.htmlFile, '?day=' + window.DBJamDemo.day);", 'game iframe document');
+          'iframe.src = gameUrl(this.config.htmlFile);',
+          "iframe.srcdoc = window.DBSingleFile.page(this.config.htmlFile, '?day=' + window.DBJamDemo.day);", 'game iframe document');
         code = replaceRequired(code, 'event.origin !== window.location.origin',
           "(event.origin !== window.location.origin && !(window.location.protocol === 'file:' && event.origin === 'null'))", 'file iframe messages');
         code = code.replace(/},\s*window\.location\.origin\)/g,
@@ -131,10 +129,28 @@ for (const file of gamePages) {
 
 let html = await buildPage('index.html', false);
 const runtime = await readFile(resolve(root, 'scripts/single-file-runtime.js'), 'utf8');
-const payload = JSON.stringify({ pages, assets }).replaceAll('<', '\\u003c');
-// Run before the host's module script, which initializes the games.
+// Install a small lazy reader before the app module. Keep the large payload out
+// of executable JavaScript and after the opening HTML, so it cannot hide startup.
 html = replaceRequired(html, '<meta charset="UTF-8" />',
-  `<meta charset="UTF-8" />\n<script>(${runtime})(${payload});</script>`, 'host character encoding');
+  `<meta charset="UTF-8" />\n<script>(${runtime})();</script>`, 'host character encoding');
+// Inlined bundles otherwise occupy the head before any visible HTML. Keep only
+// critical opening CSS there; move app resources below the already-renderable
+// shell. Match whole script blocks so CSS strings inside JavaScript stay intact.
+const resources = [];
+const headEnd = html.indexOf('</head>');
+const head = html.slice(0, headEnd).replace(/<script\b[^>]*>[\s\S]*?<\/script>|<style\b[^>]*>[\s\S]*?<\/style>/gi, tag => {
+  if (/^<script\b[^>]*\btype="module"/i.test(tag) || (/^<style\b/i.test(tag) && !/^<style\b[^>]*\bid="startup-critical"/i.test(tag))) {
+    resources.push(tag);
+    return '';
+  }
+  return tag;
+});
+html = replaceRequired(head + html.slice(headEnd), '<!-- app-resources -->', resources.join('\n'), 'app resource position');
+const escapeAttribute = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
+const payload = Object.entries({ page: pages, asset: assets }).flatMap(([kind, entries]) =>
+  Object.entries(entries).map(([path, value]) => `<script type="application/octet-stream" id="${escapeAttribute(`db-embedded-${kind}:${path}`)}">${value}</script>`)
+).join('\n');
+html = replaceRequired(html, '</body>', `${payload}\n</body>`, 'embedded payload');
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, html);
 console.log(`Created ${output} (${(Buffer.byteLength(html) / 1024 / 1024).toFixed(1)} MB)`);

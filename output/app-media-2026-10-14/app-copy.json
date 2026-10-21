@@ -1,0 +1,146 @@
+[
+  {
+    "name": "Aaj Ka Shabd",
+    "hindiName": "आज का शब्द",
+    "folder": "01-aaj-ka-shabd",
+    "type": "Hindi word puzzle",
+    "color": "#685578",
+    "tagline": "A little hint. A new word. A daily discovery.",
+    "description": "Guess the Hindi word using clues and colour hints.",
+    "howToPlay": "Read the clue and fill five boxes using the on-screen letter groups. Tap Check, then use green, yellow, and grey feedback to improve your next guess. Find the word within six attempts.",
+    "screenshots": [
+      [
+        "00-cover.png",
+        "Front screen · cover"
+      ],
+      [
+        "01-how-to-play.png",
+        "How to play"
+      ],
+      [
+        "02-colour-hints.png",
+        "Colour feedback after a guess"
+      ],
+      [
+        "03-word-and-meaning.png",
+        "Solved word, meaning and related story"
+      ]
+    ]
+  },
+  {
+    "name": "Aaj Ki Niti",
+    "hindiName": "आज की नीति",
+    "folder": "02-aaj-ki-niti",
+    "type": "Thought & reflection",
+    "color": "#886735",
+    "tagline": "Complete a thought. Carry it into your day.",
+    "description": "Complete a thoughtful phrase and share its personalised card.",
+    "howToPlay": "Read the unfinished thought, choose one of four answers, and check your choice. Read the completed thought and its meaning. Add a name to its card, then download or share it if you like.",
+    "screenshots": [
+      [
+        "00-cover.png",
+        "Front screen · cover"
+      ],
+      [
+        "01-how-to-play.png",
+        "How to play"
+      ],
+      [
+        "02-choose-an-answer.png",
+        "Selecting a phrase"
+      ],
+      [
+        "03-thought-and-meaning.png",
+        "Completed thought and meaning"
+      ],
+      [
+        "04-personalised-card.png",
+        "Personalised share card · sample name"
+      ]
+    ]
+  },
+  {
+    "name": "Aaj Ka Over",
+    "hindiName": "आज का ओवर",
+    "folder": "03-aaj-ka-over",
+    "type": "Six-ball cricket",
+    "color": "#365c49",
+    "tagline": "Six balls. One challenge. Your moment.",
+    "description": "Chase or defend a cricket target in six balls.",
+    "howToPlay": "Pick a team and choose batting or bowling. When batting, swipe toward your shot as the ball reaches the green timing mark. When bowling, choose a spot on the pitch and release. Chase or defend the target within six balls; two wickets end the innings.",
+    "screenshots": [
+      [
+        "00-cover.png",
+        "Front screen · team and role selection"
+      ],
+      [
+        "01-how-to-play.png",
+        "How to play"
+      ],
+      [
+        "02-batting.png",
+        "Batting challenge"
+      ],
+      [
+        "03-bowling.png",
+        "Bowling challenge"
+      ]
+    ]
+  },
+  {
+    "name": "Aaj Ka Nishana",
+    "hindiName": "आज का निशाना",
+    "folder": "04-aaj-ka-nishana",
+    "type": "Carrom challenge",
+    "color": "#8f564c",
+    "tagline": "A familiar board. A fresh target.",
+    "description": "Aim, strike, and pocket coins in a Carrom challenge.",
+    "howToPlay": "Read the target above the board. Move the striker along the bottom line, pull back to aim and set power, then release. Keep taking shots until you complete the target; every shot counts.",
+    "screenshots": [
+      [
+        "00-cover.png",
+        "Front screen · cover"
+      ],
+      [
+        "01-how-to-play.png",
+        "How to play"
+      ],
+      [
+        "02-aim-and-power.png",
+        "Aiming and setting shot power"
+      ],
+      [
+        "03-after-the-shot.png",
+        "Board after a released shot"
+      ]
+    ]
+  },
+  {
+    "name": "Aaj Ki Jodi",
+    "hindiName": "आज की जोड़ी",
+    "folder": "05-aaj-ki-jodi",
+    "type": "Find connections",
+    "color": "#556d91",
+    "tagline": "Find the pairs. Discover the bigger picture.",
+    "description": "Match related facts and discover the connections behind them.",
+    "howToPlay": "Read both columns and tap one card, then its related partner in the other column. You can also drag a line between them. Match all four pairs, then explore the explanations and related stories.",
+    "screenshots": [
+      [
+        "00-cover.png",
+        "Front screen · cover"
+      ],
+      [
+        "01-how-to-play.png",
+        "How to play"
+      ],
+      [
+        "02-making-connections.png",
+        "Two pairs connected"
+      ],
+      [
+        "03-connections-explained.png",
+        "Completed pairs and explanations"
+      ]
+    ]
+  }
+]

@@ -9,6 +9,8 @@
     "build": "vite build",
     "build:single": "node scripts/build-single.mjs",
     "test:mashal": "node tests/mashal-progression.mjs && node tests/mashal-popup-browser.mjs",
+    "test:results": "node qa-result-copy.mjs",
+    "test:loading": "node tests/loading-browser.mjs",
     "preview": "vite preview"
   },
   "keywords": [],

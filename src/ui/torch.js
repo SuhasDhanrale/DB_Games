@@ -24,7 +24,7 @@ export function torchCardMarkup({ journey = torchJourney(), lang = getLang(), na
     <div class="torch-card__main" data-torch-tier="${Math.min(3, journey.level)}">${mashal}<div class="torch-card__copy"><span class="torch-card__eyebrow">${hi ? 'मशाल यात्रा' : 'Mashal journey'}${count ? ` · <span class="torch-card__count">${escapeHtml(count)}</span>` : ''}</span><h3 class="torch-card__title">${escapeHtml(levelUp ? (hi ? 'शानदार! नया स्तर!' : 'Well done! Level up!') : title || (hi ? 'हर खेल से और रोशनी' : 'Brighter with every game'))}</h3></div></div>
     <div class="torch-card__progress" role="progressbar" aria-label="${hi ? 'अगले स्तर की प्रगति' : 'Progress to next level'}" aria-valuemin="0" aria-valuemax="${goal}" aria-valuenow="${journey.progress}" aria-valuetext="${journey.progress} / ${goal} · ${next}" style="--torch-from:${start / goal};--torch-to:${end / goal};--torch-final:${journey.progress / goal}"><span class="torch-card__fill"></span>${Array.from({ length: goal - 1 }, (_, i) => `<i style="left:${(i + 1) / goal * 100}%"></i>`).join('')}</div>
     <div class="torch-card__progress-copy"><span><b>${journey.progress}</b> / ${goal} ${hi ? 'खेल' : 'games'}</span><span>${next} →</span></div>
-    <p class="torch-card__rule">${rule}</p>${celebrate ? '<button class="torch-card__skip" type="button" lang="en" disabled aria-hidden="true">Tap to skip</button>' : ''}`;
+    ${celebrate ? `<button class="torch-card__skip" type="button" disabled aria-hidden="true">${hi ? 'जारी रखें' : 'Continue'}</button>` : `<p class="torch-card__rule">${rule}</p>`}`;
 }
 
 export function prepareTorchCelebration(streak, { awarded = true } = {}) {
@@ -46,11 +46,41 @@ export function consumeTorchPulse() {
   return pending === todayStr();
 }
 
-/** Celebrate above the whole game screen, then allow dismissal after three seconds. */
+/** Ordinary progress stays inline; only a new level opens the celebration. */
 export function showTorchCelebration(anchor, celebration) {
   if (!anchor || !celebration) return () => {};
   const anchorDoc = anchor.ownerDocument;
   const doc = anchorDoc.defaultView.frameElement?.ownerDocument || anchorDoc;
+  const journey = celebration.journey;
+  const awarded = celebration.awarded !== false;
+  const milestone = awarded && journey?.completions > 0 && journey.progress === 0;
+  const rows = [];
+  const progressSlots = [...anchor.querySelectorAll('[data-mashal-progress]')];
+  const ensureStyles = targetDoc => {
+    if (targetDoc.querySelector('[data-torch-styles]')) return;
+    const style = targetDoc.createElement('style');
+    style.dataset.torchStyles = '';
+    style.textContent = torchStyles;
+    targetDoc.head.appendChild(style);
+  };
+  const showProgress = () => {
+    if (rows.length) return;
+    ensureStyles(anchorDoc);
+    const hi = celebration.lang === 'hi';
+    const slots = [...progressSlots];
+    if (!slots.length) slots.push(null);
+    for (const slot of slots) {
+      const row = anchorDoc.createElement('div');
+      row.className = 'torch-result-progress';
+      row.lang = celebration.lang;
+      row.dataset.awarded = String(awarded);
+      row.setAttribute('role', 'status');
+      row.innerHTML = `${torchIcon}<span>${hi ? 'मशाल' : 'Mashal'}${awarded ? ' +1' : ''} · ${hi ? 'स्तर' : 'Level'} ${journey.level} · ${journey.progress}/${journey.goal} ${hi ? 'खेल' : 'games'}</span>`;
+      rows.push(row);
+      if (slot) slot.appendChild(row);
+      else anchor.insertAdjacentElement('afterend', row);
+    }
+  };
   let timer = null;
   let settleTimer = null;
   let skipTimer = null;
@@ -64,31 +94,29 @@ export function showTorchCelebration(anchor, celebration) {
     clearTimeout(settleTimer);
     clearTimeout(skipTimer);
     observer.disconnect();
+    rows.forEach(row => row.remove());
     if (popup?.open) popup.close();
     popup?.remove();
   };
   // checkVisibility is missing in older browsers/WebViews and blocks every game.
   const isVisible = () => anchor.isConnected && anchor.getClientRects().length > 0
-    && anchorDoc.defaultView.getComputedStyle(anchor).visibility === 'visible';
+    && anchorDoc.defaultView.getComputedStyle(anchor).visibility === 'visible'
+    && (!progressSlots.length || progressSlots.some(slot => !slot.hidden));
   const check = () => {
     if (stopped) return;
     if (!isVisible()) {
       clearTimeout(timer);
       timer = null;
       // Leaving results also removes the card from subsequent practice rounds.
-      if (card) cleanup();
+      if (card || rows.length) cleanup();
       return;
     }
-    if (timer || card) return;
+    showProgress();
+    if (!milestone || timer || card) return;
     timer = setTimeout(() => {
       timer = null;
       if (stopped || !isVisible()) return;
-      if (!doc.querySelector('[data-torch-styles]')) {
-        const style = doc.createElement('style');
-        style.dataset.torchStyles = '';
-        style.textContent = torchStyles;
-        doc.head.appendChild(style);
-      }
+      ensureStyles(doc);
       popup = doc.createElement('dialog');
       popup.className = 'torch-popup';
       popup.lang = celebration.lang;
@@ -99,7 +127,7 @@ export function showTorchCelebration(anchor, celebration) {
       card.className = `torch-card${animate && awarded ? ' is-feeding' : ''}${awarded && celebration.journey?.completions > 0 && celebration.journey.progress === 0 ? ' is-level-up' : ''}`;
       card.lang = celebration.lang;
       card.tabIndex = -1;
-      card.innerHTML = torchCardMarkup({ ...celebration, celebrate: true });
+      card.innerHTML = torchCardMarkup({ ...celebration, count: '', celebrate: true });
       card.querySelector('.torch-card__title').id = 'torch-popup-title';
       popup.setAttribute('aria-labelledby', 'torch-popup-title');
       popup.appendChild(card);
@@ -125,10 +153,16 @@ export function showTorchCelebration(anchor, celebration) {
         card?.classList.remove('is-feeding');
         if (levelUp) setProgressCopy(journey.progress, journey.level + 1);
       };
-      popup.addEventListener('click', () => { if (ready) cleanup(); });
+      const dismiss = () => {
+        settle();
+        clearTimeout(skipTimer);
+        popup.close();
+        popup.remove();
+      };
+      popup.addEventListener('click', () => { if (ready) dismiss(); });
       popup.addEventListener('cancel', event => {
         event.preventDefault();
-        if (ready) cleanup();
+        if (ready) dismiss();
       });
       if (animate) settleTimer = setTimeout(settle, 2600);
       skipTimer = setTimeout(() => {
@@ -138,7 +172,7 @@ export function showTorchCelebration(anchor, celebration) {
         const skip = card.querySelector('.torch-card__skip');
         skip.disabled = false;
         skip.removeAttribute('aria-hidden');
-      }, 3000);
+      }, animate ? 3000 : 0);
     }, 1000);
   };
   const observer = new anchorDoc.defaultView.MutationObserver(check);
@@ -146,6 +180,7 @@ export function showTorchCelebration(anchor, celebration) {
   for (let node = anchor; node; node = node.parentElement) {
     observer.observe(node, { attributes: true, attributeFilter: ['class', 'style', 'hidden'], childList: true });
   }
+  progressSlots.forEach(slot => observer.observe(slot, { attributes: true, attributeFilter: ['hidden'] }));
   check();
   return cleanup;
 }

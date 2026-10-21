@@ -1,0 +1,47 @@
+import { readFile, writeFile, stat } from 'node:fs/promises';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import assert from 'node:assert/strict';
+import { chromium } from 'file:///C:/Users/Suhas/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+
+const root = path.resolve('output/app-media-2026-10-14');
+const qa = path.resolve('tmp/app-media-qa');
+const browser = await chromium.launch({ headless: true, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
+const errors = [];
+const results = {};
+try {
+  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+  page.on('pageerror', e => errors.push(e.message));
+  await page.goto(pathToFileURL(path.join(root, '00-collection-cover.html')).href);
+  await page.evaluate(() => document.fonts.ready);
+  await page.locator('img').evaluateAll(imgs => Promise.all(imgs.map(i => { i.loading = 'eager'; return i.decode(); })));
+  await page.screenshot({ path: path.join(root, '00-collection-cover.png') });
+  results.coverOverflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth || document.documentElement.scrollHeight > innerHeight);
+  assert.equal(results.coverOverflow, false);
+  await page.setViewportSize({ width: 1186, height: 960 });
+  await page.goto(pathToFileURL(path.join(qa, 'contact-sheet.html')).href);
+  await page.locator('img').evaluateAll(imgs => Promise.all(imgs.map(i => { i.loading = 'eager'; return i.decode(); })));
+  await page.screenshot({ path: path.join(qa, 'contact-sheet.png'), fullPage: true });
+  await page.goto(pathToFileURL(path.join(root, 'index.html')).href);
+  await page.evaluate(() => document.fonts.ready);
+  await page.locator('img').evaluateAll(imgs => Promise.all(imgs.map(i => { i.loading = 'eager'; return i.decode(); })));
+  assert.equal(await page.locator('section').count(), 5);
+  assert.equal(await page.locator('button.copy').count(), 5);
+  results.galleryImages = await page.locator('img').count();
+  results.galleryOverflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
+  assert.equal(results.galleryOverflow, false);
+  await page.screenshot({ path: path.join(qa, 'gallery-desktop.png') });
+  await page.locator('button.copy').first().click();
+  await page.waitForTimeout(100);
+  results.copyButton = await page.locator('button.copy').first().innerText();
+  assert.equal(results.copyButton, 'Copied');
+  await page.setViewportSize({ width: 390, height: 844 });
+  results.mobileGalleryOverflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
+  assert.equal(results.mobileGalleryOverflow, false);
+  const apps = JSON.parse(await readFile(path.join(root, 'app-copy.json'), 'utf8'));
+  for (const app of apps) for (const [file] of app.screenshots) assert((await stat(path.join(root, app.folder, file))).size > 10000);
+  assert.deepEqual(errors, []);
+  results.browserErrors = errors;
+  await writeFile(path.join(qa, 'verification.json'), JSON.stringify(results, null, 2));
+  console.log(JSON.stringify(results));
+} finally { await browser.close(); }

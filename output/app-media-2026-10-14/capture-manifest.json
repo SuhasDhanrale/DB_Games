@@ -1,0 +1,188 @@
+{
+  "capturedAt": "2026-10-14T13:54:15.24Z",
+  "screenshots": [
+    {
+      "file": "01-aaj-ka-shabd/01-how-to-play.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "01-aaj-ka-shabd/00-cover.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "01-aaj-ka-shabd/02-colour-hints.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "01-aaj-ka-shabd/03-word-and-meaning.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "02-aaj-ki-niti/01-how-to-play.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "02-aaj-ki-niti/00-cover.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "02-aaj-ki-niti/02-choose-an-answer.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "02-aaj-ki-niti/03-thought-and-meaning.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "02-aaj-ki-niti/04-personalised-card.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "03-aaj-ka-over/01-how-to-play.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "03-aaj-ka-over/00-cover.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "03-aaj-ka-over/02-batting.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "03-aaj-ka-over/03-bowling.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "04-aaj-ka-nishana/01-how-to-play.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "04-aaj-ka-nishana/00-cover.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "04-aaj-ka-nishana/02-aim-and-power.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "04-aaj-ka-nishana/03-after-the-shot.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "05-aaj-ki-jodi/01-how-to-play.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "05-aaj-ki-jodi/00-cover.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "05-aaj-ki-jodi/02-making-connections.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "05-aaj-ki-jodi/03-connections-explained.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    },
+    {
+      "file": "01-collection-home.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 3
+    }
+  ],
+  "browserErrors": [],
+  "collectionCover": {
+    "file": "00-collection-cover.png",
+    "width": 1920,
+    "height": 1080,
+    "type": "HTML composition using original front screenshots"
+  }
+}
